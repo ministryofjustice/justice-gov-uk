@@ -1,33 +1,25 @@
 {
-    "name": "roots/bedrock",
+    "name": "ministryofjustice/justice-gov-uk",
     "type": "project",
     "license": "MIT",
-    "description": "WordPress boilerplate with Composer, easier configuration, and an improved folder structure",
-    "homepage": "https://roots.io/bedrock/",
+    "description": "Justice website for deployment on Cloud Platform",
+    "homepage": "https://www.justice.gov.uk/",
     "authors": [
         {
-            "name": "Scott Walkinshaw",
-            "email": "scott.walkinshaw@gmail.com",
-            "homepage": "https://github.com/swalkinshaw"
+            "name": "Central Digital Product Team",
+            "homepage": "https://github.com/ministryofjustice"
         },
         {
-            "name": "Ben Word",
-            "email": "ben@benword.com",
-            "homepage": "https://github.com/retlehs"
+            "name": "Damien Wilson",
+            "homepage": "https://github.com/wilson1000-MoJ"
         }
     ],
     "keywords": [
-        "bedrock",
         "composer",
-        "roots",
         "wordpress",
         "wp",
         "wp-config"
     ],
-    "support": {
-        "issues": "https://github.com/roots/bedrock/issues",
-        "forum": "https://discourse.roots.io/category/bedrock"
-    },
     "repositories": [
         {
             "type": "composer",
@@ -39,7 +31,7 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "alphagov/notifications-php-client": "^5.0",
         "composer/installers": "^2.2",
         "vlucas/phpdotenv": "^5.5",
@@ -65,7 +57,6 @@
         "preferred-install": "dist",
         "allow-plugins": {
             "composer/installers": true,
-            "roots/wordpress-core-installer": true,
             "php-http/discovery": false
         }
     },
