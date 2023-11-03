@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+    wordpress:
+        build: .
+        env_file: .env
+        environment:
+            VIRTUAL_HOST: "${SERVER_NAME}"
+            VIRTUAL_PORT: "8080"
+            SMTP_HOST: mailcatcher
+            SMTP_PORT: 1025
+            DB_NAME: justice_gov_uk
+            DB_USER: wordpress
+            DB_PASSWORD: wordpress
+            DB_HOST: mysql
+            DB_PREFIX: gov_uk_
+        volumes:
+            - .:/bedrock
+        depends_on:
+            - mysql
+        cap_add:
+            - SYS_ADMIN
+        devices:
+            - /dev/fuse
+
+    mysql:
+        image: mariadb
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: justice_gov_uk
+            MYSQL_USER: wordpress
+            MYSQL_PASSWORD: wordpress
+        volumes:
+            - database:/var/lib/mysql
+        ports:
+            - "9001:3306"
+
+    mailcatcher:
+        image: schickling/mailcatcher
+        environment:
+            VIRTUAL_HOST: mail.${SERVER_NAME}
+            VIRTUAL_PORT: 1080
+
+    phpmyadmin:
+        image: phpmyadmin:latest
+        environment:
+            VIRTUAL_HOST: phpmyadmin.${SERVER_NAME}
+            VIRTUAL_PORT: 9191
+            PMA_HOST: mysql
+        depends_on:
+            - mysql
+        ports:
+            - "9192:80"
+
+volumes:
+    database:
+        driver: local

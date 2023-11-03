@@ -1,0 +1,11 @@
+web/app/uploads/*
+web/wp
+vendor
+
+bin/local-*
+.github
+.editorconfig
+.env.example
+
+buildspec.yml
+LICENSE
