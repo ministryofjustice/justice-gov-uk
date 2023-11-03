@@ -87,7 +87,13 @@
     },
     "scripts": {
         "test": [
+            "phpcs --report=summary"
+        ],
+        "test-full": [
             "phpcs"
+        ],
+        "test-fix": [
+            "phpcbf"
         ]
     }
 }

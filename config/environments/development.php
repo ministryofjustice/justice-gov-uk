@@ -15,4 +15,3 @@ Config::define('SCRIPT_DEBUG', true);
 Config::define('DISALLOW_INDEXING', true);
 
 ini_set('display_errors', '1');
-
