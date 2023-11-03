@@ -57,7 +57,8 @@
         "preferred-install": "dist",
         "allow-plugins": {
             "composer/installers": true,
-            "php-http/discovery": false
+            "php-http/discovery": false,
+            "roots/wordpress-core-installer": true
         }
     },
     "minimum-stability": "dev",
