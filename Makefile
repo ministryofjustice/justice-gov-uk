@@ -4,7 +4,7 @@ init: setup run
 
 d-compose:
 	docker compose up -d nginx phpmyadmin
-	docker compose run --service-ports --rm --entrypoint=bash app
+	docker compose run --service-ports --rm --entrypoint=bash php
 
 d-shell: setup d-compose
 
@@ -58,7 +58,7 @@ dory:
 
 # Open a bash shell on the running container
 bash:
-	docker compose exec app bash
+	docker compose exec php bash
 
 # Run tests
 test:
@@ -74,10 +74,10 @@ test-fixes:
 #####
 
 build-nginx:
-	docker image build -f docker/nginx/Dockerfile -t nginx:latest --target nginx .
+	docker image build -f ops/nginx/Dockerfile -t nginx:latest --target nginx .
 
 build-app:
-	docker image build -f docker/app/Dockerfile -t app:latest --target app .
+	docker image build -f ops/app/Dockerfile -t app:latest --target app .
 
 build:
 	make build-fpm
