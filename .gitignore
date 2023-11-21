@@ -1,0 +1,41 @@
+# Editor
+.idea*
+.DS_*
+._DS_*
+._.*
+.editorconfig
+
+*.sql
+
+# Application
+public/.well-known/*
+public/hot
+public/app/plugins/*
+public/app/db.php
+public/app/mu-plugins/*/
+public/app/upgrade
+public/app/languages
+public/app/uploads/*
+vendor
+
+!public/app/plugins/.keep
+!public/app/uploads/.keep
+
+public/app/cache
+
+# Theme
+public/app/themes/*
+!public/app/themes/justice
+public/app/themes/justice/dist
+public/app/themes/justice/node_modules
+
+# WordPress
+public/wp
+
+# WordPress Plugin additions
+public/app/ewww
+
+# Dotenv
+.env
+.env.*
+!.env.example

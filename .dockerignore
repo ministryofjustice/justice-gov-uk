@@ -1,0 +1,11 @@
+public/app/uploads/*
+public/wp
+vendor
+
+bin/local-*
+.github
+.editorconfig
+.env.example
+
+LICENSE
+README.md

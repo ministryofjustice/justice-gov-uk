@@ -1,0 +1,73 @@
+version: "3.8"
+
+volumes:
+    node_modules: ~
+    public: ~
+    mariadb_data: ~
+
+services:
+    php:
+        build:
+            context: .
+            target: dev
+        volumes:
+            - .:/var/www/html
+        env_file:
+            - .env
+        depends_on:
+            - mariadb
+
+    nginx:
+        image: nginxinc/nginx-unprivileged
+        volumes:
+            - ./docker/conf/local/php-fpm.conf:/etc/nginx/php-fpm.conf
+            - ./docker/conf/local/server.conf:/etc/nginx/conf.d/default.conf
+            - ./public:/var/www/html/public
+        environment:
+            VIRTUAL_HOST: ${SERVER_NAME}
+            VIRTUAL_PORT: 8000
+        ports:
+            - "8000:8000"
+        depends_on:
+            - php
+            - node
+
+    node:
+        image: node:20
+        working_dir: /node
+        entrypoint: make
+        command: node-assets
+        volumes:
+            - node_modules:/node/node_modules
+            - ./Makefile:/node/Makefile
+            - ./public/app/themes/justice/dist:/node/dist
+            - ./public/app/themes/justice/src:/node/src
+            - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
+            - ./public/app/themes/justice/package.json:/node/package.json
+        ports:
+            - "8080:8080"
+
+    mariadb:
+        image: mariadb:10
+        healthcheck:
+            test: [ "CMD-SHELL", "bash", "-c", "echo > /dev/tcp/localhost/3306" ]
+            interval: 1s
+        volumes:
+            - mariadb_data:/var/lib/mysql
+        environment:
+            MYSQL_RANDOM_ROOT_PASSWORD: "true"
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_NAME}
+
+    phpmyadmin:
+        image: phpmyadmin
+        environment:
+            - PMA_HOST=mariadb
+        depends_on:
+            - mariadb
+        ports:
+            - "9191:80"
+        links:
+            - mariadb
+
