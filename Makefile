@@ -11,7 +11,7 @@ d-shell: setup d-compose
 setup:
 	@chmod +x ./bin/*
 	@[ -f "./.env" ] || cp .env.example .env
-	@echo "http://127.0.0.1:8080/" > web/hot
+	@echo "http://127.0.0.1:8080/" > public/hot
 
 restart:
 	@docker compose down app
@@ -33,7 +33,7 @@ node:
 # Remove ignored git files – e.g. composer dependencies and built theme assets
 # But keep .env file, .idea directory (PhpStorm config), and uploaded media files
 clean:
-	@if [ -d ".git" ]; then git clean -xdf --exclude ".env" --exclude ".idea" --exclude "web/app/uploads"; fi
+	@if [ -d ".git" ]; then git clean -xdf --exclude ".env" --exclude ".idea" --exclude "public/app/uploads"; fi
 	@clear
 
 # Remove all ignored git files (including media files)

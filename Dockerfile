@@ -57,5 +57,5 @@ RUN npm run production
 
 FROM nginx:1.25-alpine AS nginx
 
-COPY docker/conf/production/server-prod.conf /etc/nginx/conf.d/default.conf
+COPY ops/conf/production/server-prod.conf /etc/nginx/conf.d/default.conf
 COPY --from=assets-build /code/web /var/www/html/
