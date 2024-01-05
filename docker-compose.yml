@@ -2,7 +2,7 @@ version: "3.8"
 
 volumes:
     node_modules: ~
-    public: ~
+    dist: ~
     mariadb_data: ~
 
 services:
@@ -18,8 +18,9 @@ services:
             - mariadb
 
     nginx:
-        image: nginxinc/nginx-unprivileged
+        image: nginxinc/nginx-unprivileged:1.25-alpine
         volumes:
+            - dist:/var/www/html/public/app/themes/justice/dist
             - ./ops/conf/local/php-fpm.conf:/etc/nginx/php-fpm.conf
             - ./ops/conf/local/server.conf:/etc/nginx/conf.d/default.conf
             - ./public:/var/www/html/public
@@ -39,13 +40,11 @@ services:
         command: node-assets
         volumes:
             - node_modules:/node/node_modules
+            - dist:/node/dist
             - ./Makefile:/node/Makefile
-            - ./public/app/themes/justice/dist:/node/dist
             - ./public/app/themes/justice/src:/node/src
             - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
             - ./public/app/themes/justice/package.json:/node/package.json
-        ports:
-            - "8080:8080"
 
     mariadb:
         image: mariadb:10
