@@ -51,7 +51,8 @@
         "wpackagist-plugin/wp-document-revisions": "^3.5.0",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "3.2.5",
         "sentry/sdk": "^3.1",
-        "php-http/guzzle7-adapter": "^1.0"
+        "php-http/guzzle7-adapter": "^1.0",
+        "ext-mysqli": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7.1",
