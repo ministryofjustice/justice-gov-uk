@@ -46,9 +46,10 @@
         "roots/wp-password-bcrypt": "^1.1.0",
         "koodimonni-language/core-en_gb": "^6.4",
         "wpackagist-plugin/classic-editor": "^1.0.0",
-        "wpackagist-plugin/quick-301-redirects":"^1.1",
-        "wpackagist-plugin/wordpress-seo":"^21.0",
+        "wpackagist-plugin/quick-301-redirects": "^1.1",
+        "wpackagist-plugin/wordpress-seo": "^21.0",
         "wpackagist-plugin/wp-document-revisions": "^3.5.0",
+        "wpackagist-plugin/amazon-s3-and-cloudfront": "3.2.5",
         "sentry/sdk": "^3.1",
         "php-http/guzzle7-adapter": "^1.0"
     },
