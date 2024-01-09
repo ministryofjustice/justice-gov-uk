@@ -42,8 +42,8 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
 
   deploy-dev:
-    environment: development
     runs-on: ubuntu-latest
+    environment: development
     needs: build_ecr
     env:
       KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
@@ -56,46 +56,39 @@ jobs:
       ####          Generate hashes         ####
       ##########################################
 
-      - name: "Auth key"
+      - name: "Generate keys and salts"
         uses: licenseware/generate-password-and-hash@v1
-        id: auth-key-hash
+        id: auth-key
         with:
-          length: 34
-      - name: "Auth salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: auth-salt-hash
+          length: 64
+      - uses: licenseware/generate-password-and-hash@v1
+        id: auth-salt
         with:
-          length: 34
-      - name: "Logged in key"
-        uses: licenseware/generate-password-and-hash@v1
-        id: logged-in-key-hash
+          length: 64
+      - uses: licenseware/generate-password-and-hash@v1
+        id: logged-in-key
         with:
-          length: 34
-      - name: "Logged in salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: logged-in-salt-hash
+          length: 64
+      - uses: licenseware/generate-password-and-hash@v1
+        id: logged-in-salt
         with:
-          length: 34
-      - name: "Nonce key"
-        uses: licenseware/generate-password-and-hash@v1
-        id: nonce-key-hash
+          length: 64
+      - uses: licenseware/generate-password-and-hash@v1
+        id: nonce-key
         with:
-          length: 34
-      - name: "Nonce salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: nonce-salt-hash
+          length: 64
+      - uses: licenseware/generate-password-and-hash@v1
+        id: nonce-salt
         with:
-          length: 34
-      - name: "Secure key"
-        uses: licenseware/generate-password-and-hash@v1
-        id: secure-key-hash
+          length: 64
+      - uses: licenseware/generate-password-and-hash@v1
+        id: secure-key
         with:
-          length: 34
-      - name: "Secure salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: secure-salt-hash
+          length: 64
+      - uses: licenseware/generate-password-and-hash@v1
+        id: secure-salt
         with:
-          length: 34
+          length: 64
 
       ##########################################
       ####          ===============         ####
@@ -106,18 +99,18 @@ jobs:
           ECR_URL: ${{ vars.ECR_URL }}/${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
-          AUTH_KEY: ${{ steps.auth-key-hash.outputs.password-hash }}
-          AUTH_SALT: ${{ steps.auth-salt-hash.outputs.password-hash }}
-          LOGGED_IN_KEY: ${{ steps.logged-in-key-hash.outputs.password-hash }}
-          LOGGED_IN_SALT: ${{ steps.logged-in-salt-hash.outputs.password-hash }}
-          NONCE_KEY: ${{ steps.nonce-key-hash.outputs.password-hash }}
-          NONCE_SALT: ${{ steps.nonce-salt-hash.outputs.password-hash }}
-          SECURE_AUTH_KEY: ${{ steps.secure-key-hash.outputs.password-hash }}
-          SECURE_AUTH_SALT: ${{ steps.secure-salt-hash.outputs.password-hash }}
+          AUTH_KEY: ${{ steps.auth-key.outputs.password }}
+          AUTH_SALT: ${{ steps.auth-salt.outputs.password }}
+          LOGGED_IN_KEY: ${{ steps.logged-in-key.outputs.password }}
+          LOGGED_IN_SALT: ${{ steps.logged-in-salt.outputs.password }}
+          NONCE_KEY: ${{ steps.nonce-key.outputs.password }}
+          NONCE_SALT: ${{ steps.nonce-salt.outputs.password }}
+          SECURE_AUTH_KEY: ${{ steps.secure-key.outputs.password }}
+          SECURE_AUTH_SALT: ${{ steps.secure-salt.outputs.password }}
           BASIC_AUTH: ${{ secrets.BASIC_AUTH }}
         run: |
-          cat deploy/development/secret.tpl | envsubst > deploy/development/secret.yaml
-          cat deploy/development/deployment.tpl | envsubst > deploy/development/deployment.yaml
+          cat deploy/${{ job.environment }}/secret.tpl | envsubst > deploy/${{ job.environment }}/secret.yaml
+          cat deploy/${{ job.environment }}/deployment.tpl | envsubst > deploy/${{ job.environment }}/deployment.yaml
 
       - name: "Authenticate to the cluster"
         env:
@@ -133,4 +126,4 @@ jobs:
 
       - name: "Apply manifest files"
         run: |
-          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/development
+          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ job.environment }}
