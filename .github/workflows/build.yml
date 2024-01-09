@@ -1,0 +1,41 @@
+name: "Image build"
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets: inherit
+
+jobs:
+  build_image:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Configuring AWS credentials"
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
+          aws-region: ${{ vars.ECR_REGION }}
+
+      - name: "Logging into ECR"
+        uses: aws-actions/amazon-ecr-login@v2
+        id: ecr-login
+
+      - name: "Build & Push to ECR"
+        run: |
+          docker image build -t $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG --target nginx .
+          docker image build -t $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG --target build-fpm .
+          docker push $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG
+        env:
+          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+          REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
