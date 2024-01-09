@@ -1,50 +1,26 @@
-name: Deploy to MoJ Cloud Platform
+name: "Environment build / deploy"
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - 'main'
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets: inherit
 
 jobs:
-  build_ecr:
+
+  image_build:
+    name: "Build image"
+    uses: ./.github/workflows/build.yml
+    with:
+      environment: ${{ inputs.environment }}
+
+  deploy_environment:
+    name: "Deploy"
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-      - name: "Configuring AWS credentials"
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
-          aws-region: ${{ vars.ECR_REGION }}
-
-      - name: "Logging into ECR"
-        uses: aws-actions/amazon-ecr-login@v2
-        id: ecr-login
-
-      - name: "Build & Push to ECR"
-        run: |
-          docker image build -t $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG --target nginx .
-          docker image build -t $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG --target build-fpm .
-          docker push $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
-          docker push $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG
-        env:
-          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-          REPOSITORY: ${{ vars.ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ github.sha }}
-
-  deploy-dev:
-    runs-on: ubuntu-latest
-    environment: development
-    needs: build_ecr
+    needs: image_build
+    environment: ${{ inputs.environment }}
     env:
       KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
 
@@ -53,39 +29,46 @@ jobs:
         uses: actions/checkout@v4
 
       ##########################################
-      ####          Generate hashes         ####
+      ####      Generate keys and salts     ####
       ##########################################
 
-      - name: "Generate keys and salts"
+      - name: "Generate auth key"
         uses: licenseware/generate-password-and-hash@v1
         id: auth-key
         with:
           length: 64
-      - uses: licenseware/generate-password-and-hash@v1
+      - name: "Generate auth salt"
+        uses: licenseware/generate-password-and-hash@v1
         id: auth-salt
         with:
           length: 64
-      - uses: licenseware/generate-password-and-hash@v1
+      - name: "Generate logged in key"
+        uses: licenseware/generate-password-and-hash@v1
         id: logged-in-key
         with:
           length: 64
-      - uses: licenseware/generate-password-and-hash@v1
+      - name: "Generate logged in salt"
+        uses: licenseware/generate-password-and-hash@v1
         id: logged-in-salt
         with:
           length: 64
-      - uses: licenseware/generate-password-and-hash@v1
+      - name: "Generate nonce key"
+        uses: licenseware/generate-password-and-hash@v1
         id: nonce-key
         with:
           length: 64
-      - uses: licenseware/generate-password-and-hash@v1
+      - name: "Generate nonce salt"
+        uses: licenseware/generate-password-and-hash@v1
         id: nonce-salt
         with:
           length: 64
-      - uses: licenseware/generate-password-and-hash@v1
+      - name: "Generate secure key"
+        uses: licenseware/generate-password-and-hash@v1
         id: secure-key
         with:
           length: 64
-      - uses: licenseware/generate-password-and-hash@v1
+      - name: "Generate secure salt"
+        uses: licenseware/generate-password-and-hash@v1
         id: secure-salt
         with:
           length: 64
@@ -96,7 +79,7 @@ jobs:
 
       - name: "Inject environment variables"
         env:
-          ECR_URL: ${{ vars.ECR_URL }}/${{ vars.ECR_REPOSITORY }}
+          ECR_URL: ${{ secrets.ECR_URL }}/${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
           AUTH_KEY: ${{ steps.auth-key.outputs.password }}
@@ -109,8 +92,8 @@ jobs:
           SECURE_AUTH_SALT: ${{ steps.secure-salt.outputs.password }}
           BASIC_AUTH: ${{ secrets.BASIC_AUTH }}
         run: |
-          cat deploy/${{ job.environment }}/secret.tpl | envsubst > deploy/${{ job.environment }}/secret.yaml
-          cat deploy/${{ job.environment }}/deployment.tpl | envsubst > deploy/${{ job.environment }}/deployment.yaml
+          cat deploy/${{ inputs.environment }}/secret.tpl | envsubst > deploy/${{ inputs.environment }}/secret.yaml
+          cat deploy/${{ inputs.environment }}/deployment.tpl | envsubst > deploy/${{ inputs.environment }}/deployment.yaml
 
       - name: "Authenticate to the cluster"
         env:
@@ -126,4 +109,4 @@ jobs:
 
       - name: "Apply manifest files"
         run: |
-          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ job.environment }}
+          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ inputs.environment }}
