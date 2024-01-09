@@ -12,6 +12,8 @@ jobs:
     name: "Image build"
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    outputs:
+      registry: ${{ steps.ecr-login.outputs.registry }}
     permissions:
       id-token: write
       contents: read
@@ -56,42 +58,42 @@ jobs:
       ####      Generate keys and salts     ####
       ##########################################
 
-      - name: "Generate auth key"
+      - name: "Generating auth key"
         uses: licenseware/generate-password-and-hash@v1
         id: auth-key
         with:
           length: 64
-      - name: "Generate auth salt"
+      - name: "... auth salt"
         uses: licenseware/generate-password-and-hash@v1
         id: auth-salt
         with:
           length: 64
-      - name: "Generate logged in key"
+      - name: "... logged in key"
         uses: licenseware/generate-password-and-hash@v1
         id: logged-in-key
         with:
           length: 64
-      - name: "Generate logged in salt"
+      - name: "... logged in salt"
         uses: licenseware/generate-password-and-hash@v1
         id: logged-in-salt
         with:
           length: 64
-      - name: "Generate nonce key"
+      - name: "... nonce key"
         uses: licenseware/generate-password-and-hash@v1
         id: nonce-key
         with:
           length: 64
-      - name: "Generate nonce salt"
+      - name: "... nonce salt"
         uses: licenseware/generate-password-and-hash@v1
         id: nonce-salt
         with:
           length: 64
-      - name: "Generate secure key"
+      - name: "... secure key"
         uses: licenseware/generate-password-and-hash@v1
         id: secure-key
         with:
           length: 64
-      - name: "Generate secure salt"
+      - name: "... secure salt"
         uses: licenseware/generate-password-and-hash@v1
         id: secure-salt
         with:
@@ -103,7 +105,7 @@ jobs:
 
       - name: "Inject environment variables"
         env:
-          ECR_URL: ${{ secrets.ECR_URL }}/${{ secrets.ECR_REPOSITORY }}
+          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
           AUTH_KEY: ${{ steps.auth-key.outputs.password }}
