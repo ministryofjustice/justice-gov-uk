@@ -2,9 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ${KUBE_NAMESPACE}
+  namespace: ${KUBE_NAMESPACE}
+  labels:
+    app: ${KUBE_NAMESPACE}
+    tier: frontend-c
 spec:
   replicas: 2
-  revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -17,6 +20,7 @@ spec:
     metadata:
       labels:
         app: ${KUBE_NAMESPACE}
+        tier: frontend-c
     spec:
       volumes:
         - name: media

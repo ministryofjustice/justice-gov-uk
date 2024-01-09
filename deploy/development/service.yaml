@@ -11,3 +11,4 @@ spec:
     targetPort: 8080
   selector:
     app: justice-gov-uk-dev
+    tier: frontend-c
