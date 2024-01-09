@@ -42,6 +42,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
 
   deploy-dev:
+    environment: development
     runs-on: ubuntu-latest
     needs: build_ecr
     env:
@@ -59,42 +60,42 @@ jobs:
         uses: licenseware/generate-password-and-hash@v1
         id: auth-key-hash
         with:
-          length: 32
+          length: 34
       - name: "Auth salt"
         uses: licenseware/generate-password-and-hash@v1
         id: auth-salt-hash
         with:
-          length: 32
+          length: 34
       - name: "Logged in key"
         uses: licenseware/generate-password-and-hash@v1
         id: logged-in-key-hash
         with:
-          length: 32
+          length: 34
       - name: "Logged in salt"
         uses: licenseware/generate-password-and-hash@v1
         id: logged-in-salt-hash
         with:
-          length: 32
+          length: 34
       - name: "Nonce key"
         uses: licenseware/generate-password-and-hash@v1
         id: nonce-key-hash
         with:
-          length: 32
+          length: 34
       - name: "Nonce salt"
         uses: licenseware/generate-password-and-hash@v1
         id: nonce-salt-hash
         with:
-          length: 32
+          length: 34
       - name: "Secure key"
         uses: licenseware/generate-password-and-hash@v1
         id: secure-key-hash
         with:
-          length: 32
+          length: 34
       - name: "Secure salt"
         uses: licenseware/generate-password-and-hash@v1
         id: secure-salt-hash
         with:
-          length: 32
+          length: 34
 
       ##########################################
       ####          ===============         ####
