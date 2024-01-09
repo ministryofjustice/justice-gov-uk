@@ -1,0 +1,39 @@
+body {
+    font-size: 90%;
+}
+body.page-template-page_left-centre-right {
+    width: 620px;
+}
+p {
+    font-family: Arial, Helvetica, Sans-Serif, serif !important;
+    padding: 0.7em 0;
+    margin: 0;
+    line-height: 1.5em;
+}
+
+a {
+    display: inline;
+    color: #4e6280;
+    text-decoration: none;
+}
+
+a[href$=".pdf"] {
+    display: inline;
+    *display: inline-block;
+    padding-left: 18px;
+    line-height: 18px;
+    background: transparent url(https://www.justice.gov.uk/__data/assets/image/0004/33709/icon_pdf.png?v=0.1.4) center left no-repeat;
+}
+
+ul {
+    font-family: Arial, Helvetica, Sans-Serif, serif !important;
+    list-style: disc;
+    padding: 0.5em 0 0.5em 1.5em;
+    margin: 0;
+    line-height: 1.5em;
+}
+
+ul li {
+    margin: 0;
+    padding: 0 0 0 1em;
+}

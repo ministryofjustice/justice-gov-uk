@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: justice-gov-uk-dev-service
+  labels:
+    app: justice-gov-uk-dev
+spec:
+  ports:
+  - port: 80
+    name: http
+    targetPort: 8080
+  selector:
+    app: justice-gov-uk-dev

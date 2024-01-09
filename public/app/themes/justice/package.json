@@ -1,0 +1,32 @@
+{
+    "name": "justice.gov.uk",
+    "version": "2.0.0",
+    "description": "Node dependency manager of justice.gov.uk",
+    "main": "./src/js/app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "npm run development",
+        "staging": "npm run production",
+        "hot": "npx mix watch --hot",
+        "watch": "npx mix watch",
+        "development": "npx mix",
+        "production": "npx mix --production"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ministryofjustice/justice-gov-uk.git"
+    },
+    "author": "damien.wilson@digital.justice.gov.uk",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ministryofjustice/justice-gov-uk/issues"
+    },
+    "homepage": "https://github.com/ministryofjustice/justice-gov-uk#readme",
+    "dependencies": {
+    },
+    "devDependencies": {
+        "laravel-mix": "^6.0.49",
+        "sass": "^1.66.1",
+        "sass-loader": "^12.6.0"
+    }
+}

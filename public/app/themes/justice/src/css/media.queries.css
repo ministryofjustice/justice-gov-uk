@@ -1,0 +1,204 @@
+/*
+  Running Squiz Matrix
+  Developed by Squiz - http://www.squiz.net
+  Squiz, Squiz Matrix, MySource, MySource Matrix and Squiz.net are registered Trademarks of Squiz Pty Ltd
+  Page generated: 18 September 2023 09:21:52
+*/
+
+
+/***reset(ios)***/
+input[type=text],input[type=submit]{-webkit-appearance: none;-webkit-border-radius:0px;}
+
+/***tablet(all)***/
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+    .container-wrapper{padding:0 7px;}
+    #highlight-wrapper,#popular,#popular li a:hover,#footer-bar,#footer-bar .social-media{background-size:29px 29px;}
+}
+
+/***tablet(portrait)***/
+@media only screen and (min-width : 768px) and (max-width : 1024px) and (orientation : portrait) {
+    /*global*/
+    body{font-size:95%;}
+    .container-wrapper{padding:0 7px;}
+    #links-top{font-size:108%;}
+    .menu-top li a{padding:0 9px 0 10px;}
+    .menu-top .flyout-container li a{padding:.6em 0;}
+    .menu-top .flyout-container .content-1col,.menu-top .flyout-container .content-2col,.menu-top .flyout-container .content-3col{padding:1em 0;font-size:105%;}
+
+    /*home*/
+    .content-3col,body.home .menu-top .flyout-container .content-4col{padding:1em 0;}
+    body.home #highlight article h1{font-size:1.0em;padding:.5em 0;}
+    body.home #highlight article header span{font-size:1.15em;line-height:1.4em;}
+    body.home #highlight .tabs li a{margin:6px 0 0 0;padding:5px 6px 3px 6px;}
+    body.home #popular h2{padding:.4em 0 .1em 0;}
+    body.home #popular li{font-size:1.05em;}
+    body.home #popular li a{padding:.4em 0;}
+    body.home .home-box25p-1 article,body.home .home-box25p-2 article,body.home .home-box25p-3 article,body.home .home-box25p-4 article,
+    body.home .home-box33p-1 article,body.home .home-box33p-2 article,body.home .home-box33p-3 article{height:450px;}
+    body.home #most-recent .tab-content li:last-child{display:none}
+    body.home #most-recent .tab-content li li{font-size:1em;padding:.2em 0;}
+    body.home .nselect li,body.home .nselect .current{line-height:1.3em!important;}
+
+    /*inner*/
+    .news-box50p-wrapper{line-height:1.4em;}
+    .lv1-listing .grey-box .header span{line-height:1.1em;}
+}
+
+/***phone(all)***/
+@media only screen and (min-width : 320px) and (max-width : 569px) {
+    /*global*/
+    body{font-size:80%;}
+    iframe{max-width:100%;}
+    .device-only{display:block!important;}
+    .container-wrapper{width:100%;padding:0;}
+    body.inner-lcr #content,body.inner-lc #content,body.inner-cr #content,body.inner-c #content{width:94%;padding:3%;margin-bottom:0;}
+    #content-wrapper{padding:0!important;}
+    #section-sub-wrapper{display:none;}
+    #breadcrumb{margin:0!important;}
+    .menu-top,#search-top,#content-left{display:none;}
+    #header-wrapper{height:auto;border:0 none;}
+    #logo{width:100%;margin:15px 0 25px 0;}
+    #logo a{margin:0 auto;}
+    #section-sub-wrapper{padding:0;}
+    #links-top{float:left;font-size:.9em;margin-left:10px;}
+    #links-top li{display:none;margin-left:0.4em;}
+    #logo{clear:left;}
+    #search-top{width:100%;margin:1em 0;}
+    #search-top form{float:left;margin-left:8px;}
+    .menu-top{float:left;position:static;height:auto;padding-left:0;}
+    .menu-top li{width:100%;height:40px;padding-right:0;border-top:1px solid #d8d7d2;
+        background: url(https://www.justice.gov.uk/__data/assets/image/0020/2495/phone-menu-top-arrow.png?v=0.0.7) top right no-repeat, -moz-linear-gradient(top,  #afaca5 0%, #6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0020/2495/phone-menu-top-arrow.png?v=0.0.7) top right no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afaca5), color-stop(100%,#6f6f6f));
+        background: url(https://www.justice.gov.uk/__data/assets/image/0020/2495/phone-menu-top-arrow.png?v=0.0.7) top right no-repeat, -webkit-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0020/2495/phone-menu-top-arrow.png?v=0.0.7) top right no-repeat, -o-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0020/2495/phone-menu-top-arrow.png?v=0.0.7) top right no-repeat, -ms-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0020/2495/phone-menu-top-arrow.png?v=0.0.7) top right no-repeat, linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);}
+    .menu-top li a{width:100%;height:32px;text-indent:15px;padding:8px 0 0 0;font-size:1.4em;color:#ffffff;text-shadow:0 -1px 0 #555555;}
+    .menu-top .flyout-container,.menu-top li span,.menu-top .finish{display:none!important;}
+    #footer-bar{height:40px;background:none;border:0 none;}
+    #footer-bar .social-media{float:left;width:100%;margin:0;}
+    #footer-bar .social-media span{margin:7px 10px 0;}
+    #footer-bar .social-media ul{float:right;margin-right:5px;}
+    #footer ul,#footer .f-line,#footer h1{display:none;}
+    #footer ul#f-copy{display:block;margin-right:10px;font-size:.9em;}
+    .h-line,.h-line-light,.h-bar{display:none;}
+
+    /*home*/
+    body.home #content{width:100%;padding:0;margin-bottom:1.5em;}
+    body.home .menu-top,body.home #search-top{display:block;}
+    body.home .menu-top li.more{display:none;}
+    body.home #popular,body.home #iam,body.home #looking-for,body.home #most-recent,body.home .home-box50p{display:none;}
+    body.home .feature-panel{float:left}
+    body.home #highlight-wrapper{background:none;border:0 none;}
+    body.home #highlight{height:325px;}
+    body.home #highlight article{margin:0;}
+    body.home #highlight article h1{font-size:1.7em;padding:.3em 10px;}
+    body.home #highlight article img{width:320px;height:auto;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;}
+    body.home #highlight .tabs{left:10px;top:275px;}
+    body.home #highlight article header{width:100%;padding:0;}
+
+    body.home #highlight article header span {display:block;padding:.5em .7em}
+
+    body.home #highlight article header{height:auto;}
+    body.home .h-bar{height:30px;}
+    body.home .home-box25p-1,body.home .home-box25p-2,body.home .home-box25p-3,body.home .home-box25p-4{width:100%;padding:0;border:0 none;background:none;min-height:0;}
+    body.home .home-box25p-1 article,body.home .home-box25p-2 article,body.home .home-box25p-3 article,body.home .home-box25p-4 article{width:100%;height:auto;margin-top:0;}
+    body.home .home-box25p-1 article img,body.home .home-box25p-2 article img,body.home .home-box25p-3 article img,body.home .home-box25p-4 article img{float:left;width:80px;height:auto;margin:0 10px;}
+    body.home .home-box25p-1 article h1,body.home .home-box25p-2 article h1,body.home .home-box25p-3 article h1,body.home .home-box25p-4 article h1{padding-top:0;}
+    body.home .home-box25p-1 article header,body.home .home-box25p-2 article header,body.home .home-box25p-3 article header,body.home .home-box25p-4 article header{float:left;width:65%;}
+    body.home .home-box25p-wrapper-1,body.home .home-box25p-wrapper-2,body.home .home-box25p-wrapper-3,body.home .home-box25p-wrapper-4{width:100%;border:0 none;}
+    body.home .anchor-link,body.home #phone-nav-top,body.home #phone-nav-left{display:none;}
+
+    /*inner*/
+    .share-this span.right{display:none;}
+    #content-right{float:left;width:300px;padding:10px;}
+    #content-right .grey-box .header span{width:272px;}
+    #content-right .grey-box{display:none;}
+    .lv1-listing .grey-box{width:100%;margin-right:0;}
+    .lv1-listing .grey-box .header span,.lv1-listing .grey-box .content{width:272px;}
+    .lv1-listing li,.lv2-listing ul{width:100%;}
+    body.inner-c .news-box50p-wrapper{width:100%;margin-bottom:1em;}
+    body.inner-c .news-box50p-wrapper iframe{width:300px;height:182px;}
+    body.inner-c .news-box50p-wrapper .home-box50p{float:left!important;width:100%;margin-top:1em;}
+    body.inner-c .news-box50p-wrapper .home-box50p .news-simple-grey-box{width:94%;padding:35px 3%;}
+    body.inner-c .news-box50p-wrapper .home-box50p article{height:auto;}
+    body.inner-c .home-box50p .news-50p,body.inner-c .home-box50p .news-50p-last{margin-right:0;width:100%;}
+    body.inner-c .home-box50p .news-50p-last{margin-top:1em;}
+    body.inner-c #guest-articles,body.inner-c #speeches{margin-left:-3%;}
+    body.inner-c #guest-articles .news-box30p,body.inner-c #speeches .news-box30p{margin:0;}
+    body.inner-c #twitter-feed .news-box30p{float:left;margin:0;width:100%;}
+    body.inner-c #twitter-feed .news-box30p .content{width:auto;height:auto;padding-top:0;padding-bottom:0;}
+    body.inner-c .home-box33p-wrapper-1,body.inner-c .home-box33p-wrapper-2,body.inner-c .home-box33p-wrapper-3{border:0;}
+    body.inner-c .home-box33p-1,body.inner-c .home-box33p-2,body.inner-c .home-box33p-3,body.inner-c .home-box30p,body.inner-c .news-box30p{padding:.5em 0 0 0;width:100%;border:0 none;min-height:0;}
+    body.inner-c .news-box30p h2{padding:10px 0 10px 3%;}
+    body.inner-c .home-box33p-1{padding-top:2em;}
+    body.inner-c .home-box33p-1 article,body.inner-c .home-box33p-2 article,body.inner-c .home-box33p-3 article{height:auto;margin-top:0;}
+    body.inner-c .home-box33p-1,body.inner-c .home-box33p-2,body.inner-c .home-box33p-3{background:none;}
+    body.inner-c .home-box33p-1 article header span,body.inner-c .home-box33p-2 article header span,body.inner-c .home-box33p-3 article header span{margin-bottom:.3em;width:65%;}
+    body.inner-c .home-box33p-1 article header span.date,body.inner-c .home-box33p-2 article header span.date,body.inner-c .home-box33p-3 article header span.date{width:100%;}
+    body.inner-c .home-box33p-1 article header h1,body.inner-c .home-box33p-2 article header h1,body.inner-c .home-box33p-3 article header h1{width:100%;margin-bottom:0;padding-top:0;}
+    body.inner-c .home-box33p-1 article img,body.inner-c .home-box33p-2 article img,body.inner-c .home-box33p-3 article img{width:80px;height:80px;}
+    /****body.inner-c #guest-articles .news-box30p,body.inner-c #speeches .news-box30p,body.inner-c #twitter-feed{margin-left:-3%;}*/
+    .filter{display:none;}
+    .search .search-bar #query{width:210px;}
+    .search .search-info{float:left;}
+    #comment-box{width:270px;}
+    #comment-box textarea{width:254px!important;}
+    body.inner-cr .search-wrapper .search{width:100%;}
+    .search .nav ul{width:50%;}
+    .search .nav span.prev,.search .nav span.next{width:25%;}
+    .news-list article{width:100%;}
+    .news-list header{width:55%;}
+    .date-bar{margin:2em 0;}
+    .date-bar .months{display:none;}
+    .search .results article{width:100%;overflow:hidden;}
+    #content article img{max-width:300px;height:auto;}
+    .az-listing ul.menu li{margin-bottom:3px;}
+
+    /*media only*/
+    .anchor-link{position:relative;float:left;width:94%;margin:3%;}
+    .anchor-link a{float:left;width:100%;text-align:center;font-weight:bold;}
+    .anchor-link .bar-left,.anchor-link .bar-right{position:absolute;top:5px;width:128px;height:6px;background:#eff0f2;}
+    .anchor-link .bar-left{left:0;}
+    .anchor-link .bar-right{right:0;}
+    .anchor-top{width:100%;margin:3% 0;}
+    #phone-nav-left{float:left;padding:3%;margin-bottom:2em;}
+    #phone-nav-left{width:94%;}
+    #phone-nav-left li,#phone-nav-left li a{width:100%;}
+    #phone-nav-top{display:block;}
+    #phone-nav-top li{
+        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -moz-linear-gradient(top,  #afaca5 0%, #6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#afaca5), color-stop(100%,#6f6f6f));
+        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -webkit-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -o-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -ms-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
+        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);}
+    #phone-nav-top li a{text-indent:30px;}
+    #phone-nav-anchor{float:left;}
+
+    /*jcarousel-on-phone*/
+    #flickr img{height:173px;max-width:260px;}
+    #flickr li{width:260px;height:173px;}
+    .jcarousel-skin .jcarousel-container-horizontal{width:260px;}
+    .jcarousel-skin .jcarousel-clip-horizontal{width:260px;}
+    .jcarousel-skin .jcarousel-item{width:260px;}
+    .jcarousel-skin .jcarousel-next-horizontal{height:173px;background-position:0 85px;}
+    .jcarousel-skin .jcarousel-next-horizontal:hover,.jcarousel-skin .jcarousel-next-horizontal:focus{background-position:-20px 85px;}
+    .jcarousel-skin .jcarousel-next-horizontal:active{background-position:-40px 85px;}
+    .jcarousel-skin .jcarousel-next-disabled-horizontal,.jcarousel-skin .jcarousel-next-disabled-horizontal:hover,.jcarousel-skin .jcarousel-next-disabled-horizontal:focus,.jcarousel-skin .jcarousel-next-disabled-horizontal:active{background-position:-60px 85px;}
+    .jcarousel-skin .jcarousel-prev-horizontal{height:173px;background-position:0 85px;}
+    .jcarousel-skin .jcarousel-prev-horizontal:hover,.jcarousel-skin .jcarousel-prev-horizontal:focus{background-position:-20px 85px;}
+    .jcarousel-skin .jcarousel-prev-horizontal:active{background-position:-40px 85px;}
+    .jcarousel-skin .jcarousel-prev-disabled-horizontal,.jcarousel-skin .jcarousel-prev-disabled-horizontal:hover,.jcarousel-skin .jcarousel-prev-disabled-horizontal:focus,.jcarousel-skin .jcarousel-prev-disabled-horizontal:active{background-position:-60px 85px;}
+
+    /*global*/
+    .phone{display:block!important;}
+}
+
+/***phone(portrait)***/
+/*@media only screen and (max-width : 320px) and (orientation : portrait) {
+body.home .home-box25p-1 article header,body.home .home-box25p-2 article header,body.home .home-box25p-3 article header,body.home .home-box25p-4 article header{float:left;width:210px;}
+}*/
+
+
+/*body.home #highlight article header span.intro{display:block; padding:.5em .7em}*/
