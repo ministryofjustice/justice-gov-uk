@@ -31,10 +31,10 @@ jobs:
 
       - name: "Build & Push to ECR"
         run: |
-          docker image build -t $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG --target nginx .
           docker image build -t $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG --target build-fpm .
-          docker push $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
+          docker image build -t $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG --target nginx .
           docker push $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
         env:
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           REPOSITORY: ${{ vars.ECR_REPOSITORY }}
