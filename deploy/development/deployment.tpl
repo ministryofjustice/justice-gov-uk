@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: ${KUBE_NAMESPACE}
 spec:
-  replicas: 4
+  replicas: 2
   revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
