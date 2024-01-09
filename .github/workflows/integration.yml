@@ -13,23 +13,26 @@ concurrency:
 jobs:
 
   deploy_dev:
-    name: "Deploy / Development"
+    name: "Development"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: development
+    secrets: inherit
 
   deploy_staging:
-    name: "Deploy / Staging"
+    name: "Staging"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
+    secrets: inherit
 
   deploy_production:
-    name: "Deploy / Production"
+    name: "Production"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: production
+    secrets: inherit
 

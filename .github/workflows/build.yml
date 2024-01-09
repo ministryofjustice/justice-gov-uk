@@ -6,7 +6,6 @@ on:
       environment:
         required: true
         type: string
-    secrets: inherit
 
 jobs:
   build_image:
