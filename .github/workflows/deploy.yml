@@ -57,7 +57,6 @@ jobs:
       ##########################################
       ####      Generate keys and salts     ####
       ##########################################
-
       - name: "Generating auth key"
         uses: licenseware/generate-password-and-hash@v1
         id: auth-key
@@ -122,7 +121,7 @@ jobs:
         run: |
           cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
           cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml
-          if [ -n "$BASIC_AUTH_USER" ]; then cat $TPL_PATH/secret-basic-auth.tpl | envsubst > $TPL_PATH/secret-basic-auth.yaml
+          if [ -n "$BASIC_AUTH_USER" ]; then; cat $TPL_PATH/secret-basic-auth.tpl | envsubst > $TPL_PATH/secret-basic-auth.yaml
 
       - name: "Authenticate to the cluster"
         env:
