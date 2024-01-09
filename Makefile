@@ -118,11 +118,11 @@ port-forward:
 	@$(k8s_pod) | echo $$(cat -)" "$(k8s_prt) | xargs kubectl -n $(k8s_nsp) port-forward
 
 apply:
-	kubectl apply -f ops/deploy/local
+	kubectl apply -f deploy/local
 
 unapply:
 	@$(k8s_pod) | xargs kubectl -n $(k8s_nsp) delete pod
 
 apply-production:
-	kubectl apply -f ops/deploy/production
+	kubectl apply -f deploy/production
 
