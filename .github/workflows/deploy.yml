@@ -41,7 +41,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
 
   deploy_environment:
-    name: "Deploy environment"
+    name: "Deploy"
     runs-on: ubuntu-latest
     needs: image_build
     environment: ${{ inputs.environment }}
