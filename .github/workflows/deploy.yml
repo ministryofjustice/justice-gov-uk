@@ -105,7 +105,7 @@ jobs:
 
       - name: "Inject environment variables"
         env:
-          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}
+          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
           AUTH_KEY: ${{ steps.auth-key.outputs.password }}
