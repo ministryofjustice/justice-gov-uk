@@ -23,7 +23,6 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
-      ENVIRONMENT: ${{ inputs.environment }}
 
     steps:
       - name: "Checkout"
@@ -93,8 +92,8 @@ jobs:
           SECURE_AUTH_SALT: ${{ steps.secure-salt.outputs.password }}
           BASIC_AUTH: ${{ secrets.BASIC_AUTH }}
         run: |
-          cat deploy/$ENVIRONMENT/secret.tpl | envsubst > deploy/$ENVIRONMENT/secret.yaml
-          cat deploy/$ENVIRONMENT/deployment.tpl | envsubst > deploy/$ENVIRONMENT/deployment.yaml
+          cat deploy/${{ inputs.environment }}/secret.tpl | envsubst > deploy/${{ inputs.environment }}/secret.yaml
+          cat deploy/${{ inputs.environment }}/deployment.tpl | envsubst > deploy/${{ inputs.environment }}/deployment.yaml
 
       - name: "Authenticate to the cluster"
         env:
@@ -110,4 +109,4 @@ jobs:
 
       - name: "Apply manifest files"
         run: |
-          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/$ENVIRONMENT
+          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ inputs.environment }}
