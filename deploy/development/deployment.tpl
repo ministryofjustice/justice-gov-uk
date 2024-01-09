@@ -31,8 +31,6 @@ spec:
         envFrom:
           - configMapRef:
               name: ${KUBE_NAMESPACE}
-        securityContext:
-          readOnlyRootFilesystem: true
       - name: fpm
         image: ${ECR_URL}:${IMAGE_TAG_FPM}
         ports:
