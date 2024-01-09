@@ -29,6 +29,15 @@ jobs:
       environment: staging
     secrets: inherit
 
+  deploy_demo:
+    name: "Demo"
+    needs: deploy_dev
+    if: github.event.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: staging
+    secrets: inherit
+
   deploy_production:
     name: "Production"
     needs: deploy_staging

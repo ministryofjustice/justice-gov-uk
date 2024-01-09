@@ -1,10 +1,8 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: basic-auth
+  name: justice-gov-uk-dev-secrets
 type: Opaque
-data:
-  auth: ${BASIC_AUTH}
 stringData:
   AUTH_KEY: "${AUTH_KEY}"
   AUTH_SALT: "${AUTH_SALT}"

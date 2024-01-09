@@ -22,7 +22,7 @@ spec:
         - name: media
           emptyDir: { }
       terminationGracePeriodSeconds: 35
-      serviceAccountName: ${KUBE_NAMESPACE}
+      serviceAccountName: ${KUBE_NAMESPACE}-service
       containers:
       - name: nginx
         image: ${ECR_URL}:${IMAGE_TAG_NGINX}
@@ -33,13 +33,13 @@ spec:
               name: ${KUBE_NAMESPACE}
         securityContext:
           readOnlyRootFilesystem: true
-        volumeMounts:
-          - name: media
-            mountPath: /var/www/html/public/app/uploads
       - name: fpm
         image: ${ECR_URL}:${IMAGE_TAG_FPM}
         ports:
         - containerPort: 9000
+        volumeMounts:
+          - name: media
+            mountPath: /var/www/html/public/app/uploads
         env:
           - name: S3_BUCKET_NAME
             valueFrom:
@@ -74,3 +74,5 @@ spec:
         envFrom:
           - configMapRef:
               name: ${KUBE_NAMESPACE}
+          - secretRef:
+              name: ${KUBE_NAMESPACE}-secrets

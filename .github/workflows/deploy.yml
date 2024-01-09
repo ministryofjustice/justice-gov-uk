@@ -105,6 +105,7 @@ jobs:
 
       - name: "Inject environment variables"
         env:
+          TPL_PATH: "deploy/${{ inputs.environment }}"
           ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
@@ -116,10 +117,12 @@ jobs:
           NONCE_SALT: ${{ steps.nonce-salt.outputs.password }}
           SECURE_AUTH_KEY: ${{ steps.secure-key.outputs.password }}
           SECURE_AUTH_SALT: ${{ steps.secure-salt.outputs.password }}
-          BASIC_AUTH: ${{ secrets.BASIC_AUTH }}
+          BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
+          BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
         run: |
-          cat deploy/${{ inputs.environment }}/secret.tpl | envsubst > deploy/${{ inputs.environment }}/secret.yaml
-          cat deploy/${{ inputs.environment }}/deployment.tpl | envsubst > deploy/${{ inputs.environment }}/deployment.yaml
+          cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
+          cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml
+          if [ -n "$BASIC_AUTH_USER" ]; then cat $TPL_PATH/secret-basic-auth.tpl | envsubst > $TPL_PATH/secret-basic-auth.yaml
 
       - name: "Authenticate to the cluster"
         env:
