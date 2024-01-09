@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: justice-gov-uk-dev
+  name: ${KUBE_NAMESPACE}
 spec:
   replicas: 4
   revisionHistoryLimit: 5
@@ -12,17 +12,17 @@ spec:
       maxSurge: 100%
   selector:
     matchLabels:
-      app: justice-gov-uk-dev
+      app: ${KUBE_NAMESPACE}
   template:
     metadata:
       labels:
-        app: justice-gov-uk-dev
+        app: ${KUBE_NAMESPACE}
     spec:
       volumes:
         - name: media
           emptyDir: { }
       terminationGracePeriodSeconds: 35
-      serviceAccountName: justice-gov-uk-dev
+      serviceAccountName: ${KUBE_NAMESPACE}
       containers:
       - name: nginx
         image: ${ECR_URL}:${IMAGE_TAG_NGINX}
@@ -30,7 +30,7 @@ spec:
         - containerPort: 8080
         envFrom:
           - configMapRef:
-              name: justice-gov-uk-dev
+              name: ${KUBE_NAMESPACE}
         securityContext:
           readOnlyRootFilesystem: true
         volumeMounts:
@@ -73,4 +73,4 @@ spec:
                 key: database_password
         envFrom:
           - configMapRef:
-              name: justice-gov-uk-dev
+              name: ${KUBE_NAMESPACE}
