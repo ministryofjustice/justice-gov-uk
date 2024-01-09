@@ -65,6 +65,7 @@ COPY . /code/
 WORKDIR /code/public/app/themes/justice
 RUN npm i
 RUN npm run production
+RUN rm -rf node_modules
 
 
 ###

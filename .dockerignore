@@ -1,9 +1,12 @@
 public/app/uploads/*
+public/app/themes/justice/node_modules
 public/wp
 vendor
+deploy
+!deploy/config
 
 bin/local-*
-.github
+.git*
 .editorconfig
 .env.example
 
