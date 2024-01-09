@@ -20,9 +20,10 @@ spec:
     metadata:
       labels:
         app: justice-gov-uk-local
+        tier: frontend-c
     spec:
       volumes:
-        - name: uploads
+        - name: media
           emptyDir: {}
       containers:
         - name: nginx
