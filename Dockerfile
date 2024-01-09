@@ -14,7 +14,7 @@ RUN apk add --update nano nodejs npm
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # non-root
-USER www-data
+USER 82
 
 ###
 
@@ -34,7 +34,7 @@ RUN composer install --no-dev
 RUN composer dump-autoload -o
 
 # non-root
-USER www-data
+USER 82
 
 ###
 
@@ -45,7 +45,7 @@ WORKDIR /var/www/html
 COPY --from=build-fpm-composer /var/www/html /var/www/html
 
 # non-root
-USER www-data
+USER 82
 
 ###
 
