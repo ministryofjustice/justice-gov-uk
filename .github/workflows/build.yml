@@ -9,6 +9,7 @@ on:
 
 jobs:
   build_image:
+    name: "Build & push to ECR"
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     permissions:

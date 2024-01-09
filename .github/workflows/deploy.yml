@@ -10,10 +10,11 @@ on:
 jobs:
 
   image_build:
-    name: "Build image"
+    name: "Image"
     uses: ./.github/workflows/build.yml
     with:
       environment: ${{ inputs.environment }}
+    secrets: inherit
 
   deploy_environment:
     name: "Deploy"
