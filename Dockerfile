@@ -72,6 +72,6 @@ RUN npm run production
 
 FROM nginxinc/nginx-unprivileged:1.25-alpine AS nginx
 
-COPY ops/conf/production/php-fpm.conf /etc/nginx/php-fpm.conf
-COPY ops/conf/production/server.conf /etc/nginx/conf.d/default.conf
+COPY deploy/config/php-fpm.conf /etc/nginx/php-fpm.conf
+COPY deploy/config/server.conf /etc/nginx/conf.d/default.conf
 COPY --from=assets-build /code/public /var/www/html/public/
