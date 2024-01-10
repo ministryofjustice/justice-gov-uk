@@ -5,6 +5,3 @@ metadata:
   namespace: justice-gov-uk-dev
 data:
   WP_ENV: "development"
-  WP_HOME: "justice-gov-uk-dev"
-  WP_SITEURL: 'justice-gov-uk-dev/wp'
-
