@@ -5,6 +5,6 @@ metadata:
   namespace: justice-gov-uk-dev
 data:
   WP_ENV: "development"
-  WP_HOME: "https://justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk"
-  WP_SITEURL: 'https://justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk/wp'
+  WP_HOME: "justice-gov-uk-dev"
+  WP_SITEURL: 'justice-gov-uk-dev/wp'
 
