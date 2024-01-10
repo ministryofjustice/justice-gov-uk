@@ -32,9 +32,6 @@ spec:
         image: ${ECR_URL}:${IMAGE_TAG_NGINX}
         ports:
         - containerPort: 8080
-        envFrom:
-          - configMapRef:
-              name: ${KUBE_NAMESPACE}
       - name: fpm
         image: ${ECR_URL}:${IMAGE_TAG_FPM}
         ports:
