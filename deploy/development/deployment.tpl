@@ -5,7 +5,6 @@ metadata:
   namespace: ${KUBE_NAMESPACE}
   labels:
     app: ${KUBE_NAMESPACE}
-    tier: frontend-c
 spec:
   replicas: 2
   strategy:
@@ -16,6 +15,7 @@ spec:
   selector:
     matchLabels:
       app: ${KUBE_NAMESPACE}
+      tier: frontend-c
   template:
     metadata:
       labels:

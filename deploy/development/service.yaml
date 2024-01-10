@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: justice-gov-uk-dev
   labels:
     app: justice-gov-uk-dev
 spec:
