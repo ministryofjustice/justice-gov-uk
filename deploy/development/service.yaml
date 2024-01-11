@@ -1,14 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: justice-gov-uk-dev
+  name: nginx-service
   labels:
     app: justice-gov-uk-dev
 spec:
   ports:
   - port: 8080
-    name: http
     targetPort: 8080
   selector:
     app: justice-gov-uk-dev
-    tier: frontend-c
