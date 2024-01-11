@@ -23,8 +23,6 @@ spec:
         tier: frontend-c
     spec:
       volumes:
-        - name: public
-          emptyDir: { }
         - name: media
           emptyDir: { }
       terminationGracePeriodSeconds: 35
@@ -33,17 +31,12 @@ spec:
       - name: nginx
         image: ${ECR_URL}:${IMAGE_TAG_NGINX}
         ports:
-          - containerPort: 8080
-        volumeMounts:
-          - name: public
-            mountPath: /var/www/html/public
+        - containerPort: 8080
       - name: fpm
         image: ${ECR_URL}:${IMAGE_TAG_FPM}
         ports:
-          - containerPort: 9000
+        - containerPort: 9000
         volumeMounts:
-          - name: public
-            mountPath: /var/www/html/public
           - name: media
             mountPath: /var/www/html/public/app/uploads
         env:
