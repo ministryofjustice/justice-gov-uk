@@ -75,4 +75,5 @@ FROM nginxinc/nginx-unprivileged:1.25-alpine AS nginx
 
 COPY deploy/config/php-fpm.conf /etc/nginx/php-fpm.conf
 COPY deploy/config/server.conf /etc/nginx/conf.d/default.conf
-COPY --from=assets-build /code/ /var/www/html/
+COPY --from=assets-build /code/public /var/www/html/public/
+COPY --from=build-fpm-composer /var/www/html/public/wp /var/www/html/public/wp/
