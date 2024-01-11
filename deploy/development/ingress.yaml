@@ -36,4 +36,4 @@ spec:
           service:
             name: justice-gov-uk-dev
             port:
-              number: 8080
+              number: 80
