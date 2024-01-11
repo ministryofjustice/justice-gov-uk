@@ -26,7 +26,7 @@ spec:
         - name: media
           emptyDir: { }
       terminationGracePeriodSeconds: 35
-      serviceAccountName: ${KUBE_NAMESPACE}-service
+      serviceAccountName: ${KUBE_NAMESPACE}
       containers:
       - name: nginx
         image: ${ECR_URL}:${IMAGE_TAG_NGINX}
