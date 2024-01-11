@@ -15,27 +15,24 @@ spec:
   selector:
     matchLabels:
       app: ${KUBE_NAMESPACE}
-      tier: frontend-c
   template:
     metadata:
       labels:
         app: ${KUBE_NAMESPACE}
-        tier: frontend-c
     spec:
       volumes:
         - name: media
           emptyDir: { }
       terminationGracePeriodSeconds: 35
-      serviceAccountName: ${KUBE_NAMESPACE}
       containers:
       - name: nginx
         image: ${ECR_URL}:${IMAGE_TAG_NGINX}
         ports:
-        - containerPort: 8080
+          - containerPort: 8080
       - name: fpm
         image: ${ECR_URL}:${IMAGE_TAG_FPM}
         ports:
-        - containerPort: 9000
+          - containerPort: 9000
         volumeMounts:
           - name: media
             mountPath: /var/www/html/public/app/uploads
