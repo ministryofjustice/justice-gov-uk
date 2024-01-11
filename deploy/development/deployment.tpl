@@ -32,6 +32,27 @@ spec:
         image: ${ECR_URL}:${IMAGE_TAG_NGINX}
         ports:
         - containerPort: 8080
+        env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rds-output
+                  key: rds_instance_address
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: rds-output
+                  key: database_name
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rds-output
+                  key: database_username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rds-output
+                  key: database_password
       - name: fpm
         image: ${ECR_URL}:${IMAGE_TAG_FPM}
         ports:
