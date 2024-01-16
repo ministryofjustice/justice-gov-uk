@@ -6,7 +6,7 @@ volumes:
     mariadb_data: ~
 
 services:
-    php:
+    php-fpm:
         build:
             context: .
             target: dev
@@ -30,7 +30,7 @@ services:
         ports:
             - "8080:8080"
         depends_on:
-            - php
+            - php-fpm
             - node
 
     node:
