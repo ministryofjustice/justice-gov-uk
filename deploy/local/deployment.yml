@@ -2,11 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: justice-gov-uk-local
-  namespace: justice-gov-uk-local
   labels:
     app: justice-gov-uk-local
 spec:
-  replicas: 1
+  replicas: 2
   revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
@@ -20,19 +19,15 @@ spec:
     metadata:
       labels:
         app: justice-gov-uk-local
-        tier: frontend-c
     spec:
       volumes:
-        - name: media
+        - name: uploads
           emptyDir: {}
       containers:
         - name: nginx
           image: justice-nginx:latest
           imagePullPolicy: Never
-          resources:
-            limits:
-              cpu: 500m
-              memory: 50M
+          resources: {}
           ports:
             - containerPort: 8080
 
@@ -41,7 +36,7 @@ spec:
           imagePullPolicy: Never
           envFrom:
             - configMapRef:
-                name: justice-gov-uk-local
+                name: justice-gov-uk-config
           securityContext:
             runAsUser: 82
             readOnlyRootFilesystem: true
