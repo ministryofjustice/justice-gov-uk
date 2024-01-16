@@ -17,7 +17,7 @@
 
 <!-- License -->
 
-[License Link]: https://github.com/ministryofjustice/justice-gov-uk/blob/java/LICENSE 'License.'
+[License Link]: https://github.com/ministryofjustice/justice-gov-uk/blob/main/LICENSE 'License.'
 
 [License Icon]: https://img.shields.io/github/license/ministryofjustice/justice-gov-uk?style=for-the-badge
 
