@@ -5,6 +5,6 @@ metadata:
   namespace: justice-gov-uk-dev
 data:
   WP_ENV: "development"
-  WP_HOME: 'http://justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk/'
+  WP_HOME: 'http://justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk'
   WP_SITEURL: 'http://justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk/wp'
   SENTRY_DEV_ID: 'development'
