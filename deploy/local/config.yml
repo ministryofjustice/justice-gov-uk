@@ -4,7 +4,7 @@ metadata:
   name: justice-gov-uk-config
 data:
   WP_ENV: 'development'
-  WP_HOME: 'http://justice.local/'
+  WP_HOME: 'http://justice.local'
   WP_SITEURL: 'http://justice.local/wp'
   SENTRY_DEV_ID: '-damien-local-kube'
 
