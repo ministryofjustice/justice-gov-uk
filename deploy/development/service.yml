@@ -6,7 +6,6 @@ metadata:
     app: justice-gov-uk-dev
 spec:
   ports:
-  - port: 80
-    targetPort: 8080
+  - port: 8080
   selector:
     app: justice-gov-uk-dev

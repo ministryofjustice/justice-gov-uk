@@ -4,6 +4,7 @@ metadata:
   name: justice-gov-uk-dev-secrets
 type: Opaque
 stringData:
+  GOV_NOTIFY_API_KEY: "${AUTH_KEY}"
   AUTH_KEY: "${AUTH_KEY}"
   AUTH_SALT: "${AUTH_SALT}"
   LOGGED_IN_KEY: "${LOGGED_IN_KEY}"

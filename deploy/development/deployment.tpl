@@ -21,7 +21,7 @@ spec:
         app: ${KUBE_NAMESPACE}
     spec:
       volumes:
-        - name: media
+        - name: uploads
           emptyDir: { }
       terminationGracePeriodSeconds: 35
       containers:
@@ -34,7 +34,7 @@ spec:
         ports:
           - containerPort: 9000
         volumeMounts:
-          - name: media
+          - name: uploads
             mountPath: /var/www/html/public/app/uploads
         env:
           - name: S3_BUCKET_NAME

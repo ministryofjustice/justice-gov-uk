@@ -31,9 +31,9 @@ spec:
     http:
       paths:
       - path: /
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
-            name: justice-gov-uk-dev
+            name: nginx-service
             port:
-              number: 80
+              number: 8080
