@@ -2,10 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: justice-gov-uk-local
-  labels:
-    app: justice-gov-uk-local
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
@@ -39,7 +37,6 @@ spec:
                 name: justice-gov-uk-config
           securityContext:
             runAsUser: 82
-            readOnlyRootFilesystem: true
           volumeMounts:
             - name: uploads
               mountPath: /var/www/html/public/app/uploads

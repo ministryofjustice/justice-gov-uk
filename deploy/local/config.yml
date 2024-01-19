@@ -4,11 +4,17 @@ metadata:
   name: justice-gov-uk-config
 data:
   WP_ENV: 'development'
+  WP_HOME: 'http://justice.local/'
+  WP_SITEURL: 'http://justice.local/wp'
+  SENTRY_DEV_ID: '-damien-local-kube'
+
+  # Generated in Cloud Platform
   DB_HOST: 'mariadb'
   DB_NAME: 'justice'
   DB_USER: 'justice'
   DB_PASSWORD: 'justice'
-  SENTRY_DEV_ID: '-damien-local-kube'
+
+  # Applied via GitHub Actions
   GOV_NOTIFY_API_KEY: ''
   AUTH_KEY: 'strong-64-character-random-string'
   SECURE_AUTH_KEY: 'strong-64-character-random-string'
