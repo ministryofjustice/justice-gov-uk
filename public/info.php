@@ -26,4 +26,4 @@ if (!$tblCnt) {
     echo "There are $tblCnt tables<br />\n";
 }
 
-phpinfo(INFO_MODULES);
+phpinfo();
