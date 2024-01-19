@@ -7,6 +7,10 @@ RUN apk add --update bash zlib-dev libpng-dev libzip-dev ghostscript icu-dev hto
 
 RUN echo "opcache.jit_buffer_size=500000000" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
+# Install wp-cli
+RUN curl -o /usr/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x /usr/bin/wp
+
 
 ## target: dev
 FROM base AS dev
