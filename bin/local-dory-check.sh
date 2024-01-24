@@ -9,12 +9,28 @@ indent() {
   sed 's/^/      /'
 }
 
+# Sniff out Apple silicon and then, save the day with
+# an ARM64 compatible settings file, if no ot file exists
+copy_dory_settings() {
+  if [[ -f "$HOME/.dory.yml" ]]; then
+  	return 0
+  fi
+
+  if [[ $(sysctl -n machdep.cpu.brand_string) =~ "Apple" ]]; then
+  	echo -e "${YELLOW}Dory proxy:${NC} installing ARM64 compatible settings..." | indent
+    cp ".dory.yml" "$HOME/.dory.yml"
+  	echo -e "${YELLOW}Dory proxy:${NC} Done.\n" | indent
+  fi
+}
+
 # Search for the Dory Proxy container
 DORY_RUNNING=$(docker ps | grep dory_dnsmasq)
 
-# If an output is available in the DORY_RUNNING var, we're good. Otherwise, try and start the proxy server
+# If an output is available in $DORY_RUNNING, we're good. Otherwise, try and start the proxy server
 if [[ -z "$DORY_RUNNING" ]]; then
   if command -v dory &>/dev/null; then
+  	copy_dory_settings
+  	# Fire up Dory
     dory up
   else
     printf "\nThe Dory Proxy is used in this project. You may install it using homebrew.\n\n"
@@ -24,15 +40,16 @@ if [[ -z "$DORY_RUNNING" ]]; then
       [Yy]*)
         echo -e "\nRunning ${YELLOW}brew install dory${NC}. This may take a few minutes...\n" | indent
         brew install dory | indent
+  		copy_dory_settings
         echo -e "\n${YELLOW}Installation complete.${NC} Starting Dory...\n" | indent
-        dory up | indent
+		# Fire up Dory
+		dory up | indent
         echo -e "\n\n"
-        break
-        ;;
+        break ;;
       [Nn]*)
-        echo -e "\n${YELLOW}Shame${NC}. Continuing without Dory...\n\n"
-        break
-        ;;
+        echo -e "\n${YELLOW}Host configuration${NC}: Please make sure to configure SERVER_NAME in .env."
+        echo -e "\n${YELLOW}Host configuration${NC}: By default, the site uses http://justice.docker/."
+        break ;;
       *) echo "Please answer yes or no." | indent ;;
       esac
     done
