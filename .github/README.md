@@ -13,6 +13,72 @@
 
 </div>
 
+## Summary
+
+This code-base is the website for the Ministry of Justice which hosts Civil and Family Procedure Committee Rules content
+only.
+
+## Architecture
+A visual overview of the architectural layout of the development application.
+
+![Container architecture](https://docs.google.com/drawings/d/e/2PACX-1vSI0GFWU3Gw2gmARPqtQ8_hFPOz-9IE5XkM3-Zb5KpX8qfelO2VwErIbRIbeb7_L5vNwcGc7FfeSz38/pub?w=960&h=720)
+
+## Installation for development
+
+The application uses Docker. This repository provides two separate local test environments, namely:
+
+1. Docker Compose
+2. Kubernetes
+
+Where `docker compose` provides a pre-production environment to develop features and apply upgrades, Kubernetes allows us to test K8S deployment.
+
+### Setup
+
+In a terminal, move to a directory where you would like to install the application. You may then run:
+
+```bash
+git clone https://github.com/ministryofjustice/justice-gov-uk.git
+```
+
+Change directories:
+
+```bash
+cd justice-gov-uk
+```
+
+Next, depending on the environment you would like to launch, do one of the following.
+
+### 1. Docker Compose
+
+This environment has been set up to develop and improve the application.
+
+#### Requirements
+
+- Docker
+- Dory (by FreedomBen)
+
+Creates the environment, starts all services and opens a command prompt on the container that houses our PHP code, the service is called `php-fpm`:
+
+```bash
+make
+```
+
+During the `make` process, the Dory proxy will attempt to install. You will be guided though an installation, if needed.
+
+### 2. Kubernetes
+
+This environment is useful to test Kubernetes deployment scripts.
+
+Local setup attempts to get as close to development on Cloud Platform as possible, with a production-first approach.
+
+#### Requirements
+
+- Docker
+- Kind Cluster
+- Hosts file update, you could...
+  >`sudo nano /etc/hosts`. On a new line, add: `127.0.0.1  justice.local`
+
+
 
 
 <!-- License -->
@@ -20,6 +86,10 @@
 [License Link]: https://github.com/ministryofjustice/justice-gov-uk/blob/main/LICENSE 'License.'
 
 [License Icon]: https://img.shields.io/github/license/ministryofjustice/justice-gov-uk?style=for-the-badge
+
+<!-- Architecture -->
+
+[Arch Image]: https://docs.google.com/drawings/d/1BlzbAmZC2lfS3H2wdnNpT229QeZMpNRNYA84mKXAOec/edit?usp=sharing
 
 <!-- MoJ Standards -->
 
