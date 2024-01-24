@@ -7,7 +7,7 @@ k8s_pod := kubectl -n $(k8s_nsp) get pod -l app=justice-gov-uk-local -o jsonpath
 
 init: setup run
 
-d-compose:
+d-compose: local-stop
 	docker compose up -d nginx phpmyadmin
 	docker compose run --service-ports --rm --entrypoint=bash php-fpm
 
@@ -49,11 +49,11 @@ docker-clean:
 	bin/local-docker-clean.sh
 
 # Run the application
-run: dory
+run: local-stop dory
 	docker compose up
 
 # Launch the application, open browser, no stdout
-launch: dory
+launch: local-stop dory
 	bin/local-launch.sh
 
 # Start the Dory Proxy
@@ -104,7 +104,20 @@ cluster:
 	@if [ "${kube}" == 'kind' ]; then kind create cluster --config=deploy/config/local/cluster.yml; kubectl apply -f https://projectcontour.io/quickstart/contour.yaml; fi
 	@if [ "${kube}" == 'kind' ]; then kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/control-plane","operator":"Equal","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'; fi
 
-local-kube: clear cluster build deploy
+local-kube: local-kube-start clear cluster local-kube-build
+	@if [ "${kube}" == 'kind' ]; then echo "\n-->  Verifying..."; echo "-->  Use ctrl + C to exit when ready\n"; kubectl get pods -w; fi
+
+local-kube-start:
+	@$DORY_RUNNING=$(docker ps | grep dory_dnsmasq)
+	@if [ -n "$DORY_RUNNING" ]; then dory down; fi # lets make sure port 80 is free
+	@docker container start kind-control-plane
+
+local-stop:
+	@echo "\n-->  Checking if we should stop the kind-control-plane container..."
+	@docker container stop kind-control-plane >/dev/null 2>&1
+	@echo "-->  Done.\n"
+
+local-kube-build: build deploy
 	@if [ "${kube}" == 'kind' ]; then echo "\n-->  Verifying..."; echo "-->  Use ctrl + C to exit when ready\n"; kubectl get pods -w; fi
 
 clear:

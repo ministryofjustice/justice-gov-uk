@@ -30,11 +30,11 @@ The application uses Docker. This repository provides two separate local test en
 1. Docker Compose
 2. Kubernetes
 
-Where `docker compose` provides a pre-production environment to develop features and apply upgrades, Kubernetes allows us to test K8S deployment.
+Where `docker compose` provides a pre-production environment to develop features and apply upgrades, Kubernetes allows us to test our deployment to the Cloud Platform.
 
 ### Setup
 
-In a terminal, move to a directory where you would like to install the application. You may then run:
+In a terminal, move to the directory where you want to install the application. You may then run:
 
 ```bash
 git clone https://github.com/ministryofjustice/justice-gov-uk.git
@@ -54,16 +54,53 @@ This environment has been set up to develop and improve the application.
 
 #### Requirements
 
-- Docker
-- Dory (by FreedomBen)
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Dory](https://formulae.brew.sh/formula/dory) (by FreedomBen) _auto-install available_
 
-Creates the environment, starts all services and opens a command prompt on the container that houses our PHP code, the service is called `php-fpm`:
+The following make command will get you up and running.
+
+It creates the environment, starts all services and opens a command prompt on the container that houses our PHP code, the service is called `php-fpm`:
 
 ```bash
 make
 ```
 
 During the `make` process, the Dory proxy will attempt to install. You will be guided though an installation, if needed.
+
+### Services
+You will have five services running with different access points. They are:
+
+**Nginx**<br>
+http://justice.docker/
+
+**PHP-FPM**<br>
+```bash
+make bash
+```
+On first use, the application will need initializing with the following command.
+
+```bash
+composer install
+```
+
+**Node**<br>
+This service watches and compiles our assets, no need to access. The output of this service is available on STDOUT.
+
+**MariaDB**<br>
+Internally accessed by PHP-FPM on port 3306
+
+**PHPMyAdmin**<br>
+http://justice.docker:9191/ <br>
+Login details located in `docker-compose.yml`
+
+> There is no need to install application software on your computer.<br>
+> All required software is built within the services and all services are ephemeral.
+
+
+#### Volumes
+There are multiple volume mounts created in this project and shared across the services.
+The approach has been taken to speed up and optimise the development experience.
+
 
 ### 2. Kubernetes
 
@@ -73,12 +110,69 @@ Local setup attempts to get as close to development on Cloud Platform as possibl
 
 #### Requirements
 
-- Docker
-- Kind Cluster
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 - Hosts file update, you could...
-  >`sudo nano /etc/hosts`. On a new line, add: `127.0.0.1  justice.local`
+  >`sudo nano /etc/hosts`<br>... on a new line, add: `127.0.0.1	justice.local`
 
+Once the above requirements have been met, we are able to launch our application by executing the following make command:
 
+```bash
+make local-kube
+```
+
+The following will take place:
+
+1. If running; the Dory proxy is stopped
+2. A Kind cluster is created with configuration from: `deploy/config/local/cluster.yml`
+3. The cluster Ingress is configured
+4. Nginx and PHP-FPM images are built
+5. Images are transferred to the Kind Control Plane
+6. Local deployment is applied using `kubectl apply -f deploy/local`
+7. Verifies pods using `kubectl get pods -w`
+
+Access the running application here:
+**http://justice.local/**
+
+#### Volumes
+In the MariaDB YAML file you will notice a persistent volume claim. This will assist you in keeping application data, preventing you from having to reinstall WordPress every time you stop and start the service.
+
+### Kubernetes - quick command reference
+
+```bash
+# Make interaction a little easier; we can create repeatable
+# variables, our namespace is the same name as the app, defined
+# in ./deploy/development/deployment.tpl
+#
+# If interacting with a different stack, change the NSP var.
+# For example;
+# - local, change to `default`
+# - production, change to 'justice-gov-uk-prod'
+
+# Set some vars, gets the first available pod
+NSP="justice-gov-uk-dev"; \
+POD=$(kubectl -n $NSP get pod -l app=$NSP -o jsonpath="{.items[0].metadata.name}");
+```
+
+After setting the above variables (via `copy -> paste -> execute`) the following blocks of commands will work using `copy -> paste -> execute` too.
+
+```bash
+# list available pods and their status for the namespace
+kubectl get pods -n $NSP
+
+# watch for updates, add the -w flag
+kubectl get pods -w -n $NSP
+
+# describe the first available pod
+kubectl describe pods -n $NSP
+
+# monitor the system log of the first pod
+kubectl logs -f $POD -n $NSP
+
+# open an interactive shell on an active pod
+kubectl exec -it $POD -n $NSP -- ash
+````
 
 
 <!-- License -->
