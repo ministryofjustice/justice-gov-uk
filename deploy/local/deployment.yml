@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: justice-gov-uk-local
 spec:
-  replicas: 1
+  replicas: 4
   revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
