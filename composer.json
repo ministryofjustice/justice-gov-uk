@@ -53,7 +53,9 @@
         "sentry/sdk": "^3.1",
         "php-http/guzzle7-adapter": "^1.0",
         "ext-mysqli": "*",
-        "wp-cli/wp-cli-bundle": "*"
+        "wp-cli/wp-cli-bundle": "*",
+        "wpackagist-plugin/query-monitor": "*",
+        "wpackagist-plugin/debug-bar": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7.1",
