@@ -16,6 +16,7 @@ RUN curl -o /usr/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages
 FROM base AS dev
 RUN apk add --update nano nodejs npm
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY deploy/config/local/pool.conf /usr/local/etc/php-fpm.d/pool.conf
 
 # www-data
 USER 82
