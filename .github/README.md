@@ -30,7 +30,7 @@ The application uses Docker. This repository provides two separate local test en
 1. Docker Compose
 2. Kubernetes
 
-Where `docker compose` provides a pre-production environment to develop features and apply upgrades, Kubernetes allows us to test our deployment to the Cloud Platform.
+Where `docker compose` provides a pre-production environment to develop features and apply upgrades, Kubernetes allows us to test and debug our deployments to the Cloud Platform.
 
 ### Setup
 
@@ -147,12 +147,16 @@ In the MariaDB YAML file you will notice a persistent volume claim. This will as
 #
 # If interacting with a different stack, change the NSP var.
 # For example;
-# - local, change to `default`
 # - production, change to 'justice-gov-uk-prod'
 
 # Set some vars, gets the first available pod
 NSP="justice-gov-uk-dev"; \
 POD=$(kubectl -n $NSP get pod -l app=$NSP -o jsonpath="{.items[0].metadata.name}");
+
+# Local interaction is a little different:
+# - local, change NSP to `default` and app to `justice-gov-uk-local`
+NSP="default"; \
+POD=$(kubectl -n $NSP get pod -l app=justice-gov-uk-local -o jsonpath="{.items[0].metadata.name}");
 ```
 
 After setting the above variables (via `copy -> paste -> execute`) the following blocks of commands will work using `copy -> paste -> execute` too.
@@ -167,11 +171,17 @@ kubectl get pods -w -n $NSP
 # describe the first available pod
 kubectl describe pods -n $NSP
 
-# monitor the system log of the first pod
+# monitor the system log of the first pod container
 kubectl logs -f $POD -n $NSP
+
+# monitor the system log of the fpm container
+kubectl logs -f $POD -n $NSP fpm
 
 # open an interactive shell on an active pod
 kubectl exec -it $POD -n $NSP -- ash
+
+# open an interactive shell on the FPM container
+kubectl exec -it $POD -n $NSP -c fpm -- ash
 ````
 
 
