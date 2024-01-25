@@ -106,7 +106,7 @@ jobs:
         env:
           TPL_PATH: "deploy/${{ inputs.environment }}"
           ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars.ECR_REPOSITORY }}
-          IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
+          IMAGE_TAG_NGINX: ::add-mask::"nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
           AUTH_KEY: ::add-mask::${{ steps.auth-key.outputs.password }}
           AUTH_SALT: ::add-mask::${{ steps.auth-salt.outputs.password }}
