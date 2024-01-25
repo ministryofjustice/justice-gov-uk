@@ -4,11 +4,14 @@ public/wp
 vendor
 deploy
 !deploy/config
+deploy/config/local
+Makefile
 
 bin/local-*
 .git*
 .editorconfig
 .env.example
+.dory.yml
 
 LICENSE
 README.md
