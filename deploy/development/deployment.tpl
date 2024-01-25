@@ -38,7 +38,6 @@ spec:
             mountPath: /var/www/html/public/app/uploads
         securityContext:
             runAsUser: 82
-            runAsNonRoot: true
         env:
           - name: S3_BUCKET_NAME
             valueFrom:
