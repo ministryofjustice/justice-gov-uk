@@ -19,6 +19,7 @@ This code-base is the website for the Ministry of Justice which hosts Civil and 
 only.
 
 ## Architecture
+
 A visual overview of the architectural layout of the development application.
 
 ![Container architecture](https://docs.google.com/drawings/d/e/2PACX-1vSI0GFWU3Gw2gmARPqtQ8_hFPOz-9IE5XkM3-Zb5KpX8qfelO2VwErIbRIbeb7_L5vNwcGc7FfeSz38/pub?w=960&h=720)
@@ -30,7 +31,8 @@ The application uses Docker. This repository provides two separate local test en
 1. Docker Compose
 2. Kubernetes
 
-Where `docker compose` provides a pre-production environment to develop features and apply upgrades, Kubernetes allows us to test and debug our deployments to the Cloud Platform.
+Where `docker compose` provides a pre-production environment to develop features and apply upgrades, Kubernetes allows
+us to test and debug our deployments to the Cloud Platform.
 
 ### Setup
 
@@ -59,7 +61,8 @@ This environment has been set up to develop and improve the application.
 
 The following make command will get you up and running.
 
-It creates the environment, starts all services and opens a command prompt on the container that houses our PHP code, the service is called `php-fpm`:
+It creates the environment, starts all services and opens a command prompt on the container that houses our PHP code,
+the service is called `php-fpm`:
 
 ```bash
 make
@@ -68,15 +71,18 @@ make
 During the `make` process, the Dory proxy will attempt to install. You will be guided though an installation, if needed.
 
 ### Services
+
 You will have five services running with different access points. They are:
 
 **Nginx**<br>
 http://justice.docker/
 
 **PHP-FPM**<br>
+
 ```bash
 make bash
 ```
+
 On first use, the application will need initializing with the following command.
 
 ```bash
@@ -96,11 +102,10 @@ Login details located in `docker-compose.yml`
 > There is no need to install application software on your computer.<br>
 > All required software is built within the services and all services are ephemeral.
 
-
 #### Volumes
+
 There are multiple volume mounts created in this project and shared across the services.
 The approach has been taken to speed up and optimise the development experience.
-
 
 ### 2. Kubernetes
 
@@ -114,9 +119,10 @@ Local setup attempts to get as close to development on Cloud Platform as possibl
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 - Hosts file update, you could...
-  >`sudo nano /etc/hosts`<br>... on a new line, add: `127.0.0.1	justice.local`
+  > `sudo nano /etc/hosts`<br>... on a new line, add: `127.0.0.1	justice.local`
 
-Once the above requirements have been met, we are able to launch our application by executing the following make command:
+Once the above requirements have been met, we are able to launch our application by executing the following make
+command:
 
 ```bash
 make local-kube
@@ -136,7 +142,19 @@ Access the running application here:
 **http://justice.local/**
 
 #### Volumes
-In the MariaDB YAML file you will notice a persistent volume claim. This will assist you in keeping application data, preventing you from having to reinstall WordPress every time you stop and start the service.
+
+In the MariaDB YAML file you will notice a persistent volume claim. This will assist you in keeping application data,
+preventing you from having to reinstall WordPress every time you stop and start the service.
+
+### Secrets
+
+[Most secrets are managed via GitHub settings](https://github.com/ministryofjustice/justice-gov-uk/settings/secrets/actions)
+
+#### WP Keys & Salts
+
+It is the intention that WordPress keys and salts are auto generated, before the initial GHA
+build stage. Lots of testing occurred yet the result wasn't desired; dynamic secrets could not be hidden in
+the log outputs. Due to this, secrets are managed in settings.
 
 ### Kubernetes - quick command reference
 
@@ -159,7 +177,8 @@ NSP="default"; \
 POD=$(kubectl -n $NSP get pod -l app=justice-gov-uk-local -o jsonpath="{.items[0].metadata.name}");
 ```
 
-After setting the above variables (via `copy -> paste -> execute`) the following blocks of commands will work using `copy -> paste -> execute` too.
+After setting the above variables (via `copy -> paste -> execute`) the following blocks of commands will work
+using `copy -> paste -> execute` too.
 
 ```bash
 # list available pods and their status for the namespace
@@ -183,7 +202,6 @@ kubectl exec -it $POD -n $NSP -- ash
 # open an interactive shell on the FPM container
 kubectl exec -it $POD -n $NSP -c fpm -- ash
 ````
-
 
 <!-- License -->
 

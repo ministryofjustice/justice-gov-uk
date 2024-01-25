@@ -54,101 +54,20 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      ##########################################
-      ####      Generate keys and salts     ####
-      ##########################################
-      - name: "Generating auth key"
-        uses: licenseware/generate-password-and-hash@v1
-        id: auth-key
-        with:
-          length: 64
-          inlineScript: |
-            AUTH_KEY=${{ auth-key.outputs.password }}
-            echo "::add-mask::$AUTH_KEY"
-            echo AUTH_KEY=$AUTH_KEY >> $GITHUB_ENV
-
-      - name: "... auth salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: auth-salt
-        with:
-          length: 64
-      - name: "... logged in key"
-        uses: licenseware/generate-password-and-hash@v1
-        id: logged-in-key
-        with:
-          length: 64
-      - name: "... logged in salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: logged-in-salt
-        with:
-          length: 64
-      - name: "... nonce key"
-        uses: licenseware/generate-password-and-hash@v1
-        id: nonce-key
-        with:
-          length: 64
-      - name: "... nonce salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: nonce-salt
-        with:
-          length: 64
-      - name: "... secure key"
-        uses: licenseware/generate-password-and-hash@v1
-        id: secure-key
-        with:
-          length: 64
-      - name: "... secure salt"
-        uses: licenseware/generate-password-and-hash@v1
-        id: secure-salt
-        with:
-          length: 64
-
-      - name: "Secret squirrels"
-        run: |
-          AUTH_SALT=${{ steps.auth-salt.outputs.password }}
-          LOGGED_IN_KEY=${{ steps.logged-in-key.outputs.password }}
-          LOGGED_IN_SALT=${{ steps.logged-in-salt.outputs.password }}
-          NONCE_KEY=${{ steps.nonce-key.outputs.password }}
-          NONCE_SALT=${{ steps.nonce-salt.outputs.password }}
-          SECURE_AUTH_KEY=${{ steps.secure-key.outputs.password }}
-          SECURE_AUTH_SALT=${{ steps.secure-salt.outputs.password }}
-
-          echo "::add-mask::$AUTH_SALT"
-          echo "::add-mask::$LOGGED_IN_KEY"
-          echo "::add-mask::$LOGGED_IN_SALT"
-          echo "::add-mask::$NONCE_KEY"
-          echo "::add-mask::$NONCE_SALT"
-          echo "::add-mask::$SECURE_AUTH_KEY"
-          echo "::add-mask::$SECURE_AUTH_SALT"
-
-          {
-            echo AUTH_SALT=$AUTH_SALT
-            echo LOGGED_IN_KEY=$LOGGED_IN_KEY
-            echo LOGGED_IN_SALT=$LOGGED_IN_SALT
-            echo NONCE_KEY=$NONCE_KEY
-            echo NONCE_SALT=$NONCE_SALT
-            echo SECURE_AUTH_KEY=$SECURE_AUTH_KEY
-            echo SECURE_AUTH_SALT=$SECURE_AUTH_SALT
-          } >> $GITHUB_ENV
-
-      ##########################################
-      ####          ===============         ####
-      ##########################################
-
       - name: "Inject environment variables"
         env:
           TPL_PATH: "deploy/${{ inputs.environment }}"
           ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
-          AUTH_KEY: ${{ steps.auth-key.outputs.password }}
-          AUTH_SALT: ${{ steps.auth-salt.outputs.password }}
-          LOGGED_IN_KEY: ${{ steps.logged-in-key.outputs.password }}
-          LOGGED_IN_SALT: ${{ steps.logged-in-salt.outputs.password }}
-          NONCE_KEY: ${{ steps.nonce-key.outputs.password }}
-          NONCE_SALT: ${{ steps.nonce-salt.outputs.password }}
-          SECURE_AUTH_KEY: ${{ steps.secure-key.outputs.password }}
-          SECURE_AUTH_SALT: ${{ steps.secure-salt.outputs.password }}
+          AUTH_KEY: ${{ secrets.AUTH_KEY }}
+          AUTH_SALT: ${{ secrets.AUTH_SALT }}
+          LOGGED_IN_KEY: ${{ secrets.LOGGED_IN_KEY }}
+          LOGGED_IN_SALT: ${{ secrets.LOGGED_IN_SALT }}
+          NONCE_KEY: ${{ secrets.NONCE_KEY }}
+          NONCE_SALT: ${{ secrets.NONCE_SALT }}
+          SECURE_AUTH_KEY: ${{ secrets.SECURE_AUTH_KEY }}
+          SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
         run: |
           cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
           cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml
