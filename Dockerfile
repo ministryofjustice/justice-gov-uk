@@ -1,6 +1,6 @@
 FROM php:8-fpm-alpine AS base
 
-RUN apk add --update bash zlib-dev libpng-dev libzip-dev ghostscript icu-dev htop mariadb-client $PHPIZE_DEPS && \
+RUN apk add --update bash zlib-dev libpng-dev libzip-dev ghostscript icu-dev htop mariadb-client sudo $PHPIZE_DEPS && \
     docker-php-ext-configure intl && \
     docker-php-ext-install exif gd zip mysqli opcache intl && \
     apk del $PHPIZE_DEPS
@@ -34,12 +34,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY ./composer.json /var/www/html/composer.json
 RUN composer install --no-dev --no-scripts --no-autoloader
 
-COPY --chown=www-data:www-data . .
+COPY . .
 RUN composer install --no-dev
 RUN composer dump-autoload -o
-
-# non-root (www-data)
-USER 82
 
 ###
 
@@ -47,7 +44,7 @@ USER 82
 FROM base AS build-fpm
 
 WORKDIR /var/www/html
-COPY --from=build-fpm-composer /var/www/html /var/www/html
+COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html /var/www/html
 
 # non-root
 USER 82
