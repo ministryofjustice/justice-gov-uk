@@ -108,8 +108,7 @@ local-kube: local-kube-start clear cluster local-kube-build
 	@if [ "${kube}" == 'kind' ]; then echo "\n-->  Verifying..."; echo "-->  Use ctrl + C to exit when ready\n"; kubectl get pods -w; fi
 
 local-kube-start:
-	@$DORY_RUNNING=$(docker ps | grep dory_dnsmasq)
-	@if [ -n "$DORY_RUNNING" ]; then dory down; fi # lets make sure port 80 is free
+	@if [ -n "$(docker ps | grep dory_dnsmasq)" ]; then dory down; fi # lets make sure port 80 is free
 	@docker container start kind-control-plane
 
 local-stop:
