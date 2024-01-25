@@ -63,7 +63,7 @@ jobs:
         with:
           length: 64
           inlineScript: |
-            AUTH_KEY=${{ outputs.password }}
+            AUTH_KEY=${{ password }}
             echo "::add-mask::$AUTH_KEY"
             echo AUTH_KEY=$AUTH_KEY >> $GITHUB_ENV
 
