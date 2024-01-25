@@ -98,6 +98,10 @@ jobs:
         with:
           length: 64
 
+      - name: "Mask keys"
+        run: |
+          echo "::add-mask::${{ steps.auth-key.outputs.password }}"
+
       ##########################################
       ####          ===============         ####
       ##########################################
