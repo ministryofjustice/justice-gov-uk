@@ -98,9 +98,36 @@ jobs:
         with:
           length: 64
 
-      - name: "Mask keys"
+      - name: "Secret squirrels"
         run: |
-          echo "::add-mask::${{ steps.auth-key.outputs.password }}"
+          AUTH_KEY=${{ steps.auth-key.outputs.password }}
+          AUTH_SALT=${{ steps.auth-salt.outputs.password }}
+          LOGGED_IN_KEY=${{ steps.logged-in-key.outputs.password }}
+          LOGGED_IN_SALT=${{ steps.logged-in-salt.outputs.password }}
+          NONCE_KEY=${{ steps.nonce-key.outputs.password }}
+          NONCE_SALT=${{ steps.nonce-salt.outputs.password }}
+          SECURE_AUTH_KEY=${{ steps.secure-key.outputs.password }}
+          SECURE_AUTH_SALT=${{ steps.secure-salt.outputs.password }}
+
+          echo "::add-mask::$AUTH_KEY"
+          echo "::add-mask::$AUTH_SALT"
+          echo "::add-mask::$LOGGED_IN_KEY"
+          echo "::add-mask::$LOGGED_IN_SALT"
+          echo "::add-mask::$NONCE_KEY"
+          echo "::add-mask::$NONCE_SALT"
+          echo "::add-mask::$SECURE_AUTH_KEY"
+          echo "::add-mask::$SECURE_AUTH_SALT"
+
+          {
+            echo AUTH_KEY=$AUTH_KEY
+            echo AUTH_SALT=$AUTH_SALT
+            echo LOGGED_IN_KEY=$LOGGED_IN_KEY
+            echo LOGGED_IN_SALT=$LOGGED_IN_SALT
+            echo NONCE_KEY=$NONCE_KEY
+            echo NONCE_SALT=$NONCE_SALT
+            echo SECURE_AUTH_KEY=$SECURE_AUTH_KEY
+            echo SECURE_AUTH_SALT=$SECURE_AUTH_SALT
+          } >> $GITHUB_ENV
 
       ##########################################
       ####          ===============         ####
