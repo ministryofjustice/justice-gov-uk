@@ -108,14 +108,14 @@ jobs:
           ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars.ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
-          AUTH_KEY: ${{ steps.auth-key.outputs.password }}
-          AUTH_SALT: ${{ steps.auth-salt.outputs.password }}
-          LOGGED_IN_KEY: ${{ steps.logged-in-key.outputs.password }}
-          LOGGED_IN_SALT: ${{ steps.logged-in-salt.outputs.password }}
-          NONCE_KEY: ${{ steps.nonce-key.outputs.password }}
-          NONCE_SALT: ${{ steps.nonce-salt.outputs.password }}
-          SECURE_AUTH_KEY: ${{ steps.secure-key.outputs.password }}
-          SECURE_AUTH_SALT: ${{ steps.secure-salt.outputs.password }}
+          AUTH_KEY: ::add-mask::${{ steps.auth-key.outputs.password }}
+          AUTH_SALT: ::add-mask::${{ steps.auth-salt.outputs.password }}
+          LOGGED_IN_KEY: ::add-mask::${{ steps.logged-in-key.outputs.password }}
+          LOGGED_IN_SALT: ::add-mask::${{ steps.logged-in-salt.outputs.password }}
+          NONCE_KEY: ::add-mask::${{ steps.nonce-key.outputs.password }}
+          NONCE_SALT: ::add-mask::${{ steps.nonce-salt.outputs.password }}
+          SECURE_AUTH_KEY: ::add-mask::${{ steps.secure-key.outputs.password }}
+          SECURE_AUTH_SALT: ::add-mask::${{ steps.secure-salt.outputs.password }}
         run: |
           cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
           cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml
