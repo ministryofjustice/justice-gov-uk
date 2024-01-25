@@ -1,6 +1,6 @@
 FROM php:8-fpm-alpine AS base
 
-RUN apk add --update bash zlib-dev libpng-dev libzip-dev ghostscript icu-dev htop $PHPIZE_DEPS && \
+RUN apk add --update bash zlib-dev libpng-dev libzip-dev ghostscript icu-dev htop mariadb-client $PHPIZE_DEPS && \
     docker-php-ext-configure intl && \
     docker-php-ext-install exif gd zip mysqli opcache intl && \
     apk del $PHPIZE_DEPS
