@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine AS base
+FROM php:8.3-fpm-alpine AS base
 
 RUN apk add --update bash zlib-dev libpng-dev libzip-dev ghostscript icu-dev htop mariadb-client sudo $PHPIZE_DEPS && \
     docker-php-ext-configure intl && \
