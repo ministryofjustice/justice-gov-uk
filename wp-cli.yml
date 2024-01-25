@@ -1,3 +1,4 @@
 path: /var/www/html/public/wp
-server:
-  docroot: public
+disabled_commands:
+  - db drop
+  - plugin install
