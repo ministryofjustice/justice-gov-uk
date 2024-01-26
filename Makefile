@@ -113,7 +113,7 @@ local-kube-start:
 
 local-stop:
 	@echo "\n-->  Checking if we should stop the kind-control-plane container..."
-	@docker container stop kind-control-plane >/dev/null 2>&1
+	@docker container stop kind-control-plane || true >/dev/null 2>&1
 	@echo "-->  Done.\n"
 
 local-kube-build: build deploy
