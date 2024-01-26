@@ -18,7 +18,7 @@ copy_dory_settings() {
 
   if [[ $(sysctl -n machdep.cpu.brand_string) =~ "Apple" ]]; then
   	echo -e "${YELLOW}Dory proxy:${NC} installing ARM64 compatible settings..." | indent
-    cp ".dory.yml" "$HOME/.dory.yml"
+    cp "deploy/config/local/.dory.yml" "$HOME/.dory.yml"
   	echo -e "${YELLOW}Dory proxy:${NC} Done.\n" | indent
   fi
 }
