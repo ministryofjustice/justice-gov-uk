@@ -39,8 +39,8 @@ jobs:
       - name: "Configuring AWS credentials"
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets[${ROLE_TO_ASSUME}] }}
-          aws-region: ${{ vars[${REGION}] }}
+          role-to-assume: ${{ secrets[ env.ROLE_TO_ASSUME ] }}
+          aws-region: ${{ vars[ env.REGION ] }}
 
       - name: "Logging into ECR"
         uses: aws-actions/amazon-ecr-login@v2
@@ -54,7 +54,7 @@ jobs:
           docker push $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG
         env:
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-          CP_REPOSITORY: ${{ vars[${REPOSITORY}] }}
+          CP_REPOSITORY: ${{ vars[ env.REPOSITORY ] }}
           IMAGE_TAG: ${{ github.sha }}
 
   deploy_environment:
@@ -72,7 +72,7 @@ jobs:
       - name: "Inject environment variables"
         env:
           TPL_PATH: "deploy/${{ inputs.environment }}"
-          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars[${REPOSITORY}] }}
+          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars[ env.REPOSITORY ] }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
           AUTH_KEY: ${{ secrets.AUTH_KEY }}
