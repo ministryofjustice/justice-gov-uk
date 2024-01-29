@@ -18,6 +18,8 @@
 This code-base is the website for the Ministry of Justice which hosts Civil and Family Procedure Committee Rules content
 only.
 
+> Nb. `README.md` is located in `.github/`, the preferred location for a clean repository.
+
 ## Architecture
 
 A visual overview of the architectural layout of the development application.
@@ -203,13 +205,13 @@ kubectl exec -it $POD -n $NSP -- ash
 kubectl exec -it $POD -n $NSP -c fpm -- ash
 ````
 
-<!-- License -->
+<!-- License badge -->
 
 [License Link]: https://github.com/ministryofjustice/justice-gov-uk/blob/main/LICENSE 'License.'
 
 [License Icon]: https://img.shields.io/github/license/ministryofjustice/justice-gov-uk?style=for-the-badge
 
-<!-- Architecture -->
+<!-- Architecture image -->
 
 [Arch Image]: https://docs.google.com/drawings/d/1BlzbAmZC2lfS3H2wdnNpT229QeZMpNRNYA84mKXAOec/edit?usp=sharing
 
