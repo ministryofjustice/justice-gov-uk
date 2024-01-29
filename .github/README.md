@@ -18,7 +18,7 @@
 This code-base is the website for the Ministry of Justice which hosts Civil and Family Procedure Committee Rules content
 only.
 
-> Nb. `README.mb` is located in `.github/`, the preferred location for a clean repository.
+> Nb. `README.md` is located in `.github/`, the preferred location for a clean repository.
 
 ## Architecture
 
