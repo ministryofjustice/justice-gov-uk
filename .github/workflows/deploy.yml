@@ -25,9 +25,9 @@ jobs:
     steps:
       - name: "Prepare Variable Names"
         run: |
-          area="${{ environment }}_ECR_REGION"
-          role="${{ environment }}_ECR_ROLE_TO_ASSUME"
-          repo="${{ environment }}_ECR_REPOSITORY"
+          area="${{ inputs.environment }}_ECR_REGION"
+          role="${{ inputs.environment }}_ECR_ROLE_TO_ASSUME"
+          repo="${{ inputs.environment }}_ECR_REPOSITORY"
 
           REGION=${area^^}
           ROLE_TO_ASSUME=${role^^}
