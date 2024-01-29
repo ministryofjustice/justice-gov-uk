@@ -31,7 +31,7 @@ jobs:
 
           {
             echo "REGION=${area^^}";
-            echo "ROLE_TO_ASSUME=::add-mask::${role^^}"
+            echo "ROLE_TO_ASSUME=${role^^}"
             echo "REPOSITORY=${repo^^}"
           } >> "$GITHUB_ENV"
 
