@@ -7,11 +7,6 @@ on:
         required: true
         type: string
 
-env:
-  REGION: ""
-  ROLE_TO_ASSUME: ""
-  REPOSITORY: ""
-
 jobs:
   image_build:
     name: "Build"
@@ -19,11 +14,13 @@ jobs:
     environment: ${{ inputs.environment }}
     outputs:
       registry: ${{ steps.ecr-login.outputs.registry }}
+      repository: ${{ steps.prep-registry-var.outputs.registry }}
     permissions:
       id-token: write
       contents: read
     steps:
       - name: "Prepare Variable Names"
+        id: prep-registry-var
         run: |
           area="${{ inputs.environment }}_ECR_REGION"
           role="${{ inputs.environment }}_ECR_ROLE_TO_ASSUME"
@@ -34,6 +31,8 @@ jobs:
             echo "ROLE_TO_ASSUME=${role^^}"
             echo "REPOSITORY=${repo^^}"
           } >> "$GITHUB_ENV"
+
+          echo "REPOSITORY=${repo^^}" >> "$GITHUB_OUTPUT"
 
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -74,7 +73,7 @@ jobs:
       - name: "Inject environment variables"
         env:
           TPL_PATH: "deploy/${{ inputs.environment }}"
-          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars[ env.REPOSITORY ] }}
+          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ needs.image_build.outputs.repository }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
           AUTH_KEY: ${{ secrets.AUTH_KEY }}
