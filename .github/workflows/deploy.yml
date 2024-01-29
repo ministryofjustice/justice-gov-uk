@@ -7,6 +7,11 @@ on:
         required: true
         type: string
 
+env:
+  REGION: ""
+  ROLE_TO_ASSUME: ""
+  REPOSITORY: ""
+
 jobs:
   image_build:
     name: "Build"
@@ -18,14 +23,24 @@ jobs:
       id-token: write
       contents: read
     steps:
+      - name: "Prepare Variable Names"
+        run: |
+          area="${{ environment }}_ECR_REGION"
+          role="${{ environment }}_ECR_ROLE_TO_ASSUME"
+          repo="${{ environment }}_ECR_REPOSITORY"
+
+          REGION=${area^^}
+          ROLE_TO_ASSUME=${role^^}
+          REPOSITORY=${repo^^}
+
       - name: "Checkout"
         uses: actions/checkout@v4
 
       - name: "Configuring AWS credentials"
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.ECR_ROLE_TO_ASSUME }}
-          aws-region: ${{ vars.ECR_REGION }}
+          role-to-assume: ${{ secrets[${ROLE_TO_ASSUME}] }}
+          aws-region: ${{ vars[${REGION}] }}
 
       - name: "Logging into ECR"
         uses: aws-actions/amazon-ecr-login@v2
@@ -33,13 +48,13 @@ jobs:
 
       - name: "Build & Push to ECR"
         run: |
-          docker image build -t $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG --target build-fpm .
-          docker image build -t $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG --target nginx .
-          docker push $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG
-          docker push $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
+          docker image build -t $REGISTRY/$CP_REPOSITORY:fpm-$IMAGE_TAG --target build-fpm .
+          docker image build -t $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG --target nginx .
+          docker push $REGISTRY/$CP_REPOSITORY:fpm-$IMAGE_TAG
+          docker push $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG
         env:
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-          REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+          CP_REPOSITORY: ${{ vars[${REPOSITORY}] }}
           IMAGE_TAG: ${{ github.sha }}
 
   deploy_environment:
@@ -57,7 +72,7 @@ jobs:
       - name: "Inject environment variables"
         env:
           TPL_PATH: "deploy/${{ inputs.environment }}"
-          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars.ECR_REPOSITORY }}
+          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars[${REPOSITORY}] }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
           AUTH_KEY: ${{ secrets.AUTH_KEY }}
