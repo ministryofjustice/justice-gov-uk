@@ -26,21 +26,8 @@ spec:
   tls:
   - hosts:
     - justice-gov-uk-staging.apps.live.cloud-platform.service.justice.gov.uk
-  - hosts:
-    - dev.justice.gov.uk
-    secretName: justice-gov-uk-staging-cert-secret
   rules:
   - host: justice-gov-uk-staging.apps.live.cloud-platform.service.justice.gov.uk
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: nginx-service
-            port:
-              number: 8080
-  - host: dev.justice.gov.uk
     http:
       paths:
       - path: /
