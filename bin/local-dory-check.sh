@@ -10,15 +10,15 @@ indent() {
 }
 
 # Sniff out Apple silicon and then, save the day with
-# an ARM64 compatible settings file, if no ot file exists
+# an ARM64 compatible settings file, if no file exists
 copy_dory_settings() {
-  if [[ -f "$HOME/.dory.yml" ]]; then
+  if [[ -f "./.dory.yml" ]]; then
   	return 0
   fi
 
   if [[ $(sysctl -n machdep.cpu.brand_string) =~ "Apple" ]]; then
   	echo -e "${YELLOW}Dory proxy:${NC} installing ARM64 compatible settings..." | indent
-    cp "deploy/config/local/.dory.yml" "$HOME/.dory.yml"
+    cp "deploy/config/local/.dory.yml" "./.dory.yml"
   	echo -e "${YELLOW}Dory proxy:${NC} Done.\n" | indent
   fi
 }
