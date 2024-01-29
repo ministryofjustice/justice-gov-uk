@@ -29,9 +29,11 @@ jobs:
           role="${{ inputs.environment }}_ECR_ROLE_TO_ASSUME"
           repo="${{ inputs.environment }}_ECR_REPOSITORY"
 
-          REGION=${area^^}
-          ROLE_TO_ASSUME=${role^^}
-          REPOSITORY=${repo^^}
+          {
+            echo "REGION=${area^^}";
+            echo "ROLE_TO_ASSUME=${role^^}"
+            echo "REPOSITORY=${repo^^}"
+          } >> "$GITHUB_ENV"
 
       - name: "Checkout"
         uses: actions/checkout@v4
