@@ -9,7 +9,7 @@ dory:
     port: 53
     kill_others: true
     service_start_delay: 5
-    image: tripox/dory-dnsmasq:latest
+    image: tripox/dory-dnsmasq:1.1.1
   nginx_proxy:
     enabled: true
     container_name: dory_dinghy_http_proxy
@@ -17,7 +17,7 @@ dory:
     ssl_certs_dir: ''
     port: 80
     tls_port: 443
-    image: taybenlor/dinghy-http-proxy:latest
+    image: codekitchen/dinghy-http-proxy:2.7.1
   resolv:
     enabled: true
     nameserver: 127.0.0.1
