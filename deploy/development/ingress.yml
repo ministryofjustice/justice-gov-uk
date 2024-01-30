@@ -10,6 +10,9 @@ metadata:
     nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
     nginx.ingress.kubernetes.io/auth-realm: 'Development User | Authentication Required'
     nginx.ingress.kubernetes.io/server-snippet: |
+      if ($host = 'justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk') {
+        return 301 https://dev.justice.gov.uk;
+      }
       location = /health {
         auth_basic off;
         access_log off;
@@ -26,8 +29,21 @@ spec:
   tls:
   - hosts:
     - justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk
+  - hosts:
+    - dev.justice.gov.uk
+    secretName: justice-gov-uk-dev-cert-secret
   rules:
   - host: justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 8080
+  - host: dev.justice.gov.uk
     http:
       paths:
       - path: /
