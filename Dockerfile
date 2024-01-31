@@ -21,6 +21,25 @@ COPY deploy/config/local/pool.conf /usr/local/etc/php-fpm.d/pool.conf
 # www-data
 USER 82
 
+
+## target: ssh
+FROM base AS local-ssh
+
+ARG LOCAL_SSH_PASSWORD
+
+RUN apk add --no-cache openssh bash
+
+RUN ssh-keygen -A 
+RUN adduser -h /home/ssh-user -s /bin/bash -D ssh-user
+RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+RUN echo -n "ssh-user:${LOCAL_SSH_PASSWORD}" | chpasswd
+RUN echo "ssh-user:${LOCAL_SSH_PASSWORD}"
+RUN echo 'cd /var/www/html' >> /home/ssh-user/.bash_profile
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D", "-e"]
+
 ###
 
 
