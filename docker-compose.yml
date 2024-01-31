@@ -17,10 +17,12 @@ services:
         depends_on:
             - mariadb
 
-    php-fpm-ssh:
+    local-ssh:
         build:
             context: .
-            target: ssh
+            target: local-ssh
+            args:
+                LOCAL_SSH_PASSWORD: ${LOCAL_SSH_PASSWORD}
         volumes:
             - .:/var/www/html
         env_file:
@@ -28,7 +30,7 @@ services:
         ports: 
             - 2222:22
         profiles:
-            - ssh
+            - local-ssh
 
     nginx:
         image: nginxinc/nginx-unprivileged:1.25-alpine
