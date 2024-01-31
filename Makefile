@@ -68,6 +68,10 @@ bash:
 bash-nginx:
 	docker compose exec nginx ash
 
+# Starts the application, includes the local-ssh container for migrations.
+migrate:
+	docker compose --profile local-ssh up
+
 # Run tests
 test:
 	composer test
