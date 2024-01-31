@@ -11,10 +11,10 @@ const JUSTICE_MAIL_TEMPLATES = __DIR__ . "/mail-templates.php";
  * This is a working filter however, you can yse a filter
  * like this to modify email or SMS content.
  *
- * Call it just before you send an email using wp_mail()
+ * To select a different template, use the filter just before you send an email using wp_mail()
  *
  * @example
- * add_filter('moj_mail_templates', function ($templates) use ($local_var_one, $local_var_two) {
+ * add_filter('moj_mail_template', function ($templates) use ($local_var_one, $local_var_two) {
  *     $template = $templates['email']['hello-world'];
  *     $template['personalisation']['name'] = $local_var_one;
  *     $template['personalisation']['email'] = $local_var_two;
