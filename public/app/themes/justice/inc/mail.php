@@ -12,6 +12,17 @@ const JUSTICE_MAIL_TEMPLATES = __DIR__ . "/mail-templates.php";
  * like this to modify email or SMS content.
  *
  * Call it just before you send an email using wp_mail()
+ *
+ * @example
+ * add_filter('moj_mail_templates', function ($templates) use ($local_var_one, $local_var_two) {
+ *     $template = $templates['email']['hello-world'];
+ *     $template['personalisation']['name'] = $local_var_one;
+ *     $template['personalisation']['email'] = $local_var_two;
+ *     return $template;
+ * }, 10, 1);
+ *
+ * wp_mail($local_var_two, 'default', 'default');
+ *
  */
 function mail_template_default($templates, $attrs)
 {
@@ -32,13 +43,13 @@ function mail_template_default($templates, $attrs)
 add_filter('pre_wp_mail', function ($null, $mail) {
     // Things we'd like to find:
     $patterns = [
-        'api' => '/[a-f0-9]{8}\-[a-f0-9]{4}\-4[a-f0-9]{3}\-[a-f0-9]{4}\-[a-f0-9]{12}/',
+        'api' => '/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[a-f0-9]{4}-[a-f0-9]{12}/',
         'sms' => '/((\+44(\s\(0\)\s|\s0\s|\s)?)|0)7\d{3}(\s)?\d{6}/' # matches UK mobile numbers
     ];
 
     // Don't short-circuit if the password doesn't look right
-    $maybe_api_key = env('SMTP_PASSWORD') ?? env('SMTP_PASS');
-    preg_match_all($patterns['api'], $maybe_api_key, $matches);
+    $api_key = env('GOV_NOTIFY_API_KEY');
+    preg_match_all($patterns['api'], $api_key, $matches);
     if (count($matches[0]) !== 2) {
         // hand back to wp_mail()
         return null;
@@ -46,7 +57,7 @@ add_filter('pre_wp_mail', function ($null, $mail) {
 
     // Set up Gov Notify client
     $client = new Client([
-        'apiKey' => $maybe_api_key,
+        'apiKey' => $api_key,
         'httpClient' => new \Http\Adapter\Guzzle7\Client
     ]);
 
@@ -59,8 +70,8 @@ add_filter('pre_wp_mail', function ($null, $mail) {
      *
      * @param array $settings
      */
-    if (has_filter('gov_notify_mail_templates')) {
-        $settings = apply_filters('gov_notify_mail_templates', $templates, $mail);
+    if (has_filter('moj_mail_template')) {
+        $settings = apply_filters('moj_mail_template', $templates, $mail);
 
         /**
          * Resets the filter hook
@@ -71,7 +82,7 @@ add_filter('pre_wp_mail', function ($null, $mail) {
          * every time leaving us nothing to 'pluck'. This way, we can safely assume we have a full array of
          * templates to chose from on each closure call.
          */
-        remove_all_filters('gov_notify_mail_templates');
+        remove_all_filters('moj_mail_template');
     }
 
     $message = $mail['message'];
