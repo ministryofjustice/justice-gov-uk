@@ -17,21 +17,6 @@ services:
         depends_on:
             - mariadb
 
-    local-ssh:
-        build:
-            context: .
-            target: local-ssh
-            args:
-                LOCAL_SSH_PASSWORD: ${LOCAL_SSH_PASSWORD}
-        volumes:
-            - .:/var/www/html
-        env_file:
-            - .env
-        ports: 
-            - 2222:22
-        profiles:
-            - local-ssh
-
     nginx:
         image: nginxinc/nginx-unprivileged:1.25-alpine
         volumes:
@@ -84,4 +69,19 @@ services:
             - "9191:80"
         links:
             - mariadb
+
+    local-ssh:
+      build:
+        context: .
+        target: local-ssh
+        args:
+          LOCAL_SSH_PASSWORD: ${LOCAL_SSH_PASSWORD}
+      volumes:
+        - .:/var/www/html
+      env_file:
+        - .env
+      ports:
+        - 2222:22
+      profiles:
+        - local-ssh
 
