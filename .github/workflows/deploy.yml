@@ -85,6 +85,7 @@ jobs:
           NONCE_SALT: ${{ secrets.NONCE_SALT }}
           SECURE_AUTH_KEY: ${{ secrets.SECURE_AUTH_KEY }}
           SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
+          GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
         run: |
           cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
           cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml
