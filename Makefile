@@ -86,7 +86,7 @@ test-fixes:
 #####
 build-nginx:
 	@echo "\n-->  Building local Nginx  <---------------------------|\n"; sleep 3;
-	docker image build -t justice-nginx:latest --target nginx .
+	docker image build -t justice-nginx:latest --target build-nginx .
 
 # FastCGI Process Manager for PHP
 # https://www.php.net/manual/en/install.fpm.php
