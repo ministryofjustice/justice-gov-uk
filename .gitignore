@@ -18,6 +18,7 @@ public/app/upgrade
 public/app/languages
 public/app/uploads/*
 vendor
+vendor-assets
 .dory.yml
 
 
