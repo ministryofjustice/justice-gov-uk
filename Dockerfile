@@ -25,7 +25,7 @@ RUN echo "# This file is configured at runtime." > /etc/nginx/real_ip.conf
 
 RUN mkdir -p /var/run/nginx-cache
 
-USER nginx
+USER 82
 
 
 ## target: dev
