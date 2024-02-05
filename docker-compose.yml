@@ -18,7 +18,9 @@ services:
             - mariadb
 
     nginx:
-        image: nginxinc/nginx-unprivileged:1.25-alpine
+        build:
+          context: .
+          target: nginx-dev
         volumes:
             - dist:/var/www/html/public/app/themes/justice/dist
             - ./deploy/config/local/php-fpm.conf:/etc/nginx/php-fpm.conf
@@ -27,6 +29,7 @@ services:
         environment:
             VIRTUAL_HOST: ${SERVER_NAME}
             VIRTUAL_PORT: 8080
+            SERVER_NAME: justice.docker
         ports:
             - "8080:8080"
         depends_on:
