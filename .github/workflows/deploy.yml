@@ -46,7 +46,7 @@ jobs:
       - name: "Build & Push to ECR"
         run: |
           docker image build -t $REGISTRY/$CP_REPOSITORY:fpm-$IMAGE_TAG --target build-fpm .
-          docker image build -t $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG --target nginx .
+          docker image build -t $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG --target build-nginx .
           docker push $REGISTRY/$CP_REPOSITORY:fpm-$IMAGE_TAG
           docker push $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG
         env:
