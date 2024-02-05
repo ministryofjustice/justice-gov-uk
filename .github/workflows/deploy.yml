@@ -88,7 +88,7 @@ jobs:
           GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
         run: |
           cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
-          cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml
+          cat $TPL_PATH/deployment.tpl.yml | envsubst > $TPL_PATH/deployment.yaml
 
       - name: "Authenticate to the cluster"
         env:

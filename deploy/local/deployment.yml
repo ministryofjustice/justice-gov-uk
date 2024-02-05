@@ -21,6 +21,9 @@ spec:
       volumes:
         - name: uploads
           emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
+      terminationGracePeriodSeconds: 35
       containers:
         - name: nginx
           image: justice-nginx:latest
@@ -28,6 +31,9 @@ spec:
           resources: {}
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - name: nginx-cache
+              mountPath: /var/run/nginx-cache
 
         - name: fpm
           image: justice-fpm:latest
