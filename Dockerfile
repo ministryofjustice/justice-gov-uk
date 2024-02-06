@@ -75,7 +75,7 @@ COPY . .
 RUN composer install --no-dev
 RUN composer dump-autoload -o
 
-ARG regex_files='\(css\|js\|jpg\|svg\|png\)'
+ARG regex_files='\(htm\|html\|css\|js\|jpg\|svg\|png\)'
 ARG regex_path='\(app\/mu\-plugins\|app\/plugins\|wp\)'
 
 RUN mkdir -p ./vendor-assets && \
