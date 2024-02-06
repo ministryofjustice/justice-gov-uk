@@ -84,7 +84,7 @@ COPY . .
 RUN composer install --no-dev
 RUN composer dump-autoload -o
 
-ARG regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\)'
+ARG regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\|svg\)'
 ARG regex_path='\(app\/themes\/justice\/error\-pages\|app\/mu\-plugins\|app\/plugins\|wp\)'
 RUN mkdir -p ./vendor-assets && \
     find public/ -regex "public\/${regex_path}.*\.${regex_files}" -exec cp --parent "{}" vendor-assets/  \;

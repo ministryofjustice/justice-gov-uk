@@ -1,7 +1,7 @@
 #!/usr/bin/env ash
 
 # Nginx file sharing regex-parts
-regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\)'
+regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\|svg\)'
 regex_path='\(app\/themes\/justice\|app\/mu\-plugins\|app\/plugins\|wp\)'
 
 composer install
