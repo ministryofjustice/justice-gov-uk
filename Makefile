@@ -1,4 +1,4 @@
-.PHONY: d-shell
+.DEFAULT_GOAL := d-shell
 
 kube := kind
 k8s_prt := 8080:80
@@ -9,27 +9,33 @@ init: setup run
 
 d-compose: local-stop
 	docker compose up -d nginx phpmyadmin
-	docker compose run --service-ports --rm --entrypoint=bash php-fpm
 
-d-shell: setup d-compose
+d-shell: setup d-compose composer
 
 setup:
 	@chmod +x ./bin/*
 	@[ -f "./.env" ] || cp .env.example .env
 
 restart:
-	@docker compose down app
+	@docker compose down php-fpm
 	@make d-compose
-
-down:
-	docker compose down
 
 node-assets:
 	npm install
 	npm run watch
 
+composer:
+	@chmod +x ./bin/local-composer-assets.sh
+	docker compose exec php-fpm ./bin/local-composer-assets.sh ash
+	docker compose cp php-fpm:/var/www/html/vendor-assets/public ./vendor-assets
+	docker compose cp ./vendor-assets/public nginx:/var/www/html
+
+# Open a bash shell on the running php container
+bash:
+	docker compose exec php-fpm bash
+
 nginx:
-	docker compose exec --workdir /var/www/html nginx bash
+	docker compose exec --workdir /var/www/html nginx ash
 
 node:
 	docker compose exec --workdir /node node bash
@@ -52,6 +58,9 @@ docker-clean:
 run: local-stop dory
 	docker compose up
 
+down:
+	docker compose down
+
 # Launch the application, open browser, no stdout
 launch: local-stop dory
 	bin/local-launch.sh
@@ -59,14 +68,6 @@ launch: local-stop dory
 # Start the Dory Proxy
 dory:
 	@chmod +x ./bin/local-dory-check.sh && ./bin/local-dory-check.sh
-
-# Open a bash shell on the running php container
-bash:
-	docker compose exec php-fpm bash
-
-# Open a bash shell on the running php container
-bash-nginx:
-	docker compose exec nginx ash
 
 # Starts the application, includes the local-ssh container for migrations.
 migrate:
