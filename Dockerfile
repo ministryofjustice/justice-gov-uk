@@ -1,7 +1,19 @@
-FROM php:8.3-fpm-alpine AS base-fpm
+FROM php:8.2-fpm-alpine AS base-fpm
 
-RUN apk add --update bash zlib-dev libpng-dev libzip-dev ghostscript icu-dev htop mariadb-client sudo $PHPIZE_DEPS
-RUN docker-php-ext-configure intl && \
+RUN apk add --update bash  \
+    zlib-dev  \
+    libpng-dev  \
+    libzip-dev  \
+    libxml2-dev \
+    ghostscript imagemagick imagemagick-libs imagemagick-dev libjpeg-turbo libgomp freetype-dev \
+    icu-dev  \
+    htop  \
+    mariadb-client \
+    $PHPIZE_DEPS
+
+RUN pecl install imagick
+RUN docker-php-ext-enable imagick && \
+    docker-php-ext-configure intl && \
     docker-php-ext-install exif gd zip mysqli opcache intl
 RUN apk del $PHPIZE_DEPS
 
@@ -23,15 +35,12 @@ COPY deploy/config/init/* /docker-entrypoint.d/
 RUN chmod +x /docker-entrypoint.d/*
 RUN echo "# This file is configured at runtime." > /etc/nginx/real_ip.conf
 
-RUN mkdir -p /var/run/nginx-cache
-
 USER 82
 
 
 ## target: dev
 FROM base-fpm AS dev
 RUN apk add --update nano nodejs npm
-RUN docker-php-ext-install xdebug
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -75,9 +84,8 @@ COPY . .
 RUN composer install --no-dev
 RUN composer dump-autoload -o
 
-ARG regex_files='\(htm\|html\|css\|js\|jpg\|svg\|png\)'
+ARG regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\)'
 ARG regex_path='\(app\/themes\/justice\/error\-pages\|app\/mu\-plugins\|app\/plugins\|wp\)'
-
 RUN mkdir -p ./vendor-assets && \
     find public/ -regex "public\/${regex_path}.*\.${regex_files}" -exec cp --parent "{}" vendor-assets/  \;
 
@@ -120,6 +128,7 @@ RUN rm -rf node_modules
 
 FROM base-nginx AS nginx-dev
 
+RUN echo "# This is a placeholder, because the file is included in `php-fpm.conf`." > /etc/nginx/server_name.conf
 
 ###
 
