@@ -56,8 +56,8 @@ jobs:
         # Runs Snyk Container (Container and SCA) analysis.
       - name: Container monitor ~ analyse
         run: |
-          snyk container monitor justice-fpm:snyk --file=Dockerfile --sarif >> snyk-code.sarif
-          snyk container monitor justice-nginx:snyk --file=Dockerfile --sarif >> snyk-code.sarif
+          snyk container monitor justice-fpm:snyk --file=Dockerfile
+          snyk container monitor justice-nginx:snyk --file=Dockerfile
 
         # Push the Snyk Code results into GitHub Code Scanning tab
       - name: Upload result to GitHub Code Scanning
