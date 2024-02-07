@@ -42,7 +42,9 @@ jobs:
 
         # Runs Snyk Infrastructure as Code (IaC) analysis and uploads result into GitHub.
       - name: Infrastructure as Code test and report
-        run: snyk iac test --sarif > moj-sarif/snyk-iac.sarif || true
+        run: |
+          mkdir -p moj-sarif
+          snyk iac test --sarif > moj-sarif/snyk-iac.sarif || true
 
       - name: PHP test
         uses: snyk/actions/php@master
