@@ -7,14 +7,14 @@
     <div class="container-wrapper">
         <div id="footer">
             <ul class="box25p">
-                <li><a href="https://www.justice.gov.uk/help/accessibility">Accessibility</a></li>
-                <li><a href="https://www.justice.gov.uk/privacy/cookies">Cookies</a></li>
+                <li><a href="<?php echo home_url('/help/accessibility'); ?>">Accessibility</a></li>
+                <li><a href="<?php echo home_url('/privacy/cookies'); ?>">Cookies</a></li>
                 <li><a href="https://www.gov.uk/government/organisations/ministry-of-justice">Contacts</a></li>
-                <li><a href="https://www.justice.gov.uk/copyright">Copyright</a></li>
-                <li><a href="https://www.justice.gov.uk/help">Help</a></li>
-                <li><a href="https://www.justice.gov.uk/privacy">Privacy</a></li>
-                <li><a href="https://www.justice.gov.uk/ministry-of-justice-webchats">Web chats</a></li>
-                <li><a href="https://www.justice.gov.uk/website-queries">Website queries</a></li>
+                <li><a href="<?php echo home_url('/copyright'); ?>">Copyright</a></li>
+                <li><a href="<?php echo home_url('/help'); ?>">Help</a></li>
+                <li><a href="<?php echo home_url('/privacy'); ?>">Privacy</a></li>
+                <li><a href="<?php echo home_url('/ministry-of-justice-webchats'); ?>">Web chats</a></li>
+                <li><a href="<?php echo home_url('/website-queries'); ?>">Website queries</a></li>
             </ul>
             <div class="f-line"></div>
             <h1>Citizen and business advice</h1>
