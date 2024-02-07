@@ -19,7 +19,7 @@ public/app/languages
 public/app/uploads/*
 vendor
 vendor-assets
-.dory.yml
+/.dory.yml
 
 
 !public/app/plugins/.keep
