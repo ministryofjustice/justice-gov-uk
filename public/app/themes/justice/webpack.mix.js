@@ -4,6 +4,7 @@ mix.setPublicPath('./dist/')
 
 /*******************/
 mix.js('src/js/app.js', 'dist/app.min.js')
+    .js('src/js/admin.js', 'dist/admin.min.js')
     .sass('src/sass/app.scss', 'dist/app.min.css')
     .copy('src/img/', 'dist/img/')
     .css('src/css/global.css', 'dist/css/')
