@@ -203,7 +203,65 @@ kubectl exec -it $POD -n $NSP -- ash
 
 # open an interactive shell on the FPM container
 kubectl exec -it $POD -n $NSP -c fpm -- ash
-````
+```
+
+## AWS setup
+
+### S3
+
+Create a bucket with the following settings:
+
+- Region: `eu-west-2`
+- Object Ownership: 
+   - ACLs enabled
+   - Bucket owner preferred
+- Block all public access:
+  - Block public access to buckets and objects granted through new access control lists (ACLs): NO
+  - Block public access to buckets and objects granted through any access control lists (ACLs): YES
+  - Block public access to buckets and objects granted through new public bucket or access point policies: YES
+  - Block public and cross-account access to buckets and objects through any public bucket or access point policies: YES
+
+### CloudFront
+
+Create a deployment with the following settings:
+
+- Cache key and origin requests
+    - Legacy cache settings
+       - Query strings: All
+
+To restrict access to the Amazon S3 bucket follow the guide to implement origin access control (OAC) 
+https://repost.aws/knowledge-center/cloudfront-access-to-amazon-s3
+
+### IAM
+
+For using u user's keys, create a user with a policy similar to the following:
+
+```json
+{
+  "Sid": "s3-bucket-access",
+  "Effect": "Allow",
+  "Action": "s3:*",
+  "Resource": "arn:aws:s3:::bucket-name"
+}
+```
+
+An access key can then be used for testing actions related to the S3 bucket, use env vars:
+
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+
+When deployed, server-roles should be used.
+
+### Verify WP Offload Media
+
+To verify that S3 & CloudFront are working correctly.
+
+- Go to WP Offload Media Lite settings page. There should be green checks for Storage & Delivery settings.
+- Upload an image via Media Library.
+- Image should be shown correctly in the Media Library.
+- The img source domain should be CloudFront.
+- Directly trying to access an image via the S3 bucket url should return an access denied message.
+
 
 <!-- License badge -->
 

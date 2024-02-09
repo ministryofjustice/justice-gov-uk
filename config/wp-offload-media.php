@@ -27,8 +27,8 @@ $as3_settings = array(
     'object-versioning' => true,
     // Delivery Provider ('storage', 'aws', 'do', 'gcp', 'cloudflare', 'keycdn', 'stackpath', 'other')
     'delivery-provider' => env('CLOUDFRONT_URL') ? 'aws' : 'storage',
-    // Rewrite file URLs to bucket
-    'serve-from-s3' => !env('CLOUDFRONT_URL'),
+    // Rewrite file URLs to bucket (s3 or cloudfront)
+    'serve-from-s3' => true,
     // Use a custom domain (CNAME), not supported when using 'storage' Delivery Provider
     'enable-delivery-domain' => !!env('CLOUDFRONT_URL'),
     // Custom domain (CNAME), not supported when using 'storage' Delivery Provider
