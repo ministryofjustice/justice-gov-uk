@@ -15,3 +15,7 @@ Config::define('SCRIPT_DEBUG', true);
 Config::define('DISALLOW_INDEXING', true);
 
 ini_set('display_errors', '1');
+
+if (env('WP_OFFLOAD_MEDIA_PRESET')) {
+    Config::define('WP_OFFLOAD_MEDIA_PRESET', env('WP_OFFLOAD_MEDIA_PRESET'));
+}
