@@ -14,7 +14,7 @@ $as3_settings = array(
     // Bucket to upload files to
     'bucket' => env('S3_BUCKET_NAME'),
     // Bucket region (e.g. 'us-west-1' - leave blank for default region)
-    'region' => env('S3_BUCKET_REGION') ?: 'eu-west-2',
+    'region' => 'eu-west-2',
     // Automatically copy files to bucket on upload
     'copy-to-s3' => true,
     // Enable object prefix, useful if you use your bucket for other files
@@ -28,9 +28,9 @@ $as3_settings = array(
     // Delivery Provider ('storage', 'aws', 'do', 'gcp', 'cloudflare', 'keycdn', 'stackpath', 'other')
     'delivery-provider' => env('CLOUDFRONT_URL') ? 'aws' : 'storage',
     // Rewrite file URLs to bucket
-    'serve-from-s3' => true,
+    'serve-from-s3' => !env('CLOUDFRONT_URL'),
     // Use a custom domain (CNAME), not supported when using 'storage' Delivery Provider
-    'enable-delivery-domain' => false,
+    'enable-delivery-domain' => !!env('CLOUDFRONT_URL'),
     // Custom domain (CNAME), not supported when using 'storage' Delivery Provider
     'delivery-domain' =>  env('CLOUDFRONT_URL'),
     // Enable signed URLs for Delivery Provider that uses separate key pair (currently only 'aws' supported, a.k.a. CloudFront)
