@@ -11,6 +11,8 @@ use function Env\env;
 $as3_settings = array(
     // Storage Provider ('aws', 'do', 'gcp')
     'provider' => 'aws',
+    // Use IAM Roles on Amazon Elastic Compute Cloud (EC2) or Google Compute Engine (GCE)
+    'use-server-roles' => true,
     // Bucket to upload files to
     'bucket' => env('S3_BUCKET_NAME'),
     // Bucket region (e.g. 'us-west-1' - leave blank for default region)
@@ -50,16 +52,13 @@ $as3_settings = array(
 
 // Merge in the access key and secret if they are set
 if (env('AWS_ACCESS_KEY_ID') && env('AWS_SECRET_ACCESS_KEY')) {
+    unset($as3_settings['use-server-roles']);
+
     $as3_settings = array_merge($as3_settings, [
          // Access Key ID for Storage Provider (aws and do only, replace '*')
         'access-key-id' => env('AWS_ACCESS_KEY_ID'),
         // Secret Access Key for Storage Providers (aws and do only, replace '*')
-        'secret-access-key' => env('AWS_SECRET_ACCESS_KEY')
-    ]);
-} else {
-    $as3_settings = array_merge($as3_settings, [
-        // Use IAM Roles on Amazon Elastic Compute Cloud (EC2) or Google Compute Engine (GCE)
-        'use-server-roles' => true
+        'secret-access-key' => env('AWS_SECRET_ACCESS_KEY'),
     ]);
 }
 

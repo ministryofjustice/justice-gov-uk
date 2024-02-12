@@ -46,10 +46,9 @@ class AmazonS3AndCloudFrontTweaks
         add_filter('as3cf_use_ssl', '__return_false', 10, 1);
     }
 
-    // define some strings
-    private static $minio_host_in_backend_context = 'host.docker.internal';
-
-    private static $minio_host_in_frontend_context = 'localhost';
+    // Define the minio hostnames for the backend and frontend contexts.
+    private static $minio_host_in_backend_context = 'minio';
+    private static $minio_host_in_frontend_context = 'minio.justice.docker';
 
     /*
      * >>> MinIO Examples Start
