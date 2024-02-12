@@ -11,12 +11,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  image:
+    name: "Image"
+    if: github.event.ref == 'refs/heads/main'
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
   deploy_dev:
     name: "Development"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: development
+      registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
   deploy_staging:
@@ -26,6 +33,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
+      registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
   deploy_demo:
@@ -35,6 +43,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
+      registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
   deploy_production:
@@ -44,5 +53,6 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: production
+      registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
