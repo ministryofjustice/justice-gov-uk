@@ -21,6 +21,7 @@ jobs:
     name: "Development"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
+    needs: image
     with:
       environment: development
       registry: ${{ needs.image.outputs.registry }}
