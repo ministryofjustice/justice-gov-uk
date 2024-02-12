@@ -4,7 +4,7 @@ on:
   workflow_call:
     outputs:
       registry:
-        description: "AWS region where the ECR is located"
+        description: "AWS registry where the ECR is located"
         value: ${{ jobs.image_build.outputs.registry }}
 
 jobs:
