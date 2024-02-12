@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   image:
-    name: "Build"
+    name: "Image"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/build.yml
     secrets: inherit
