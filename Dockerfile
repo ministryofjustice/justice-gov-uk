@@ -147,3 +147,17 @@ COPY --from=assets-build /code/public/app/themes/justice/dist /var/www/html/publ
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/vendor-assets /var/www/html/
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/index.php /var/www/html/public/index.php
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/wp/wp-admin/index.php /var/www/html/public/wp/wp-admin/index.php
+
+
+###
+
+## target: local-cdn
+FROM caddy:2.7.6-alpine AS local-cdn
+
+# A CDN to proxy requests to the Minio (S3) server.
+# Mimics AWS CloudFront, and remove the bucket path from the URL.
+# e.g. Request: http://cdn.justice.docker/uploads/2024/02/xyz.jpg
+# proxies to:   http://minio:9000/bucket-name/uploads/2024/02/xyz.jpg
+RUN  echo $':2019 \n\
+rewrite * /{$S3_BUCKET_NAME}{uri} \n\
+reverse_proxy minio:9000' >  /etc/caddy/Caddyfile
