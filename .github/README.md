@@ -203,7 +203,37 @@ kubectl exec -it $POD -n $NSP -- ash
 
 # open an interactive shell on the FPM container
 kubectl exec -it $POD -n $NSP -c fpm -- ash
-````
+```
+
+## Testing
+
+### Summary
+
+The test suites for this project use [Codeception](https://codeception.com/) and [wp-browser](https://wpbrowser.wptestkit.dev/).
+
+> Codeception collects and shares best practices and solutions for testing PHP web applications.
+
+> The wp-browser library provides a set of Codeception modules and middleware to enable the testing of WordPress sites, plugins and themes.
+
+The suites are intended to include Unit Tests for functions & classes, all the way to Acceptance Tests with automated browsing.
+
+### Spec container
+
+The spec container is used to keep the test environment separate from the application environment. 
+Where necessary, packages are installed to the spec container to support the test suites.  
+e.g. pdo_mysql
+
+### Container dependencies
+
+The spec container is dependent on the various other containers.
+
+| Test type               | Dependencies                                      |
+| ----------------------- | ------------------------------------------------- |
+| Unit                    | App files                                         |
+| Integration             | App files, MariaDB, Minio, Local CDN              |
+| Acceptance & Functional | PHP-FPM, Nginx, MariaDB, Minio, Local CDN, Chrome |
+
+
 
 <!-- License badge -->
 

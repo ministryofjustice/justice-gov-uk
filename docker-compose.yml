@@ -74,6 +74,27 @@ services:
         links:
             - mariadb
 
+    spec:
+        build:
+            context: .
+            target: spec
+        volumes:
+            - .:/var/www/html
+        env_file:
+            - .env
+        depends_on:
+            - nginx
+            - mariadb
+            - chromium
+
+    chromium:
+        image: seleniarm/standalone-chromium:latest
+        shm_size: 2g
+        ports:
+            - "4444:4444"
+            - "5900:5900"
+            - "7900:7900"
+
     local-ssh:
       build:
         context: .

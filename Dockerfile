@@ -112,6 +112,17 @@ RUN make test
 ###
 
 
+FROM base-fpm AS spec
+
+RUN apk add --update $PHPIZE_DEPS
+RUN docker-php-ext-install pdo_mysql
+RUN apk del $PHPIZE_DEPS
+
+
+###
+
+
+
 FROM node:20 AS assets-build
 
 WORKDIR /code
