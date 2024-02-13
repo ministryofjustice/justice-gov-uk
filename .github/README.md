@@ -209,19 +209,27 @@ kubectl exec -it $POD -n $NSP -c fpm -- ash
 
 ### Summary
 
-The test suites for this project use [Codeception](https://codeception.com/) and [wp-browser](https://wpbrowser.wptestkit.dev/).
+The test suites for this project use:
+
+[Codeception](https://codeception.com/)
 
 > Codeception collects and shares best practices and solutions for testing PHP web applications.
 
+[wp-browser](https://wpbrowser.wptestkit.dev/)
+
 > The wp-browser library provides a set of Codeception modules and middleware to enable the testing of WordPress sites, plugins and themes.
+
+WP_Mock is used in unit tests to mock WordPress functions and classes.
 
 The suites are intended to include Unit Tests for functions & classes, all the way to Acceptance Tests with automated browsing.
 
-### Spec container
+### Spec container
 
 The spec container is used to keep the test environment separate from the application environment. 
 Where necessary, packages are installed to the spec container to support the test suites.  
 e.g. pdo_mysql
+
+To access a terminal on the spec container, run: `make spec-bash`.
 
 ### Container dependencies
 
@@ -233,7 +241,22 @@ The spec container is dependent on the various other containers.
 | Integration             | App files, MariaDB, Minio, Local CDN              |
 | Acceptance & Functional | PHP-FPM, Nginx, MariaDB, Minio, Local CDN, Chrome |
 
+### Installation log
+ 
+The test packages have been installed by running `composer require --dev lucatume/wp-browser` from inside the spec container.
 
+wp-browser was initialised by running `vendor/bin/codecept init wpbrowser` from inside the spec container.
+
+When prompted to use a portable configuration based on PHP built-in server, Chromedriver and SQLite, 
+the answer was no.  
+This is because these services are already provided by the docker-compose environment.
+
+Changes to the default installation include:
+
+- rename `tests` directory to `spec`.
+- move `codeception.yml` from the project root to the spec directory.
+- amend file paths within `codeception.yml` accordingly.
+- add scripts to the `composer.json` file to run the tests, e.g. running `vendor/bin/codecept` with `-c` to specify the codeception config file.
 
 <!-- License badge -->
 
