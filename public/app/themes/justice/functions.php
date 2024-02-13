@@ -4,37 +4,24 @@ if (defined('WP_CLI') && WP_CLI) {
     require_once 'inc/commands.php';
 }
 
+
+require_once 'inc/admin.php';
+
+use  MOJ\Justice;
+new Justice\Admin();
+
+
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/app.min.css'));
 
 add_editor_style();
 
-
 add_action('init', fn() => register_nav_menus([
     'header-menu' => __('Header Menu'),
     'footer-menu' => __('Footer Menu')
 ]));
 
-add_action('wp_before_admin_bar_render', function () {
-    global $wp_admin_bar;
-    $wp_admin_bar->remove_menu('customize');
-});
-
-add_action(
-    'admin_enqueue_scripts',
-    function () {
-        wp_enqueue_style(
-            'justice-admin-style',
-            get_template_directory_uri() . '/dist/css/wp-admin-override.css'
-        );
-    }
-);
-
-
-add_action('admin_enqueue_scripts', function () {
-    wp_enqueue_script('justice-admin', get_template_directory_uri() . '/dist/admin.min.js', [], false, true);
-});
 
 // B R E A D C R U M B S //
 function justice_crumbs()
