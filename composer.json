@@ -36,7 +36,7 @@
     "require": {
         "php": ">=8.2",
         "alphagov/notifications-php-client": "^5.0",
-        "composer/installers": "^2.2",
+        "composer/installers": "^2.2.0",
         "vlucas/phpdotenv": "^5.5",
         "oscarotero/env": "^2.1",
         "roots/bedrock-autoloader": "^1.0",
