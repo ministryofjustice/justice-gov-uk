@@ -118,6 +118,10 @@ RUN apk add --update $PHPIZE_DEPS
 RUN docker-php-ext-install pdo_mysql
 RUN apk del $PHPIZE_DEPS
 
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# www-data
+USER 82
 
 ###
 
