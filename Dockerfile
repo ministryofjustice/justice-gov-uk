@@ -77,6 +77,9 @@ WORKDIR /var/www/html
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# non-root
+USER 82
+
 COPY ./composer.json /var/www/html/composer.json
 RUN composer install --no-dev --no-scripts --no-autoloader
 
