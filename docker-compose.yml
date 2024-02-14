@@ -98,9 +98,9 @@ services:
         "
 
     cdn:
-      build:
-        context: .
-        target: local-cdn
+      image: caddy:2.7.6-alpine
+      volumes:
+        - ./deploy/config/local/Caddyfile:/etc/caddy/Caddyfile
       environment:
         S3_BUCKET_NAME: ${S3_BUCKET_NAME}
         VIRTUAL_HOST: cdn.${SERVER_NAME}
