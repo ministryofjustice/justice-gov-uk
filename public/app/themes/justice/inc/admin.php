@@ -24,6 +24,7 @@ class Admin
     {
         add_action( 'admin_enqueue_scripts', array($this, 'enqueueStyles') );
         add_action( 'admin_enqueue_scripts', array($this, 'enqueueScripts') );
+        // add_action( 'after_setup_theme', array($this, 'addEditorStyle') );
         // add_action('wp_before_admin_bar_render', array($this, 'editAdminBar'));
     }
     
@@ -36,6 +37,11 @@ class Admin
     {
         wp_enqueue_script('justice-admin', get_template_directory_uri() . '/dist/admin.min.js', [], false, true);
     }
+
+    // public static function addEditorStyle() {
+        // add_theme_support( 'editor-styles' );
+        // add_editor_style();
+    // }
     
     // public static function editAdminBar()
     // {

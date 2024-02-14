@@ -11,7 +11,3 @@ global $theme_root_dir;
 // Optional step
 // If your project does not use autoloading via Composer, include your files now
 require_once $theme_root_dir . '/inc/admin.php';
-require_once $theme_root_dir . '/inc/my-plugin.php';
-
-
-// require_once $theme_root_dir . '/inc/my-plugin.php';
