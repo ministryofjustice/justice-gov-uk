@@ -134,26 +134,21 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
     $_SERVER['HTTPS'] = 'on';
 }
 
+/**
+ * WP Offload Media settings
+ */
+if (file_exists(__DIR__ . '/wp-offload-media.php')) {
+    require_once __DIR__ . '/wp-offload-media.php';
+}
+
+/**
+ * Environment-specific settings
+ */
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 
 if (file_exists($env_config)) {
     require_once $env_config;
 }
-
-// S3 media upload plugin settings
-$as3_settings = ['provider' => 'aws', 'use-server-roles' => true];
-
-/**
- * if we have an access key overwrite default configuration
- */
-if (env('AWS_ACCESS_KEY_ID')) {
-    $as3_settings = [
-        'provider' => 'aws',
-        'access-key-id' => env('AWS_ACCESS_KEY_ID'),
-        'secret-access-key' => env('AWS_SECRET_ACCESS_KEY')
-    ];
-}
-Config::define('AS3CF_SETTINGS', serialize($as3_settings));
 
 
 Config::apply();
