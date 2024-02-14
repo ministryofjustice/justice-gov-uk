@@ -1,0 +1,45 @@
+class_name: FunctionalTester
+modules:
+    enabled:
+        - \Helper\Functional
+        - REST
+        - WPDb
+        - WPBrowser
+        - Asserts
+        - WPLoader
+    config:
+        # needed by the REST module
+        WPBrowser:
+            url: 'http://justice.docker'
+            adminUsername: test
+            adminPassword: test
+            adminUrl: /wp/wp-admin
+            headers:
+                X_WPBROWSER_REQUEST: 1
+                X_TEST_REQUEST: 1
+
+        # to test the REST API
+        REST:
+            depends: WPBrowser
+            url: 'http://justice.docker'
+
+        # to manage database insertions and states 
+        WPDb:
+            dsn: 'mysql:host=localhost;dbname=wp'
+            user: root
+            password: root
+            dump: tests/_data/dump.sql # load this...
+            populate: true # ...before the tests...
+            cleanup: true # ... and between tests
+            url: 'http://justice.docker'
+            tablePrefix: wp_
+
+        # to get access to WordPress code in the tests
+        WPLoader:
+            # just load WordPress using the same db as WPDb
+            loadOnly: true
+            wpRootFolder: /tmp/wordpress
+            dbName: wp
+            dbHost: localhost
+            dbUser: root
+            dbPassword: root
