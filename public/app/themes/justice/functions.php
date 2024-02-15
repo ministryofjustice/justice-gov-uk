@@ -4,7 +4,13 @@ if (defined('WP_CLI') && WP_CLI) {
     require_once 'inc/commands.php';
 }
 
+if (defined('WP_OFFLOAD_MEDIA_PRESET') && WP_OFFLOAD_MEDIA_PRESET === 'minio') {
+    require_once 'inc/amazon-s3-and-cloudfront-tweaks-for-minio.php';
+}
+
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
+
+add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/app.min.css'));
 
 add_editor_style();
 
@@ -28,6 +34,11 @@ add_action(
         );
     }
 );
+
+
+add_action('admin_enqueue_scripts', function () {
+    wp_enqueue_script('justice-admin', get_template_directory_uri() . '/dist/admin.min.js', [], false, true);
+});
 
 // B R E A D C R U M B S //
 function justice_crumbs()
