@@ -109,6 +109,9 @@
         "test:unit": [
             "vendor/bin/codecept run -c spec/codeception.yml Unit"
         ],
+        "test:acceptance": [
+            "vendor/bin/codecept run -c spec/codeception.yml Acceptance"
+        ],
         "test:cmd": [
             "vendor/bin/codecept -c spec/codeception.yml"
         ]

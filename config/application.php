@@ -75,18 +75,24 @@ if (env('DB_SSL')) {
     Config::define('MYSQL_CLIENT_FLAGS', MYSQLI_CLIENT_SSL);
 }
 
-// If the request origin is from a test suite, use the test database.
-$is_test_request = ( isset( $_SERVER['HTTP_X_TEST_REQUEST'] ) && $_SERVER['HTTP_X_TEST_REQUEST'] )
-    || ( isset( $_SERVER['HTTP_USER_AGENT'] ) && $_SERVER['HTTP_USER_AGENT'] === 'wp-browser' )
-    || getenv( 'WPBROWSER_HOST_REQUEST' );
 
-Config::define('DB_NAME', $is_test_request ? env('DB_NAME_TEST') : env('DB_NAME'));
+Config::define('DB_NAME', env('DB_NAME'));
 Config::define('DB_USER', env('DB_USER'));
 Config::define('DB_PASSWORD', env('DB_PASSWORD'));
 Config::define('DB_HOST', env('DB_HOST') ?: 'localhost');
 Config::define('DB_CHARSET', 'utf8mb4');
 Config::define('DB_COLLATE', '');
-$table_prefix = env('DB_PREFIX') ?: 'wp_';
+
+
+// If the request origin is from a test suite, use the test database.
+$is_test_request = ( isset( $_SERVER['HTTP_X_TEST_REQUEST'] ) && $_SERVER['HTTP_X_TEST_REQUEST'] )
+|| ( isset( $_SERVER['HTTP_USER_AGENT'] ) && $_SERVER['HTTP_USER_AGENT'] === 'wp-browser' )
+|| getenv( 'WPBROWSER_HOST_REQUEST' );
+
+
+$table_prefix =  $is_test_request ? 'test_' : (env('DB_PREFIX') ?: 'wp_');
+
+// echo $table_prefix;
 
 // if (env('DATABASE_URL')) {
 //     $dsn = (object) parse_url(env('DATABASE_URL'));

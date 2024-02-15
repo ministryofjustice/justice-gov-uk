@@ -82,6 +82,9 @@ services:
             - .:/var/www/html
         env_file:
             - .env
+        environment: 
+            # Overwrite the database name to use the test database
+            - DB_PREFIX=test_
         depends_on:
             - nginx
             - mariadb
@@ -94,6 +97,9 @@ services:
             - "4444:4444"
             - "5900:5900"
             - "7900:7900"
+        # add host
+        extra_hosts:
+            - "justice.docker:host-gateway"
 
     local-ssh:
       build:

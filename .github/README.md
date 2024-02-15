@@ -257,6 +257,17 @@ Changes to the default installation include:
 - move `codeception.yml` from the project root to the spec directory.
 - amend file paths within `codeception.yml` accordingly.
 - add scripts to the `composer.json` file to run the tests, e.g. running `vendor/bin/codecept` with `-c` to specify the codeception config file.
+- [Simple start with Acceptance Testing for WordPress](https://wp-punk.com/simple-start-with-acceptance-testing-for-wordpress/) was followed to add acceptance tests.
+
+> To avoid coupling between tests. We should run each test separately from the default state. In our case, the default state is a default state for a database. So, let’s create a separate acceptance_db database, activate the tested WordPress plugin, install the tested plugin/theme, and export the database to the spec/tests/Support/Data/dump.sql.
+
+```bash
+# If this is run from the spec container, the following commands will install WordPress and activate all plugins, and use test_ as the database prefix.
+wp core install --url="http://justice.docker" --title="Test" --admin_user="test" --admin_password="test" --admin_email="example@justice.docker" --skip-email
+wp plugin activate --all
+
+mysqldump --host="mariadb" --user="mysql" --password="mysql" justice > spec/Support/Data/dump.sql
+```
 
 <!-- License badge -->
 
