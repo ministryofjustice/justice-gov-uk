@@ -1,14 +1,31 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+use MOJ\Justice\Breadcrumbs;
+
+$moj_breadcrumbs = (new Breadcrumbs)->getTheBreadcrumbs();
+
+if (!$moj_breadcrumbs) {
+    return;
+}
+
+?>
+
 <ul id="breadcrumb">
-    <li><a href="/">Home</a></li>
-    <li class="separator">»</li>
-    <li><a href="<?php echo home_url('/courts'); ?>">Courts</a></li>
-    <li class="separator">»</li>
-    <li><a href="<?php echo home_url('/courts/procedure-rules'); ?>">Procedure rules</a></li>
-    <li class="separator">»</li>
-    <li><a href="<?php echo home_url('/courts/procedure-rules/family'); ?>">Family</a>
-    </li>
-    <li class="separator">»</li>
-    <li><a href="<?php echo home_url('/courts/procedure-rules/family/magistrates'); ?>">Magistrates
-            Courts
-            Rules</a></li>
+    <?php foreach ($moj_breadcrumbs as $breadcrumb) { ?>
+        <li>
+            <?php if ($breadcrumb['url']) { ?>
+                <a href="<?php echo $breadcrumb['url']; ?>"><?php echo $breadcrumb['title']; ?></a>
+            <?php } else { ?>
+                <?php echo $breadcrumb['title']; ?>
+            <?php } ?>
+        </li>
+
+        <?php if (empty($breadcrumb['last'])) { ?>
+            <li class="separator">»</li>
+        <?php } ?>
+    <?php } ?>
 </ul>
