@@ -9,13 +9,6 @@ if (!defined('ABSPATH')) {
 class Breadcrumbs
 {
 
-    public function getShortTitle(string | int $post_id): string
-    {
-        $short_title = get_post_meta($post_id, 'short_title', true);
-
-        return $short_title ? $short_title : get_the_title($post_id);
-    }
-
     /**
      * Get the breadcrumbs as an array
      */
@@ -26,6 +19,8 @@ class Breadcrumbs
         if (is_home() || is_front_page() || !is_page()) {
             return null;
         }
+
+        $meta = new Meta();
 
         $breadcrumbs = [];
     
@@ -48,7 +43,7 @@ class Breadcrumbs
             // Parent page loop
             foreach ($ancestor_ids as $ancestor_id) {
                 $breadcrumbs[] = [
-                    'title' => $this->getShortTitle($ancestor_id),
+                    'title' => $meta->getShortTitle($ancestor_id),
                     'url' => get_permalink($ancestor_id)
                 ];
             }
@@ -56,7 +51,7 @@ class Breadcrumbs
     
         // Current page
         $breadcrumbs[] = [
-            'title' => $this->getShortTitle($post->ID),
+            'title' => $meta->getShortTitle($post->ID),
             'url' => null,
             'last' => true
         ];

@@ -24,7 +24,7 @@ get_header();
 
             <div id="content">
                 
-                <?php get_template_part('template-parts/breadcrumbs'); ?>
+                <?php get_template_part('template-parts/nav/breadcrumbs'); ?>
 
                 <div class="device-only">
                     <div class="anchor-link anchor-top">
