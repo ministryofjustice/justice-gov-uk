@@ -1,3 +1,21 @@
+<div class="device-only">
+
+    <div class="anchor-link">
+        <div class="bar-left"></div>
+        <a href="#top"> Top ↑ </a>
+        <div class="bar-right"></div>
+    </div>
+
+    <a id="phone-nav-anchor" name="phonenav"></a>
+
+    <ul id="phone-nav-top" class="menu-top">
+        <li><a href="/">Home</a></li>
+    </ul>
+    
+    <?php get_template_part('template-parts/nav/mobile'); ?>
+
+</div>
+
 <div class="h-line"></div>
 <div id="footer-bar">
     <div>
