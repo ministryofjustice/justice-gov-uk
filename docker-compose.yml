@@ -5,6 +5,7 @@ volumes:
     dist: ~
     mariadb_data: ~
     minio_storage: ~
+    local_ssh: ~
 
 services:
     php-fpm:
@@ -127,6 +128,7 @@ services:
           LOCAL_SSH_PASSWORD: ${LOCAL_SSH_PASSWORD}
       volumes:
         - .:/var/www/html
+        - local_ssh:/home/ssh-user/.ssh
       env_file:
         - .env
       ports:
