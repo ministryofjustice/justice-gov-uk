@@ -53,7 +53,7 @@ get_header();
                     <!-- end/ PAGE CONTENT -->
 
                     <div class="share-this bottom">
-                        <span class="right">Updated: Monday, 30 January 2017</span>
+                        <span class="right">Updated: <?php the_modified_date('l, j F Y') ?></span>
                     </div>
 
                 </article>
