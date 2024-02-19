@@ -23,6 +23,7 @@ get_header();
             <?php } ?>
 
             <div id="content">
+
                 
                 <?php get_template_part('template-parts/nav/breadcrumbs'); ?>
 

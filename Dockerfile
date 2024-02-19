@@ -63,6 +63,10 @@ RUN ssh-keygen -A && \
     echo "ssh-user:${LOCAL_SSH_PASSWORD}" && \
     echo 'cd /var/www/html' >> /home/ssh-user/.bash_profile
 
+RUN mkdir -p /home/ssh-user/.ssh && \
+    chown -R ssh-user:ssh-user /home/ssh-user/.ssh && \
+    chmod 700 /home/ssh-user/.ssh
+
 EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D", "-e"]
