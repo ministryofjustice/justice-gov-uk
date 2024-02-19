@@ -49,7 +49,6 @@ add_filter('pre_wp_mail', function ($null, $mail) {
     ];
 
     // Don't short-circuit if the password doesn't look right
-    $api_key = env('GOV_NOTIFY_API_KEY');
     $api_key = Config::get('GOV_NOTIFY_API_KEY');
     preg_match_all($patterns['api'], $api_key, $matches);
     if (count($matches[0]) !== 2) {
