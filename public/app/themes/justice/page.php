@@ -36,7 +36,7 @@ get_header();
                 </div>
 
                 <div class="print-only">
-                    <img src="<?php echo home_url('/__data/assets/image/0012/32601/logo-inv.png'); ?>" alt="" title="">
+                    <img src="<?php echo get_template_directory_uri() ?>/dist/img/logo-inv.png" alt="" title="">
                 </div>
 
                 <article>
