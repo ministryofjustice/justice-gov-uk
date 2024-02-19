@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 if (defined('WP_CLI') && WP_CLI) {
     require_once 'inc/commands.php';
 }
@@ -7,6 +11,11 @@ if (defined('WP_CLI') && WP_CLI) {
 if (defined('WP_OFFLOAD_MEDIA_PRESET') && WP_OFFLOAD_MEDIA_PRESET === 'minio') {
     require_once 'inc/amazon-s3-and-cloudfront-tweaks-for-minio.php';
 }
+
+require_once 'inc/breadcrumbs.php';
+require_once 'inc/dynamic-menu.php';
+require_once 'inc/layout.php';
+require_once 'inc/meta.php';
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 

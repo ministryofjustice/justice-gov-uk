@@ -172,7 +172,8 @@ input[type=text],input[type=submit]{-webkit-appearance: none;-webkit-border-radi
         background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -webkit-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
         background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -o-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
         background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, -ms-linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
-        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);}
+        background: url(https://www.justice.gov.uk/__data/assets/image/0015/2661/phone-menu-top-arrow-back.png?v=0.0.7) top left no-repeat, linear-gradient(top,  #afaca5 0%,#6f6f6f 100%);
+    }
     #phone-nav-top li a{text-indent:30px;}
     #phone-nav-anchor{float:left;}
 
