@@ -22,7 +22,7 @@ a[href$=".pdf"] {
     *display: inline-block;
     padding-left: 18px;
     line-height: 18px;
-    background: transparent url(https://www.justice.gov.uk/__data/assets/image/0004/33709/icon_pdf.png?v=0.1.4) center left no-repeat;
+    background: transparent url(../img/icon/pdf.png) center left no-repeat;
 }
 
 ul {
