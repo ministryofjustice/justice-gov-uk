@@ -43,12 +43,30 @@
                 <a href="/" accesskey="1">Home</a><a href="#skip_nav" style="display:none;" accesskey="s">&nbsp;</a>
             </div>
             <?php
-            wp_nav_menu([
-                'theme_location' => 'header-menu',
-                'container' => 'nav',
-                'container_class' => 'menu-top'
-            ]);
+            // TODO: replace hardcoded menu with dynamic menu.
+            // wp_nav_menu([
+            //     'theme_location' => 'header-menu',
+            //     'container' => 'nav',
+            //     'container_class' => 'menu-top',
+            //     'fallback_cb' => false
+            // ]);
             ?>
+            <nav>             
+                <ul class="menu-top">
+                    <li class="item4-item0"><a href="https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service" onclick="_gaq.push(['_trackPageview', '<?php echo home_url('/courts'); ?>'])">Courts</a>
+                        <div class="finish"></div>
+                        <span></span>                                  
+                    </li>
+                    <li class="item5-item0"><a href="<?php echo home_url('/procedure-rules'); ?>" onclick="_gaq.push(['_trackPageview', '<?php echo home_url('/procedure-rules'); ?>'])">Procedure rules</a>
+                        <div class="finish"></div>
+                        <span></span>                                  
+                    </li>
+                    <li class="item7-item0"><a href="https://www.gov.uk/government/organisations/hm-prison-and-probation-service" onclick="_gaq.push(['_trackPageview', '<?php echo home_url('/offenders'); ?>'])">Offenders</a>
+                        <div class="finish"></div>
+                        <span></span>                                  
+                    </li>
+                </ul>
+            </nav>
             <div id="search-top">
                 <form action="/">
                     <label for="searchbox-top">Search</label>

@@ -25,14 +25,14 @@ get_header();
                 <ul id="breadcrumb">
                     <li><a href="/">Home</a></li>
                     <li class="separator">»</li>
-                    <li><a href="https://www.justice.gov.uk/courts">Courts</a></li>
+                    <li><a href="<?php echo home_url('/courts'); ?>">Courts</a></li>
                     <li class="separator">»</li>
-                    <li><a href="https://www.justice.gov.uk/courts/procedure-rules">Procedure rules</a></li>
+                    <li><a href="<?php echo home_url('/courts/procedure-rules'); ?>">Procedure rules</a></li>
                     <li class="separator">»</li>
-                    <li><a href="https://www.justice.gov.uk/courts/procedure-rules/family">Family</a>
+                    <li><a href="<?php echo home_url('/courts/procedure-rules/family'); ?>">Family</a>
                     </li>
                     <li class="separator">»</li>
-                    <li><a href="https://www.justice.gov.uk/courts/procedure-rules/family/magistrates">Magistrates
+                    <li><a href="<?php echo home_url('/courts/procedure-rules/family/magistrates'); ?>">Magistrates
                             Courts
                             Rules</a></li>
                 </ul>
@@ -44,7 +44,7 @@ get_header();
                     </div>
                 </div>
                 <div class="print-only">
-                    <img src="https://www.justice.gov.uk/__data/assets/image/0012/32601/logo-inv.png" alt="" title="">
+                    <img src="<?php echo home_url('/__data/assets/image/0012/32601/logo-inv.png'); ?>" alt="" title="">
                 </div>
                 <article>
                     <h1 class="title"><?php the_title(); ?></h1>
@@ -70,7 +70,7 @@ get_header();
 
             <div id="content-right">
                 <div id="rhs-banner" class="phone"><a href=""><img
-                            src="https://www.justice.gov.uk/__data/assets/image/0020/2972/moj1.gif" width="161"
+                            src="<?php echo home_url('/__data/assets/image/0020/2972/moj1.gif'); ?>" width="161"
                             height="86" alt="Ministry of Justice" title="Ministry of Justice"></a></div>
                 <div id="panel-mostPopular-wrapper"></div>
                 <div id="panel-relatedContent-wrapper"></div>

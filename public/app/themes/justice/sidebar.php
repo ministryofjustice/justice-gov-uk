@@ -2,9 +2,14 @@
 function sidebar_child_menu_List()
 {
     global $post;
+
+    if (!$post) {
+        return;
+    }
+
     $page_args = [
         'child_of' => $post->ID,
-        'depth' => 0,
+        'depth' => 1,
         'exclude' => wp_get_post_parent_id($post->ID),
         'title_li' => 0,
         'post_status' => 'publish',
