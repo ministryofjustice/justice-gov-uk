@@ -1,18 +1,13 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-#
 # For more examples, including how to limit scans to only high-severity issues
 # and fail PR checks, see https://github.com/snyk/actions/
 
 name: Snyk Security
 
 on:
-  push:
-    branches: ["main"]
   pull_request:
-    branches: ["main"]
+    branches: [ "main", "develop" ]
+  schedule:
+    - cron: '12 8 * * 2'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

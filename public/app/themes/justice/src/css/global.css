@@ -1502,17 +1502,17 @@ span.view-all {
 
 .word-file {
     text-indent: 20px;
-    background: url(/__data/asset_types/word_doc/icon.png) no-repeat 0 .7em;
+    background: url(../img/icon/doc.png) no-repeat 0 .7em;
 }
 
 .excel-file, .default-file {
     text-indent: 20px;
-    background: url(/__data/asset_types/excel_doc/icon.png) no-repeat 0 .7em;
+    background: url(../img/icon/excel.png) no-repeat 0 .7em;
 }
 
 .pdf-file {
     text-indent: 20px;
-    background: url(/__data/asset_types/pdf_file/icon.png) no-repeat 0 .7em;
+    background: url(../img/icon/pdf.png) no-repeat 0 .7em;
 }
 
 /*rhs panels*/
