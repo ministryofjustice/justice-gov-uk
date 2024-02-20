@@ -1,5 +1,7 @@
 <?php
 
+use MOJ\Justice\Meta;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -17,7 +19,9 @@ require_once 'inc/dynamic-menu.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
 require_once 'inc/meta.php';
-require_once 'inc/panels.php';
+
+$meta = new Meta();
+$meta->registerHooks();
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 
