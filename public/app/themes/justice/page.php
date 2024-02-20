@@ -36,7 +36,7 @@ get_header();
                 </div>
 
                 <div class="print-only">
-                    <img src="<?php echo home_url('/__data/assets/image/0012/32601/logo-inv.png'); ?>" alt="" title="">
+                    <img src="<?php echo get_template_directory_uri() ?>/dist/img/logo-inv.png" alt="" title="">
                 </div>
 
                 <article>
@@ -53,7 +53,7 @@ get_header();
                     <!-- end/ PAGE CONTENT -->
 
                     <div class="share-this bottom">
-                        <span class="right">Updated: Monday, 30 January 2017</span>
+                        <span class="right">Updated: <?php the_modified_date('l, j F Y') ?></span>
                     </div>
 
                 </article>
