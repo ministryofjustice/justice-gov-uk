@@ -146,7 +146,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 //     require_once __DIR__ . '/wp-offload-media.php';
 // }
 // Only set the 'use-server-role' setting.
-define( 'AS3CF_AWS_USE_EC2_IAM_ROLE', true );
+define('AS3CF_AWS_USE_EC2_IAM_ROLE', true);
 
 /**
  * Environment-specific settings
