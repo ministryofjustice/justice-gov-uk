@@ -6,6 +6,8 @@ name: Snyk Security
 on:
   pull_request:
     branches: [ "main", "develop" ]
+  schedule:
+    - cron: '12 8 * * 2'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
