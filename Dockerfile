@@ -9,6 +9,8 @@ RUN apk add --update bash  \
     icu-dev  \
     htop  \
     mariadb-client \
+    # For debugging only. TODO: remove aws-cli in production.
+    aws-cli \ 
     $PHPIZE_DEPS
 
 RUN pecl install imagick
