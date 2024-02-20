@@ -24,6 +24,8 @@ spec:
         - name: nginx-cache
           emptyDir: {}
       terminationGracePeriodSeconds: 35
+      securityContext:
+        fsGroup: 82
       containers:
         - name: nginx
           image: justice-nginx:latest
