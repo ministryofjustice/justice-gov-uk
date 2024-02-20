@@ -2,7 +2,7 @@ const { __ } = wp.i18n;
 const { registerPlugin } = wp.plugins;
 
 import { metaFields, panelFields } from "./constants";
-import AWP_Custom_Plugin from "./awp-custom-postmeta-fields";
+import AWP_Custom_Plugin from "./fields";
 
 /**
  * The following code registers a plugin(s) to add custom meta fields to the page editor.

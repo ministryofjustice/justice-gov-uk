@@ -9,11 +9,13 @@ const AWP_Custom_Plugin = ({
   setPostMeta,
   title,
   fields,
+  name
 }) => {
   if ("page" !== postType) return null; // Will only render component for post type 'post'
 
   return (
     <PluginDocumentSettingPanel
+      name={name}
       title={title}
       icon="generic"
       initialOpen="false"
