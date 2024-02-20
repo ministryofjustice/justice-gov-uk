@@ -22,10 +22,10 @@
         "url": "https://github.com/ministryofjustice/justice-gov-uk/issues"
     },
     "homepage": "https://github.com/ministryofjustice/justice-gov-uk#readme",
-    "dependencies": {
-    },
     "devDependencies": {
+        "@babel/preset-react": "^7.23.3",
         "laravel-mix": "^6.0.49",
+        "react": "^18.2.0",
         "sass": "^1.66.1",
         "sass-loader": "^12.6.0"
     }

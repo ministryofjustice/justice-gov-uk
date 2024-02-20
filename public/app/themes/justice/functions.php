@@ -46,9 +46,12 @@ add_action(
     }
 );
 
-
-add_action('admin_enqueue_scripts', function () {
-    wp_enqueue_script('justice-admin', get_template_directory_uri() . '/dist/admin.min.js', [], false, true);
+add_action('enqueue_block_editor_assets', function () {
+    wp_enqueue_script(
+        'justice-block-editor',
+        get_template_directory_uri() . '/dist/block-editor.min.js',
+        [ 'wp-edit-post' ]
+    );
 });
 
 // B R E A D C R U M B S //
