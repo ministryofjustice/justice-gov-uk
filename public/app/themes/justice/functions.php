@@ -1,6 +1,6 @@
 <?php
 
-use MOJ\Justice\Meta;
+use MOJ\Justice;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -18,10 +18,10 @@ require_once 'inc/breadcrumbs.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
-require_once 'inc/meta.php';
+require_once 'src/components/post-meta/post-meta.php';
 
-$meta = new Meta();
-$meta->registerHooks();
+$post_meta = new Justice\PostMeta();
+$post_meta->registerHooks();
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 
@@ -51,11 +51,18 @@ add_action(
 );
 
 add_action('enqueue_block_editor_assets', function () {
-    wp_enqueue_script(
+
+    wp_register_script(
         'justice-block-editor',
         get_template_directory_uri() . '/dist/block-editor.min.js',
         [ 'wp-edit-post' ]
     );
+
+    $post_meta = new Justice\PostMeta();
+
+    wp_localize_script('justice-block-editor', 'justiceBlockEditorLocalized', $post_meta->meta_groups);
+
+    wp_enqueue_script('justice-block-editor');
 });
 
 // B R E A D C R U M B S //

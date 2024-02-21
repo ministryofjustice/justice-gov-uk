@@ -18,7 +18,7 @@ class DynamicMenu
 
         $entries = [];
 
-        $meta = new Meta();
+        $post_meta = new PostMeta();
     
         // Parent page(s)
         if ($post->post_parent) {
@@ -32,7 +32,7 @@ class DynamicMenu
             foreach ($ancestor_ids as $ancestor_id) {
                 $entries[] = [
                     'level' => 1,
-                    'title' => $meta->getShortTitle($ancestor_id),
+                    'title' => $post_meta->getShortTitle($ancestor_id),
                     'url' => get_permalink($ancestor_id)
                 ];
             }
@@ -41,7 +41,7 @@ class DynamicMenu
         // Current page
         $entries[] = [
             'level' => 1,
-            'title' => $meta->getShortTitle($post->ID),
+            'title' => $post_meta->getShortTitle($post->ID),
             'url' => get_permalink(),
             // Only use the selected property on the sidebar.
             'selected' => $location === 'sidebar'
@@ -65,7 +65,7 @@ class DynamicMenu
             foreach ($children as $child) {
                 $entries[] = [
                     'level' => 2,
-                    'title' => $meta->getShortTitle($child->ID),
+                    'title' => $post_meta->getShortTitle($child->ID),
                     'url' => get_permalink($child->ID)
                 ];
             }

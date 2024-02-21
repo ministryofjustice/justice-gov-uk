@@ -50,8 +50,10 @@ services:
             - dist:/node/dist
             - ./Makefile:/node/Makefile
             - ./public/app/themes/justice/src:/node/src
-            - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
+            - ./public/app/themes/justice/jsconfig.json:/node/jsconfig.json
             - ./public/app/themes/justice/package.json:/node/package.json
+            - ./public/app/themes/justice/package-lock.json:/node/package-lock.json
+            - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
 
     mariadb:
         image: mariadb:10

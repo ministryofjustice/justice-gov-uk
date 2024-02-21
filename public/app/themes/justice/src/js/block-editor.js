@@ -1,2 +1,5 @@
-import toTheTop from "../blocks/to-the-top/admin.js";
-import postMeta from "../plugins/page-meta/index.jsx"; 
+// @ts-check
+/// <reference path="./block-editor.d.ts" />
+
+import "../components/post-meta/block-editor.jsx"; 
+import "../components/to-the-top/block-editor.js";
