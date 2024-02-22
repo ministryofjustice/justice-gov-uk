@@ -34,3 +34,7 @@ if ($post_meta->hasPanel('related_content')) {
 if ($post_meta->hasPanel('other_websites')) {
     get_template_part('template-parts/panels/other-websites');
 }
+
+if (defined('WP_ENV') && WP_ENV === 'development') {
+    get_template_part('template-parts/panels/development');
+}
