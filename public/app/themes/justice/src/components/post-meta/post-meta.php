@@ -33,7 +33,7 @@ class PostMeta
                     ]
                 ]
             ]
-        ], 
+        ],
         [
             'name'  => 'panel',
             'title' => 'Panels',
@@ -79,7 +79,7 @@ class PostMeta
     public function __construct(int | string $post_id = 0)
     {
         $this->post_id = $post_id ? (int) $post_id : \get_the_ID();
-    } 
+    }
 
     /**
      * Register hooks.
@@ -95,11 +95,12 @@ class PostMeta
     /**
      * Localize the block editor.
      * This will make the meta groups available as a global variable called justiceBlockEditorLocalized,
-     * it's needed to make the fields available to the block editor. 
+     * it's needed to make the fields available to the block editor.
      * The alternative is for the the declaration to be also made in JS.
      */
 
-    public function localize() {
+    public function localize()
+    {
         wp_localize_script('justice-block-editor', 'justiceBlockEditorLocalized', $this->meta_groups);
     }
 
@@ -142,7 +143,7 @@ class PostMeta
 
     public function hasPanel(string $panel): bool
     {
-        return get_post_meta( $this->post_id, "_panel_$panel", true);
+        return get_post_meta($this->post_id, "_panel_$panel", true);
     }
 
     /**
@@ -151,7 +152,7 @@ class PostMeta
 
     public function getShortTitle(): string
     {
-        $short_title = get_post_meta( $this->post_id, '_short_title', true);
+        $short_title = get_post_meta($this->post_id, '_short_title', true);
 
         return $short_title && strlen($short_title) ? $short_title : get_the_title($this->post_id);
     }
