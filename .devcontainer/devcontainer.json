@@ -2,4 +2,4 @@
     "dockerComposeFile": "../docker-compose.yml",
     "service": "node",
     "workspaceFolder": "/node"
-  }
+}
