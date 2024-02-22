@@ -1516,9 +1516,10 @@ span.view-all {
 }
 
 /*rhs panels*/
-#panel-mostPopular, #panel-relatedContent, #panel-STContact, #panel-emailAlerts, #panel-findForm, #panel-findCourtForm {
+/* Migration edit: this isn't needed because panels are shown/hidden at the template level. */
+/* #panel-mostPopular, #panel-relatedContent, #panel-STContact, #panel-emailAlerts, #panel-findForm, #panel-findCourtForm {
     display: none;
-}
+} */
 
 /*tabs*/
 .tab-content li {

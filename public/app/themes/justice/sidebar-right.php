@@ -1,33 +1,40 @@
 <?php
 
-use MOJ\Justice\Panels;
+use MOJ\Justice\PostMeta;
 
-$panels = new Panels();
+$post_meta = new PostMeta();
 
-if ($panels->hasBanner()) {
-    get_template_part('template-parts/panels/banner');
+if ($post_meta->hasPanel('brand')) {
+    get_template_part('template-parts/panels/brand');
 }
 
-if ($panels->hasMostPopular()) {
-    get_template_part('template-parts/panels/most-popular');
+if ($post_meta->hasPanel('search')) {
+    get_template_part('template-parts/panels/search');
 }
 
-if ($panels->hasRelatedContent()) {
-    get_template_part('template-parts/panels/related-content');
-}
-
-if ($panels->hasContact()) {
-    get_template_part('template-parts/panels/contact');
-}
-
-if ($panels->hasEmailAlerts()) {
+if ($post_meta->hasPanel('email_alerts')) {
     get_template_part('template-parts/panels/email-alerts');
 }
 
-if ($panels->hasFindForm()) {
-    get_template_part('template-parts/panels/find-form');
+if ($post_meta->hasPanel('archived')) {
+    get_template_part('template-parts/panels/archived');
 }
 
-if ($panels->hasFindCourtForm()) {
-    get_template_part('template-parts/panels/find-court-form');
+// TODO. Handling meta for this template is not implemented yet.
+if ($post_meta->hasPanel('most_popular')) {
+    get_template_part('template-parts/panels/most-popular');
+}
+
+// TODO. Handling meta for this template is not implemented yet.
+if ($post_meta->hasPanel('related_content')) {
+    get_template_part('template-parts/panels/related-content');
+}
+
+// TODO. Handling meta for this template is not implemented yet.
+if ($post_meta->hasPanel('other_websites')) {
+    get_template_part('template-parts/panels/other-websites');
+}
+
+if (defined('WP_ENV') && WP_ENV === 'development') {
+    get_template_part('template-parts/panels/development');
 }
