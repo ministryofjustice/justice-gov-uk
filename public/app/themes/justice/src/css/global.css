@@ -561,7 +561,8 @@ a.button {
     background: linear-gradient(#000000 0%, #2b2b2b 100%);
 }
 
-.menu-top li.item1-item1 span, .menu-top li.item2-item2 span, .menu-top li.item3-item3 span, .menu-top li.item4-item4 span, .menu-top li.item5-item5 span, .menu-top li.item6-item6 span, .menu-top li.item7-item7 span, .menu-top li.item8-item8 span {
+/* .menu-top li.item1-item1 span, .menu-top li.item2-item2 span, .menu-top li.item3-item3 span, .menu-top li.item4-item4 span, .menu-top li.item5-item5 span, .menu-top li.item6-item6 span, .menu-top li.item7-item7 span, .menu-top li.item8-item8 span { */
+.menu-top li.active span {
     position: absolute;
     top: 25px;
     left: 0;
@@ -852,10 +853,15 @@ a.button {
     vertical-align: top;
 }
 
+.filter {
+    margin-right: 30px;
+}
+
 #content-left, .filter {
     float: left;
     width: 190px;
-    margin-right: 30px;
+    /* Migration edit: this is handled by gap: 30px in layout.scss */
+    /* margin-right: 30px; */
     padding-bottom: 5em;
     -moz-box-shadow: inset -10px 0 8px #f9fafb;
     -webkit-box-shadow: inset -10px 0 8px #f9fafb;
