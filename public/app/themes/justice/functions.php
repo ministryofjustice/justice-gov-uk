@@ -59,8 +59,7 @@ add_action('enqueue_block_editor_assets', function () {
     );
 
     $post_meta = new Justice\PostMeta();
-
-    wp_localize_script('justice-block-editor', 'justiceBlockEditorLocalized', $post_meta->meta_groups);
+    $post_meta->localize();
 
     wp_enqueue_script('justice-block-editor');
 });

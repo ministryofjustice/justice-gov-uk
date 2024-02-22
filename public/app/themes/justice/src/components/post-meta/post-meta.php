@@ -6,20 +6,18 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-
-
 class PostMeta
 {
 
-    protected int | null | false $post_id = null;
+    protected int | false $post_id = 0;
 
     /**
-     * Meta groups and fields
+     * Meta groups and fields.
      * These are the meta groups and fields that will be registered.
-     * They will also be used to generate the meta boxes (via JS) in the admin,
+     * They will also be used to generate the meta boxes (via JS) in the pose edit screen,
      * it's important to make sure the type matches MetaGroup type in block-editor.d.ts
      */
-
+    
     public array $meta_groups = [
          [
             'name'  => 'panel',
@@ -80,24 +78,45 @@ class PostMeta
          ]
     ];
 
+    /**
+     * Constructor.
+     */
+
     public function __construct(int | string $post_id = 0)
     {
         $this->post_id = $post_id ? (int) $post_id : \get_the_ID();
-    }
+    } 
+
+    /**
+     * Register hooks.
+     * This isn't called within the constructor because it's only needs to be called once.
+     */
 
     public function registerHooks()
     {
         add_action('init', [$this, 'registerMetaGroups']);
     }
 
+
     /**
-     * Register fields
+     * Localize the block editor.
+     * This will make the meta groups available as a global variable called justiceBlockEditorLocalized,
+     * it's needed to make the fields available to the block editor. 
+     * The alternative is for the the declaration to be also made in JS.
      */
-    
+
+    public function localize() {
+        wp_localize_script('justice-block-editor', 'justiceBlockEditorLocalized', $this->meta_groups);
+    }
+
+    /**
+     * Register fields.
+     */
 
     public function registerMetaGroups()
     {
 
+        // Our default settings for register_post_meta
         $default_meta_settings = [
             'show_in_rest' => true,
             'single' => true,
@@ -111,6 +130,7 @@ class PostMeta
 
         // Loop over $meta_groups
         foreach ($this->meta_groups as $meta_group) {
+            // Loop over the fields in each group
             foreach ($meta_group['fields'] as $field) {
                 register_post_meta(
                     'page',
@@ -122,23 +142,22 @@ class PostMeta
     }
 
     /**
-     * Check if a panel is enabled
+     * Check if a panel is enabled.
      */
 
-
-    public function hasPanel(string $panel, string | int $post_id = 0): bool
+    public function hasPanel(string $panel): bool
     {
-        return get_post_meta($post_id ?: $this->post_id, "_panel_$panel", true);
+        return get_post_meta( $this->post_id, "_panel_$panel", true);
     }
 
     /**
-     * Get short title
+     * Get short title.
      */
 
-    public function getShortTitle(string | int $post_id = 0): string
+    public function getShortTitle(): string
     {
-        $short_title = get_post_meta($post_id ?: $this->post_id, 'short_title', true);
+        $short_title = get_post_meta( $this->post_id, 'short_title', true);
 
-        return $short_title ? $short_title : get_the_title($post_id);
+        return $short_title ? $short_title : get_the_title($this->post_id);
     }
 }

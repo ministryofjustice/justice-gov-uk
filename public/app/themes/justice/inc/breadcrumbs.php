@@ -51,7 +51,7 @@ class Breadcrumbs
     
         // Current page
         $breadcrumbs[] = [
-            'title' => $post_meta->getShortTitle($post->ID),
+            'title' => $post_meta->getShortTitle(),
             'url' => null,
             'last' => true
         ];

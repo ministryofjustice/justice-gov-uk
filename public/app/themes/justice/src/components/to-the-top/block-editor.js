@@ -5,7 +5,7 @@
  * @see https://www.wordpressintegration.com/blog/creating-custom-wordpress-gutenberg-block/
  */
 
-wp?.blocks.registerBlockType("moj/to-the-top", {
+wp.blocks.registerBlockType("moj/to-the-top", {
   title: "To the top", // Block name visible to the user within the editor
   icon: "arrow-up-alt", // Toolbar icon displayed beneath the name of the block
   category: "common", // The category under which the block will appear in the Add block menu

@@ -8,17 +8,17 @@ const { PluginDocumentSettingPanel } = wp.editPost;
 /**
  * @typedef {Object} PluginProps
  * @property {string} postType
- * @property {import('../../js/block-editor.d.ts').MetaFieldValues} postMeta
+ * @property {import('../../js/block-editor.js').MetaFieldValues} postMeta
  * @property {Function} setPostMeta
  * @property {string} name
- * @property {import('../../js/block-editor.d.ts').MetaField[]} fields
+ * @property {import('../../js/block-editor.js').MetaField[]} fields
  * @property {string} title
  */
 
 /** 
  * @type {React.FC<PluginProps>}
  */
-const AWP_Custom_Plugin = ({
+const PostMetaPlugin = ({
   postType,
   postMeta,
   setPostMeta,
@@ -26,13 +26,13 @@ const AWP_Custom_Plugin = ({
   fields,
   name
 }) => {
-  if ("page" !== postType) return null; // Will only render component for post type 'post'
+  if ("page" !== postType) return null; // Will only render component for post type 'page'
 
   return (
     <PluginDocumentSettingPanel
       name={name}
       title={title}
-      icon="generic"
+      icon="admin-generic"
     >
       {fields.map((field, index) => {
         if ("boolean" === field.settings.type) {
@@ -41,6 +41,7 @@ const AWP_Custom_Plugin = ({
               <ToggleControl
                 label={field.label}
                 onChange={(value) => setPostMeta({ [field.name]: value })}
+                // @ts-ignore
                 checked={postMeta[field.name]}
               />
             </PanelRow>
@@ -51,6 +52,7 @@ const AWP_Custom_Plugin = ({
             <PanelRow key={index}>
               <TextControl
                 label={field.label}
+                // @ts-ignore
                 value={postMeta[field.name]}
                 onChange={(value) => setPostMeta({ [field.name]: value })}
               />
@@ -84,12 +86,12 @@ const applyWithDispatch = withDispatch((dispatch) => {
  * A react functional component, composed with withSelect and withDispatch.
  * Because of the way the compose function works, the props are not inferred correctly.
  * This is why the type casting to 'any' is necessary.
- * @type {React.FC<import('../../js/block-editor.d.ts').MetaGroup>}
+ * @type {React.FC<import('../../js/block-editor.js').MetaGroup>}
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-compose/
  */
 const ComposedComponent = /** @type {any} */(compose(
   applyWithSelect,
   applyWithDispatch,
-)(AWP_Custom_Plugin));
+)(PostMetaPlugin));
 
 export default ComposedComponent;

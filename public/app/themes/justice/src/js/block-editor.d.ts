@@ -1,4 +1,4 @@
-export interface WP {
+export interface Wp {
   i18n: typeof import("@wordpress/i18n")
   plugins: typeof import("@wordpress/plugins")
   components: typeof import("@wordpress/components")

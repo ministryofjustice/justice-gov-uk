@@ -36,8 +36,8 @@
         "sass-loader": "^12.6.0"
     },
     "devDependenciesComments": {
-        "@wordpress/components": [
-            "Dependencies starting with @wordpress... are used to get types for the wp global."
+        "@wordpress/...": [
+            "Dependencies starting with @wordpress/... are used to get types for the wp global."
         ]
     }
 }
