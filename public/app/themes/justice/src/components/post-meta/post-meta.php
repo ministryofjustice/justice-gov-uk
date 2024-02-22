@@ -19,17 +19,25 @@ class PostMeta
      */
     
     public array $meta_groups = [
-         [
+        [
+            'name' => 'page-meta',
+            'title' => 'Page meta',
+            'fields' => [
+                [
+                    'name'  => '_short_title',
+                    'label' => 'Short title',
+                    'settings' => [
+                        'type'              => 'string',
+                        'default'           => '',
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ]
+                ]
+            ]
+        ], 
+        [
             'name'  => 'panel',
             'title' => 'Panels',
             'fields' => [
-                [
-                    'name'  => '_panel_archived',
-                    'label' =>'Show archived panel',
-                    'settings' => [
-                        'type'  => 'boolean',
-                    ],
-                ],
                 [
                     'name'  => '_panel_brand',
                     'label' => 'Show brand panel',
@@ -40,8 +48,8 @@ class PostMeta
                     ]
                 ],
                 [
-                    'name'  => '_panel_direct_gov',
-                    'label' => 'Show direct gov panel',
+                    'name'  => '_panel_search',
+                    'label' => 'Show search panel',
                     'settings' => [
                         'type'  => 'boolean',
                     ],
@@ -54,26 +62,12 @@ class PostMeta
                     ],
                 ],
                 [
-                    'name'  => '_panel_search',
-                    'label' => 'Show search panel',
+                    'name'  => '_panel_archived',
+                    'label' =>'Show archived panel',
                     'settings' => [
                         'type'  => 'boolean',
                     ],
-                ]
-            ]
-         ],
-         [
-            'name' => 'page-meta',
-            'title' => 'Page meta',
-            'fields' => [
-                [
-                    'name'  => '_short_title',
-                    'label' => 'Short title',
-                    'settings' => [
-                        'type'  => 'string',
-                        'default' => '',
-                    ]
-                ]
+                ],
             ]
          ]
     ];
@@ -125,7 +119,8 @@ class PostMeta
             // This is needed because the meta is protected. i.e. prefixed with _
             'auth_callback' => function () {
                 return current_user_can('edit_posts');
-            }
+            },
+            'sanitize_callback' => 'rest_sanitize_boolean',
         ];
 
         // Loop over $meta_groups
@@ -156,8 +151,8 @@ class PostMeta
 
     public function getShortTitle(): string
     {
-        $short_title = get_post_meta( $this->post_id, 'short_title', true);
+        $short_title = get_post_meta( $this->post_id, '_short_title', true);
 
-        return $short_title ? $short_title : get_the_title($this->post_id);
+        return $short_title && strlen($short_title) ? $short_title : get_the_title($this->post_id);
     }
 }
