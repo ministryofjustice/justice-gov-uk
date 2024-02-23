@@ -1,9 +1,9 @@
 // @ts-check
 
-const { ToggleControl, TextControl, PanelRow } = wp.components;
-const { compose } = wp.compose;
-const { withSelect, withDispatch } = wp.data;
-const { PluginDocumentSettingPanel } = wp.editPost;
+import { ToggleControl, TextControl, PanelRow } from '@wordpress/components';
+import { compose } from '@wordpress/compose';
+import { withSelect, withDispatch } from '@wordpress/data';
+import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 
 /**
  * @typedef {Object} PluginProps
