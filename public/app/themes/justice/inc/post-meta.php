@@ -88,53 +88,68 @@ class PostMeta
 
     public function registerHooks()
     {
-        add_action('init', [$this, 'registerMetaGroups']);
+        add_filter('sgf_register_fields', [$this, 'postFields'], 5);
     }
 
-
-    /**
-     * Localize the block editor.
-     * This will make the meta groups available as a global variable called justiceBlockEditorLocalized,
-     * it's needed to make the fields available to the block editor.
-     * The alternative is for the the declaration to be also made in JS.
-     */
-
-    public function localize()
-    {
-        wp_localize_script('justice-block-editor', 'justiceBlockEditorLocalized', $this->meta_groups);
-    }
-
-    /**
-     * Register fields.
-     */
-
-    public function registerMetaGroups()
+    public function postFields($fields_array)
     {
 
-        // Our default settings for register_post_meta
-        $default_meta_settings = [
-            'show_in_rest' => true,
-            'single' => true,
-            'type' => 'boolean',
-            'default' => false,
-            // This is needed because the meta is protected. i.e. prefixed with _
-            'auth_callback' => function () {
-                return current_user_can('edit_posts');
-            },
-            'sanitize_callback' => 'rest_sanitize_boolean',
+        $fields_array[] = [
+            'meta_key' => '_short_title',
         ];
 
-        // Loop over $meta_groups
-        foreach ($this->meta_groups as $meta_group) {
-            // Loop over the fields in each group
-            foreach ($meta_group['fields'] as $field) {
-                register_post_meta(
-                    'page',
-                    $field['name'],
-                    array_merge($default_meta_settings, $field['settings'])
-                );
-            }
-        }
+        $fields_array[] = [
+            'meta_key' => '_modified_at_override',
+            'type'     => 'string',
+            'control'  => 'datepicker',
+        ];
+
+        $fields_array[] = [
+            'meta_key' => '_panel_brand',
+            'type'     => 'boolean',
+            'default'  => true,
+            'control'  => 'toggle',
+            'label'    => 'Show brand panel',
+            'panel'    => 'panels',
+        ];
+        
+        $fields_array[] = [
+            'meta_key' => '_panel_search',
+            'type'     => 'boolean',
+            'default'  => true,
+            'control'  => 'toggle',
+            'label'    => 'Show search panel',
+            'panel'    => 'panels',
+        ];
+        
+        $fields_array[] = [
+            'meta_key' => '_panel_email_alerts',
+            'type'     => 'boolean',
+            'default'  => true,
+            'control'  => 'toggle',
+            'label'    => 'Show email alerts panel',
+            'panel'    => 'panels',
+        ];
+        
+        $fields_array[] = [
+            'meta_key' => '_panel_archived',
+            'type'     => 'boolean',
+            'default'  => true,
+            'control'  => 'toggle',
+            'label'    => 'Show archived panel',
+            'panel'    => 'panels',
+        ];
+
+        $fields_array   = array_map(function ($field) {
+            $field['post_type'] = $field['post_type'] ?? 'page';
+            $field['control']   = $field['control'] ?? 'text';
+            $field['panel']     = $field['panel'] ?? 'custom-fields';
+            $field['label']     = $field['label'] ?? ucfirst(str_replace('_', ' ', $field['meta_key']));
+    
+            return $field;
+        }, $fields_array);
+    
+        return $fields_array;
     }
 
     /**

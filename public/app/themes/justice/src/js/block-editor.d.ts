@@ -1,21 +1,15 @@
-interface MetaField {
-  name: string
+export interface SimpleGutemField {
+  post_type: string
+  control: string
   label: string
-  settings :{
-    type: 'boolean' | 'string'
-  }
+  panel: string
+  default: any
 }
 
-interface MetaFieldValues {
-  [key: string]: string | boolean
-}
-
-export interface MetaGroup {
-  name: string
-  title: string
-  fields: MetaField[]
-}
+interface SimpleGutenFieldsData{
+  [key: string]: SimpleGutemField[]
+} 
 
 declare global {
-  const justiceBlockEditorLocalized: MetaGroup[]
+  const sgf_data: SimpleGutenFieldsData
 }

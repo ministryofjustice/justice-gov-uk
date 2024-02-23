@@ -1,5 +1,5 @@
 // @ts-check
 /// <reference path="./block-editor.d.ts" />
 
-import "../components/post-meta/block-editor.jsx"; 
+import "../components/simple-guten-fields/index.js";
 import "../components/to-the-top/block-editor.js";
