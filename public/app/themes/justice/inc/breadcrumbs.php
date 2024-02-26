@@ -20,7 +20,7 @@ class Breadcrumbs
             return null;
         }
 
-        $meta = new Meta();
+        $post_meta = new PostMeta();
 
         $breadcrumbs = [];
     
@@ -43,7 +43,7 @@ class Breadcrumbs
             // Parent page loop
             foreach ($ancestor_ids as $ancestor_id) {
                 $breadcrumbs[] = [
-                    'title' => $meta->getShortTitle($ancestor_id),
+                    'title' => $post_meta->getShortTitle($ancestor_id),
                     'url' => get_permalink($ancestor_id)
                 ];
             }
@@ -51,7 +51,7 @@ class Breadcrumbs
     
         // Current page
         $breadcrumbs[] = [
-            'title' => $meta->getShortTitle($post->ID),
+            'title' => $post_meta->getShortTitle(),
             'url' => null,
             'last' => true
         ];
