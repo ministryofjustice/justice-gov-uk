@@ -121,6 +121,10 @@ Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 // API key for notifications.service.gov.uk email service
 Config::define('GOV_NOTIFY_API_KEY', env('GOV_NOTIFY_API_KEY') ?? null);
 
+// Sentry settings
+Config::define('SENTRY_TRACES_SAMPLE_RATE', 0.3);
+Config::define('SENTRY_PROFILE_SAMPLE_RATE', 0.3);
+
 /**
  * Debugging Settings
  */
@@ -161,6 +165,18 @@ if (file_exists($env_config)) {
 
 
 Config::apply();
+
+/**
+ * Initialise Sentry
+ */
+if (env('SENTRY_DSN')) {
+    Sentry\init([
+        'dsn' => env('SENTRY_DSN'),
+        'environment'=> WP_ENV . (env('SENTRY_DEV_ID') ?? ''),
+        'traces_sample_rate' => Config::get('SENTRY_TRACES_SAMPLE_RATE'),
+        'profiles_sample_rate' => Config::get('SENTRY_PROFILE_SAMPLE_RATE')
+    ]);
+}
 
 /**
  * Bootstrap WordPress

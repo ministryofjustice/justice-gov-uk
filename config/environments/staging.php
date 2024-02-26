@@ -16,3 +16,6 @@ use Roots\WPConfig\Config;
  */
 
 Config::define('DISALLOW_INDEXING', true);
+
+Config::define('SENTRY_TRACES_SAMPLE_RATE', 1.0);
+Config::define('SENTRY_PROFILE_SAMPLE_RATE', 1.0);
