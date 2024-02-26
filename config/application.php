@@ -162,7 +162,7 @@ if (file_exists($env_config)) {
 /**
  * Initialise Sentry
  */
-if(env('SENTRY_DSN')) {
+if (env('SENTRY_DSN')) {
     Sentry\init([
         'dsn' => env('SENTRY_DSN'),
         'environment'=> WP_ENV . (env('SENTRY_DEV_ID') ?? ''),
