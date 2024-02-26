@@ -22,12 +22,14 @@ export default function PostSchedulePanel({
   isChild,
   onChange,
 }) {
-  const value = isChild
-    ? values
-    : useSelect(
-        (select) =>
-          select("core/editor").getEditedPostAttribute("meta")[meta_key],
-      );
+  if (isChild) {
+    console.warn("PostSchedulePanel is not supported inside a repeater.");
+    return null;
+  }
+
+  const value = useSelect(
+    (select) => select("core/editor").getEditedPostAttribute("meta")[meta_key],
+  );
 
   const [popoverAnchor, setPopoverAnchor] = useState(null);
   // Memoize popoverProps to avoid returning a new object every time.
@@ -80,7 +82,7 @@ export default function PostSchedulePanel({
             field={{ label, meta_key, placeholder }}
             row_index={row_index}
             property_key={property_key}
-            values={values}
+            value={value}
             isChild={isChild}
             onChange={onChange}
             onClose={onClose}
