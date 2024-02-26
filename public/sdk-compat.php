@@ -3,8 +3,8 @@
 namespace CentralDigital;
 
 // Run this script from the command line to see if your system is able to run
-// php -f public/sdk-compat.php
 // the AWS SDK for PHP
+// $ php -f public/sdk-compat.php
 
 
 if (getenv('WP_ENV') !== 'development') {
