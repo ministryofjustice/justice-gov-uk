@@ -100,6 +100,7 @@ class PostMeta
 
         $fields_array[] = [
             'meta_key' => '_modified_at_override',
+            'label'    => 'Modified at (override)',
             'type'     => 'string',
             'control'  => 'datepicker',
         ];

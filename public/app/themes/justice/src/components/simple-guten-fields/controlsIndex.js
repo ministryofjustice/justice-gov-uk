@@ -7,7 +7,7 @@ import SelectControlComponent from "./SelectControl";
 import MediaUpload from "./MediaUpload";
 import RepeaterControl from "./RepeaterControl";
 // import Multiselect from "./Mulitselect";
-import DatePicker from "./DatePickerControl";
+import DatePicker from "./DatePickerControl/panel.js";
 
 const controlsIndex =
     {
