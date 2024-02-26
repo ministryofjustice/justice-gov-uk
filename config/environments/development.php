@@ -19,3 +19,6 @@ ini_set('display_errors', '1');
 if (env('WP_OFFLOAD_MEDIA_PRESET')) {
     Config::define('WP_OFFLOAD_MEDIA_PRESET', env('WP_OFFLOAD_MEDIA_PRESET'));
 }
+
+const SENTRY_TRACES_SAMPLE_RATE = 1.0;
+const SENTRY_PROFILE_SAMPLE_RATE = 1.0;

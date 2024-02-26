@@ -159,6 +159,17 @@ if (file_exists($env_config)) {
     require_once $env_config;
 }
 
+/**
+ * Initialise Sentry
+ */
+if(env('SENTRY_DSN')) {
+    Sentry\init([
+        'dsn' => env('SENTRY_DSN'),
+        'environment'=> WP_ENV . (env('SENTRY_DEV_ID') ?? ''),
+        'traces_sample_rate' => SENTRY_TRACES_SAMPLE_RATE,
+        'profiles_sample_rate' => SENTRY_PROFILE_SAMPLE_RATE
+    ]);
+}
 
 Config::apply();
 

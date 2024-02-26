@@ -7,6 +7,7 @@ data:
   WP_HOME: 'http://justice.local'
   WP_SITEURL: 'http://justice.local/wp'
   SENTRY_DEV_ID: '-damien-local-kube'
+  SENTRY_DSN: ''
 
   # Generated in Cloud Platform
   DB_HOST: 'mariadb'
