@@ -141,19 +141,19 @@ class PostMeta
      * Check if a panel is enabled.
      */
 
-    public function hasPanel(string $panel): bool
+    public function hasPanel(string $panel, string | int $post_id = 0): bool
     {
-        return get_post_meta($this->post_id, "_panel_$panel", true);
+        return get_post_meta($post_id ?: $this->post_id, "_panel_$panel", true);
     }
 
     /**
      * Get short title.
      */
 
-    public function getShortTitle(): string
+    public function getShortTitle(string | int $post_id = 0): string
     {
-        $short_title = get_post_meta($this->post_id, '_short_title', true);
+        $short_title = get_post_meta($post_id ?: $this->post_id, '_short_title', true);
 
-        return $short_title && strlen($short_title) ? $short_title : get_the_title($this->post_id);
+        return $short_title && strlen($short_title) ? $short_title : get_the_title($post_id ?: $this->post_id);
     }
 }
