@@ -70,11 +70,6 @@ spec:
               secretKeyRef:
                 name: rds-output
                 key: database_password
-          - name: SENTRY_DSN
-            valueFrom:
-              secretKeyRef:
-                name: sentry-output
-                key: sentry-dsn
         envFrom:
           - configMapRef:
               name: ${KUBE_NAMESPACE}
