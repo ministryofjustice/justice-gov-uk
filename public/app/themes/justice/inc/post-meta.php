@@ -68,6 +68,13 @@ class PostMeta
                         'type'  => 'boolean',
                     ],
                 ],
+                [
+                    'name'  => '_panel_other_websites',
+                    'label' =>'Show other websites panel',
+                    'settings' => [
+                        'type'  => 'boolean',
+                    ],
+                ],
             ]
          ]
     ];
@@ -139,6 +146,47 @@ class PostMeta
             'control'  => 'toggle',
             'label'    => 'Show archived panel',
             'panel'    => 'panels',
+        ];
+
+        $fields_array[] = [
+            'meta_key' => '_panel_other_websites',
+            'type'     => 'boolean',
+            'default'  => true,
+            'control'  => 'toggle',
+            'label'    => 'Show other websites panel',
+            'panel'    => 'panels',
+        ];
+
+        $fields_array[] = [
+         'meta_key'     => '_panel_other_websites_entries',
+         'control'      => 'repeater',
+         'type'         => 'array',
+         'default'      => [],
+         'panel'        => 'panels',
+         'conditions'   => [
+             [
+                 'meta_key' => '_panel_other_websites',
+                 'operator' => '===',
+                 'value'    => true,
+             ],
+         ],
+         'show_in_rest' => [
+             'schema' => [
+                 'items' => [
+                     'type'       => 'object',
+                     'properties' => [
+                         'url'       => [
+                             'type' => 'string',
+                             'default' => '',
+                         ],
+                         'site_name' => [
+                             'type' => 'string',
+                             'default' => '',
+                         ],
+                     ],
+                 ]
+             ],
+         ],
         ];
 
         $fields_array   = array_map(function ($field) {
