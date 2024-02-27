@@ -1,18 +1,45 @@
 // @ts-check
 import { Fragment } from "@wordpress/element";
-import { select } from "@wordpress/data";
+import { select, useSelect } from "@wordpress/data";
 import { PluginDocumentSettingPanel } from "@wordpress/edit-post";
 import { registerPlugin } from "@wordpress/plugins";
 
 import controlsIndex from "./controlsIndex";
 
-// /** @type {(string: string) => string} */
+/** @type {(string: string) => string} */
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
+
+/** @type { (field: import('../../js/block-editor.d.ts').SimpleGutemField) => boolean} */
+const meetsConditons = (field) => {
+  const { conditions } = field;
+  if (!conditions) {
+    return true;
+  }
+  
+  return conditions.every((condition) => {
+    const { meta_key, operator, value } = condition;
+
+    const postMeta = useSelect(
+      (select) =>
+        // @ts-ignore https://github.com/WordPress/gutenberg/pull/46881
+        select("core/editor").getEditedPostAttribute("meta"),
+      [],
+    );
+
+    switch (operator) {
+      case "===":
+        return postMeta[meta_key] === value;
+      case "!==":
+        return postMeta[meta_key] !== value;
+      default:
+        return true;
+    }
+  });
+};
 
 const CustomFieldsPanel = () => {
-
   let fields = sgf_data.fields;
 
   let currentCpt = select("core/editor").getCurrentPostType();
@@ -22,7 +49,9 @@ const CustomFieldsPanel = () => {
   }
 
   if (fields) {
-    fields = fields.filter((field) => field.post_type == currentCpt);
+    fields = fields.filter(
+      (field) => field.post_type == currentCpt && meetsConditons(field),
+    );
   }
 
   let panels = fields
@@ -59,6 +88,6 @@ const CustomFieldsPanel = () => {
 };
 
 registerPlugin("plugin-document-setting-panel-demo", {
-  icon: 'admin-generic',
+  icon: "admin-generic",
   render: CustomFieldsPanel,
 });

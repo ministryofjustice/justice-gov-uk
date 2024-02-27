@@ -4,6 +4,11 @@ export interface SimpleGutemField {
   label: string
   panel: string
   default: any
+  conditions: {
+    meta_key: string
+    operator: '===' | '!=='
+    value: string
+  }[]
 }
 
 interface SimpleGutenFieldsData{
