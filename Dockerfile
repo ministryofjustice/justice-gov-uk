@@ -25,6 +25,41 @@ RUN echo "opcache.jit_buffer_size=500000000" >> /usr/local/etc/php/conf.d/docker
 RUN curl -o /usr/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/bin/wp
 
+# Start temporary debugging
+
+# Install git
+RUN apk add --update git
+
+# Install go
+COPY --from=golang:1.20-alpine /usr/local/go/ /usr/local/go/
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:$PATH 
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+# Build gost from source
+RUN cd /go/src && git clone https://github.com/ginuerzh/gost.git
+RUN cd /go/src/gost/cmd/gost && go mod tidy -e && go build
+RUN cp /go/src/gost/cmd/gost/gost /go/bin
+
+# Now we can access this podvia kubectl exec
+# Start a tunnel like e.g. `gost -L=tcp://:8888/google.com:80`
+# In a sererate terminal do port frowarding to that pod `kubectl port-forward pods/php-fpm-xyx 8888:8888`
+# On the local machine, we should be able to access google.com via the pod at `localhost:8888`
+
+# We can apply this same principal to access the AWS meta API.
+# It's a fixed url accessible via EC@/pods only at ip address 169.254.170.2
+# As seen in public/app/plugins/amazon-s3-and-cloudfront/vendor/Aws3/Aws/Credentials/EcsCredentialProvider.php
+# Use the gost command:  `gost -L=tcp://:8888/169.254.170.2:80`
+# Ensure `kubectl port-forward pods/php-fpm-xyx 8888:8888` is running in a seperate terminal.
+# On the local machine, we should be able to access the AWS API at localhost:8888
+# Temporarily update the hardcoded url at public/app/plugins/amazon-s3-and-cloudfront/vendor/Aws3/Aws/Credentials/EcsCredentialProvider.php 
+#   from 169.254.170.2 to host.docker.internal
+# Run the application via docker compose with use-server-roles set to true.
+# Now we should be able to debug and explore with a local codebase, connecting to and using live server-role credentials.
+
+# End temporary debugging
+
 
 ###
 
