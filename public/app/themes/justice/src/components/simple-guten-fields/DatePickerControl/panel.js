@@ -2,9 +2,9 @@
  * WordPress dependencies
  */
 import { Button, Dropdown } from "@wordpress/components";
-import { __, sprintf } from "@wordpress/i18n";
-import { useState, useMemo } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
+import { useState, useMemo } from "@wordpress/element";
+import { __, sprintf } from "@wordpress/i18n";
 
 /**
  * Internal dependencies
@@ -18,7 +18,6 @@ export default function PostSchedulePanel({
   field: { label, meta_key, placeholder },
   row_index,
   property_key,
-  values,
   isChild,
   onChange,
 }) {
@@ -83,6 +82,7 @@ export default function PostSchedulePanel({
             row_index={row_index}
             property_key={property_key}
             value={value}
+            label={label}
             isChild={isChild}
             onChange={onChange}
             onClose={onClose}

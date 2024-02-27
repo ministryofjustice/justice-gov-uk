@@ -23,7 +23,7 @@ export function getPostScheduleLabel(
   { isFloating = false, now = new Date() } = {},
 ) {
   if (!dateAttribute || isFloating) {
-    return __("Immediately");
+    return __("Not set");
   }
 
   // If the user timezone does not equal the site timezone then using words

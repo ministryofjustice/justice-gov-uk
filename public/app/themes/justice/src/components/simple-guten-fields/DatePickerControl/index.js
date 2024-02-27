@@ -1,40 +1,28 @@
-/**
- * External dependencies
- */
-import { format } from "@wordpress/date";
-
-/**
- * WordPress dependencies
- */
-import { getSettings } from "@wordpress/date";
-import { dispatch, useDispatch, useSelect } from "@wordpress/data";
+import { __experimentalInspectorPopoverHeader as InspectorPopoverHeader } from "@wordpress/block-editor";
 import { DateTimePicker } from "@wordpress/components";
-import { useState, useCallback, useMemo } from "@wordpress/element";
-import { store as coreStore } from "@wordpress/core-data";
+import { dispatch } from "@wordpress/data";
+import { format, getSettings } from "@wordpress/date";
+import { forwardRef, useCallback } from "@wordpress/element";
 
 /**
  * Internal dependencies
  */
 
-export default function PostSchedule({
-  onClose,
-  field: { meta_key },
-  row_index,
-  property_key,
-  values,
-  isChild,
-  onChange,
-}) {
-  const value = isChild
-    ? values
-    : useSelect(
-        (select) =>
-          select("core/editor").getEditedPostAttribute("meta")[meta_key],
-      );
-
+const PostSchedule = (
+  {
+    onClose,
+    field: { meta_key },
+    row_index,
+    property_key,
+    value,
+    onChange,
+    label,
+  },
+  ref,
+) => {
   const onChangeHandler = useCallback(
     (value) => {
-      const formattedValue = format("Y-m-d H:i:s", value);
+      const formattedValue = value ? format("Y-m-d H:i:s", value) : null;
 
       if (onChange) {
         onChange(formattedValue, property_key, row_index);
@@ -63,11 +51,25 @@ export default function PostSchedule({
   );
 
   return (
-    <DateTimePicker
-      currentDate={value}
-      onChange={onChangeHandler}
-      is12Hour={is12HourTime}
-      onClose={onClose}
-    />
+    <div ref={ref}>
+      <InspectorPopoverHeader
+        title={label}
+        actions={[
+          {
+            label: "Unset",
+            onClick: () => onChangeHandler?.(null),
+          },
+        ]}
+        onClose={onClose}
+      />
+      <DateTimePicker
+        currentDate={value}
+        onChange={onChangeHandler}
+        is12Hour={is12HourTime}
+        onClose={onClose}
+      />
+    </div>
   );
-}
+};
+
+export default forwardRef(PostSchedule);

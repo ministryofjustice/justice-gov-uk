@@ -13,8 +13,6 @@ const capitalizeFirstLetter = (string) => {
 
 const CustomFieldsPanel = () => {
 
-
-
   let fields = sgf_data.fields;
 
   let currentCpt = select("core/editor").getCurrentPostType();
