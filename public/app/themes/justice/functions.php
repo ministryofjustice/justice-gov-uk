@@ -15,6 +15,7 @@ if (defined('WP_OFFLOAD_MEDIA_PRESET') && WP_OFFLOAD_MEDIA_PRESET === 'minio') {
 }
 
 require_once 'inc/breadcrumbs.php';
+require_once 'inc/debug.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
@@ -26,9 +27,8 @@ new SimpleGutenFields();
 $post_meta = new Justice\PostMeta();
 $post_meta->registerHooks();
 
-
-
-
+$debug = new Justice\Debug();
+$debug->registerHooks();
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 

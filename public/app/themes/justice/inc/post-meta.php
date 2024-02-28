@@ -12,74 +12,6 @@ class PostMeta
     protected int | false $post_id = 0;
 
     /**
-     * Meta groups and fields.
-     * These are the meta groups and fields that will be registered.
-     * They will also be used to generate the meta boxes (via JS) in the pose edit screen,
-     * it's important to make sure the type matches MetaGroup type in block-editor.d.ts
-     */
-    
-    public array $meta_groups = [
-        [
-            'name' => 'page-meta',
-            'title' => 'Page meta',
-            'fields' => [
-                [
-                    'name'  => '_short_title',
-                    'label' => 'Short title',
-                    'settings' => [
-                        'type'              => 'string',
-                        'default'           => '',
-                        'sanitize_callback' => 'sanitize_text_field',
-                    ]
-                ]
-            ]
-        ],
-        [
-            'name'  => 'panel',
-            'title' => 'Panels',
-            'fields' => [
-                [
-                    'name'  => '_panel_brand',
-                    'label' => 'Show brand panel',
-                    'type'  => 'boolean',
-                    'settings' => [
-                        'type'  => 'boolean',
-                        'default'  => true,
-                    ]
-                ],
-                [
-                    'name'  => '_panel_search',
-                    'label' => 'Show search panel',
-                    'settings' => [
-                        'type'  => 'boolean',
-                    ],
-                ],
-                [
-                    'name'  => '_panel_email_alerts',
-                    'label' => 'Show email alerts panel',
-                    'settings' => [
-                        'type'  => 'boolean',
-                    ],
-                ],
-                [
-                    'name'  => '_panel_archived',
-                    'label' =>'Show archived panel',
-                    'settings' => [
-                        'type'  => 'boolean',
-                    ],
-                ],
-                [
-                    'name'  => '_panel_other_websites',
-                    'label' =>'Show other websites panel',
-                    'settings' => [
-                        'type'  => 'boolean',
-                    ],
-                ],
-            ]
-         ]
-    ];
-
-    /**
      * Constructor.
      */
 
@@ -113,6 +45,17 @@ class PostMeta
         ];
 
         $fields_array[] = [
+            'meta_key' => '_page_test',
+            'label'    => 'Related page',
+            'type'     => 'string',
+            'control'  => 'page',
+        ];
+
+        /**
+         * Panels - toggles
+         */
+
+        $fields_array[] = [
             'meta_key' => '_panel_brand',
             'type'     => 'boolean',
             'default'  => true,
@@ -124,7 +67,7 @@ class PostMeta
         $fields_array[] = [
             'meta_key' => '_panel_search',
             'type'     => 'boolean',
-            'default'  => true,
+            'default'  => false,
             'control'  => 'toggle',
             'label'    => 'Show search panel',
             'panel'    => 'panels',
@@ -133,7 +76,7 @@ class PostMeta
         $fields_array[] = [
             'meta_key' => '_panel_email_alerts',
             'type'     => 'boolean',
-            'default'  => true,
+            'default'  => false,
             'control'  => 'toggle',
             'label'    => 'Show email alerts panel',
             'panel'    => 'panels',
@@ -142,52 +85,94 @@ class PostMeta
         $fields_array[] = [
             'meta_key' => '_panel_archived',
             'type'     => 'boolean',
-            'default'  => true,
+            'default'  => false,
             'control'  => 'toggle',
             'label'    => 'Show archived panel',
             'panel'    => 'panels',
         ];
 
         $fields_array[] = [
+            'meta_key' => '_panel_related',
+            'type'     => 'boolean',
+            'default'  => false,
+            'control'  => 'toggle',
+            'label'    => 'Show related pages panel',
+            'panel'    => 'panels',
+        ];
+        
+        $fields_array[] = [
+            'meta_key'     => '_panel_related_entries',
+            'label'        => 'Related pages',
+            'control'      => 'repeater',
+            'type'         => 'array',
+            'default'      => [],
+            'panel'        => 'panels',
+            'conditions'   => [
+                [
+                    'meta_key' => '_panel_related',
+                    'operator' => '===',
+                    'value'    => true,
+                ],
+            ],
+            'show_in_rest' => [
+                'schema' => [
+                    'items' => [
+                        'type'       => 'object',
+                        'properties' => [
+                            'label' => [
+                                'type' => 'string',
+                                'control'  => 'page',
+                                'default' => '',
+                            ],
+                        ],
+                    ]
+                ],
+            ],
+        ];
+
+        $fields_array[] = [
             'meta_key' => '_panel_other_websites',
             'type'     => 'boolean',
-            'default'  => true,
+            'default'  => false,
             'control'  => 'toggle',
             'label'    => 'Show other websites panel',
             'panel'    => 'panels',
         ];
 
         $fields_array[] = [
-         'meta_key'     => '_panel_other_websites_entries',
-         'control'      => 'repeater',
-         'type'         => 'array',
-         'default'      => [],
-         'panel'        => 'panels',
-         'conditions'   => [
-             [
-                 'meta_key' => '_panel_other_websites',
-                 'operator' => '===',
-                 'value'    => true,
-             ],
-         ],
-         'show_in_rest' => [
-             'schema' => [
-                 'items' => [
-                     'type'       => 'object',
-                     'properties' => [
-                         'url'       => [
-                             'type' => 'string',
-                             'default' => '',
-                         ],
-                         'site_name' => [
-                             'type' => 'string',
-                             'default' => '',
-                         ],
-                     ],
-                 ]
-             ],
-         ],
+            'meta_key'     => '_panel_other_websites_entries',
+            'label'        => 'Other websites',
+            'control'      => 'repeater',
+            'type'         => 'array',
+            'default'      => [],
+            'panel'        => 'panels',
+            'conditions'   => [
+                [
+                    'meta_key' => '_panel_other_websites',
+                    'operator' => '===',
+                    'value'    => true,
+                ],
+            ],
+            'show_in_rest' => [
+                'schema' => [
+                    'items' => [
+                        'type'       => 'object',
+                        'properties' => [
+                            'label' => [
+                                'type' => 'string',
+                                'default' => '',
+                            ],
+                            'url'       => [
+                                'type' => 'string',
+                                'default' => '',
+                            ],
+                        ],
+                    ]
+                ],
+            ],
         ];
+
+
 
         $fields_array   = array_map(function ($field) {
             $field['post_type'] = $field['post_type'] ?? 'page';
@@ -219,5 +204,30 @@ class PostMeta
         $short_title = get_post_meta($post_id ?: $this->post_id, '_short_title', true);
 
         return $short_title && strlen($short_title) ? $short_title : get_the_title($post_id ?: $this->post_id);
+    }
+
+    /**
+     * Get the modified at date.
+     */
+
+    public function getModifiedAt(string | int $post_id = 0): string
+    {
+        $date_format = 'l, j F Y';
+        try {
+            $modified_at_override = get_post_meta($post_id ?: $this->post_id, '_modified_at_override', true);
+            return $modified_at_override ? date($date_format, strtotime($modified_at_override)) : get_the_modified_date($date_format);
+        } catch (\Exception) {
+            return get_the_modified_date($date_format);
+        }
+    }
+
+    /**
+     * Get the meta field.
+     * A convenience wrapper around WordPress' get_post_meta.
+     */
+
+    public function getMeta(string $meta_key, string | int $post_id = 0, bool $single = true)
+    {
+        return get_post_meta($post_id ?: $this->post_id, $meta_key, $single);
     }
 }

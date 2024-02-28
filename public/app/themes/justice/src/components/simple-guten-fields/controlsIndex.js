@@ -8,6 +8,7 @@ import MediaUpload from "./MediaUpload";
 import RepeaterControl from "./RepeaterControl";
 // import Multiselect from "./Mulitselect";
 import DatePicker from "./DatePickerControl/panel.js";
+import PageField from "./PageControl/panel.js";
 
 const controlsIndex =
     {
@@ -20,6 +21,7 @@ const controlsIndex =
         repeater: RepeaterControl,
         // multiselect: Multiselect,
         datepicker: DatePicker,
-        toggle: ToggleField
+        toggle: ToggleField,
+        page: PageField,
     }
 export default controlsIndex

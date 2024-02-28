@@ -1,5 +1,6 @@
 import controlsIndex from "./controlsIndex";
 const { select, withDispatch, useSelect } = wp.data;
+import { Button } from "@wordpress/components";
 
 const InnerControlComponent = (props) => {
   const { index, field, row_index, property_key, repeater_record_label } =
@@ -55,27 +56,31 @@ let ControlField = ({ addItem, removeItem, field, controlsIndex }) => {
                   />
                 );
               })}
-              {index > 0 && (
-                <button
+              {/* {index > 0 && ( */}
+                <Button
+                  isSmall={true}
+                  variant="secondary"
                   onClick={() => {
                     removeItem(meta_key, index, repeaterValues);
                   }}
                 >
                   Remove line {index + 1}
-                </button>
-              )}
+                </Button>
+              {/* )} */}
               <hr />
             </div>
           );
         })}
-      <button
+      <Button
+        isSmall={true}
+        variant="secondary"
         style={{ marginTop: "10px" }}
         onClick={() => {
-          addItem(meta_key, repeaterValues);
+          addItem(meta_key, repeaterValues ?? []);
         }}
       >
         Add Item
-      </button>
+      </Button>
     </>
   );
 };

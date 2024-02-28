@@ -6,10 +6,16 @@
  */
 
 use MOJ\Justice\Layout;
+use MOJ\Justice\PostMeta;
 
 $layout = new Layout();
 
 get_header();
+
+$post_meta = new PostMeta();
+
+$debug->push(get_post_meta(get_the_id(), '_page_test'));
+$debug->push(get_post_meta(get_the_id(), '_panel_related_entries'));
 
 ?>
 
@@ -53,7 +59,7 @@ get_header();
                     <!-- end/ PAGE CONTENT -->
 
                     <div class="share-this bottom">
-                        <span class="right">Updated: <?php the_modified_date('l, j F Y') ?></span>
+                        <span class="right">Updated: <?php echo $post_meta->getModifiedAt(); ?></span>
                     </div>
 
                 </article>
