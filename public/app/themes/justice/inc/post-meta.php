@@ -44,11 +44,44 @@ class PostMeta
             'control'  => 'datepicker',
         ];
 
+        $page_schema = [
+            'type'       => 'object',
+            'control'    => 'page',
+            'properties' => [
+                'url' => [
+                    'type' => 'string'
+                ],
+                'post' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'id' => [
+                            'type' => 'number'
+                        ],
+                        'type' => [
+                            'type' => 'string'
+                        ],
+                        'title' => [
+                            'type' => 'string'
+                        ],
+                        'url' => [
+                            'type' => 'string'
+                        ],
+                        'kind' => [
+                            'type' => 'string'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
         $fields_array[] = [
             'meta_key' => '_page_test',
             'label'    => 'Related page',
-            'type'     => 'string',
             'control'  => 'page',
+            'type' => 'object',
+            'show_in_rest' => [
+                'schema' => $page_schema
+            ]
         ];
 
         /**
@@ -119,14 +152,10 @@ class PostMeta
                     'items' => [
                         'type'       => 'object',
                         'properties' => [
-                            'label' => [
-                                'type' => 'string',
-                                'control'  => 'page',
-                                'default' => '',
-                            ],
-                        ],
+                            'pages' => $page_schema
+                        ]
                     ]
-                ],
+                ]
             ],
         ];
 
@@ -139,38 +168,38 @@ class PostMeta
             'panel'    => 'panels',
         ];
 
-        $fields_array[] = [
-            'meta_key'     => '_panel_other_websites_entries',
-            'label'        => 'Other websites',
-            'control'      => 'repeater',
-            'type'         => 'array',
-            'default'      => [],
-            'panel'        => 'panels',
-            'conditions'   => [
-                [
-                    'meta_key' => '_panel_other_websites',
-                    'operator' => '===',
-                    'value'    => true,
-                ],
-            ],
-            'show_in_rest' => [
-                'schema' => [
-                    'items' => [
-                        'type'       => 'object',
-                        'properties' => [
-                            'label' => [
-                                'type' => 'string',
-                                'default' => '',
-                            ],
-                            'url'       => [
-                                'type' => 'string',
-                                'default' => '',
-                            ],
-                        ],
-                    ]
-                ],
-            ],
-        ];
+        // $fields_array[] = [
+        //     'meta_key'     => '_panel_other_websites_entries',
+        //     'label'        => 'Other websites',
+        //     'control'      => 'repeater',
+        //     'type'         => 'array',
+        //     'default'      => [],
+        //     'panel'        => 'panels',
+        //     'conditions'   => [
+        //         [
+        //             'meta_key' => '_panel_other_websites',
+        //             'operator' => '===',
+        //             'value'    => true,
+        //         ],
+        //     ],
+        //     'show_in_rest' => [
+        //         'schema' => [
+        //             'items' => [
+        //                 'type'       => 'object',
+        //                 'properties' => [
+        //                     'label' => [
+        //                         'type' => 'string',
+        //                         'default' => '',
+        //                     ],
+        //                     'url'       => [
+        //                         'type' => 'string',
+        //                         'default' => '',
+        //                     ],
+        //                 ],
+        //             ]
+        //         ],
+        //     ],
+        // ];
 
 
 

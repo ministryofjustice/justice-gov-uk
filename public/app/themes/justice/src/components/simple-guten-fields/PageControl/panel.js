@@ -3,8 +3,8 @@ import { withSelect, select, withDispatch } from "@wordpress/data";
 import { Button, Dropdown } from "@wordpress/components";
 import { useState, useMemo } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
+import { keyboardReturn, arrowLeft, trash } from "@wordpress/icons";
 import PostPanelRow from "../PostPanelRow";
-import { keyboardReturn, arrowLeft } from "@wordpress/icons";
 
 const MyTextControl = (props) => {
   const { label, value, onChange } = props;
@@ -24,8 +24,19 @@ const MyTextControl = (props) => {
     [popoverAnchor],
   );
 
-  const buttonLabel = value ? value.replace(/http(s)?:\/\//, "") : "Set page";
-  const buttonLabelFull = value;
+  const buttonLabels = {
+    short: "Set Page",
+    full: "Set Page",
+  };
+
+  if (value?.url) {
+    buttonLabels.short = value.url.replace(/http(s)?:\/\//, "");
+    buttonLabels.full = value.url;
+  }
+  if (value?.post?.title) {
+    buttonLabels.short = value.post.title;
+    buttonLabels.full = value.post.title;
+  }
 
   return (
     <PostPanelRow label={label} ref={setPopoverAnchor}>
@@ -40,16 +51,16 @@ const MyTextControl = (props) => {
             className="editor-post-schedule__dialog-toggle"
             variant="tertiary"
             onClick={() => {
-              setTempValue({url: value});
+              setTempValue(value);
               onToggle();
             }}
             aria-label={sprintf(
               // translators: %s: Current post date.
               __("Change page: %s"),
-              buttonLabel,
+              buttonLabels.short,
             )}
-            label={buttonLabelFull}
-            showTooltip={label !== buttonLabelFull}
+            label={buttonLabels.full}
+            showTooltip={buttonLabels.short !== buttonLabels.full}
             aria-expanded={isOpen}
             style={{
               whiteSpace: "normal",
@@ -58,14 +69,14 @@ const MyTextControl = (props) => {
               wordBreak: "break-word",
             }}
           >
-            {buttonLabel}
+            {buttonLabels.short}
           </Button>
         )}
         renderContent={({ onClose }) => (
           <form
             className="block-editor-url-input__button-modal"
             onSubmit={() => {
-              onChange(tempValue.url);
+              onChange(tempValue);
               onClose();
             }}
           >
@@ -76,13 +87,22 @@ const MyTextControl = (props) => {
                 label={__("Close")}
                 onClick={onClose}
               />
+              <Button
+                className="block-editor-url-input__trash"
+                icon={trash}
+                label={__("Remove link")}
+                onClick={() => {
+                  onChange(null);
+                  onClose();
+                }}
+              />
               <URLInput
                 __nextHasNoMarginBottom
-                value={tempValue.url || ""}
+                value={tempValue?.url || tempValue?.post?.title || ""}
                 onChange={(url, post) => {
-                  console.log({url, post});
-                  setTempValue ({url, post})
+                  setTempValue({ url, post });
                 }}
+                required={false}
               />
               <Button
                 icon={keyboardReturn}
@@ -127,9 +147,10 @@ export default withDispatch((dispatch, props) => {
 
   return {
     onChange: (value) => {
-      let newValue = value;
-
-      console.log("in onchange", newValue);
+      let newValue = value ? {
+        ...(value?.post && { post: value.post }),
+        ...(value?.url && {url: value.url})
+      } : null;
 
       if (typeof row_index !== "undefined") {
         let repeaterValues =
@@ -140,8 +161,6 @@ export default withDispatch((dispatch, props) => {
             : row;
         });
       }
-
-      console.log("in onchange", newValue);
 
       dispatch("core/editor").editPost({ meta: { [meta_key]: newValue } });
     },

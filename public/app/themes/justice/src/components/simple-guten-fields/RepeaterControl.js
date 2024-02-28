@@ -25,6 +25,7 @@ let ControlField = ({ addItem, removeItem, field, controlsIndex }) => {
   const { meta_key, label, show_in_rest } = field;
 
   const properties = show_in_rest?.schema?.items?.properties;
+  const control = show_in_rest?.schema?.items?.control;
   let propertiesKeys = Object.entries(properties).map((item) => item[0]);
   let repeaterValues = useSelect(
     (select) =>
@@ -41,6 +42,7 @@ let ControlField = ({ addItem, removeItem, field, controlsIndex }) => {
               <div>
                 <b>Repeater Record {index + 1}:</b>
               </div>
+
               {propertiesKeys.map((property_key, innerIndex) => {
                 let innerField = properties[property_key];
                 innerField.meta_key = meta_key;
@@ -57,15 +59,15 @@ let ControlField = ({ addItem, removeItem, field, controlsIndex }) => {
                 );
               })}
               {/* {index > 0 && ( */}
-                <Button
-                  isSmall={true}
-                  variant="secondary"
-                  onClick={() => {
-                    removeItem(meta_key, index, repeaterValues);
-                  }}
-                >
-                  Remove line {index + 1}
-                </Button>
+              <Button
+                isSmall={true}
+                variant="secondary"
+                onClick={() => {
+                  removeItem(meta_key, index, repeaterValues);
+                }}
+              >
+                Remove line {index + 1}
+              </Button>
               {/* )} */}
               <hr />
             </div>

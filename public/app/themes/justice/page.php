@@ -14,8 +14,7 @@ get_header();
 
 $post_meta = new PostMeta();
 
-$debug->push(get_post_meta(get_the_id(), '_page_test'));
-$debug->push(get_post_meta(get_the_id(), '_panel_related_entries'));
+
 
 ?>
 
