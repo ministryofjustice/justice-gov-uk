@@ -1,11 +1,7 @@
 <?php
 
 /**
- * Template name: Error Testing
- * Template Post Type: page
- *
- * Use this file to test error reporting.
- * It is within WordPress because WordPress modifies error options at runtime.
+ * Errors
  */
 
 if (!defined('ABSPATH') || getenv('WP_ENV') !== 'development') {
