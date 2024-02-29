@@ -16,6 +16,7 @@ data:
 
   # Applied via GitHub Actions
   GOV_NOTIFY_API_KEY: ''
+  SENTRY_DSN: ''
   AUTH_KEY: 'strong-64-character-random-string'
   SECURE_AUTH_KEY: 'strong-64-character-random-string'
   LOGGED_IN_KEY: 'strong-64-character-random-string'

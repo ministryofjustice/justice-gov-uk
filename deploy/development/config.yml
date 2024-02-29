@@ -7,4 +7,3 @@ data:
   WP_ENV: "development"
   WP_HOME: 'https://dev.justice.gov.uk'
   WP_SITEURL: 'https://dev.justice.gov.uk/wp'
-  SENTRY_DEV_ID: 'development'

@@ -12,6 +12,10 @@
         {
             "name": "Damien Wilson",
             "homepage": "https://github.com/wilson1000-MoJ"
+        },
+        {
+            "name": "Davey Brown",
+            "homepage": "https://github.com/earthlingdavey"
         }
     ],
     "keywords": [
@@ -54,7 +58,8 @@
         "ext-mysqli": "*",
         "wp-cli/wp-cli-bundle": "*",
         "wpackagist-plugin/query-monitor": "*",
-        "wpackagist-plugin/debug-bar": "*"
+        "wpackagist-plugin/debug-bar": "*",
+        "sentry/sentry": "^3.22"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7.1",

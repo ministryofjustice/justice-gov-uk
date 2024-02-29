@@ -94,6 +94,14 @@ composer install
 **Node**<br>
 This service watches and compiles our assets, no need to access. The output of this service is available on STDOUT.
 
+When working with JS files in the `src` directory it can be useful to develop from inside the node container. 
+Using a *devcontainer* will allow the editor to have access to the `node_modules` directory, which is good for intellisense and type-safety.
+When using a devcontainer, first start the required services with `make` and then open the project in the devcontainer. 
+Be sure to keep an eye on the node container's terminal output for any laravel mix errors.
+
+The folder `src/components` is used for when it makes sense to keep a group of scss/js/php files together.
+The folder `src/components/post-meta` is an example where php is required to register fields in the backend, and js is used to register fields in the frontend.
+
 **MariaDB**<br>
 Internally accessed by PHP-FPM on port 3306
 

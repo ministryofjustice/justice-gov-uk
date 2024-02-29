@@ -50,21 +50,35 @@
             //     'container_class' => 'menu-top',
             //     'fallback_cb' => false
             // ]);
+
+            $menu_items = [
+                [
+                    'title' => 'Courts',
+                    'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
+                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/courts') . "'])"
+                ],
+                [
+                    'title' => 'Procedure rules',
+                    'url' => home_url('/courts/procedure-rules'),
+                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/procedure-rules') . "'])",
+                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules'))
+                ],
+                [
+                    'title' => 'Offenders',
+                    'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
+                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/offenders') . "'])"
+                ]
+            ];
             ?>
             <nav>             
                 <ul class="menu-top">
-                    <li class="item4-item0"><a href="https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service" onclick="_gaq.push(['_trackPageview', '<?php echo home_url('/courts'); ?>'])">Courts</a>
-                        <div class="finish"></div>
-                        <span></span>                                  
-                    </li>
-                    <li class="item5-item0"><a href="<?php echo home_url('/procedure-rules'); ?>" onclick="_gaq.push(['_trackPageview', '<?php echo home_url('/procedure-rules'); ?>'])">Procedure rules</a>
-                        <div class="finish"></div>
-                        <span></span>                                  
-                    </li>
-                    <li class="item7-item0"><a href="https://www.gov.uk/government/organisations/hm-prison-and-probation-service" onclick="_gaq.push(['_trackPageview', '<?php echo home_url('/offenders'); ?>'])">Offenders</a>
-                        <div class="finish"></div>
-                        <span></span>                                  
-                    </li>
+                    <?php foreach ($menu_items as $item) : ?>
+                        <li <?php echo !empty($item['active']) ? 'class="active"' : '' ?>>
+                            <a href="<?php echo $item['url']; ?>" onclick="<?php echo $item['onclick']; ?>"><?php echo $item['title']; ?></a>
+                            <div class="finish"></div>
+                            <span></span>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </nav>
             <div id="search-top">

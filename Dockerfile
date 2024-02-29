@@ -10,7 +10,7 @@ RUN apk add --update bash  \
     htop  \
     mariadb-client \
     # For debugging only. TODO: remove aws-cli in production.
-    aws-cli \ 
+    aws-cli \
     $PHPIZE_DEPS
 
 RUN pecl install imagick
@@ -24,6 +24,20 @@ RUN echo "opcache.jit_buffer_size=500000000" >> /usr/local/etc/php/conf.d/docker
 # Install wp-cli
 RUN curl -o /usr/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/bin/wp
+
+RUN { \
+		echo 'error_reporting = E_ALL'; \
+		echo 'display_errors = Off'; \
+		echo 'display_startup_errors = Off'; \
+		echo 'log_errors = On'; \
+		echo 'error_log = /dev/stderr'; \
+		echo 'log_errors_max_len = 1024'; \
+		echo 'ignore_repeated_errors = On'; \
+		echo 'ignore_repeated_source = Off'; \
+		echo 'html_errors = Off'; \
+		echo 'catch_workers_output = yes'; \
+		echo 'decorate_workers_output = no'; \
+	} > /usr/local/etc/php/conf.d/error-logging.ini
 
 
 ###
@@ -93,7 +107,7 @@ COPY . .
 RUN composer install --no-dev
 RUN composer dump-autoload -o
 
-ARG regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\|svg\)'
+ARG regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\|svg\|webmanifest\)'
 ARG regex_path='\(app\/themes\/justice\/error\-pages\|app\/mu\-plugins\|app\/plugins\|wp\)'
 RUN mkdir -p ./vendor-assets && \
     find public/ -regex "public\/${regex_path}.*\.${regex_files}" -exec cp --parent "{}" vendor-assets/  \;

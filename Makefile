@@ -10,7 +10,7 @@ init: setup run
 d-compose: local-stop
 	docker compose up -d nginx phpmyadmin
 
-d-shell: setup d-compose composer
+d-shell: setup dory d-compose composer
 
 setup:
 	@chmod +x ./bin/*
@@ -24,11 +24,15 @@ node-assets:
 	npm install
 	npm run watch
 
-composer:
+composer-assets:
 	@chmod +x ./bin/local-composer-assets.sh
-	docker compose exec php-fpm ./bin/local-composer-assets.sh ash
-	docker compose cp php-fpm:/var/www/html/vendor-assets/public ./vendor-assets
-	docker compose cp ./vendor-assets/public nginx:/var/www/html
+	@docker compose exec php-fpm ./bin/local-composer-assets.sh ash
+
+composer-copy:
+	@chmod +x ./bin/local-composer-assets-copy.sh
+	@./bin/local-composer-assets-copy.sh
+
+composer: composer-assets composer-copy
 
 # Open a bash shell on the running php container
 bash:
@@ -109,7 +113,7 @@ cluster:
 	@if [ "${kube}" == 'kind' ]; then kind create cluster --config=deploy/config/local/cluster.yml; kubectl apply -f https://projectcontour.io/quickstart/contour.yaml; fi
 	@if [ "${kube}" == 'kind' ]; then kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/control-plane","operator":"Equal","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'; fi
 
-local-kube: local-kube-start clear cluster local-kube-build
+kind: local-kube-start clear cluster local-kube-build
 	@if [ "${kube}" == 'kind' ]; then echo "\n-->  Verifying..."; echo "-->  Use ctrl + C to exit when ready\n"; kubectl get pods -w; fi
 
 local-kube-start:
