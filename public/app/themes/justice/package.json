@@ -39,6 +39,7 @@
         ]
     },
     "dependencies": {
-        "@wordpress/icons": "^9.43.0"
+        "@wordpress/icons": "^9.43.0",
+        "react-select": "^5.8.0"
     }
 }

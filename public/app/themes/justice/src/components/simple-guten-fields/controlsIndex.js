@@ -6,7 +6,7 @@ import ColorPickerComponent from "./ColorPicker";
 import SelectControlComponent from "./SelectControl";
 import MediaUpload from "./MediaUpload";
 import RepeaterControl from "./RepeaterControl";
-// import Multiselect from "./Mulitselect";
+import Multiselect from "./Mulitselect";
 import DatePicker from "./DatePickerControl/panel.js";
 import PageField from "./PageControl/panel.js";
 
@@ -19,7 +19,7 @@ const controlsIndex =
         select: SelectControlComponent,
         media: MediaUpload,
         repeater: RepeaterControl,
-        // multiselect: Multiselect,
+        multiselect: Multiselect,
         datepicker: DatePicker,
         toggle: ToggleField,
         page: PageField,

@@ -19,7 +19,7 @@ require_once 'inc/debug.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
-require_once 'inc/post-meta.php';
+require_once 'inc//post-meta/post-meta.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 
 new SimpleGutenFields();
