@@ -113,7 +113,7 @@ cluster:
 	@if [ "${kube}" == 'kind' ]; then kind create cluster --config=deploy/config/local/cluster.yml; kubectl apply -f https://projectcontour.io/quickstart/contour.yaml; fi
 	@if [ "${kube}" == 'kind' ]; then kubectl patch daemonsets -n projectcontour envoy -p '{"spec":{"template":{"spec":{"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/control-plane","operator":"Equal","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'; fi
 
-local-kube: local-kube-start clear cluster local-kube-build
+kind: local-kube-start clear cluster local-kube-build
 	@if [ "${kube}" == 'kind' ]; then echo "\n-->  Verifying..."; echo "-->  Use ctrl + C to exit when ready\n"; kubectl get pods -w; fi
 
 local-kube-start:
