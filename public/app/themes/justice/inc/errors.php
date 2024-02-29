@@ -2,6 +2,7 @@
 
 /**
  * Errors
+ * Only allowed in development environment.
  */
 
 if (!defined('ABSPATH') || getenv('WP_ENV') !== 'development') {
