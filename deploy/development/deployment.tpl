@@ -42,8 +42,6 @@ spec:
             mountPath: /var/www/html/public/app/uploads
         securityContext:
             runAsUser: 82
-            runAsGroup: 82
-            fsGroup: 82
         env:
           - name: S3_BUCKET_NAME
             valueFrom:
