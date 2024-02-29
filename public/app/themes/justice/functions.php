@@ -16,6 +16,7 @@ if (defined('WP_OFFLOAD_MEDIA_PRESET') && WP_OFFLOAD_MEDIA_PRESET === 'minio') {
 
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/dynamic-menu.php';
+require_once 'inc/errors.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
 require_once 'src/components/post-meta/post-meta.php';
