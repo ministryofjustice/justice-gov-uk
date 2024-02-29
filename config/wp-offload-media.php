@@ -22,7 +22,7 @@ $as3_settings = array(
     // Enable object prefix, useful if you use your bucket for other files
     'enable-object-prefix' => true,
     // Object prefix to use if 'enable-object-prefix' is 'true'
-    'object-prefix' => 'uploads/',
+    'object-prefix' => 'media/',
     // Organize bucket files into YYYY/MM directories matching Media Library upload date
     'use-yearmonth-folders' => true,
     // Append a timestamped folder to path of files offloaded to bucket to avoid filename clashes and bust CDN cache if updated
@@ -47,7 +47,9 @@ $as3_settings = array(
     // Serve files over HTTPS
     'force-https' => !!env('CLOUDFRONT_URL'),
     // Remove the local file version once offloaded to bucket
-    'remove-local-file' => true,
+    'remove-local-file' => false,
+    // Access Control List for the bucket
+    'use-bucket-acls' => false,
 );
 
 // Merge in the access key and secret if they are set

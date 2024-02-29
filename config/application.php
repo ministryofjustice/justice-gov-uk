@@ -146,12 +146,8 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
  */
 
 // By not setting AS3CF_SETTINGS here, we can use the plugin GUI to configure the settings during debugging.
-// if (file_exists(__DIR__ . '/wp-offload-media.php')) {
-//     require_once __DIR__ . '/wp-offload-media.php';
-// }
-// Only set the 'use-server-role' setting.
-if (!env('AWS_ACCESS_KEY_ID') || !env('AWS_SECRET_ACCESS_KEY')) {
-    define('AS3CF_AWS_USE_EC2_IAM_ROLE', true);
+if (file_exists(__DIR__ . '/wp-offload-media.php')) {
+    require_once __DIR__ . '/wp-offload-media.php';
 }
 
 /**
