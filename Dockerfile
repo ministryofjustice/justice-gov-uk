@@ -25,6 +25,20 @@ RUN echo "opcache.jit_buffer_size=500000000" >> /usr/local/etc/php/conf.d/docker
 RUN curl -o /usr/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x /usr/bin/wp
 
+RUN { \
+		echo 'error_reporting = E_ALL'; \
+		echo 'display_errors = Off'; \
+		echo 'display_startup_errors = Off'; \
+		echo 'log_errors = On'; \
+		echo 'error_log = /dev/stderr'; \
+		echo 'log_errors_max_len = 1024'; \
+		echo 'ignore_repeated_errors = On'; \
+		echo 'ignore_repeated_source = Off'; \
+		echo 'html_errors = Off'; \
+		echo 'catch_workers_output = yes'; \
+		echo 'decorate_workers_output = no'; \
+	} > /usr/local/etc/php/conf.d/error-logging.ini
+
 
 ###
 
