@@ -1,7 +1,7 @@
 // @ts-check
-import { Fragment } from "@wordpress/element";
 import { select, useSelect } from "@wordpress/data";
 import { PluginDocumentSettingPanel } from "@wordpress/edit-post";
+import { Fragment } from "@wordpress/element";
 import { registerPlugin } from "@wordpress/plugins";
 
 import controlsIndex from "./controlsIndex";
@@ -19,20 +19,30 @@ const meetsConditons = (field) => {
   }
   
   return conditions.every((condition) => {
-    const { meta_key, operator, value } = condition;
+    const { target, operator, value } = condition;
+    const targetArray = target.split('.');
 
-    const postMeta = useSelect(
-      (select) =>
-        // @ts-ignore https://github.com/WordPress/gutenberg/pull/46881
-        select("core/editor").getEditedPostAttribute("meta"),
+    const postValue = useSelect(
+      (select) => {
+            switch (targetArray[0]) {
+              case "attribute":
+                // @ts-ignore https://github.com/WordPress/gutenberg/pull/46881
+                const attriute = select("core/editor").getEditedPostAttribute(targetArray[1]);
+                // Get a nested property if necessary
+                return targetArray[2] ? attriute[targetArray[2]] : attriute;
+              default:
+                console.warn('Could net get walue for condition target:', target)
+                return null;
+            }
+      },
       [],
     );
 
     switch (operator) {
       case "===":
-        return postMeta[meta_key] === value;
+        return postValue === value;
       case "!==":
-        return postMeta[meta_key] !== value;
+        return postValue !== value;
       default:
         return true;
     }

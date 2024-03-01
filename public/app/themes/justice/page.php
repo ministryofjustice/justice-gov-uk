@@ -14,8 +14,6 @@ get_header();
 
 $post_meta = new PostMeta();
 
-
-
 ?>
 
     <main role="main" id="content-wrapper">

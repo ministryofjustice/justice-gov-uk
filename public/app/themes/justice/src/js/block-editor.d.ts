@@ -5,7 +5,7 @@ export interface SimpleGutemField {
   panel: string
   default: any
   conditions: {
-    meta_key: string
+    target: string
     operator: '===' | '!=='
     value: string
   }[]

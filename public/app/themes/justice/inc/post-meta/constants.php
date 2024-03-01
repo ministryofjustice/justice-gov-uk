@@ -21,7 +21,7 @@ class PostMetaConstants
 
     /**
      * Meta fields.
-     * 
+     *
      * Examples of fields are:
      * - `_short_title` for showing in menus
      * - `_modified_at_override` for manual entry of the modified at date.
@@ -77,7 +77,7 @@ class PostMetaConstants
 
     /**
      * Panel fields.
-     * 
+     *
      * Examples of fields are:
      * - toggle fields for displaying panels on the right hand side.
      * - entry fields for managing the content of the panels.
@@ -116,6 +116,20 @@ class PostMetaConstants
             ]
         ];
 
+        $link_schema = [
+            'type'       => 'object',
+            'properties' => [
+                'label' => [
+                    'type' => 'string',
+                    'default' => '',
+                ],
+                'url'       => [
+                    'type' => 'string',
+                    'default' => '',
+                ],
+            ],
+        ];
+
         $fields_array[] = [
             'meta_key' => '_panel_brand',
             'type'     => 'boolean',
@@ -123,6 +137,13 @@ class PostMetaConstants
             'control'  => 'toggle',
             'label'    => 'Show brand panel',
             'panel'    => 'panels',
+            'conditions'   => [
+                [
+                    'target' => 'attribute.template',
+                    'operator' => '!==',
+                    'value'    => 'page_home.php',
+                ],
+            ],
         ];
 
         $fields_array[] = [
@@ -132,16 +153,23 @@ class PostMetaConstants
             'control'  => 'toggle',
             'label'    => 'Show search panel',
             'panel'    => 'panels',
+            'conditions'   => [
+                [
+                    'target' => 'attribute.template',
+                    'operator' => '!==',
+                    'value'    => 'page_home.php',
+                ],
+            ],
         ];
 
-        $fields_array[] = [
-            'meta_key' => '_panel_email_alerts',
-            'type'     => 'boolean',
-            'default'  => false,
-            'control'  => 'toggle',
-            'label'    => 'Show email alerts panel',
-            'panel'    => 'panels',
-        ];
+        // $fields_array[] = [
+        //     'meta_key' => '_panel_email_alerts',
+        //     'type'     => 'boolean',
+        //     'default'  => false,
+        //     'control'  => 'toggle',
+        //     'label'    => 'Show email alerts panel',
+        //     'panel'    => 'panels',
+        // ];
 
         $fields_array[] = [
             'meta_key' => '_panel_archived',
@@ -150,6 +178,13 @@ class PostMetaConstants
             'control'  => 'toggle',
             'label'    => 'Show archived panel',
             'panel'    => 'panels',
+            'conditions'   => [
+                [
+                    'target' => 'attribute.template',
+                    'operator' => '!==',
+                    'value'    => 'page_home.php',
+                ],
+            ],
         ];
 
         $fields_array[] = [
@@ -159,6 +194,29 @@ class PostMetaConstants
             'control'  => 'toggle',
             'label'    => 'Show related pages panel',
             'panel'    => 'panels',
+            'conditions'   => [
+                [
+                    'target' => 'attribute.template',
+                    'operator' => '!==',
+                    'value'    => 'page_home.php',
+                ],
+            ],
+        ];
+
+        $fields_array[] = [
+            'meta_key' => '_panel_popular',
+            'type'     => 'boolean',
+            'default'  => true,
+            'control'  => 'toggle',
+            'label'    => 'Show most popular panel',
+            'panel'    => 'panels',
+            'conditions'   => [
+                [
+                    'target' => 'attribute.template',
+                    'operator' => '===',
+                    'value'    => 'page_home.php',
+                ],
+            ],
         ];
 
         $fields_array[] = [
@@ -170,20 +228,20 @@ class PostMetaConstants
             'panel'        => 'panels',
             'conditions'   => [
                 [
-                    'meta_key' => '_panel_related',
+                    'target' => 'attribute.template',
+                    'operator' => '!==',
+                    'value'    => 'page_home.php',
+                ],
+                [
+                    'target' => 'attribute.meta._panel_related',
                     'operator' => '===',
                     'value'    => true,
                 ],
             ],
             'show_in_rest' => [
                 'schema' => [
-                    'items' => [
-                        'type'       => 'object',
-                        'properties' => [
-                            'pages' => $page_control_schema
-                        ]
-                    ]
-                ]
+                    'items' => $link_schema
+                ],
             ],
         ];
 
@@ -194,6 +252,13 @@ class PostMetaConstants
             'control'  => 'toggle',
             'label'    => 'Show other websites panel',
             'panel'    => 'panels',
+            'conditions'   => [
+                [
+                    'target' => 'attribute.template',
+                    'operator' => '!==',
+                    'value'    => 'page_home.php',
+                ],
+            ],
         ];
 
         $fields_array[] = [
@@ -205,26 +270,19 @@ class PostMetaConstants
             'panel'        => 'panels',
             'conditions'   => [
                 [
-                    'meta_key' => '_panel_other_websites',
+                    'target' => 'attribute.template',
+                    'operator' => '!==',
+                    'value'    => 'page_home.php',
+                ],
+                [
+                    'target' => 'attribute.meta._panel_other_websites',
                     'operator' => '===',
                     'value'    => true,
                 ],
             ],
             'show_in_rest' => [
                 'schema' => [
-                    'items' => [
-                        'type'       => 'object',
-                        'properties' => [
-                            'label' => [
-                                'type' => 'string',
-                                'default' => '',
-                            ],
-                            'url'       => [
-                                'type' => 'string',
-                                'default' => '',
-                            ],
-                        ],
-                    ]
+                    'items' => $link_schema
                 ],
             ],
         ];

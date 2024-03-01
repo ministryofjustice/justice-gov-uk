@@ -13,8 +13,8 @@ services:
             context: .
             target: dev
         volumes:
-            - .:/var/www/html
             - dist:/var/www/html/public/app/themes/justice/dist
+            - .:/var/www/html
         env_file:
             - .env
         depends_on:
