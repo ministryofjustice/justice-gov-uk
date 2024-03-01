@@ -72,6 +72,18 @@ RUN mkdir -p ./vendor-assets && \
     find public/ -regex "public\/${regex_path}.*\.${regex_files}" -exec cp --parent "{}" vendor-assets/  \;
 
 
+###
+
+
+FROM node:20 AS assets-build
+
+WORKDIR /code/public/app/themes/justice
+COPY ./public/app/themes/justice ./
+
+RUN npm ci
+RUN npm run production
+RUN rm -rf node_modules
+
 
 ###
 
@@ -79,7 +91,8 @@ RUN mkdir -p ./vendor-assets && \
 FROM base-fpm AS build-fpm
 
 WORKDIR /var/www/html
-COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html /var/www/html
+COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html .
+COPY --from=assets-build       --chown=www-data:www-data /code/public/app/themes/justice/dist/php ./public/app/themes/justice/dist/php
 
 # non-root
 USER 82
@@ -93,19 +106,6 @@ RUN make test
 
 ###
 
-
-FROM node:20 AS assets-build
-
-WORKDIR /code
-COPY . /code/
-
-WORKDIR /code/public/app/themes/justice
-RUN npm ci
-RUN npm run production
-RUN rm -rf node_modules
-
-
-###
 
 
 FROM base-nginx AS nginx-dev
