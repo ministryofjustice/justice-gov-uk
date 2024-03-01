@@ -1,12 +1,24 @@
 import MultiSelect from "react-select";
+import { BaseControl } from "@wordpress/components";
 import { withSelect, select, withDispatch } from "@wordpress/data";
 
 const isRepeater = (rowIndex) => {
   return typeof rowIndex !== "undefined";
 };
 
+const WithHelp = (props) => (
+  <BaseControl
+    id={props._key}
+    help={props.help}
+    className={props.classes}
+    __nextHasNoMarginBottom
+  >
+    <MultiSelect {...props} />
+  </BaseControl>
+);
+
 let ControlField = withSelect((select, props) => {
-  const { label, meta_key, options, isMulti } = props.field;
+  const { help, label, meta_key, options, isMulti } = props.field;
   const { row_index, property_key } = props;
   const value = select("core/editor").getEditedPostAttribute("meta")[meta_key];
   const key = meta_key + row_index + property_key;
@@ -33,8 +45,10 @@ let ControlField = withSelect((select, props) => {
       placeholder: label,
       defaultValue,
       key,
+      _key: key,
       options,
       label: `Set ${label}`,
+      help,
     };
   } else {
     // Inside repeater we fetching the value by row index
@@ -46,7 +60,7 @@ let ControlField = withSelect((select, props) => {
               (propOption) => propOption.value == option,
             );
             let label = labelOption ? labelOption.label : option;
-            return { value: option, label: label };
+            return { value: option, label: label, help };
           })
         : [];
     return {
@@ -54,11 +68,12 @@ let ControlField = withSelect((select, props) => {
       isMulti: isMultiProp,
       defaultValue,
       key,
+      _key: key,
       options,
       label: `Set ${label}`,
     };
   }
-})(MultiSelect);
+})(WithHelp);
 
 ControlField = withDispatch((dispatch, props) => {
   const { meta_key } = props.field;

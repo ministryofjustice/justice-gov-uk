@@ -21,7 +21,7 @@ const ImagePlaceholder = () => (
 );
 
 const mediaUpload = ({ field }) => {
-  let { meta_key, label } = field;
+  let { help, meta_key, label } = field;
   const imageId = useSelect(
     (select) =>
       select("core/editor").getEditedPostAttribute("meta")?.[meta_key],
@@ -45,6 +45,7 @@ const mediaUpload = ({ field }) => {
             }}
             allowedTypes={ALLOWED_MEDIA_TYPES}
             value={imageId}
+            help={help}
             render={({ open }) => {
               return (
                 <div onClick={open}>

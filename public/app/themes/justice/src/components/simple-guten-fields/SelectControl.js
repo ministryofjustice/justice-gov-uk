@@ -2,7 +2,7 @@ import { select, withDispatch, withSelect } from "@wordpress/data";
 import { SelectControl } from "@wordpress/components";
 
 const SelectControlComponent = ({ field }) => {
-  const { meta_key, options, label } = field;
+  const { help, meta_key, options, label } = field;
 
   let SelectControlField = ({ value, handleSelectChange }) => (
     <SelectControl
@@ -10,6 +10,7 @@ const SelectControlComponent = ({ field }) => {
       value={select("core/editor").getEditedPostAttribute("meta")[meta_key]}
       onChange={(value) => handleSelectChange(value)}
       options={options}
+      help={help}
     />
   );
 
