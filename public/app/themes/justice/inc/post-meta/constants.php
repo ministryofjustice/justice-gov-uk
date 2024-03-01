@@ -29,7 +29,7 @@ class PostMetaConstants
      * - text fields to allow filtering of search results.
      */
 
-    function metaFields($fields_array)
+    public function metaFields($fields_array)
     {
 
         $fields_array[] = [
@@ -83,7 +83,7 @@ class PostMetaConstants
      * - entry fields for managing the content of the panels.
      */
 
-    function panelFields($fields_array)
+    public function panelFields($fields_array)
     {
 
         $link_schema = [

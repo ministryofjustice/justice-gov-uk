@@ -1,16 +1,11 @@
 <?php
 /**
- * Plugin Name:     Simple Guten Fields
+ * Name:            Simple Guten Fields
  * Description:     Simple Guten Fields is a concept of adding custom fields to Gutenberg editor.
- */
-
-/**
- * The following code registers a plugin(s) to add custom meta fields to the page editor.
- * This setup was based on:
- * @see https://awhitepixel.com/how-to-add-post-meta-fields-to-gutenberg-document-sidebar/
- * This example has repeater and select fields:
  * @see https://bebroide.medium.com/how-to-easily-develop-with-react-your-own-custom-fields-within-gutenberg-wordpress-editor-b868c1e193a9
  */
+
+namespace MOJ\Justice;
 
 include('register-fields.php');
 include('helpers.php');
@@ -35,7 +30,7 @@ class SimpleGutenFields
 
         $script_asset_path = "$dir/../../dist/block-editor.asset.php";
         if (! file_exists($script_asset_path)) {
-            throw new Error(
+            throw new \Error(
                 'You need to run `npm start` or `npm run build` for the "create-block/simple-guten-fields" block first.'
             );
         }
