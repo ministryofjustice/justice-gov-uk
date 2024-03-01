@@ -86,36 +86,6 @@ class PostMetaConstants
     function panelFields($fields_array)
     {
 
-        $page_control_schema = [
-            'type'       => 'object',
-            'control'    => 'page',
-            'properties' => [
-                'url' => [
-                    'type' => 'string'
-                ],
-                'post' => [
-                    'type' => 'object',
-                    'properties' => [
-                        'id' => [
-                            'type' => 'number'
-                        ],
-                        'type' => [
-                            'type' => 'string'
-                        ],
-                        'title' => [
-                            'type' => 'string'
-                        ],
-                        'url' => [
-                            'type' => 'string'
-                        ],
-                        'kind' => [
-                            'type' => 'string'
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
         $link_schema = [
             'type'       => 'object',
             'properties' => [
