@@ -77,8 +77,13 @@ RUN mkdir -p ./vendor-assets && \
 
 FROM node:20 AS assets-build
 
-WORKDIR /code/public/app/themes/justice
-COPY ./public/app/themes/justice ./
+WORKDIR /node
+COPY ./public/app/themes/justice/src               ./src
+COPY ./public/app/themes/justice/style.css         ./style.css
+COPY ./public/app/themes/justice/jsconfig.json     ./jsconfig.json
+COPY ./public/app/themes/justice/package.json      ./package.json
+COPY ./public/app/themes/justice/package-lock.json ./package-lock.json
+COPY ./public/app/themes/justice/webpack.mix.js    ./webpack.mix.js
 
 RUN npm ci
 RUN npm run production
@@ -91,8 +96,8 @@ RUN rm -rf node_modules
 FROM base-fpm AS build-fpm
 
 WORKDIR /var/www/html
-COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html .
-COPY --from=assets-build       --chown=www-data:www-data /code/public/app/themes/justice/dist/php ./public/app/themes/justice/dist/php
+COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html  .
+COPY --from=assets-build       --chown=www-data:www-data /node/dist/php ./public/app/themes/justice/dist/php
 
 # non-root
 USER 82
@@ -122,8 +127,8 @@ COPY deploy/config/php-fpm.conf /etc/nginx/php-fpm.conf
 COPY deploy/config/server.conf /etc/nginx/conf.d/default.conf
 
 # Grab assets for Nginx
-COPY --from=assets-build /code/public/app/themes/justice/style.css /var/www/html/public/app/themes/justice/
-COPY --from=assets-build /code/public/app/themes/justice/dist /var/www/html/public/app/themes/justice/dist/
+COPY --from=assets-build /node/style.css /var/www/html/public/app/themes/justice/
+COPY --from=assets-build /node/dist      /var/www/html/public/app/themes/justice/dist/
 
 # Only take what Nginx needs (current configuration)
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/vendor-assets /var/www/html/
