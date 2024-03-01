@@ -1,8 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { __, _x, sprintf, isRTL } from "@wordpress/i18n";
 import { getSettings, getDate, dateI18n } from "@wordpress/date";
+import { __, _x, sprintf, isRTL } from "@wordpress/i18n";
 
 export function getFullPostScheduleLabel(dateAttribute) {
   const date = getDate(dateAttribute);

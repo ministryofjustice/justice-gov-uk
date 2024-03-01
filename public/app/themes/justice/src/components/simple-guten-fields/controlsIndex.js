@@ -1,27 +1,27 @@
+import CheckboxField from "./CheckboxControl";
+import ColorPickerComponent from "./ColorPicker";
+import DatePicker from "./DatePickerControl/panel.js";
+import MediaUpload from "./MediaUpload";
+import Multiselect from "./Mulitselect";
+import PageField from "./PageControl/panel.js";
+import RepeaterControl from "./RepeaterControl";
+import SelectControlComponent from "./SelectControl";
 import TextField from "./TextControl";
 import TextareaField from "./TextareaControl";
-import CheckboxField from "./CheckboxControl";
 import ToggleField from "./ToggleControl";
-import ColorPickerComponent from "./ColorPicker";
-import SelectControlComponent from "./SelectControl";
-import MediaUpload from "./MediaUpload";
-import RepeaterControl from "./RepeaterControl";
-import Multiselect from "./Mulitselect";
-import DatePicker from "./DatePickerControl/panel.js";
-import PageField from "./PageControl/panel.js";
 
-const controlsIndex =
-    {
-        text: TextField,
-        textarea: TextareaField,
-        checkbox: CheckboxField,
-        color: ColorPickerComponent,
-        select: SelectControlComponent,
-        media: MediaUpload,
-        repeater: RepeaterControl,
-        multiselect: Multiselect,
-        datepicker: DatePicker,
-        toggle: ToggleField,
-        page: PageField,
-    }
-export default controlsIndex
+const controlsIndex = {
+  checkbox: CheckboxField,
+  color: ColorPickerComponent,
+  datepicker: DatePicker,
+  media: MediaUpload,
+  multiselect: Multiselect,
+  page: PageField,
+  repeater: RepeaterControl,
+  select: SelectControlComponent,
+  text: TextField,
+  textarea: TextareaField,
+  toggle: ToggleField,
+};
+
+export default controlsIndex;

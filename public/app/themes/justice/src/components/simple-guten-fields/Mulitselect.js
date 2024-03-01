@@ -1,7 +1,5 @@
 import MultiSelect from "react-select";
-
 import { withSelect, select, withDispatch } from "@wordpress/data";
-
 
 const isRepeater = (rowIndex) => {
   return typeof rowIndex !== "undefined";

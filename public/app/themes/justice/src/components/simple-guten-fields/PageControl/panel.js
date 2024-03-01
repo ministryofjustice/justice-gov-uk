@@ -1,9 +1,10 @@
 import { URLInput } from "@wordpress/block-editor";
-import { withSelect, select, withDispatch } from "@wordpress/data";
 import { Button, Dropdown } from "@wordpress/components";
+import { withSelect, select, withDispatch } from "@wordpress/data";
 import { useState, useMemo } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { keyboardReturn, arrowLeft, trash } from "@wordpress/icons";
+
 import PostPanelRow from "../PostPanelRow";
 
 const MyTextControl = (props) => {

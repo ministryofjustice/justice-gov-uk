@@ -1,6 +1,7 @@
-import controlsIndex from "./controlsIndex";
-const { select, withDispatch, useSelect } = wp.data;
 import { Button } from "@wordpress/components";
+import { select, withDispatch, useSelect } from "@wordpress/data";
+
+import controlsIndex from "./controlsIndex";
 
 const InnerControlComponent = (props) => {
   const { index, field, row_index, property_key, repeater_record_label } =
