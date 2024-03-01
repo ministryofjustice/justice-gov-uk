@@ -19,16 +19,19 @@ require_once 'inc/debug.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
-require_once 'inc//post-meta/post-meta.php';
+require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
+
+if (getenv('WP_ENV') === 'development') {
+    $debug = new Justice\Debug();
+    $debug->registerHooks();
+}
 
 new SimpleGutenFields();
 
 $post_meta = new Justice\PostMeta();
 $post_meta->registerHooks();
 
-$debug = new Justice\Debug();
-$debug->registerHooks();
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 
@@ -56,31 +59,3 @@ add_action(
         );
     }
 );
-
-// B R E A D C R U M B S //
-function justice_crumbs()
-{
-    global $post;
-    /* Change according to your needs */
-    $show_current = 1;
-    $delimiter = '»';
-    $home_url = 'Home';
-    $before_wrap = '<li class="current">';
-    $after_wrap = '</li>';
-
-    $home_url = get_bloginfo('url');
-
-    if (is_home() || is_front_page()) {
-        return;
-    }
-
-    /* Proceed with showing the breadcrumbs */
-    $breadcrumbs = '<ol id="crumbs" itemscope itemtype="https://schema.org/BreadcrumbList">';
-
-    $breadcrumbs .= '<li itemprop="itemListElement" itemtype="https://schema.org/ListItem"><a target="_blank" href="' . $home_url . '">' . $home_url . '</a></li>';
-
-    /* Build breadcrumbs here */
-
-    $breadcrumbs .= '</ol>';
-    echo $breadcrumbs;
-}
