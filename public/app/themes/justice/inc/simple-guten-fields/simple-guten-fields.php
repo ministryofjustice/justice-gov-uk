@@ -8,7 +8,6 @@
 namespace MOJ\Justice;
 
 include('register-fields.php');
-include('helpers.php');
 
 class SimpleGutenFields
 {
