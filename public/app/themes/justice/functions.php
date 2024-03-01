@@ -18,6 +18,7 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/debug.php';
 require_once 'inc/dynamic-menu.php';
+require_once 'inc/errors.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
 require_once 'inc/post-meta/post-meta.php';

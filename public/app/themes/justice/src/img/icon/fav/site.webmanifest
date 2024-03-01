@@ -3,12 +3,12 @@
     "short_name": "",
     "icons": [
         {
-            "src": "/app/themes/justice/src/img/icon/fav/android-chrome-192x192.png",
+            "src": "/app/themes/justice/dist/img/icon/fav/android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/app/themes/justice/src/img/icon/fav/android-chrome-512x512.png",
+            "src": "/app/themes/justice/dist/img/icon/fav/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

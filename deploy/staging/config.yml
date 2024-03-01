@@ -7,4 +7,3 @@ data:
   WP_ENV: "staging"
   WP_HOME: 'https://justice-gov-uk-staging.apps.live.cloud-platform.service.justice.gov.uk'
   WP_SITEURL: 'https://justice-gov-uk-staging.apps.live.cloud-platform.service.justice.gov.uk/wp'
-  SENTRY_DEV_ID: 'staging'
