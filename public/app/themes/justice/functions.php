@@ -1,6 +1,7 @@
 <?php
 
 use MOJ\Justice;
+use Roots\WPConfig\Config;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -10,7 +11,7 @@ if (defined('WP_CLI') && WP_CLI) {
     require_once 'inc/commands.php';
 }
 
-if (defined('WP_OFFLOAD_MEDIA_PRESET') && WP_OFFLOAD_MEDIA_PRESET === 'minio') {
+if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
     require_once 'inc/amazon-s3-and-cloudfront-tweaks-for-minio.php';
 }
 
@@ -27,7 +28,7 @@ if (getenv('WP_ENV') === 'development') {
     $debug->registerHooks();
 }
 
-new SimpleGutenFields();
+new Justice\SimpleGutenFields();
 
 $post_meta = new Justice\PostMeta();
 $post_meta->registerHooks();
