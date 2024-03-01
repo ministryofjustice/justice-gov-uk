@@ -1,8 +1,27 @@
+<?php
+
+use MOJ\Justice\PostMeta;
+
+$post_meta = new PostMeta();
+$entries = $post_meta->getMeta('_panel_other_websites_entries');
+
+if (empty($entries)) {
+    return;
+}
+
+?>
+
 <div class="grey-box">
     <div class="content">
         <h4>Other websites</h4>
         <ul>
-            <li><a href="http://www.aboutcookies.org/" onclick="_gaq.push(['_trackPageview', 'http://www.aboutcookies.org/'])">How to delete and control cookies</a></li>
+            <?php foreach ($entries as $entry) { ?>
+                <li>
+                    <a href="<?php echo wp_kses($entry['url'], [], ['http','https']); ?>">
+                        <?php echo wp_kses($entry['label'], []); ?>
+                    </a>
+                </li>
+            <?php } ?>
         </ul>
     </div>
 </div>
