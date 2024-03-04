@@ -11,11 +11,15 @@ class Debug
 
     public function registerHooks()
     {
-        add_action('get_footer', [$this, 'theDebugPanel']);
+        if (!defined('WP_ENV') || WP_ENV !== 'development') {
+            return;
+        }
+        add_action('get_footer', [$this, 'theCodePanel']);
+        add_action('get_footer', [$this, 'theInfoPanel']);
     }
 
     /**
-     * theDebugPanel
+     * theCodePanel
      * This function outputs a panel to the bottom let of the screen.
      * It's useful during development, to temporarily get values onto the screen.
      *
@@ -31,24 +35,15 @@ class Debug
      * $debug->push(['my value']);
      */
 
-    public function theDebugPanel(): void
+    public function theCodePanel(): void
     {
-
-        if (getenv('WP_ENV') !== 'development') {
-            return;
-        }
-
         $contents = apply_filters('moj_debug_content', []);
 
         if (empty($contents)) {
             return;
         }
 
-        echo "<pre class='moj-debug-panel'>";
-        foreach ($contents as $content) {
-            var_dump($content);
-        }
-        echo "</pre>";
+        get_template_part('template-parts/development/code', null, $contents);
     }
 
     /**
@@ -62,5 +57,25 @@ class Debug
             $content[] = $new_content;
             return $content;
         });
+    }
+
+    /**
+     * theInfoPanel
+     * Show a static info panel, during development only.
+     */
+
+    public function theInfoPanel()
+    {
+        if (!defined('WP_ENV') || WP_ENV !== 'development') {
+            return;
+        }
+
+        $source_url = get_post_meta(\get_the_ID(), '_source_url', true);
+
+        if (!$source_url) {
+            return;
+        }
+
+        get_template_part('template-parts/development/info', null, ['source_url' => $source_url]);
     }
 }
