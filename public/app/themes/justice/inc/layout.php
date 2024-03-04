@@ -1,10 +1,13 @@
 <?php
 
 /**
- * A class to manage page layout
+ * A class to manage page layout.
+ * The following body classes are for legacy css only: inner-lcr, inner-c, inner-cr
  */
 
 namespace MOJ\Justice;
+
+use MOJ\Justice\PostMeta;
 
 class Layout
 {
@@ -18,47 +21,30 @@ class Layout
         add_filter('body_class', [$this, 'bodyClass']);
     }
 
-    public function getTheColumns()
-    {
-        global $post;
-
-        if (!isset($post) || !is_page()) {
-            return;
-        }
-
-        $template = get_page_template_slug($post->id);
-
-        switch ($template) {
-            case 'page_right-sidebar.php':
-                return ['c','r'];
-            case 'page_full-width.php':
-                return ['c'];
-            default:
-                return ['l','c','r'];
-        }
-    }
-
     public function bodyClass($classes)
     {
-        $columns = $this->getTheColumns();
+        $post_id = \get_the_ID();
 
-        if (!$columns) {
+        if (!isset($post_id) || !is_page()) {
             return $classes;
         }
 
-        $classes[] = 'inner-' . implode('', $columns);
+        $post_meta = new PostMeta($post_id);
+        
+        $class_name = 'inner-';
+
+        if ($post_meta->sideHasPanels('left')) {
+            $class_name .= 'l';
+        }
+
+        $class_name .= 'c';
+
+        if ($post_meta->sideHasPanels('right')) {
+            $class_name .= 'r';
+        }
+
+        $classes[] = $class_name;
 
         return $classes;
-    }
-
-
-    public function hasLeftSidebar()
-    {
-        return  in_array('l', $this->getTheColumns());
-    }
-
-    public function hasRightSidebar()
-    {
-        return  in_array('r', $this->getTheColumns());
     }
 }

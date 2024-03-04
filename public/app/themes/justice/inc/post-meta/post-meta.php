@@ -45,6 +45,29 @@ class PostMeta
     }
 
     /**
+     * Check if a side has any panels.
+     */
+
+    public function sideHasPanels(string $side = null, string | int $post_id = 0): bool
+    {
+        switch ($side) {
+            case 'left':
+                return $this->hasPanel('menu', $post_id);
+            case 'right':
+                return $this->hasPanel('brand', $post_id)
+                    || $this->hasPanel('search', $post_id)
+                    || $this->hasPanel('email_alerts', $post_id)
+                    || $this->hasPanel('related', $post_id)
+                    || $this->hasPanel('archived', $post_id)
+                    || $this->hasPanel('popular', $post_id)
+                    || $this->hasPanel('other_websites', $post_id);
+            default:
+                // Call recursively.
+                return $this->sideHasPanels('left', $post_id) || $this->sideHasPanels('right', $post_id);
+        }
+    }
+
+    /**
      * Get short title.
      */
 
