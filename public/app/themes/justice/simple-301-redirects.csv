@@ -1,4 +1,5 @@
 request,destination
+/?moj-comment-1/?redirected-theme-assets
 /__data/asset_types/word_doc/icon.png,/app/themes/justice/dist/img/icon/doc.png
 /__data/assets/image/0004/33709/icon_pdf.png,/app/themes/justice/dist/img/icon/pdf.png
 /__data/asset_types/pdf_file/icon.png,/app/themes/justice/dist/img/icon/pdf.png
@@ -31,3 +32,6 @@ request,destination
 /__data/assets/image/0017/980/select-btn.png,/app/themes/justice/dist/img/select-btn.png
 /__data/assets/image/0018/657/social-media.png,/app/themes/justice/dist/img/social-media.png
 /__data/assets/image/0009/504/tab-arrowdown.png,/app/themes/justice/dist/img/tab-arrowdown.png
+/?moj-comment-2/?redirected-pages
+/courts/procedure-rules/other-procedure-rules-for-magistrates-courts-and-the-crown-court,https://www.gov.uk/guidance/updates-on-other-procedure-rules-for-magistrates-courts-and-the-crown-court
+/courts/procedure-rules/criminal,https://www.gov.uk/guidance/announcements-from-the-criminal-procedure-rule-committee
