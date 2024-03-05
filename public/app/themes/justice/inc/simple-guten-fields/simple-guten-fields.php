@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Name:            Simple Guten Fields
  * Description:     Simple Guten Fields is a concept of adding custom fields to Gutenberg editor.
@@ -17,7 +18,7 @@ class SimpleGutenFields
     public function __construct()
     {
         add_action('admin_enqueue_scripts', [$this, 'loadScripts']);
-        add_filter('rest_api_init', [$this, 'metaFields'], 0);
+        add_filter('init', [$this, 'metaFields']);
     }
 
     /**
@@ -28,7 +29,7 @@ class SimpleGutenFields
         $dir = __DIR__;
 
         $script_asset_path = "$dir/../../dist/php/block-editor.asset.php";
-        if (! file_exists($script_asset_path)) {
+        if (!file_exists($script_asset_path)) {
             throw new \Error(
                 'You need to run `npm start` or `npm run build` for the "create-block/simple-guten-fields" block first.'
             );
@@ -53,14 +54,22 @@ class SimpleGutenFields
 
     public function metaFields()
     {
+
+        $sanitize_map = [
+            'string'  => 'rest_sanitize_text',
+            'integer' => 'rest_sanitize_text',
+            'boolean' => 'rest_sanitize_boolean',
+            'array'   => 'rest_sanitize_array',
+            'object'  => 'rest_sanitize_object',
+        ];
+
         $fields_array = apply_filters('sgf_register_fields', []);
         foreach ($fields_array as $field) {
             // Ensure post type exists and field name is valid
-            if (! $field['post_type'] || ! post_type_exists($field['post_type']) || ! $field['meta_key'] || ! is_string($field['meta_key'])) {
+            if (!$field['post_type'] || !post_type_exists($field['post_type']) || !$field['meta_key'] || !is_string($field['meta_key'])) {
                 return;
             }
-    
-    
+
             // Using Null Coalesce Operator to set defaults
             register_post_meta(
                 $field['post_type'],
@@ -75,7 +84,7 @@ class SimpleGutenFields
                     'auth_callback'     => $field['auth_callback'] ?? function () {
                         return current_user_can('edit_posts');
                     },
-                    'sanitize_callback' => $field['sanitize_callback'] ?? 'rest_sanitize_text',
+                    'sanitize_callback' => $field['sanitize_callback'] ?? $sanitize_map[$field['type'] ?? 'string'],
                 ]
             );
         }

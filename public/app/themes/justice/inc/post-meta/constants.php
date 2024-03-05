@@ -112,12 +112,21 @@ class PostMetaConstants
     {
 
         $fields_array[] = [
+            'meta_key'  => '_show_modified_at',
+            'label'     => 'Show updated at',
+            'type'      => 'boolean',
+            'default'   => true,
+            'control'   => 'toggle',
+            'help'      => 'Show updated at date following the content.',
+        ];
+
+        $fields_array[] = [
             'meta_key'  => '_modified_at_override',
             'label'     => 'Modified at (override)',
             'type'      => 'string',
             'control'   => 'datepicker',
             'help'      =>
-            'Optional. An updated date can be set here.' .
+            'Optional. Updated at date can be set here. ' .
                 'Default: Most recent update.'
         ];
 
@@ -161,6 +170,22 @@ class PostMetaConstants
 
     public function panelFields($fields_array)
     {
+
+        $fields_array[] = [
+            'meta_key'      => '_panel_menu',
+            'type'          => 'boolean',
+            'default'       => true,
+            'control'       => 'toggle',
+            'label'         => 'Show menu',
+            'help'          => 'Show the navigation menu on the left hand side.',
+            'conditions'    => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ],
+            ],
+        ];
 
         $fields_array[] = [
             'meta_key'      => '_panel_brand',
@@ -233,7 +258,7 @@ class PostMetaConstants
         $fields_array[] = [
             'meta_key'      => '_panel_popular',
             'type'          => 'boolean',
-            'default'       => true,
+            'default'       => false,
             'control'       => 'toggle',
             'label'         => 'Show most popular panel',
             'conditions'    => [

@@ -1,7 +1,8 @@
 .inline-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  grid-gap: 16px;
+  grid-gap: 1em;
+  margin: 1em 0;
   padding: 0 !important;
   list-style: none !important;
 

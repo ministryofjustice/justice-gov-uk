@@ -2,7 +2,9 @@
 
 import { useBlockProps } from "@wordpress/block-editor";
 import { registerBlockType } from "@wordpress/blocks";
+import { Placeholder, Spinner } from "@wordpress/components";
 import { select, useSelect } from "@wordpress/data";
+import { category } from "@wordpress/icons";
 
 /**
  * This block will render a list of child pages for the current page.
@@ -24,19 +26,33 @@ registerBlockType("moj/inline-menu", {
         });
       }, []);
 
+    if (!childPages)
+      return (
+        <div {...blockProps}>
+          <Spinner />
+        </div>
+      );
+
+    if (!childPages.length)
+      return (
+        <div {...blockProps}>
+          <Placeholder
+            icon={category}
+            label="Inline menu - child pages"
+            instructions={`No child pages were found for this ${postType}.`}
+          />
+        </div>
+      );
+
     return (
       <div {...blockProps}>
-        {!childPages ? (
-          <p>Loading...</p>
-        ) : (
-          <ul>
-            {childPages.map((page) => (
-              <li key={page.id}>
-                <a href={`#${page.slug}`}>{page.title.rendered}</a>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul className="inline-list">
+          {childPages.map((page) => (
+            <li key={page.id}>
+              <a href={`#${page.slug}`}>{page.title.rendered}</a>
+            </li>
+          ))}
+        </ul>
       </div>
     );
   },

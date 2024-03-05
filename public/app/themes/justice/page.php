@@ -51,7 +51,9 @@ $post_meta = new PostMeta();
                     <!-- end/ PAGE CONTENT -->
 
                     <div class="share-this bottom">
-                        <span class="right">Updated: <?php echo $post_meta->getModifiedAt(); ?></span>
+                        <?php if ($post_meta->getMeta('_show_modified_at')) { ?>
+                            <span class="right">Updated: <?php echo $post_meta->getModifiedAt(); ?></span>
+                        <?php } ?>
                     </div>
 
                 </article>
