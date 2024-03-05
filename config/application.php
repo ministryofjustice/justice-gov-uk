@@ -121,6 +121,9 @@ Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 // API key for notifications.service.gov.uk email service
 Config::define('GOV_NOTIFY_API_KEY', env('GOV_NOTIFY_API_KEY') ?? null);
 
+// Define initial preset value for the wp-offload-media plugin.
+Config::define('WP_OFFLOAD_MEDIA_PRESET', false);
+
 // Sentry settings
 Config::define('SENTRY_TRACES_SAMPLE_RATE', 0.3);
 Config::define('SENTRY_PROFILE_SAMPLE_RATE', 0.3);
