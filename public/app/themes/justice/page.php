@@ -45,8 +45,7 @@ $post_meta = new PostMeta();
                     <!-- PAGE CONTENT -->
                     <!-- ------------------------------------ -->
                     <div class="article">
-                        <?= get_the_content() ?>
-
+                        <?php the_content() ?>
                     </div>
                     <!-- ------------------------------------ -->
                     <!-- end/ PAGE CONTENT -->
