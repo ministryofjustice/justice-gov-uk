@@ -11,32 +11,35 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-/** @type { (field: import('../../js/block-editor.d.ts').SimpleGutemField) => boolean} */
-const meetsConditons = (field) => {
+/**
+ * @typedef {import('../../js/block-editor.d.ts').SimpleGutemField} SimpleGutemField
+ * @typedef {import('@wordpress/data/src/types').SelectFunction} SelectFunction
+ */
+
+/** @type {(field: SimpleGutemField, select: SelectFunction) => boolean} */
+const meetsConditons = (field, select) => {
   const { conditions } = field;
   if (!conditions) {
     return true;
   }
-  
+
   return conditions.every((condition) => {
     const { target, operator, value } = condition;
-    const targetArray = target.split('.');
+    const targetArray = target.split(".");
 
-    const postValue = useSelect(
-      (select) => {
-            switch (targetArray[0]) {
-              case "attribute":
-                // @ts-ignore https://github.com/WordPress/gutenberg/pull/46881
-                const attriute = select("core/editor").getEditedPostAttribute(targetArray[1]);
-                // Get a nested property if necessary
-                return targetArray[2] ? attriute[targetArray[2]] : attriute;
-              default:
-                console.warn('Could net get walue for condition target:', target)
-                return null;
-            }
-      },
-      [],
-    );
+    let postValue = undefined;
+
+    switch (targetArray[0]) {
+      case "attribute":
+        // @ts-ignore https://github.com/WordPress/gutenberg/pull/46881
+        const attriute = select("core/editor").getEditedPostAttribute(
+          targetArray[1],
+        );
+        // Get a nested property if necessary
+        postValue = targetArray[2] ? attriute[targetArray[2]] : attriute;
+      default:
+      // console.warn('Could net get value for condition target:', target)
+    }
 
     switch (operator) {
       case "===":
@@ -54,14 +57,16 @@ const CustomFieldsPanel = () => {
 
   let currentCpt = select("core/editor").getCurrentPostType();
 
-  if (!fields.map((field) => field.post_type).includes(currentCpt)) {
-    return null;
-  }
-
   if (fields) {
     fields = fields.filter(
-      (field) => field.post_type == currentCpt && meetsConditons(field),
+      (field) =>
+        field.post_type == currentCpt &&
+        useSelect((select) => meetsConditons(field, select), []),
     );
+  }
+
+  if (!fields.map((field) => field.post_type).includes(currentCpt)) {
+    return null;
   }
 
   let panels = fields

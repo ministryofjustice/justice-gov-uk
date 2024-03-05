@@ -25,6 +25,7 @@
     "devDependencies": {
         "@tinypixelco/laravel-mix-wp-blocks": "1.2.0",
         "@wordpress/babel-preset-default": "^7.36.0",
+        "@wordpress/data": "^9.22.0",
         "@wordpress/dependency-extraction-webpack-plugin": "^5.2.0",
         "@wordpress/icons": "^9.43.0",
         "laravel-mix": "^6.0.49",
@@ -41,6 +42,9 @@
         ],
         "@wordpress/babel-preset-default": [
             "This package was installed by @tinypixelco/laravel-mix-wp-blocks."
+        ],
+        "@wordpress/data": [
+            "This package was installed for types."
         ],
         "react-select": [
             "This package is used in simple-guten-fields for a user friendly multi-select."
