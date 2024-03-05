@@ -15,6 +15,7 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
     require_once 'inc/amazon-s3-and-cloudfront-tweaks-for-minio.php';
 }
 
+require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/debug.php';
 require_once 'inc/dynamic-menu.php';
@@ -31,6 +32,9 @@ if (getenv('WP_ENV') === 'development') {
 
 new Justice\Layout();
 new Justice\SimpleGutenFields();
+
+$block_editor = new Justice\BlockEditor();
+$block_editor->registerHooks();
 
 $post_meta = new Justice\PostMeta();
 $post_meta->registerHooks();

@@ -1,5 +1,5 @@
-import { select, withDispatch, withSelect } from "@wordpress/data";
 import { ToggleControl } from "@wordpress/components";
+import { select, withDispatch, withSelect } from "@wordpress/data";
 
 const ControlField = withSelect((select, props) => {
   const { help, label, meta_key } = props.field;

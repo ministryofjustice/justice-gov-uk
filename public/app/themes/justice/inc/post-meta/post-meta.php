@@ -100,6 +100,6 @@ class PostMeta
 
     public function getMeta(string $meta_key, string | int $post_id = 0, bool $single = true)
     {
-        return get_post_meta($post_id ?: $this->post_id, $meta_key, $single);
+        return get_metadata('post', $post_id ?: $this->post_id, $meta_key, $single);
     }
 }
