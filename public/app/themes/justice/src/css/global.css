@@ -742,7 +742,11 @@ a.button {
     padding: 0 30px;
 }
 
-#highlight article header span {
+
+
+/* Migration edit */
+/* Old */
+/* #highlight article header span {
     float: left;
     color: #3c3c2c;
     font-size: 1.2em;
@@ -757,6 +761,14 @@ a.button {
 }
 #highlight article header .intro p {
     padding: 0
+} */
+
+/* New */
+#highlight article header p {
+    color: #3c3c2c;
+    font-size: 1.42em;
+    line-height: 1.5em;
+    padding: 0;
 }
 
 #highlight .tab-group {
