@@ -2,7 +2,7 @@ import { withSelect, select, withDispatch } from "@wordpress/data";
 import { CheckboxControl } from "@wordpress/components";
 
 const ControlField = withSelect((select, props) => {
-  const { label, meta_key } = props.field;
+  const { help, label, meta_key } = props.field;
   const { row_index, property_key } = props;
   const value = select("core/editor").getEditedPostAttribute("meta")[meta_key];
   const key = meta_key + row_index + property_key;
@@ -15,6 +15,7 @@ const ControlField = withSelect((select, props) => {
     checked: value[row_index][property_key],
     key,
     label,
+    help,
   };
 })(CheckboxControl);
 

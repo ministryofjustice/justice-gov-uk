@@ -29,6 +29,7 @@ if (getenv('WP_ENV') === 'development') {
     $debug->registerHooks();
 }
 
+new Justice\Layout();
 new Justice\SimpleGutenFields();
 
 $post_meta = new Justice\PostMeta();

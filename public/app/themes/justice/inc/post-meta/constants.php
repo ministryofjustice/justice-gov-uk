@@ -20,10 +20,89 @@ class PostMetaConstants
     ];
 
     /**
-     * Meta fields.
+     * Schemas.
+     */
+
+    private $link_schema = [
+        'type'       => 'object',
+        'properties' => [
+            'label' => [
+                'type'      => 'string',
+                'default'   => '',
+            ],
+            'url' => [
+                'type'      => 'string',
+                'default'   => '',
+            ],
+        ],
+    ];
+
+    /**
+     * Navigation fields.
      *
      * Examples of fields are:
      * - `_short_title` for showing in menus
+     * - repeater for appending entries to the dynamic menu
+     */
+
+    public function navigationFields($fields_array)
+    {
+
+        $fields_array[] = [
+            'meta_key'  => '_short_title',
+            'help'      =>
+            'Optional. This is used in breadcrumb & menu navigation.' .
+                'Default: Page title.'
+        ];
+
+        $fields_array[] = [
+            'meta_key'  => '_dynamic_menu_additional',
+            'label'     => 'Append entries to menu.',
+            'type'      => 'boolean',
+            'default'   => false,
+            'control'   => 'toggle',
+            'help'      => 'Do you need custom entries on the left hand side menu?',
+        ];
+
+        $fields_array[] = [
+            'meta_key'      => '_dynamic_menu_additional_entries',
+            'control'      => 'repeater',
+            'type'         => 'array',
+            'default'      => [],
+            'show_in_rest' => [
+                'schema' => [
+                    'items' => $this->link_schema
+                ],
+            ],
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ],
+                [
+                    'target'    => 'attribute.meta._dynamic_menu_additional',
+                    'operator'  => '===',
+                    'value'     => true,
+                ],
+            ],
+        ];
+
+        $fields_array   = array_map(function ($field) {
+            $field['post_type'] = $field['post_type'] ?? 'page';
+            $field['control']   = $field['control'] ?? 'text';
+            $field['panel']     = $field['panel'] ?? 'navigation';
+            $field['label']     = $field['label'] ?? ucfirst(str_replace('_', ' ', $field['meta_key']));
+
+            return $field;
+        }, $fields_array);
+
+        return $fields_array;
+    }
+
+    /**
+     * Meta fields.
+     *
      * - `_modified_at_override` for manual entry of the modified at date.
      * - text fields for managing meta data in the head of the html.
      * - text fields to allow filtering of search results.
@@ -33,27 +112,24 @@ class PostMetaConstants
     {
 
         $fields_array[] = [
-            'meta_key' => '_short_title',
-            'panel'    => 'meta_data',
+            'meta_key'  => '_modified_at_override',
+            'label'     => 'Modified at (override)',
+            'type'      => 'string',
+            'control'   => 'datepicker',
+            'help'      =>
+            'Optional. An updated date can be set here.' .
+                'Default: Most recent update.'
         ];
 
         $fields_array[] = [
-            'meta_key' => '_modified_at_override',
-            'label'    => 'Modified at (override)',
-            'type'     => 'string',
-            'control'  => 'datepicker',
-            'panel'    => 'meta_data',
-        ];
-
-        $fields_array[] = [
-            'single'       => true,
-            'meta_key'     => '_regions',
+            'single'        => true,
+            'meta_key'      => '_regions',
             'label'         => 'Regions',
-            'control'      => 'multiselect',
-            'type'         => 'array',
-            'options'      => $this->values_regions,
-            'panel'    => 'meta_data',
-            'show_in_rest' => [
+            'control'       => 'multiselect',
+            'type'          => 'array',
+            'options'       => $this->values_regions,
+            'help'          => 'Optional. Regions for this content.',
+            'show_in_rest'  => [
                 'schema' => [
                     'type'  => 'array',
                     'items' => [
@@ -66,7 +142,7 @@ class PostMetaConstants
         $fields_array   = array_map(function ($field) {
             $field['post_type'] = $field['post_type'] ?? 'page';
             $field['control']   = $field['control'] ?? 'text';
-            $field['panel']     = $field['panel'] ?? 'custom-fields';
+            $field['panel']     = $field['panel'] ?? 'meta_data';
             $field['label']     = $field['label'] ?? ucfirst(str_replace('_', ' ', $field['meta_key']));
 
             return $field;
@@ -86,48 +162,32 @@ class PostMetaConstants
     public function panelFields($fields_array)
     {
 
-        $link_schema = [
-            'type'       => 'object',
-            'properties' => [
-                'label' => [
-                    'type' => 'string',
-                    'default' => '',
-                ],
-                'url'       => [
-                    'type' => 'string',
-                    'default' => '',
+        $fields_array[] = [
+            'meta_key'      => '_panel_brand',
+            'type'          => 'boolean',
+            'default'       => true,
+            'control'       => 'toggle',
+            'label'         => 'Show brand panel',
+            'conditions'    => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
                 ],
             ],
         ];
 
         $fields_array[] = [
-            'meta_key' => '_panel_brand',
-            'type'     => 'boolean',
-            'default'  => true,
-            'control'  => 'toggle',
-            'label'    => 'Show brand panel',
-            'panel'    => 'panels',
-            'conditions'   => [
+            'meta_key'      => '_panel_search',
+            'type'          => 'boolean',
+            'default'       => false,
+            'control'       => 'toggle',
+            'label'         => 'Show search panel',
+            'conditions'    => [
                 [
-                    'target' => 'attribute.template',
-                    'operator' => '!==',
-                    'value'    => 'page_home.php',
-                ],
-            ],
-        ];
-
-        $fields_array[] = [
-            'meta_key' => '_panel_search',
-            'type'     => 'boolean',
-            'default'  => false,
-            'control'  => 'toggle',
-            'label'    => 'Show search panel',
-            'panel'    => 'panels',
-            'conditions'   => [
-                [
-                    'target' => 'attribute.template',
-                    'operator' => '!==',
-                    'value'    => 'page_home.php',
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
                 ],
             ],
         ];
@@ -138,53 +198,49 @@ class PostMetaConstants
         //     'default'  => false,
         //     'control'  => 'toggle',
         //     'label'    => 'Show email alerts panel',
-        //     'panel'    => 'panels',
         // ];
 
         $fields_array[] = [
-            'meta_key' => '_panel_archived',
-            'type'     => 'boolean',
-            'default'  => false,
-            'control'  => 'toggle',
-            'label'    => 'Show archived panel',
-            'panel'    => 'panels',
-            'conditions'   => [
+            'meta_key'      => '_panel_archived',
+            'type'          => 'boolean',
+            'default'       => false,
+            'control'       => 'toggle',
+            'label'         => 'Show archived panel',
+            'conditions'    => [
                 [
-                    'target' => 'attribute.template',
-                    'operator' => '!==',
-                    'value'    => 'page_home.php',
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
                 ],
             ],
         ];
 
         $fields_array[] = [
-            'meta_key' => '_panel_related',
-            'type'     => 'boolean',
-            'default'  => false,
-            'control'  => 'toggle',
-            'label'    => 'Show related pages panel',
-            'panel'    => 'panels',
-            'conditions'   => [
+            'meta_key'      => '_panel_related',
+            'type'          => 'boolean',
+            'default'       => false,
+            'control'       => 'toggle',
+            'label'         => 'Show related pages panel',
+            'conditions'    => [
                 [
-                    'target' => 'attribute.template',
-                    'operator' => '!==',
-                    'value'    => 'page_home.php',
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
                 ],
             ],
         ];
 
         $fields_array[] = [
-            'meta_key' => '_panel_popular',
-            'type'     => 'boolean',
-            'default'  => true,
-            'control'  => 'toggle',
-            'label'    => 'Show most popular panel',
-            'panel'    => 'panels',
-            'conditions'   => [
+            'meta_key'      => '_panel_popular',
+            'type'          => 'boolean',
+            'default'       => true,
+            'control'       => 'toggle',
+            'label'         => 'Show most popular panel',
+            'conditions'    => [
                 [
-                    'target' => 'attribute.template',
-                    'operator' => '===',
-                    'value'    => 'page_home.php',
+                    'target'    => 'attribute.template',
+                    'operator'  => '===',
+                    'value'     => 'page_home.php',
                 ],
             ],
         ];
@@ -195,38 +251,36 @@ class PostMetaConstants
             'control'      => 'repeater',
             'type'         => 'array',
             'default'      => [],
-            'panel'        => 'panels',
-            'conditions'   => [
-                [
-                    'target' => 'attribute.template',
-                    'operator' => '!==',
-                    'value'    => 'page_home.php',
-                ],
-                [
-                    'target' => 'attribute.meta._panel_related',
-                    'operator' => '===',
-                    'value'    => true,
-                ],
-            ],
             'show_in_rest' => [
                 'schema' => [
-                    'items' => $link_schema
+                    'items' => $this->link_schema
+                ],
+            ],
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ],
+                [
+                    'target'    => 'attribute.meta._panel_related',
+                    'operator'  => '===',
+                    'value'     => true,
                 ],
             ],
         ];
 
         $fields_array[] = [
-            'meta_key' => '_panel_other_websites',
-            'type'     => 'boolean',
-            'default'  => false,
-            'control'  => 'toggle',
-            'label'    => 'Show other websites panel',
-            'panel'    => 'panels',
-            'conditions'   => [
+            'meta_key'      => '_panel_other_websites',
+            'type'          => 'boolean',
+            'default'       => false,
+            'control'       => 'toggle',
+            'label'         => 'Show other websites panel',
+            'conditions'    => [
                 [
-                    'target' => 'attribute.template',
-                    'operator' => '!==',
-                    'value'    => 'page_home.php',
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
                 ],
             ],
         ];
@@ -237,22 +291,21 @@ class PostMetaConstants
             'control'      => 'repeater',
             'type'         => 'array',
             'default'      => [],
-            'panel'        => 'panels',
-            'conditions'   => [
-                [
-                    'target' => 'attribute.template',
-                    'operator' => '!==',
-                    'value'    => 'page_home.php',
-                ],
-                [
-                    'target' => 'attribute.meta._panel_other_websites',
-                    'operator' => '===',
-                    'value'    => true,
-                ],
-            ],
             'show_in_rest' => [
                 'schema' => [
-                    'items' => $link_schema
+                    'items' => $this->link_schema
+                ],
+            ],
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ],
+                [
+                    'target'    => 'attribute.meta._panel_other_websites',
+                    'operator'  => '===',
+                    'value'     => true,
                 ],
             ],
         ];
@@ -260,7 +313,7 @@ class PostMetaConstants
         $fields_array   = array_map(function ($field) {
             $field['post_type'] = $field['post_type'] ?? 'page';
             $field['control']   = $field['control'] ?? 'text';
-            $field['panel']     = $field['panel'] ?? 'custom-fields';
+            $field['panel']     = $field['panel'] ?? 'panels';
             $field['label']     = $field['label'] ?? ucfirst(str_replace('_', ' ', $field['meta_key']));
 
             return $field;

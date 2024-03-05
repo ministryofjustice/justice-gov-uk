@@ -1,25 +1,35 @@
-import { select, withDispatch, withSelect } from "@wordpress/data";
-import { TextareaControl } from "@wordpress/components";
+// @ts-check
+import { withSelect, select, withDispatch } from "@wordpress/data";
 
+const SandboxComponent = () => {
+  return <p>In SandboxComponent</p>;
+};
+
+// @ts-ignore
 const ControlField = withSelect((select, props) => {
   const { help, label, meta_key } = props.field;
   const { row_index, property_key } = props;
   const value = select("core/editor").getEditedPostAttribute("meta")[meta_key];
   const key = meta_key + row_index + property_key;
-  const rows = 20;
+
   if (typeof row_index === "undefined") {
-    return { value, key, rows, label: `Set ${label}`, help };
+    return { value, key, label: `Set ${label}`, help };
   }
 
+  const defaultValue = props.field.default || "";
+
   return {
-    value: value[row_index][property_key],
+    value:
+      typeof value[row_index][property_key] !== "undefined"
+        ? value[row_index][property_key]
+        : defaultValue,
     key,
-    rows,
     label: `Set ${property_key.replace("_", " ")}`,
     help,
   };
-})(TextareaControl);
+})(SandboxComponent);
 
+// @ts-ignore
 export default withDispatch((dispatch, props) => {
   const { meta_key } = props.field;
   const { row_index, property_key } = props;

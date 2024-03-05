@@ -5,10 +5,7 @@
  * Template Post Type: page
  */
 
-use MOJ\Justice\Layout;
 use MOJ\Justice\PostMeta;
-
-$layout = new Layout();
 
 get_header();
 
@@ -19,7 +16,7 @@ $post_meta = new PostMeta();
     <main role="main" id="content-wrapper">
         <div class="container-wrapper">
 
-            <?php if ($layout->hasLeftSidebar()) { ?>
+            <?php if ($post_meta->sideHasPanels('left')) { ?>
                 <div id="content-left">
                     <?php get_sidebar(); ?>
                 </div>
@@ -27,7 +24,6 @@ $post_meta = new PostMeta();
 
             <div id="content">
 
-                
                 <?php get_template_part('template-parts/nav/breadcrumbs'); ?>
 
                 <div class="device-only">
@@ -62,7 +58,7 @@ $post_meta = new PostMeta();
                 </article>
             </div>
 
-            <?php if ($layout->hasRightSidebar()) { ?>
+            <?php if ($post_meta->sideHasPanels('right')) { ?>
                 <div id="content-right">
                     <?php get_sidebar('right'); ?>
                 </div>
@@ -72,4 +68,5 @@ $post_meta = new PostMeta();
     </main>
 
 <?php
+
 get_footer();

@@ -1,5 +1,5 @@
 import { withSelect, select, withDispatch } from "@wordpress/data";
-import { ColorPicker } from "@wordpress/components";
+import { BaseControl, ColorPicker } from "@wordpress/components";
 
 import { withState } from "@wordpress/compose";
 

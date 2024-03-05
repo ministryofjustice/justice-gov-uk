@@ -19,15 +19,15 @@ class DynamicMenu
         $entries = [];
 
         $post_meta = new PostMeta();
-    
+
         // Parent page(s)
         if ($post->post_parent) {
             // If child page, get parents
             $ancestor_ids = get_post_ancestors($post->ID);
-                        
+
             // Get parents in the right order
             $ancestor_ids = array_reverse($ancestor_ids);
-                    
+
             // Parent page loop
             foreach ($ancestor_ids as $ancestor_id) {
                 $entries[] = [
@@ -37,7 +37,7 @@ class DynamicMenu
                 ];
             }
         }
-        
+
         // Current page
         $entries[] = [
             'level' => 1,
@@ -46,20 +46,20 @@ class DynamicMenu
             // Only use the selected property on the sidebar.
             'selected' => $location === 'sidebar'
         ];
-        
+
         // On mobile duplicate the first entry (with some changes).
         if ('mobile-nav' === $location) {
-             $first_entry = array_merge($entries[0], [
+            $first_entry = array_merge($entries[0], [
                 'level' => 0,
                 'url' => null,
-             ]);
+            ]);
 
             array_unshift($entries, $first_entry);
         }
 
         // Child pages
         $children = get_pages('parent=' . $post->ID . '&sort_column=menu_order');
-        
+
         // Child page loop
         if ($children) {
             foreach ($children as $child) {
@@ -70,7 +70,19 @@ class DynamicMenu
                 ];
             }
         }
-        
+
+        $additional_entries = get_post_meta($post->ID, '_dynamic_menu_additional_entries', true);
+
+        if (!empty($additional_entries)) {
+            foreach ($additional_entries as $entry) {
+                $entries[] = [
+                    'level' => 2,
+                    'title' => $entry['label'],
+                    'url' => $entry['url']
+                ];
+            }
+        }
+
         return $entries;
     }
 }

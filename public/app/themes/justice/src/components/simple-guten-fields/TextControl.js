@@ -4,13 +4,13 @@ import { withSelect, select, withDispatch } from "@wordpress/data";
 
 // @ts-ignore
 const ControlField = withSelect((select, props) => {
-  const { label, meta_key } = props.field;
+  const { help, label, meta_key } = props.field;
   const { row_index, property_key } = props;
   const value = select("core/editor").getEditedPostAttribute("meta")[meta_key];
   const key = meta_key + row_index + property_key;
 
   if (typeof row_index === "undefined") {
-    return { value, key, label: `Set ${label}` };
+    return { value, key, label: `Set ${label}`, help };
   }
 
   const defaultValue = props.field.default || "";
@@ -22,6 +22,7 @@ const ControlField = withSelect((select, props) => {
         : defaultValue,
     key,
     label: `Set ${property_key.replace("_", " ")}`,
+    help, 
   };
 })(TextControl);
 

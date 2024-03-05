@@ -5,6 +5,7 @@ import MediaUpload from "./MediaUpload";
 import Multiselect from "./Mulitselect";
 import PageField from "./PageControl/panel.js";
 import RepeaterControl from "./RepeaterControl";
+import SandboxField from "./SandboxControl";
 import SelectControlComponent from "./SelectControl";
 import TextField from "./TextControl";
 import TextareaField from "./TextareaControl";
@@ -18,6 +19,7 @@ const controlsIndex = {
   multiselect: Multiselect,
   page: PageField,
   repeater: RepeaterControl,
+  sandbox: SandboxField,
   select: SelectControlComponent,
   text: TextField,
   textarea: TextareaField,
