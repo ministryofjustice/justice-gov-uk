@@ -13,6 +13,7 @@ mix
     .css('src/css/media.queries.css', 'dist/css/')
     .css('src/css/editor-style.css', 'dist/css/')
     .css('src/css/wp-admin-override.css', 'dist/css/')
+    .copy('dist/*.asset.php', 'dist/php')
     .options({ processCssUrls: false })
 
 if (mix.inProduction()) {
