@@ -31,16 +31,16 @@ class Comments
     {
 
         // Admin actions.
-        add_action('admin_init', array($this, 'disable_comments_post_types_support'));
-        add_action('admin_init', array($this, 'disable_comments_dashboard'));
-        add_action('admin_init', array($this, 'disable_comments_admin_menu_redirect'));
-        add_action('admin_menu', array($this, 'disable_comments_admin_menu'));
-        add_action('wp_before_admin_bar_render', array($this, 'admin_bar_render'));
+        add_action('admin_init', array($this, 'removePostTypesSupport'));
+        add_action('admin_init', array($this, 'removeCommentsMetaBox'));
+        add_action('admin_init', array($this, 'adminPagesRedirect'));
+        add_action('admin_menu', array($this, 'removeAdminMenus'));
+        add_action('wp_before_admin_bar_render', array($this, 'adminBarRender'));
         add_filter('the_comments', '__return_empty_array');
         add_filter('feed_links_show_comments_feed', '__return_false');
         
         // Frontend.
-        add_action('init', array($this, 'disable_comments_admin_bar'));
+        add_action('init', array($this, 'removeMenuFromAdminBar'));
         add_filter('get_comments_number', '__return_zero');
 
         // Close comments on the front-end.
@@ -52,7 +52,7 @@ class Comments
     }
 
     /** Disable support for comments and trackbacks in post types. */
-    public function disable_comments_post_types_support()
+    public function removePostTypesSupport()
     {
         $post_types = get_post_types();
         foreach ($post_types as $post_type) {
@@ -64,14 +64,14 @@ class Comments
     }
 
     /** Remove comments page in menu. */
-    public function disable_comments_admin_menu()
+    public function removeAdminMenus()
     {
         remove_menu_page('edit-comments.php');
         remove_submenu_page('options-general.php', 'options-discussion.php');
     }
 
     /** Redirect any user trying to access comments page. */
-    public function disable_comments_admin_menu_redirect()
+    public function adminPagesRedirect()
     {
         global $pagenow;
         if (in_array($pagenow, ['edit-comments.php','options-discussion.php' ])) {
@@ -81,14 +81,14 @@ class Comments
     }
 
 
-    /** Remove comments metabox from dashboard. */
-    public function disable_comments_dashboard()
+    /** Remove comments meta box from dashboard. */
+    public function removeCommentsMetaBox()
     {
         remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
     }
 
     /**  Remove comments links from admin bar. */
-    public function disable_comments_admin_bar()
+    public function removeMenuFromAdminBar()
     {
         if (is_admin_bar_showing()) {
             remove_action('admin_bar_menu', 'wp_admin_bar_comments_menu', 60);
@@ -96,7 +96,7 @@ class Comments
     }
 
     /**  Remove comments links from admin bar. */
-    public function admin_bar_render()
+    public function adminBarRender()
     {
         global $wp_admin_bar;
         $wp_admin_bar->remove_menu('comments');
