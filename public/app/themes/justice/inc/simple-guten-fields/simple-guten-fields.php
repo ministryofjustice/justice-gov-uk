@@ -18,6 +18,7 @@ class SimpleGutenFields
     public function __construct()
     {
         add_action('admin_enqueue_scripts', [$this, 'loadScripts']);
+        // Use init hook to ensure default values are available via get_metadata.
         add_filter('init', [$this, 'metaFields']);
     }
 
