@@ -112,7 +112,7 @@ class PostMetaConstants
     {
 
         $fields_array[] = [
-            'meta_key'  => '_show_modified_at',
+            'meta_key'  => '_show_updated_at',
             'label'     => 'Show updated at',
             'type'      => 'boolean',
             'default'   => true,
