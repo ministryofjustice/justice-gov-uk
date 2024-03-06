@@ -25,6 +25,7 @@ require_once 'inc/layout.php';
 require_once 'inc/mail.php';
 require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
+require_once 'inc/taxonomies.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();
@@ -41,6 +42,8 @@ $block_editor->registerHooks();
 $post_meta = new Justice\PostMeta();
 $post_meta->registerHooks();
 
+$taxonomies = new Justice\Taxonomies();
+$taxonomies->registerHooks();
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 
