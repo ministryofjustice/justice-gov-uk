@@ -45,14 +45,15 @@ $post_meta = new PostMeta();
                     <!-- PAGE CONTENT -->
                     <!-- ------------------------------------ -->
                     <div class="article">
-                        <?= get_the_content() ?>
-
+                        <?php the_content() ?>
                     </div>
                     <!-- ------------------------------------ -->
                     <!-- end/ PAGE CONTENT -->
 
                     <div class="share-this bottom">
-                        <span class="right">Updated: <?php echo $post_meta->getModifiedAt(); ?></span>
+                        <?php if ($post_meta->getMeta('_show_updated_at')) { ?>
+                            <span class="right">Updated: <?php echo $post_meta->getModifiedAt(); ?></span>
+                        <?php } ?>
                     </div>
 
                 </article>
