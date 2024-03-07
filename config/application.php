@@ -129,6 +129,16 @@ Config::define('DISALLOW_FILE_MODS', true);
 // Limit the number of post revisions
 Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 
+// API key for notifications.service.gov.uk email service
+Config::define('GOV_NOTIFY_API_KEY', env('GOV_NOTIFY_API_KEY') ?? null);
+
+// Define initial preset value for the wp-offload-media plugin.
+Config::define('WP_OFFLOAD_MEDIA_PRESET', false);
+
+// Sentry settings
+Config::define('SENTRY_TRACES_SAMPLE_RATE', 0.3);
+Config::define('SENTRY_PROFILE_SAMPLE_RATE', 0.3);
+
 /**
  * Debugging Settings
  */
@@ -145,29 +155,38 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
     $_SERVER['HTTPS'] = 'on';
 }
 
+/**
+ * WP Offload Media settings
+ */
+
+// By not setting AS3CF_SETTINGS here, we can use the plugin GUI to configure the settings during debugging.
+if (file_exists(__DIR__ . '/wp-offload-media.php')) {
+    require_once __DIR__ . '/wp-offload-media.php';
+}
+
+/**
+ * Environment-specific settings
+ */
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 
 if (file_exists($env_config)) {
     require_once $env_config;
 }
 
-// S3 media upload plugin settings
-$as3_settings = ['provider' => 'aws', 'use-server-roles' => true];
-
-/**
- * if we have an access key overwrite default configuration
- */
-if (env('AWS_ACCESS_KEY_ID')) {
-    $as3_settings = [
-        'provider' => 'aws',
-        'access-key-id' => env('AWS_ACCESS_KEY_ID'),
-        'secret-access-key' => env('AWS_SECRET_ACCESS_KEY')
-    ];
-}
-Config::define('AS3CF_SETTINGS', serialize($as3_settings));
-
 
 Config::apply();
+
+/**
+ * Initialise Sentry
+ */
+if (env('SENTRY_DSN')) {
+    Sentry\init([
+        'dsn' => env('SENTRY_DSN'),
+        'environment'=> WP_ENV . (env('SENTRY_DEV_ID') ?? ''),
+        'traces_sample_rate' => Config::get('SENTRY_TRACES_SAMPLE_RATE'),
+        'profiles_sample_rate' => Config::get('SENTRY_PROFILE_SAMPLE_RATE')
+    ]);
+}
 
 /**
  * Bootstrap WordPress

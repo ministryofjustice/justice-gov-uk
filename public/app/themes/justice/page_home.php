@@ -4,9 +4,9 @@
  * Template name: Home
  * Template Post Type: page
  */
-$post_id = get_the_ID();
 
 get_header();
+
 ?>
 
     <div id="highlight-wrapper">
@@ -16,17 +16,19 @@ get_header();
                     <!-- PAGE CONTENT -->
                     <!-- ------------------------------------ -->
                     <article>
-                        <a><img src="/app/uploads/2023/11/scales-of-justice.jpeg" alt="Scales of justice" width="474" height="285" /></a>
+                        <a>
+                            <img src="<?php echo get_template_directory_uri() ?>/dist/img/scales-of-justice.jpg" alt="Scales of justice" width="474" height="285" />
+                        </a>
                         <header>
-                            <h1 class="title"><?php the_title(); ?></h1>
-                            <span class="intro">
-                                <?php the_content() ?>
-                            </span>
+                            <?php the_content() ?>
                         </header>
                     </article>
                     <!-- ------------------------------------ -->
                     <!-- end/ PAGE CONTENT -->
                 </div>
+
+                <?php get_sidebar('right'); ?>
+
             </div>
         </div>
     </div>

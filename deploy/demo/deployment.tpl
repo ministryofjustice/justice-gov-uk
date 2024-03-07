@@ -23,19 +23,13 @@ spec:
       volumes:
         - name: uploads
           emptyDir: { }
-        - name: nginx-cache
-          emptyDir: { }
       terminationGracePeriodSeconds: 35
+      serviceAccountName: ${KUBE_NAMESPACE}-service
       containers:
         - name: nginx
-          image: justice-nginx:latest
-          imagePullPolicy: Never
-          resources: { }
+          image: ${ECR_URL}:${IMAGE_TAG_NGINX}
           ports:
             - containerPort: 8080
-          volumeMounts:
-            - name: nginx-cache
-              mountPath: /var/run/nginx-cache
         - name: fpm
           image: ${ECR_URL}:${IMAGE_TAG_FPM}
           ports:

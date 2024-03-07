@@ -94,6 +94,14 @@ composer install
 **Node**<br>
 This service watches and compiles our assets, no need to access. The output of this service is available on STDOUT.
 
+When working with JS files in the `src` directory it can be useful to develop from inside the node container. 
+Using a *devcontainer* will allow the editor to have access to the `node_modules` directory, which is good for intellisense and type-safety.
+When using a devcontainer, first start the required services with `make` and then open the project in the devcontainer. 
+Be sure to keep an eye on the node container's terminal output for any laravel mix errors.
+
+The folder `src/components` is used for when it makes sense to keep a group of scss/js/php files together.
+The folder `src/components/post-meta` is an example where php is required to register fields in the backend, and js is used to register fields in the frontend.
+
 **MariaDB**<br>
 Internally accessed by PHP-FPM on port 3306
 
@@ -268,6 +276,63 @@ wp plugin activate --all
 
 mysqldump --host="mariadb" --user="mysql" --password="mysql" justice > spec/Support/Data/dump.sql
 ```
+## AWS setup
+
+### S3
+
+Create a bucket with the following settings:
+
+- Region: `eu-west-2`
+- Object Ownership: 
+   - ACLs enabled
+   - Bucket owner preferred
+- Block all public access:
+  - Block public access to buckets and objects granted through new access control lists (ACLs): NO
+  - Block public access to buckets and objects granted through any access control lists (ACLs): YES
+  - Block public access to buckets and objects granted through new public bucket or access point policies: YES
+  - Block public and cross-account access to buckets and objects through any public bucket or access point policies: YES
+
+### CloudFront
+
+Create a deployment with the following settings:
+
+- Cache key and origin requests
+    - Legacy cache settings
+       - Query strings: All
+
+To restrict access to the Amazon S3 bucket follow the guide to implement origin access control (OAC) 
+https://repost.aws/knowledge-center/cloudfront-access-to-amazon-s3
+
+### IAM
+
+For using u user's keys, create a user with a policy similar to the following:
+
+```json
+{
+  "Sid": "s3-bucket-access",
+  "Effect": "Allow",
+  "Action": "s3:*",
+  "Resource": "arn:aws:s3:::bucket-name"
+}
+```
+
+An access key can then be used for testing actions related to the S3 bucket, use env vars:
+
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
+
+When deployed, server-roles should be used.
+
+### Verify WP Offload Media
+
+To verify that S3 & CloudFront are working correctly.
+
+- Go to WP Offload Media Lite settings page. There should be green checks for Storage & Delivery settings.
+- Upload an image via Media Library.
+- Image should be shown correctly in the Media Library.
+- The img source domain should be CloudFront.
+- Directly trying to access an image via the S3 bucket url should return an access denied message.
+
 
 <!-- License badge -->
 

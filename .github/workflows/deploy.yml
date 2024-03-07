@@ -6,77 +6,30 @@ on:
       environment:
         required: true
         type: string
+      registry:
+        required: true
+        type: string
 
 jobs:
-  image_build:
-    name: "Build"
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    outputs:
-      registry: ${{ steps.ecr-login.outputs.registry }}
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: "Prepare variable names"
-        run: |
-          area="${{ inputs.environment }}_ECR_REGION"
-          role="${{ inputs.environment }}_ECR_ROLE_TO_ASSUME"
-          repo="${{ inputs.environment }}_ECR_REPOSITORY"
-
-          {
-            echo "REGION=${area^^}";
-            echo "ROLE_TO_ASSUME=${role^^}"
-            echo "REPOSITORY=${repo^^}"
-          } >> "$GITHUB_ENV"
-
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-      - name: "Configuring AWS credentials"
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets[ env.ROLE_TO_ASSUME ] }}
-          aws-region: ${{ vars[ env.REGION ] }}
-
-      - name: "Logging into ECR"
-        uses: aws-actions/amazon-ecr-login@v2
-        id: ecr-login
-
-      - name: "Build & Push to ECR"
-        run: |
-          docker image build -t $REGISTRY/$CP_REPOSITORY:fpm-$IMAGE_TAG --target build-fpm .
-          docker image build -t $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG --target build-nginx .
-          docker push $REGISTRY/$CP_REPOSITORY:fpm-$IMAGE_TAG
-          docker push $REGISTRY/$CP_REPOSITORY:nginx-$IMAGE_TAG
-        env:
-          REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-          CP_REPOSITORY: ${{ vars[ env.REPOSITORY ] }}
-          IMAGE_TAG: ${{ github.sha }}
-
   deploy_environment:
     name: "Deploy"
     runs-on: ubuntu-latest
-    needs: image_build
     environment: ${{ inputs.environment }}
     env:
       KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
 
     steps:
-      - name: "Prepare dynamic repository name"
-        run: |
-          repo="${{ inputs.environment }}_ECR_REPOSITORY"
-          echo "REPOSITORY=${repo^^}" >> "$GITHUB_ENV"
-
       - name: "Checkout"
         uses: actions/checkout@v4
 
       - name: "Inject environment variables"
         env:
           TPL_PATH: "deploy/${{ inputs.environment }}"
-          ECR_URL: ${{ needs.image_build.outputs.registry }}/${{ vars[ env.REPOSITORY ] }}
+          ECR_URL: ${{ inputs.registry }}/${{ vars.PRODUCTION_ECR_REPOSITORY }}
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
+          GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           AUTH_KEY: ${{ secrets.AUTH_KEY }}
           AUTH_SALT: ${{ secrets.AUTH_SALT }}
           LOGGED_IN_KEY: ${{ secrets.LOGGED_IN_KEY }}
@@ -85,7 +38,6 @@ jobs:
           NONCE_SALT: ${{ secrets.NONCE_SALT }}
           SECURE_AUTH_KEY: ${{ secrets.SECURE_AUTH_KEY }}
           SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
-          GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
         run: |
           cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
           cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml

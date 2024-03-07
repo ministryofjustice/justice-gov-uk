@@ -22,11 +22,32 @@
         "url": "https://github.com/ministryofjustice/justice-gov-uk/issues"
     },
     "homepage": "https://github.com/ministryofjustice/justice-gov-uk#readme",
-    "dependencies": {
-    },
     "devDependencies": {
+        "@tinypixelco/laravel-mix-wp-blocks": "1.2.0",
+        "@wordpress/babel-preset-default": "^7.36.0",
+        "@wordpress/data": "^9.22.0",
+        "@wordpress/dependency-extraction-webpack-plugin": "^5.2.0",
+        "@wordpress/icons": "^9.43.0",
         "laravel-mix": "^6.0.49",
+        "react-select": "^5.8.0",
         "sass": "^1.66.1",
         "sass-loader": "^12.6.0"
+    },
+    "devDependenciesComments": {
+        "@tinypixelco/laravel-mix-wp-blocks": [
+            "This package is used to compile WordPress blocks using Laravel Mix.",
+            "It allows us to import from @wordpress packages and generates a php manifest file.",
+            "But, it deosn't work with @wordpress/icons, because they aren't available in the browser's global wp object.",
+            "It's pinned to a version that has been reviewed via npmjs.com web view."
+        ],
+        "@wordpress/babel-preset-default": [
+            "This package was installed by @tinypixelco/laravel-mix-wp-blocks."
+        ],
+        "@wordpress/data": [
+            "This package was installed for types."
+        ],
+        "react-select": [
+            "This package is used in simple-guten-fields for a user friendly multi-select."
+        ]
     }
 }

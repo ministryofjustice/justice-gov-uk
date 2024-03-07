@@ -1,0 +1,18 @@
+.moj-panel {
+    position: fixed;
+    bottom: 0;
+    padding: 8px;
+    max-height: 50%;
+    max-width: 300px;
+    overflow: auto;
+    opacity: 0.7;
+    background-color: #ffffff;
+
+    &--code {
+        left: 0;
+    }
+
+    &--info {
+        right: 0;
+    }
+}

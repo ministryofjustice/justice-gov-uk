@@ -12,6 +12,10 @@
         {
             "name": "Damien Wilson",
             "homepage": "https://github.com/wilson1000-MoJ"
+        },
+        {
+            "name": "Davey Brown",
+            "homepage": "https://github.com/earthlingdavey"
         }
     ],
     "keywords": [
@@ -36,7 +40,7 @@
     "require": {
         "php": ">=8.2",
         "alphagov/notifications-php-client": "^5.0",
-        "composer/installers": "^2.2",
+        "composer/installers": "^2.2.0",
         "vlucas/phpdotenv": "^5.5",
         "oscarotero/env": "^2.1",
         "roots/bedrock-autoloader": "^1.0",
@@ -54,7 +58,8 @@
         "ext-mysqli": "*",
         "wp-cli/wp-cli-bundle": "*",
         "wpackagist-plugin/query-monitor": "*",
-        "wpackagist-plugin/debug-bar": "*"
+        "wpackagist-plugin/debug-bar": "*",
+        "sentry/sentry": "^3.22"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7.1",

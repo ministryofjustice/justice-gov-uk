@@ -43,12 +43,44 @@
                 <a href="/" accesskey="1">Home</a><a href="#skip_nav" style="display:none;" accesskey="s">&nbsp;</a>
             </div>
             <?php
-            wp_nav_menu([
-                'theme_location' => 'header-menu',
-                'container' => 'nav',
-                'container_class' => 'menu-top'
-            ]);
+            // TODO: replace hardcoded menu with dynamic menu.
+            // wp_nav_menu([
+            //     'theme_location' => 'header-menu',
+            //     'container' => 'nav',
+            //     'container_class' => 'menu-top',
+            //     'fallback_cb' => false
+            // ]);
+
+            $menu_items = [
+                [
+                    'title' => 'Courts',
+                    'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
+                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/courts') . "'])"
+                ],
+                [
+                    'title' => 'Procedure rules',
+                    'url' => home_url('/courts/procedure-rules'),
+                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/procedure-rules') . "'])",
+                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules'))
+                ],
+                [
+                    'title' => 'Offenders',
+                    'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
+                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/offenders') . "'])"
+                ]
+            ];
             ?>
+            <nav>             
+                <ul class="menu-top">
+                    <?php foreach ($menu_items as $item) : ?>
+                        <li <?php echo !empty($item['active']) ? 'class="active"' : '' ?>>
+                            <a href="<?php echo $item['url']; ?>" onclick="<?php echo $item['onclick']; ?>"><?php echo $item['title']; ?></a>
+                            <div class="finish"></div>
+                            <span></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </nav>
             <div id="search-top">
                 <form action="/">
                     <label for="searchbox-top">Search</label>
