@@ -29,15 +29,15 @@ class DynamicMenu
     {
 
         $tag_ids = array_map(
-            function($slug): int | null {
+            function ($slug) : int | null {
                 // Map the slug to id.
                 $term = get_term_by('slug', $slug, 'post_tag');
                 return $term ? $term->term_id : null;
             },
             $this->excluded_child_pages_tags
-         );
+        );
 
-         return array_filter( $tag_ids, fn($id) => $id !== null );
+        return array_filter($tag_ids, fn($id) => $id !== null);
     }
 
     /**
