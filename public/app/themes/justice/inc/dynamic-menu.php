@@ -9,6 +9,13 @@ if (!defined('ABSPATH')) {
 class DynamicMenu
 {
 
+    private $hidden_child_pages_tags = [
+        'frontmatter-collection',
+        'backmatter-collection',
+        'parts-collection',
+        'content-collection'
+    ];
+
     /**
      * Get the entries as an array
      */
@@ -57,20 +64,36 @@ class DynamicMenu
             array_unshift($entries, $first_entry);
         }
 
-        // Child pages
-        $children = get_pages('parent=' . $post->ID . '&sort_column=menu_order');
+        $query_args = array(
+            'order'  => 'ASC',
+            'orderby' => 'menu_order',
+            'post_parent' => $post->ID,
+            'post_type'   => 'page',
+            'tax_query'   => array(
+                array(
+                    'taxonomy' => 'post_tag',
+                    'field' => 'slug',
+                    'operator' => 'NOT IN',
+                    'terms' => $this->hidden_child_pages_tags,
+                ),
+            ),
+        );
 
-        // Child page loop
-        if ($children) {
-            foreach ($children as $child) {
-                $entries[] = [
-                    'level' => 2,
-                    'title' => $post_meta->getShortTitle($child->ID),
-                    'url' => get_permalink($child->ID)
-                ];
-            }
+        // Child pages
+        $the_query = new \WP_Query($query_args);
+        $posts = $the_query->get_posts();
+
+        foreach ($posts as $post) {
+            $entries[] = [
+                'level' => 2,
+                'title' => $post_meta->getShortTitle($post->ID),
+                'url' => get_permalink($post->ID)
+            ];
         }
 
+        wp_reset_postdata();
+
+        // Additional entries
         $additional_entries = get_post_meta($post->ID, '_dynamic_menu_additional_entries', true);
 
         if (!empty($additional_entries)) {
