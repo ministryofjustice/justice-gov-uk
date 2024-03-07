@@ -62,6 +62,13 @@ class PostMetaConstants
             'default'   => false,
             'control'   => 'toggle',
             'help'      => 'Do you need custom entries on the left hand side menu?',
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ]
+            ],
         ];
 
         $fields_array[] = [
@@ -84,6 +91,27 @@ class PostMetaConstants
                     'target'    => 'attribute.meta._dynamic_menu_additional',
                     'operator'  => '===',
                     'value'     => true,
+                ],
+            ],
+        ];
+
+        $fields_array[] = [
+            'meta_key'  => '_dynamic_menu_exclude_this',
+            'label'     => "Exclude this page from it's parent's menu.",
+            'type'      => 'boolean',
+            'default'   => false,
+            'control'   => 'toggle',
+            'help'      => "Do you want this page to be hidden from it's parent's left hand side menu?",
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ],
+                [
+                    'target'    => 'attribute.tags',
+                    'operator'  => 'NOT INTERSECTS',
+                    'value'     => (new DynamicMenu())->getExcludedChildPagesTags(),
                 ],
             ],
         ];
@@ -118,6 +146,13 @@ class PostMetaConstants
             'default'   => true,
             'control'   => 'toggle',
             'help'      => 'Show updated at date following the content.',
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ]
+            ],
         ];
 
         $fields_array[] = [
@@ -127,7 +162,14 @@ class PostMetaConstants
             'control'   => 'datepicker',
             'help'      =>
             'Optional. Updated at date can be set here. ' .
-                'Default: Most recent update.'
+                'Default: Most recent update.',
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ]
+            ],
         ];
 
         $fields_array[] = [
@@ -145,7 +187,14 @@ class PostMetaConstants
                         'type' => 'number'
                     ],
                 ],
-            ]
+            ],
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ]
+            ],
         ];
 
         $fields_array   = array_map(function ($field) {
