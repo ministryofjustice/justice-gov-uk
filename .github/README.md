@@ -276,6 +276,7 @@ wp plugin activate --all
 
 mysqldump --host="mariadb" --user="mysql" --password="mysql" justice > spec/Support/Data/dump.sql
 ```
+
 ## AWS setup
 
 ### S3
