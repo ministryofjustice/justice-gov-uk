@@ -6,7 +6,7 @@ export interface SimpleGutemField {
   default: any
   conditions: {
     target: string
-    operator: '===' | '!=='
+    operator: '===' | '!==' | 'INTERSECTS' | 'NOT INTERSECTS'
     value: string
   }[]
 }
