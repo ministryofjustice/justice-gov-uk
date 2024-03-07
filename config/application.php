@@ -85,9 +85,9 @@ Config::define('DB_COLLATE', '');
 
 
 // If the request origin is from a test suite, use the test database.
-$is_test_request = ( isset( $_SERVER['HTTP_X_TEST_REQUEST'] ) && $_SERVER['HTTP_X_TEST_REQUEST'] )
-|| ( isset( $_SERVER['HTTP_USER_AGENT'] ) && $_SERVER['HTTP_USER_AGENT'] === 'wp-browser' )
-|| getenv( 'WPBROWSER_HOST_REQUEST' );
+$is_test_request = ( isset($_SERVER['HTTP_X_TEST_REQUEST']) && $_SERVER['HTTP_X_TEST_REQUEST'] )
+|| ( isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'wp-browser' )
+|| getenv('WPBROWSER_HOST_REQUEST');
 
 
 $table_prefix =  $is_test_request ? 'test_' : (env('DB_PREFIX') ?: 'wp_');
