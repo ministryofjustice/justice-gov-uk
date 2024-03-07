@@ -95,12 +95,26 @@ class DynamicMenu
             'orderby' => 'menu_order',
             'post_parent' => $post->ID,
             'post_type'   => 'page',
+            // Exclude pages with the tags in $excluded_child_pages_tags.
             'tax_query'   => array(
                 array(
                     'taxonomy' => 'post_tag',
                     'field' => 'slug',
                     'operator' => 'NOT IN',
                     'terms' => $this->excluded_child_pages_tags,
+                ),
+            ),
+            // Exclude pages with the _dynamic_menu_exclude_this meta set to true.
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => '_dynamic_menu_exclude_this',
+                    'value' => false,
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => '_dynamic_menu_exclude_this',
+                    'compare' => 'NOT EXISTS',
                 ),
             ),
         );
