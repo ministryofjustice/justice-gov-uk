@@ -95,6 +95,7 @@ class DynamicMenu
             'orderby' => 'menu_order',
             'post_parent' => $post->ID,
             'post_type'   => 'page',
+            'posts_per_page' => 50,
             // Exclude pages with the tags in $excluded_child_pages_tags.
             'tax_query'   => array(
                 array(
