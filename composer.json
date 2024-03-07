@@ -121,6 +121,10 @@
         ],
         "test:cmd": [
             "vendor/bin/codecept -c spec/codeception.yml"
+        ],
+        "test:watch": [
+            "Composer\\Config::disableProcessTimeout",
+            "./bin/local-watch-files.sh test:unit < /dev/tty"
         ]
     }
 }

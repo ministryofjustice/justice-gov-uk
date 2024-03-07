@@ -22,30 +22,27 @@ class Admin
 
     public function addHooks()
     {
-        add_action( 'admin_enqueue_scripts', array($this, 'enqueueStyles') );
-        add_action( 'admin_enqueue_scripts', array($this, 'enqueueScripts') );
+        add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
         // add_action( 'after_setup_theme', array($this, 'addEditorStyle') );
         // add_action('wp_before_admin_bar_render', array($this, 'editAdminBar'));
+        add_action('admin_menu', [$this, 'removeCustomizer'], 999);
     }
-    
+
     public static function enqueueStyles()
     {
-        wp_enqueue_style( 'justice-admin-style', get_template_directory_uri() . '/dist/css/wp-admin-override.css' );
+        wp_enqueue_style('justice-admin-style', get_template_directory_uri() . '/dist/css/wp-admin-override.css');
     }
-    
+
     public static function enqueueScripts()
     {
         wp_enqueue_script('justice-admin', get_template_directory_uri() . '/dist/admin.min.js', [], false, true);
     }
 
-    // public static function addEditorStyle() {
-        // add_theme_support( 'editor-styles' );
-        // add_editor_style();
-    // }
-    
-    // public static function editAdminBar()
-    // {
-    //     global $wp_admin_bar;
-    //     $wp_admin_bar->remove_menu('customize');
-    // }
+    public static function removeCustomizer()
+    {
+        // We need this because the submenu's link (key from the array too) will always be generated with the current SERVER_URI in mind.
+        $customizer_url = add_query_arg('return', urlencode(remove_query_arg(wp_removable_query_args(), wp_unslash($_SERVER['REQUEST_URI']))), 'customize.php');
+        remove_submenu_page('themes.php', $customizer_url);
+    }
 }

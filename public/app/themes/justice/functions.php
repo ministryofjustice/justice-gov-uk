@@ -57,19 +57,3 @@ add_action('init', fn() => register_nav_menus([
     'header-menu' => __('Header Menu'),
     'footer-menu' => __('Footer Menu')
 ]));
-
-
-add_action('wp_before_admin_bar_render', function () {
-    global $wp_admin_bar;
-    $wp_admin_bar->remove_menu('customize');
-});
-
-add_action(
-    'admin_enqueue_scripts',
-    function () {
-        wp_enqueue_style(
-            'justice-admin-style',
-            get_template_directory_uri() . '/dist/css/wp-admin-override.css'
-        );
-    }
-);
