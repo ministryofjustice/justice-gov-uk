@@ -103,22 +103,6 @@ COPY --from=assets-build       --chown=www-data:www-data /node/dist/php ./public
 USER 82
 
 
-
-###
-
-
-FROM base-fpm AS spec
-
-RUN apk add --update $PHPIZE_DEPS
-RUN docker-php-ext-install pdo_mysql
-RUN apk del $PHPIZE_DEPS
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# www-data
-USER 82
-
-
 ###
 
 

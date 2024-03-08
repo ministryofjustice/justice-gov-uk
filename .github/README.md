@@ -229,53 +229,11 @@ The test suites for this project use:
 
 WP_Mock is used in unit tests to mock WordPress functions and classes.
 
-The suites are intended to include Unit Tests for functions & classes, all the way to Acceptance Tests with automated browsing.
+So far, only unit tests have been written. The unit tests are located in the `spec` directory.
 
-### Spec container
+To run the unit tests duting development, use the following commands:
 
-The spec container is used to keep the test environment separate from the application environment. 
-Where necessary, packages are installed to the spec container to support the test suites.  
-e.g. pdo_mysql
-
-To access a terminal on the spec container, run: `make spec-bash`.
-
-### Container dependencies
-
-The spec container is dependent on the various other containers.
-
-| Test type               | Dependencies                                      |
-| ----------------------- | ------------------------------------------------- |
-| Unit                    | App files                                         |
-| Integration             | App files, MariaDB, Minio, Local CDN              |
-| Acceptance & Functional | PHP-FPM, Nginx, MariaDB, Minio, Local CDN, Chrome |
-
-### Installation log
- 
-The test packages have been installed by running `composer require --dev lucatume/wp-browser` from inside the spec container.
-
-wp-browser was initialised by running `vendor/bin/codecept init wpbrowser` from inside the spec container.
-
-When prompted to use a portable configuration based on PHP built-in server, Chromedriver and SQLite, 
-the answer was no.  
-This is because these services are already provided by the docker-compose environment.
-
-Changes to the default installation include:
-
-- rename `tests` directory to `spec`.
-- move `codeception.yml` from the project root to the spec directory.
-- amend file paths within `codeception.yml` accordingly.
-- add scripts to the `composer.json` file to run the tests, e.g. running `vendor/bin/codecept` with `-c` to specify the codeception config file.
-- [Simple start with Acceptance Testing for WordPress](https://wp-punk.com/simple-start-with-acceptance-testing-for-wordpress/) was followed to add acceptance tests.
-
-> To avoid coupling between tests. We should run each test separately from the default state. In our case, the default state is a default state for a database. So, let’s create a separate acceptance_db database, activate the tested WordPress plugin, install the tested plugin/theme, and export the database to the spec/tests/Support/Data/dump.sql.
-
-```bash
-# If this is run from the spec container, the following commands will install WordPress and activate all plugins, and use test_ as the database prefix.
-wp core install --url="http://justice.docker" --title="Test" --admin_user="test" --admin_password="test" --admin_email="example@justice.docker" --skip-email
-wp plugin activate --all
-
-mysqldump --host="mariadb" --user="mysql" --password="mysql" justice > spec/Support/Data/dump.sql
-```
+`make bash`, then `composer test:unit`. Or, to watch for changes, use `composer test:watch`.
 
 ## AWS setup
 

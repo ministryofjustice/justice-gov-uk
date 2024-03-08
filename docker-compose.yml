@@ -123,36 +123,6 @@ services:
         links:
             - mariadb
 
-    spec:
-        build:
-            context: .
-            target: spec
-        volumes:
-            - .:/var/www/html
-        env_file:
-            - .env
-        environment: 
-            # Overwrite the database name to use the test database
-            - DB_PREFIX=test_
-        depends_on:
-            - nginx
-            - mariadb
-            - chromium
-        profiles:
-            - spec
-
-    chromium:
-        image: seleniarm/standalone-chromium:latest
-        shm_size: 2g
-        ports:
-            - "4444:4444"
-            - "5900:5900"
-            - "7900:7900"
-        extra_hosts:
-            - "justice.docker:host-gateway"
-        profiles:
-            - spec
-
     local-ssh:
       build:
         context: .
