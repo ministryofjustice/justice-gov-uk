@@ -32,9 +32,7 @@ final class AdminTest extends \Codeception\Test\Unit
     {
         $admin = new Admin();
 
-        // WP_Mock::expectActionAdded('admin_bar_menu', [$admin, 'editAdminBar']);
         WP_Mock::expectActionAdded('admin_enqueue_scripts', [$admin, 'enqueueStyles']);
-        WP_Mock::expectActionAdded('admin_enqueue_scripts', [$admin, 'enqueueScripts']);
         WP_Mock::expectActionAdded('admin_menu', [$admin, 'removeCustomizer'], 999);
 
         $admin->addHooks();
@@ -53,21 +51,6 @@ final class AdminTest extends \Codeception\Test\Unit
         ]);
 
         Admin::enqueueStyles();
-    }
-
-    public function testEnqueueScripts(): void
-    {
-        WP_Mock::userFunction('get_template_directory_uri', [
-            'times' => 1,
-            'return' => $this->example_theme_url,
-        ]);
-
-        WP_Mock::userFunction('wp_enqueue_script', [
-            'times' => 1,
-            'args' => ['justice-admin', $this->example_theme_url . '/dist/admin.min.js', [], false, true],
-        ]);
-
-        Admin::enqueueScripts();
     }
 
     public function testRemoveCustomizer(): void
