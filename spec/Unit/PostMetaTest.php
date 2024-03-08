@@ -26,13 +26,23 @@ final class PostMetaTest extends \Codeception\Test\Unit
         WP_Mock::tearDown();
     }
 
-    public function testGetShortTitle(): void
+
+    /**
+     * @param string|null $short_title
+     * @example ["The short title"]
+     * @example [null]
+     */
+    public function testGetShortTitle(string | null $short_title): void
     {
         $post_id = 1;
         $post_meta = new PostMeta($post_id);
-        $short_title = 'The short title';
+        $full_title = 'The full long title';
 
-        WP_Mock::userFunction('get_the_title', ['times' => 0]);
+        if($short_title)  {
+            WP_Mock::userFunction('get_the_title', ['times' => 0]);
+        } else {
+            WP_Mock::userFunction('get_the_title', ['times' => 1, 'args' => [$post_id], 'return' => $full_title]);
+        }
 
         WP_Mock::userFunction('get_post_meta', [
             'times' => 1,
@@ -40,23 +50,9 @@ final class PostMetaTest extends \Codeception\Test\Unit
             'return' => $short_title
         ]);
 
-        $this->assertEquals($short_title, $post_meta->getShortTitle($post_id));
+        $expected_title = $short_title ?? $full_title;
+
+        $this->assertEquals($expected_title, $post_meta->getShortTitle($post_id));
     }
 
-    public function testGetShortTitleMissing(): void
-    {
-        $post_id = 1;
-        $post_meta = new PostMeta($post_id);
-        $full_title = 'The full long title';
-
-        WP_Mock::userFunction('get_the_title', ['times' => 1, 'args' => [$post_id], 'return' => $full_title]);
-
-        WP_Mock::userFunction('get_post_meta', [
-            'times' => 1,
-            'args' => [$post_id, '_short_title', true],
-            'return' => null
-        ]);
-
-        $this->assertEquals($full_title, $post_meta->getShortTitle($post_id));
-    }
 }
