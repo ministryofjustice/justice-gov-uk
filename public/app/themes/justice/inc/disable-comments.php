@@ -19,7 +19,7 @@ class Comments
 
     public function __construct()
     {
-        $this->registerHooks();
+        $this->addHooks();
     }
 
     /**
@@ -27,7 +27,7 @@ class Comments
      * This will setup all action and filter hooks related to comments.
      */
 
-    public function registerHooks()
+    public function addHooks()
     {
 
         // Admin actions.

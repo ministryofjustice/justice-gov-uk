@@ -27,7 +27,7 @@ class PostMeta
      * This isn't called within the constructor because it's only needs to be called once.
      */
 
-    public function registerHooks()
+    public function addHooks()
     {
         $post_meta_constants = new PostMetaConstants();
         add_filter('sgf_register_fields', [$post_meta_constants, 'navigationFields'], 5);

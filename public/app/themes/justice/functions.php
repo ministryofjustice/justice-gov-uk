@@ -30,7 +30,7 @@ require_once 'inc/taxonomies.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();
-    $debug->registerHooks();
+    $debug->addHooks();
 }
 
 new Justice\Admin();
@@ -39,13 +39,13 @@ new Justice\Layout();
 new Justice\SimpleGutenFields();
 
 $block_editor = new Justice\BlockEditor();
-$block_editor->registerHooks();
+$block_editor->addHooks();
 
 $post_meta = new Justice\PostMeta();
-$post_meta->registerHooks();
+$post_meta->addHooks();
 
 $taxonomies = new Justice\Taxonomies();
-$taxonomies->registerHooks();
+$taxonomies->addHooks();
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 
