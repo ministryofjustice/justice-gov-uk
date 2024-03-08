@@ -15,7 +15,6 @@ d-shell: setup dory d-compose composer
 setup:
 	@chmod +x ./bin/*
 	@[ -f "./.env" ] || cp .env.example .env
-	@[ -f "./spec/.env" ] || cp spec/.env.example spec/.env
 
 restart:
 	@docker compose down php-fpm
@@ -44,9 +43,6 @@ nginx:
 
 node:
 	docker compose exec --workdir /node node bash
-
-spec-bash:
-	docker compose exec spec bash
 
 # Remove ignored git files – e.g. composer dependencies and built theme assets
 # But keep .env file, .idea directory (PhpStorm config), and uploaded media files
