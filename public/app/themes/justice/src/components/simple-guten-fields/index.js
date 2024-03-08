@@ -46,6 +46,10 @@ const meetsConditons = (field, select) => {
         return postValue === value;
       case "!==":
         return postValue !== value;
+      case "INTERSECTS":
+        return !!postValue.filter((entry) => value.includes(entry)).length;
+      case "NOT INTERSECTS":
+        return !postValue.filter((entry) => value.includes(entry)).length;
       default:
         return true;
     }

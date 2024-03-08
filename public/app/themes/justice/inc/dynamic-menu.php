@@ -9,7 +9,11 @@ if (!defined('ABSPATH')) {
 class DynamicMenu
 {
 
-    private $hidden_child_pages_tags = [
+    /**
+     * List of tags to exclude from the patent page navigation.
+     */
+
+    public $excluded_child_pages_tags = [
         'frontmatter-collection',
         'backmatter-collection',
         'parts-collection',
@@ -17,8 +21,30 @@ class DynamicMenu
     ];
 
     /**
-     * Get the entries as an array
+     * getExcludedChildPagesTags
+     * returns an array of ids.
      */
+
+    public function getExcludedChildPagesTags() : array
+    {
+
+        $tag_ids = array_map(
+            function ($slug) : int | null {
+                // Map the slug to id.
+                $term = get_term_by('slug', $slug, 'post_tag');
+                return $term ? $term->term_id : null;
+            },
+            $this->excluded_child_pages_tags
+        );
+
+        return array_filter($tag_ids, fn($id) => $id !== null);
+    }
+
+    /**
+     * getTheNavigation
+     * Get the entries as an array.
+     */
+
     public function getTheNavigation(string $location = 'sidebar'): array | null
     {
         global $post;
@@ -69,12 +95,27 @@ class DynamicMenu
             'orderby' => 'menu_order',
             'post_parent' => $post->ID,
             'post_type'   => 'page',
+            'posts_per_page' => 50,
+            // Exclude pages with the tags in $excluded_child_pages_tags.
             'tax_query'   => array(
                 array(
                     'taxonomy' => 'post_tag',
                     'field' => 'slug',
                     'operator' => 'NOT IN',
-                    'terms' => $this->hidden_child_pages_tags,
+                    'terms' => $this->excluded_child_pages_tags,
+                ),
+            ),
+            // Exclude pages with the _dynamic_menu_exclude_this meta set to true.
+            'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                    'key' => '_dynamic_menu_exclude_this',
+                    'value' => false,
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => '_dynamic_menu_exclude_this',
+                    'compare' => 'NOT EXISTS',
                 ),
             ),
         );
