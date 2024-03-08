@@ -23,20 +23,12 @@ class Admin
     public function addHooks()
     {
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
-        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
-        // add_action( 'after_setup_theme', array($this, 'addEditorStyle') );
-        // add_action('wp_before_admin_bar_render', array($this, 'editAdminBar'));
         add_action('admin_menu', [$this, 'removeCustomizer'], 999);
     }
 
     public static function enqueueStyles()
     {
         wp_enqueue_style('justice-admin-style', get_template_directory_uri() . '/dist/css/wp-admin-override.css');
-    }
-
-    public static function enqueueScripts()
-    {
-        wp_enqueue_script('justice-admin', get_template_directory_uri() . '/dist/admin.min.js', [], false, true);
     }
 
     public static function removeCustomizer()
