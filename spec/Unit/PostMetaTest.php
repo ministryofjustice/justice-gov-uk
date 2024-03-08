@@ -38,7 +38,7 @@ final class PostMetaTest extends \Codeception\Test\Unit
         $post_meta = new PostMeta($post_id);
         $full_title = 'The full long title';
 
-        if($short_title)  {
+        if ($short_title) {
             WP_Mock::userFunction('get_the_title', ['times' => 0]);
         } else {
             WP_Mock::userFunction('get_the_title', ['times' => 1, 'args' => [$post_id], 'return' => $full_title]);
@@ -54,5 +54,4 @@ final class PostMetaTest extends \Codeception\Test\Unit
 
         $this->assertEquals($expected_title, $post_meta->getShortTitle($post_id));
     }
-
 }
