@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * A php class to add admin functionality to the theme
  * Like enqueue the css and js files.

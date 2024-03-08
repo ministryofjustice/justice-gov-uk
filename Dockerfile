@@ -102,11 +102,6 @@ COPY --from=assets-build       --chown=www-data:www-data /node/dist/php ./public
 # non-root
 USER 82
 
-###
-
-
-FROM build-fpm AS test
-RUN make test
 
 
 ###

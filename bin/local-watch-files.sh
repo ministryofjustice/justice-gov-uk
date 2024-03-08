@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# A script that watched for file changes.
+# It accepts composer script(s) as arguments and runs them when a file changes.
+
 args=("$@")
 
 function run_scripts {

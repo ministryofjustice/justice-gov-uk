@@ -138,6 +138,8 @@ services:
             - nginx
             - mariadb
             - chromium
+        profiles:
+            - spec
 
     chromium:
         image: seleniarm/standalone-chromium:latest
@@ -146,9 +148,10 @@ services:
             - "4444:4444"
             - "5900:5900"
             - "7900:7900"
-        # add host
         extra_hosts:
             - "justice.docker:host-gateway"
+        profiles:
+            - spec
 
     local-ssh:
       build:
