@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa14f0cedd7f2b882b8bf5391c1117f2",
+    "content-hash": "786b0dfa18b2deca50edcbc456bddba0",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -7300,31 +7300,31 @@
     "packages-dev": [
         {
             "name": "10up/wp_mock",
-            "version": "1.0.0",
+            "version": "dev-trunk",
             "source": {
                 "type": "git",
                 "url": "https://github.com/10up/wp_mock.git",
-                "reference": "de812e445e17832703571081aa40f39140497117"
+                "reference": "48b7f22934a4351e45e336f09263ee27fc9ddcbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/10up/wp_mock/zipball/de812e445e17832703571081aa40f39140497117",
-                "reference": "de812e445e17832703571081aa40f39140497117",
+                "url": "https://api.github.com/repos/10up/wp_mock/zipball/48b7f22934a4351e45e336f09263ee27fc9ddcbe",
+                "reference": "48b7f22934a4351e45e336f09263ee27fc9ddcbe",
                 "shasum": ""
             },
             "require": {
                 "antecedent/patchwork": "^2.1",
                 "mockery/mockery": "^1.6",
-                "php": ">=7.4 < 8.3",
+                "php": ">=7.4 < 9",
                 "phpunit/phpunit": "^9.6"
             },
             "require-dev": {
                 "behat/behat": "^v3.11.0",
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
                 "friendsofphp/php-cs-fixer": "^3.4",
-                "php-coveralls/php-coveralls": "^v2.5",
+                "php-coveralls/php-coveralls": "^v2.7",
                 "php-stubs/wordpress-globals": "^0.2",
-                "php-stubs/wordpress-stubs": "^6.2",
+                "php-stubs/wordpress-stubs": "^6.3",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-mockery": "^1.1",
@@ -7332,6 +7332,7 @@
                 "sebastian/comparator": "^4.0.8",
                 "sempro/phpunit-pretty-print": "^1.4"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -7348,9 +7349,9 @@
             "description": "A mocking library to take the pain out of unit testing for WordPress",
             "support": {
                 "issues": "https://github.com/10up/wp_mock/issues",
-                "source": "https://github.com/10up/wp_mock/tree/1.0.0"
+                "source": "https://github.com/10up/wp_mock/tree/trunk"
             },
-            "time": "2023-07-26T03:03:21+00:00"
+            "time": "2024-01-22T02:22:57+00:00"
         },
         {
             "name": "antecedent/patchwork",
@@ -11755,6 +11756,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "10up/wp_mock": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
