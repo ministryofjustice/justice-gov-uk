@@ -33,7 +33,7 @@ class Documents
     {
         add_action('admin_init', [$this, 'hideEditor']);
         add_filter('document_serve_use_gzip', [$this, 'filterGzip'], null, 3);
-        add_filter('document_serve', [$this, 'maybeRedirectToCdn'], null, 3);
+        add_filter('document_serve', [$this, 'maybeRedirectToAttachmentUrl'], null, 3);
         add_filter('as3cf_object_meta', [$this,  'addObjectMeta'], 10, 4);
     }
 
@@ -88,11 +88,11 @@ class Documents
     }
 
     /**
-     * maybeRedirectToCdn
-     * Stream the file via php, or redirect the user to the CDN.
+     * maybeRedirectToAttachmentUrl
+     * Stream the file via php, or redirect the user to the attachment URL (could be S3, CDN etc.).
      */
 
-    function maybeRedirectToCdn($file, $post_id, $attach_id)
+    function maybeRedirectToAttachmentUrl($file, $post_id, $attach_id)
     {
 
         // Only redirect published files to the CDN.
