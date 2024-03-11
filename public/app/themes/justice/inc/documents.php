@@ -19,8 +19,10 @@ class Documents
         'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
     ];
 
-    // Max filesize for wp-document-revisions to stream via php. 15000000 = 15MB.
-    private $php_stream_max_filesize = 15000000;
+    // Max filesize for wp-document-revisions to stream via php.
+    private $php_stream_limit = 15 * 1024 * 1024; // 15MB
+    private $default_upload_limit = 64 * 1024 * 1024; // 64MB
+    private $document_upload_limit = 200 * 1024 * 1024; // 200MB
 
     public function __construct()
     {
@@ -34,6 +36,7 @@ class Documents
         add_filter('document_serve_use_gzip', [$this, 'filterGzip'], null, 3);
         add_filter('document_serve', [$this, 'maybeRedirectToAttachmentUrl'], null, 3);
         add_filter('as3cf_object_meta', [$this,  'addObjectMeta'], 10, 4);
+        add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
     }
 
     /**
@@ -103,7 +106,7 @@ class Documents
         $file_size = filesize(get_attached_file($attach_id));
 
         // If it's too big then redirect to the CDN.
-        if ($file_size > $this->php_stream_max_filesize) {
+        if ($file_size > $this->php_stream_limit) {
             // Be aware that this url will still work even if the document visibility is later changed to private.
             // This should not be a problem with justice.gov.uk as the document visibility is always public.
             // It it becomes an issue, let's sign the URLs with a short expiry time.
@@ -155,5 +158,24 @@ class Documents
         }
 
         return $args;
+    }
+
+    /**
+     * limitUploadSize
+     * As we're setting a very high limit for uploads at the server level,
+     * we need to limit the upload size for the media library at the application level.
+     */
+
+    public function setUploadSizeLimit(int $size): int
+    {
+
+        $post_type = isset($_REQUEST['post_id']) && get_post_type($_REQUEST['post_id']);
+
+        switch ($post_type) {
+            case 'document':
+                return min($size, $this->document_upload_limit);
+            default:
+                return min($size, $this->default_upload_limit);
+        }
     }
 }
