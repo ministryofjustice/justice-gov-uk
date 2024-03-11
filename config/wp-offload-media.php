@@ -47,7 +47,7 @@ $as3_settings = array(
     // Serve files over HTTPS
     'force-https' => !!env('CLOUDFRONT_URL'),
     // Remove the local file version once offloaded to bucket
-    'remove-local-file' => false,
+    'remove-local-file' => true,
     // Access Control List for the bucket
     'use-bucket-acls' => false,
 );
