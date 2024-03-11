@@ -146,13 +146,20 @@ class Documents
 
         // If filename is hex & 32 chars long, then set a ContentDisposition filename.
         if (preg_match('/^[a-f0-9]{32}$/', $pathinfo['filename'])) {
+            // Get the basename from the request.
+            $content_disposition_basename = sanitize_file_name($_REQUEST['name']);
+
             // Get the document ID, permalink and filename.
             $document_id = wp_get_post_parent_id($attach_id);
             $document_permalink = get_permalink($document_id);
-            $document_filename = pathinfo($document_permalink, PATHINFO_FILENAME);
 
-            // Build a basename from the document filename with the file extension.
-            $content_disposition_basename = $document_filename . '.' . $pathinfo['extension'];
+            // If the permalink is set then use that as the filename.
+            if (!str_contains($document_permalink, '?post_type=document&p=')) {
+                $document_filename = pathinfo($document_permalink, PATHINFO_FILENAME);
+                // Build a basename from the document permalink filename with the file extension.
+                $content_disposition_basename = $document_filename . '.' . $pathinfo['extension'];
+            }
+
             // Write a filename to S3 metadata. This is what the downloaded file will be called.
             $args['ContentDisposition'] .= ';filename="' . $content_disposition_basename . '"';
         }
