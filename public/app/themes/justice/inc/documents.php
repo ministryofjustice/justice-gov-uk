@@ -16,12 +16,11 @@ class Documents
 
     // File extensions to mark as downloadable in S3.
     private $content_disposition_extensions = [
-        'doc', 'docx', 'pdf', 'zip', 'xls', 'xlsx'
+        'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
     ];
 
-    // Max filesize for wp-document-revisions to stream via php.
-    // 10000000 = 10MB.
-    private $php_stream_max_filesize = 20000000;
+    // Max filesize for wp-document-revisions to stream via php. 15000000 = 15MB.
+    private $php_stream_max_filesize = 15000000;
 
     public function __construct()
     {
@@ -92,7 +91,7 @@ class Documents
      * Stream the file via php, or redirect the user to the attachment URL (could be S3, CDN etc.).
      */
 
-    function maybeRedirectToAttachmentUrl($file, $post_id, $attach_id)
+    public function maybeRedirectToAttachmentUrl($file, $post_id, $attach_id)
     {
 
         // Only redirect published files to the CDN.
@@ -100,7 +99,7 @@ class Documents
             return $file;
         }
 
-        // Get the filesize. 
+        // Get the filesize.
         $file_size = filesize(get_attached_file($attach_id));
 
         // If it's too big then redirect to the CDN.
@@ -144,7 +143,6 @@ class Documents
 
         // If filename is hex & 32 chars long, then set a ContentDisposition filename.
         if (preg_match('/^[a-f0-9]{32}$/', $pathinfo['filename'])) {
-
             // Get the document ID, permalink and filename.
             $document_id = wp_get_post_parent_id($attach_id);
             $document_permalink = get_permalink($document_id);
@@ -158,5 +156,4 @@ class Documents
 
         return $args;
     }
-
 }
