@@ -142,7 +142,7 @@ class Documents
         // Mark as downloadable download.
         $args['ContentDisposition'] = 'attachment';
 
-        // If filename is hex & 32 chars long, then set $content_disposition_filename.
+        // If filename is hex & 32 chars long, then set a ContentDisposition filename.
         if (preg_match('/^[a-f0-9]{32}$/', $pathinfo['filename'])) {
 
             // Get the document ID, permalink and filename.
