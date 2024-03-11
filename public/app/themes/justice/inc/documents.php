@@ -122,7 +122,7 @@ class Documents
      * addObjectMeta
      * Add object meta to the S3 object.
      * This function is called whenever any file is upladed to S3.
-     * Vai the Media Library or the Document post type.
+     * Via the Media Library or the Document post type.
      */
 
     public function addObjectMeta($args, $attach_id)
