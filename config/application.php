@@ -35,9 +35,7 @@ if (file_exists($root_dir . '/.env')) {
     $dotenv->load();
 
     $dotenv->required(['WP_HOME', 'WP_SITEURL']);
-    if (!env('DATABASE_URL')) {
-        $dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD']);
-    }
+    $dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD']);
 }
 
 /**
