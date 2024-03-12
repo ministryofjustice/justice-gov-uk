@@ -64,7 +64,7 @@
         "wpackagist-plugin/wp-document-revisions": "^3.5.0"
     },
     "require-dev": {
-        "10up/wp_mock": "dev-trunk",
+        "10up/wp_mock": "^1.0.1",
         "lucatume/wp-browser": "^4.1.2",
         "roave/security-advisories": "dev-latest",
         "squizlabs/php_codesniffer": "^3.7.1"

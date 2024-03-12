@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "786b0dfa18b2deca50edcbc456bddba0",
+    "content-hash": "3b7617cc1de75d309f9f259ad3016c97",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -7300,7 +7300,7 @@
     "packages-dev": [
         {
             "name": "10up/wp_mock",
-            "version": "dev-trunk",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/10up/wp_mock.git",
@@ -7332,7 +7332,6 @@
                 "sebastian/comparator": "^4.0.8",
                 "sempro/phpunit-pretty-print": "^1.4"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -7349,7 +7348,7 @@
             "description": "A mocking library to take the pain out of unit testing for WordPress",
             "support": {
                 "issues": "https://github.com/10up/wp_mock/issues",
-                "source": "https://github.com/10up/wp_mock/tree/trunk"
+                "source": "https://github.com/10up/wp_mock/tree/1.0.1"
             },
             "time": "2024-01-22T02:22:57+00:00"
         },
@@ -11756,7 +11755,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "10up/wp_mock": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
