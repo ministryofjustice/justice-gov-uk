@@ -1,1 +1,1 @@
-<h1><?php echo $args['title']; ?></h1>
+<h1><?= $args['title'] ?></h1>
