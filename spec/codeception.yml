@@ -1,0 +1,20 @@
+namespace: Tests
+support_namespace: Support
+paths:
+    tests: ./
+    output: _output
+    data: Support/Data
+    support: Support
+    envs: _envs
+actor_suffix: Tester
+bootstrap: bootstrap.php
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+    config: {  }
+    commands:
+        - lucatume\WPBrowser\Command\RunOriginal
+        - lucatume\WPBrowser\Command\RunAll
+        - lucatume\WPBrowser\Command\GenerateWPUnit
+        - lucatume\WPBrowser\Command\DbExport
+        - lucatume\WPBrowser\Command\DbImport

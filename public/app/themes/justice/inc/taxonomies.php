@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 class Taxonomies
 {
 
-    public function registerHooks()
+    public function addHooks()
     {
         add_action('init', [$this, 'registerTaxonomies']);
     }

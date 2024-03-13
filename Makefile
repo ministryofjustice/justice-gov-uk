@@ -79,11 +79,11 @@ migrate:
 
 # Run tests
 test:
-	composer test
+	composer test && composer test:unit
 
 # Fix tests
 test-fixes:
-	composer test-fix
+	composer test:fix
 
 
 #####
