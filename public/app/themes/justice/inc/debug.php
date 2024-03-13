@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 class Debug
 {
 
-    public function registerHooks()
+    public function addHooks()
     {
         if (!defined('WP_ENV') || WP_ENV !== 'development') {
             return;

@@ -213,6 +213,28 @@ kubectl exec -it $POD -n $NSP -- ash
 kubectl exec -it $POD -n $NSP -c fpm -- ash
 ```
 
+## Testing
+
+### Summary
+
+The test suites for this project use:
+
+[Codeception](https://codeception.com/)
+
+> Codeception collects and shares best practices and solutions for testing PHP web applications.
+
+[wp-browser](https://wpbrowser.wptestkit.dev/)
+
+> The wp-browser library provides a set of Codeception modules and middleware to enable the testing of WordPress sites, plugins and themes.
+
+WP_Mock is used in unit tests to mock WordPress functions and classes.
+
+So far, only unit tests have been written. The unit tests are located in the `spec` directory.
+
+To run the unit tests duting development, use the following commands:
+
+`make bash`, then `composer test:unit`. Or, to watch for changes, use `composer test:watch`.
+
 ## AWS setup
 
 ### S3

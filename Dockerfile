@@ -15,7 +15,7 @@ USER 82
 
 ## target: dev
 FROM base-fpm AS dev
-RUN apk add --update nano nodejs npm
+RUN apk add --update nano nodejs npm inotify-tools
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -102,15 +102,8 @@ COPY --from=assets-build       --chown=www-data:www-data /node/dist/php ./public
 # non-root
 USER 82
 
-###
-
-
-FROM build-fpm AS test
-RUN make test
-
 
 ###
-
 
 
 FROM base-nginx AS nginx-dev

@@ -35,9 +35,7 @@ if (file_exists($root_dir . '/.env')) {
     $dotenv->load();
 
     $dotenv->required(['WP_HOME', 'WP_SITEURL']);
-    if (!env('DATABASE_URL')) {
-        $dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD']);
-    }
+    $dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD']);
 }
 
 /**
@@ -81,16 +79,15 @@ Config::define('DB_PASSWORD', env('DB_PASSWORD'));
 Config::define('DB_HOST', env('DB_HOST') ?: 'localhost');
 Config::define('DB_CHARSET', 'utf8mb4');
 Config::define('DB_COLLATE', '');
-$table_prefix = env('DB_PREFIX') ?: 'wp_';
 
-if (env('DATABASE_URL')) {
-    $dsn = (object) parse_url(env('DATABASE_URL'));
+// If the request origin is from a test suite, use the test database.
+$is_test_request = ( isset($_SERVER['HTTP_X_TEST_REQUEST']) && $_SERVER['HTTP_X_TEST_REQUEST'] )
+|| ( isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'wp-browser' )
+|| getenv('WPBROWSER_HOST_REQUEST');
 
-    Config::define('DB_NAME', substr($dsn->path, 1));
-    Config::define('DB_USER', $dsn->user);
-    Config::define('DB_PASSWORD', $dsn->pass ?? null);
-    Config::define('DB_HOST', isset($dsn->port) ? "{$dsn->host}:{$dsn->port}" : $dsn->host);
-}
+// Set the table prefix based on the request origin.
+$table_prefix =  $is_test_request ? 'test_' : (env('DB_PREFIX') ?: 'wp_');
+
 
 /**
  * Authentication Unique Keys and Salts
