@@ -15,6 +15,7 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
     require_once 'inc/amazon-s3-and-cloudfront-tweaks-for-minio.php';
 }
 
+require_once 'inc/admin.php';
 require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/debug.php';
@@ -30,22 +31,23 @@ require_once 'inc/taxonomies.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();
-    $debug->registerHooks();
+    $debug->addHooks();
 }
 
+new Justice\Admin();
 new Justice\Comments();
 new Justice\Documents();
 new Justice\Layout();
 new Justice\SimpleGutenFields();
 
 $block_editor = new Justice\BlockEditor();
-$block_editor->registerHooks();
+$block_editor->addHooks();
 
 $post_meta = new Justice\PostMeta();
-$post_meta->registerHooks();
+$post_meta->addHooks();
 
 $taxonomies = new Justice\Taxonomies();
-$taxonomies->registerHooks();
+$taxonomies->addHooks();
 
 add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
 
@@ -53,23 +55,7 @@ add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('justice-styles', get_
 
 add_editor_style();
 
-
 add_action('init', fn() => register_nav_menus([
     'header-menu' => __('Header Menu'),
     'footer-menu' => __('Footer Menu')
 ]));
-
-add_action('wp_before_admin_bar_render', function () {
-    global $wp_admin_bar;
-    $wp_admin_bar->remove_menu('customize');
-});
-
-add_action(
-    'admin_enqueue_scripts',
-    function () {
-        wp_enqueue_style(
-            'justice-admin-style',
-            get_template_directory_uri() . '/dist/css/wp-admin-override.css'
-        );
-    }
-);

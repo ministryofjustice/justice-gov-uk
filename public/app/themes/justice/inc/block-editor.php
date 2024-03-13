@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 class BlockEditor
 {
 
-    public function registerHooks()
+    public function addHooks()
     {
         add_action('init', [$this, 'registerBlocks']);
     }

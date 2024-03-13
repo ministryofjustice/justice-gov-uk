@@ -43,3 +43,9 @@ public/app/ewww
 .env
 .env.*
 !.env.example
+
+# Tests/Spec
+spec/_output/*
+!spec/_output/.keep
+spec/Support/_generated/*
+!spec/Support/_generated/.keep
