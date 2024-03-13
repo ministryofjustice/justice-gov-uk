@@ -178,7 +178,7 @@ class Documents
      * If we have a 404 and the request matches a _source_path then redirect to the new document URL.
      */
 
-    public function redirectLegacyDocumentUrls()
+    public function redirectLegacyDocumentUrls() : void
     {
 
         if (!is_404()) {
@@ -192,7 +192,6 @@ class Documents
             return;
         }
 
-        // Is there a document where the meta field source_path is set and matches this request?
         $document = get_posts([
             'post_type' => $this->slug,
             'posts_per_page' => 1,
