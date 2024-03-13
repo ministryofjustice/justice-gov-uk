@@ -9,6 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
     nginx.ingress.kubernetes.io/auth-realm: 'Development User | Authentication Required'
+    nginx.ingress.kubernetes.io/proxy-body-size: "200m"
     nginx.ingress.kubernetes.io/server-snippet: |
       if ($host = 'justice-gov-uk-dev.apps.live.cloud-platform.service.justice.gov.uk') {
         return 301 https://dev.justice.gov.uk;
