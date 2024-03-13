@@ -19,6 +19,10 @@ class Documents
         'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
     ];
 
+    private $disallow_in_media_library = [
+        'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
+    ];
+
     // Max filesize for wp-document-revisions to stream via php.
     private $php_stream_limit = 15 * 1024 * 1024; // 15MB
     private $default_upload_limit = 64 * 1024 * 1024; // 64MB
@@ -53,11 +57,15 @@ class Documents
         add_action('add_meta_boxes', [$this, 'addMetaBoxes']);
         add_filter('document_permalink', [$this,  'addParentPagesToPermalink'], 20, 2);
         add_filter('document_rewrite_rules', [$this,  'addRewriteRules'], null, 2);
-        // Limits on uploads. * Affects documents & non-documents.
-        add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
         // Prevent posts using document(s) slug. * Affects documents & non-documents.
         add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [$this, 'isValidSlug'], 10, 2);
         add_filter('wp_unique_post_slug_is_bad_flat_slug', [$this, 'isValidSlug'], 10, 2);
+        // Media Library hint regarding unsupported file types. * Affects non-documents.
+        add_filter('post-upload-ui', [$this,  'mediaLibraryHint'], 10);
+        // Remove support for document file types from the Media Library. * Affects non-documents.
+        add_filter('upload_mimes', [$this,  'removeFileSupport'], 10, 3);
+        // Limits on uploads. * Affects documents & non-documents.
+        add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
     }
 
     /**
@@ -178,7 +186,7 @@ class Documents
      * If we have a 404 and the request matches a _source_path then redirect to the new document URL.
      */
 
-    public function redirectLegacyDocumentUrls() : void
+    public function redirectLegacyDocumentUrls(): void
     {
 
         if (!is_404()) {
@@ -198,7 +206,7 @@ class Documents
             'meta_query' => [
                 [
                     'key' => '_source_path',
-                    'value' => $wp->request
+                    'value' => '/' . $wp->request
                 ]
             ],
         ]);
@@ -349,28 +357,12 @@ class Documents
 
     /**
      * Functions related to documents, also having an effect on non-documents.
-     * - limitUploadSize
      * - isValidSlug
+     * - mediaLibraryHint
+     * - removeFileSupport
+     * - setUploadSizeLimit
      */
 
-    /**
-     * limitUploadSize
-     * As we're setting a very high limit for uploads at the server level,
-     * we need to limit the upload size for the media library at the application level.
-     */
-
-    public function setUploadSizeLimit(int $size): int
-    {
-
-        $post_type = isset($_REQUEST['post_id']) && get_post_type($_REQUEST['post_id']);
-
-        switch ($post_type) {
-            case $this->slug:
-                return min($size, $this->document_upload_limit);
-            default:
-                return min($size, $this->default_upload_limit);
-        }
-    }
 
     /**
      * isValidSlug
@@ -384,5 +376,62 @@ class Documents
             return true;
         }
         return $bad_slug;
+    }
+
+    /**
+     * mediaLibraryHint
+     * Help users to understand that documents should not be loaded to the Media Library.
+     */
+
+    public function mediaLibraryHint(): void
+    {
+        echo sprintf(
+            '<p>Are you uploading file types: %1$s etc. ? Try to <a href="%2$s">add document</a> instead.</p>',
+            join(', ', $this->disallow_in_media_library),
+            admin_url('post-new.php?post_type=document')
+        );
+    }
+
+    /**
+     * removeFileSupport
+     * Remove support for document file types from the Media Library.
+     */
+
+    public function removeFileSupport(array $mime_types, int|\WP_User|null $user): array
+    {
+
+        $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
+
+        // We're uploading a document.
+        if ($this->slug === $post_type) {
+            return $mime_types;
+        }
+
+        // We're uploading via the Media Library or non-document.
+        // Remove the disallowed file types.
+        foreach ($this->disallow_in_media_library as $ext) {
+            unset($mime_types[$ext]);
+        }
+
+        return $mime_types;
+    }
+
+    /**
+     * setUploadSizeLimit
+     * As we're setting a very high limit for uploads at the server level,
+     * we need to limit the upload size for the media library at the application level.
+     */
+
+    public function setUploadSizeLimit(int $size): int
+    {
+ 
+        $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
+ 
+        switch ($post_type) {
+            case $this->slug:
+                return min($size, $this->document_upload_limit);
+            default:
+                return min($size, $this->default_upload_limit);
+        }
     }
 }
