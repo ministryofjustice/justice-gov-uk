@@ -42,17 +42,22 @@ class Documents
         add_filter('option_document_link_date', '__return_true');
         // Dashboard
         add_action('admin_init', [$this, 'hideEditor']);
+        add_action('edit_form_after_title', [$this, 'modifiedPrepareEditor']);
         // Serving documents
         add_filter('document_serve_use_gzip', [$this, 'filterGzip'], null, 3);
         add_filter('document_serve', [$this, 'maybeRedirectToAttachmentUrl'], null, 3);
+        add_action('template_redirect', [$this, 'redirectLegacyDocumentUrls']);
         // S3
         add_filter('as3cf_object_meta', [$this,  'addObjectMeta'], 10, 4);
-        // Limits on uploads.
-        add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
         // Add parent page to the document post type.
         add_action('add_meta_boxes', [$this, 'addMetaBoxes']);
         add_filter('document_permalink', [$this,  'addParentPagesToPermalink'], 20, 2);
         add_filter('document_rewrite_rules', [$this,  'addRewriteRules'], null, 2);
+        // Limits on uploads. * Affects documents & non-documents.
+        add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
+        // Prevent posts using document(s) slug. * Affects documents & non-documents.
+        add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [$this, 'isValidSlug'], 10, 2);
+        add_filter('wp_unique_post_slug_is_bad_flat_slug', [$this, 'isValidSlug'], 10, 2);
     }
 
     /**
@@ -105,6 +110,24 @@ class Documents
     }
 
     /**
+     * modifiedPrepareEditor
+     * Add a hint to the editor to explain the slug.
+     */
+
+    public function modifiedPrepareEditor($post)
+    {
+        if (!$this->isDocument($post)) {
+            return;
+        }
+
+        echo '<p>' .
+            'Editing the permalink here will update the URL of the document. ' .
+            'Only do this before sharing/publishing new documents. ' .
+            'Editing the permalink for an established document will result in a broken link.' .
+            '</p>';
+    }
+
+    /**
      * filterGzip
      * Should the file be gzipped? Don't gzip zip files.
      */
@@ -146,6 +169,47 @@ class Documents
         }
 
         return $file;
+    }
+
+    /**
+     * redirectLegacyDocumentUrls
+     * During migration it was not possible to have an exact match between old and new document URLs.
+     * The the path of the old document is stored in the source_path meta field.
+     * If we have a 404 and the request matches a _source_path then redirect to the new document URL.
+     */
+
+    public function redirectLegacyDocumentUrls()
+    {
+
+        if (!is_404()) {
+            return;
+        }
+
+        global $wp;
+        $ext = pathinfo($wp->request, PATHINFO_EXTENSION);
+
+        if (!$ext) {
+            return;
+        }
+
+        // Is there a document where the meta field source_path is set and matches this request?
+        $document = get_posts([
+            'post_type' => $this->slug,
+            'posts_per_page' => 1,
+            'meta_query' => [
+                [
+                    'key' => '_source_path',
+                    'value' => $wp->request
+                ]
+            ],
+        ]);
+
+        if (!isset($document[0]?->ID)) {
+            return;
+        }
+
+        wp_safe_redirect(get_permalink($document[0]->ID), 301);
+        exit;
     }
 
     /**
@@ -198,26 +262,6 @@ class Documents
     }
 
     /**
-     * limitUploadSize
-     * As we're setting a very high limit for uploads at the server level,
-     * we need to limit the upload size for the media library at the application level.
-     */
-
-    public function setUploadSizeLimit(int $size): int
-    {
-
-        $post_type = isset($_REQUEST['post_id']) && get_post_type($_REQUEST['post_id']);
-
-        switch ($post_type) {
-            case 'document':
-                return min($size, $this->document_upload_limit);
-            default:
-                return min($size, $this->default_upload_limit);
-        }
-    }
-
-
-    /**
      * 4 functions related to adding a parent page to the document post type.
      * - addMetaBoxes
      * - metaBoxContent
@@ -232,7 +276,7 @@ class Documents
 
     public function addMetaBoxes()
     {
-        add_meta_box('page', 'Post Attributes', [$this, 'metaBoxContent'], $this->slug, 'side', 'default');
+        add_meta_box('page', 'Document Attributes', [$this, 'metaBoxContent'], $this->slug, 'side', 'default');
     }
 
     /**
@@ -253,8 +297,15 @@ class Documents
             )
         );
 
+        $verb = $post->post_parent ? 'Changing' : 'Setting';
+
+
         if (!empty($pages)) {
+            echo '<label class="screen-reader-text" for="parent_id">Parent page</label>';
+            echo '<p>Parent page</p>';
             echo $pages;
+            echo '<p>' . $verb . ' the parent page will update the permalink of the document. ' .
+                'This part of the URL is presentational, and will not result in broken links.</p>';
         }
     }
 
@@ -295,5 +346,44 @@ class Documents
         }
 
         return array_merge($new_rules, $rules);
+    }
+
+    /**
+     * Functions related to documents, also having an effect on non-documents.
+     * - limitUploadSize
+     * - isValidSlug
+     */
+
+    /**
+     * limitUploadSize
+     * As we're setting a very high limit for uploads at the server level,
+     * we need to limit the upload size for the media library at the application level.
+     */
+
+    public function setUploadSizeLimit(int $size): int
+    {
+
+        $post_type = isset($_REQUEST['post_id']) && get_post_type($_REQUEST['post_id']);
+
+        switch ($post_type) {
+            case $this->slug:
+                return min($size, $this->document_upload_limit);
+            default:
+                return min($size, $this->default_upload_limit);
+        }
+    }
+
+    /**
+     * isValidSlug
+     * Prevent all single posts, of any post type, from using the document(s) slug.
+     * This prevents a conflict, where nested pages may make a url like /documents/my-document
+     */
+
+    public function isValidSlug(bool $bad_slug, string $slug): bool
+    {
+        if (in_array($slug, [$this->slug, $this->document_slug])) {
+            return true;
+        }
+        return $bad_slug;
     }
 }
