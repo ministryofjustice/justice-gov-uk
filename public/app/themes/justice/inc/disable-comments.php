@@ -49,6 +49,9 @@ class Comments
 
         // Hide existing comments.
         add_filter('comments_array', '__return_empty_array', 10, 2);
+
+        // Set default state on posts.
+        add_filter('get_default_comment_status', fn() => 'closed');
     }
 
     /** Disable support for comments and trackbacks in post types. */

@@ -20,6 +20,7 @@ require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/debug.php';
 require_once 'inc/disable-comments.php';
+require_once 'inc/documents.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
 require_once 'inc/layout.php';
@@ -35,6 +36,7 @@ if (getenv('WP_ENV') === 'development') {
 
 new Justice\Admin();
 new Justice\Comments();
+new Justice\Documents();
 new Justice\Layout();
 new Justice\SimpleGutenFields();
 
