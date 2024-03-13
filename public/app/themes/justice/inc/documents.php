@@ -400,6 +400,11 @@ class Documents
     public function removeFileSupport(array $mime_types, int|\WP_User|null $user): array
     {
 
+        // We're using the WP CLI.
+        if (defined('WP_CLI') && \WP_CLI) {
+            return $mime_types;
+        }
+
         $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
 
         // We're uploading a document.
@@ -424,9 +429,9 @@ class Documents
 
     public function setUploadSizeLimit(int $size): int
     {
- 
+
         $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
- 
+
         switch ($post_type) {
             case $this->slug:
                 return min($size, $this->document_upload_limit);
