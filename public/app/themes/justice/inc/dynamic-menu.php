@@ -49,6 +49,10 @@ class DynamicMenu
     {
         global $post;
 
+        if(!$post) {
+            return null;
+        }
+
         $entries = [];
 
         $post_meta = new PostMeta();
