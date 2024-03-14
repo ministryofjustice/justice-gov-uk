@@ -71,7 +71,7 @@ class PostMeta
      * Get short title.
      */
 
-    public function getShortTitle(string | int $post_id = 0): string
+    public function getShortTitle(string | int | null $post_id = 0): string
     {
         $short_title = get_post_meta($post_id ?: $this->post_id, '_short_title', true);
 
