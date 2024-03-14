@@ -48,8 +48,8 @@ class Documents
         add_filter('document_slug', fn () => $this->document_slug);
         add_filter('option_document_link_date', '__return_true');
         // Importing.
-        add_action('import_start', fn() => $this->is_importing = true);
-        add_action('import_end', fn() => $this->is_importing = false);
+        add_action('import_start', fn () => $this->is_importing = true);
+        add_action('import_end', fn () => $this->is_importing = false);
         // Dashboard
         add_action('admin_init', [$this, 'hideEditor']);
         add_action('edit_form_after_title', [$this, 'modifiedPrepareEditor']);
@@ -406,13 +406,8 @@ class Documents
     public function removeFileSupport(array $mime_types, int|\WP_User|null $user): array
     {
 
-        // We're using the WP CLI.
-        if (defined('WP_CLI') && \WP_CLI) {
-            return $mime_types;
-        }
-
-        // We're running an import.
-        if ($this->is_importing) {
+        // We're using the WP CLI or running the wordpress-import plugin.
+        if ((defined('WP_CLI') && \WP_CLI) || $this->is_importing) {
             return $mime_types;
         }
 

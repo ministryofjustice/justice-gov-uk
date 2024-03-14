@@ -49,7 +49,7 @@ class DynamicMenu
     {
         global $post;
 
-        if(!$post) {
+        if (!$post) {
             return null;
         }
 
