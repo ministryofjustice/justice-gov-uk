@@ -33,6 +33,9 @@ class Documents
     // Hardcoded document slug. We don't want this to be changed by the user.
     public $document_slug = 'documents';
 
+    // Is the wordpress-importer plugin running?
+    private $is_importing = false;
+
     public function __construct()
     {
         $this->addHooks();
@@ -44,6 +47,9 @@ class Documents
         // Set default plugin options.
         add_filter('document_slug', fn () => $this->document_slug);
         add_filter('option_document_link_date', '__return_true');
+        // Importing.
+        add_action('import_start', fn() => $this->is_importing = true);
+        add_action('import_end', fn() => $this->is_importing = false);
         // Dashboard
         add_action('admin_init', [$this, 'hideEditor']);
         add_action('edit_form_after_title', [$this, 'modifiedPrepareEditor']);
@@ -402,6 +408,11 @@ class Documents
 
         // We're using the WP CLI.
         if (defined('WP_CLI') && \WP_CLI) {
+            return $mime_types;
+        }
+
+        // We're running an import.
+        if ($this->is_importing) {
             return $mime_types;
         }
 
