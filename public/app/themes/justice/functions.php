@@ -25,6 +25,7 @@ require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
+require_once 'inc/optimise.php';
 require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/taxonomies.php';
@@ -38,6 +39,7 @@ new Justice\Admin();
 new Justice\Comments();
 new Justice\Documents();
 new Justice\Layout();
+new Justice\Optimise();
 new Justice\SimpleGutenFields();
 
 $block_editor = new Justice\BlockEditor();
