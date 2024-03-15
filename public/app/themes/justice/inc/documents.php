@@ -202,7 +202,7 @@ class Documents
         global $wp;
         $ext = pathinfo($wp->request, PATHINFO_EXTENSION);
 
-        if (!$ext) {
+        if (!$ext || $ext === 'php') {
             return;
         }
 
