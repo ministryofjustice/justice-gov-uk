@@ -59,7 +59,7 @@ trait DocumentColumns
                 $revision_count = $this->arrayFind($results, fn ($row) => $row['post_type'] === 'revision')['count'];
                 echo "$revision_count / $attachment_count";
             } else {
-                echo '0';
+                echo '0 / 0';
             }
         }
 
