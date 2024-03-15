@@ -20,7 +20,7 @@ require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/debug.php';
 require_once 'inc/disable-comments.php';
-require_once 'inc/documents.php';
+require_once 'inc/documents/documents.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
 require_once 'inc/layout.php';

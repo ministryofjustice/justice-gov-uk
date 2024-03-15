@@ -6,6 +6,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once 'columns.php';
+require_once 'filters.php';
+
 /**
  * Documents
  * Actions and filters related to WordPress documents post type.
@@ -13,6 +16,9 @@ if (!defined('ABSPATH')) {
 
 class Documents
 {
+
+    use DocumentColumns;
+    use DocumentFilters;
 
     // File extensions to mark as downloadable in S3.
     private $content_disposition_extensions = [
@@ -36,10 +42,13 @@ class Documents
     // Is the wordpress-importer plugin running?
     private $is_importing = false;
 
+    private $post_meta = null;
+
     public function __construct()
     {
         $this->addHooks();
         $this->removeHooks();
+        $this->post_meta = new PostMeta();
     }
 
     public function addHooks()
@@ -51,6 +60,8 @@ class Documents
         add_action('import_start', fn () => $this->is_importing = true);
         add_action('import_end', fn () => $this->is_importing = false);
         // Dashboard
+        add_action('restrict_manage_posts', [$this, 'addFilteringDropdown']);
+        add_filter('parse_query', [$this, 'editorFiltering']);
         add_action('admin_init', [$this, 'hideEditor']);
         add_action('edit_form_after_title', [$this, 'modifiedPrepareEditor']);
         // Serving documents
@@ -72,7 +83,11 @@ class Documents
         add_filter('upload_mimes', [$this,  'removeFileSupport'], 10, 3);
         // Limits on uploads. * Affects documents & non-documents.
         add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
+
+        add_filter('manage_' . $this->slug . '_posts_columns', [$this, 'addColumns']);
+        add_filter('manage_' . $this->slug . '_posts_custom_column', [$this, 'addColumnContent'], null, 2);
     }
+
 
     /**
      * Remove the editor for the document post type.
