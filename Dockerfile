@@ -93,7 +93,9 @@ RUN rm -rf node_modules
 FROM base-fpm AS build-fpm
 
 WORKDIR /var/www/html
-COPY --chown=www-data:www-data . .
+COPY --chown=www-data:www-data ./config ./config
+COPY --chown=www-data:www-data ./public ./public
+COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/wp /var/www/html/public/wp
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/vendor /var/www/html/vendor
 COPY --from=assets-build       --chown=www-data:www-data /node/dist/php ./public/app/themes/justice/dist/php
 
