@@ -60,7 +60,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 USER 82
 
 COPY ./composer.json ./composer.lock /var/www/html/
-RUN composer install --no-dev
+RUN composer install --no-dev --no-autoloader
+
 RUN composer dump-autoload -o
 
 ARG regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\|svg\|webmanifest\)'
