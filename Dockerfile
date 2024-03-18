@@ -119,6 +119,8 @@ FROM base-nginx AS build-nginx
 # Grab server configurations
 COPY deploy/config/php-fpm.conf /etc/nginx/php-fpm.conf
 COPY deploy/config/server.conf /etc/nginx/conf.d/default.conf
+
+# WordPress view bootstrapper
 COPY public/index.php /var/www/html/public/index.php
 
 # Grab assets for Nginx
