@@ -119,6 +119,7 @@ FROM base-nginx AS build-nginx
 # Grab server configurations
 COPY deploy/config/php-fpm.conf /etc/nginx/php-fpm.conf
 COPY deploy/config/server.conf /etc/nginx/conf.d/default.conf
+COPY public/index.php /var/www/html/public/index.php
 
 # Grab assets for Nginx
 COPY --from=assets-build /node/style.css /var/www/html/public/app/themes/justice/
@@ -126,5 +127,4 @@ COPY --from=assets-build /node/dist      /var/www/html/public/app/themes/justice
 
 # Only take what Nginx needs (current configuration)
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/vendor-assets /var/www/html/
-COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/wp/index.php /var/www/html/public/index.php
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/wp/wp-admin/index.php /var/www/html/public/wp/wp-admin/index.php
