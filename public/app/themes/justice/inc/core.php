@@ -32,7 +32,7 @@ class Core
 
     /**
      * Remove the welcome panel from the dashboard.
-     * 
+     *
      * @return void
      */
 
@@ -43,10 +43,10 @@ class Core
 
     /**
      * Removes various default dashboard widgets.
-     * 
+     *
      * Some of them create unnecessary transient entries in the database.
      * Others are only relevant to posts, and will likely never be used.
-     * 
+     *
      * @return void
      */
 
