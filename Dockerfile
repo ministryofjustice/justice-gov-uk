@@ -59,10 +59,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # non-root
 USER 82
 
-COPY ./composer.json /var/www/html/composer.json
-RUN composer install --no-dev --no-scripts --no-autoloader
-
-COPY . .
+COPY ./composer.json ./composer.lock /var/www/html/
 RUN composer install --no-dev
 RUN composer dump-autoload -o
 
@@ -96,7 +93,8 @@ RUN rm -rf node_modules
 FROM base-fpm AS build-fpm
 
 WORKDIR /var/www/html
-COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html  .
+COPY --chown=www-data:www-data . .
+COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/vendor /var/www/html/vendor
 COPY --from=assets-build       --chown=www-data:www-data /node/dist/php ./public/app/themes/justice/dist/php
 
 # non-root
@@ -125,5 +123,5 @@ COPY --from=assets-build /node/dist      /var/www/html/public/app/themes/justice
 
 # Only take what Nginx needs (current configuration)
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/vendor-assets /var/www/html/
-COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/index.php /var/www/html/public/index.php
+COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/wp/index.php /var/www/html/public/index.php
 COPY --from=build-fpm-composer --chown=www-data:www-data /var/www/html/public/wp/wp-admin/index.php /var/www/html/public/wp/wp-admin/index.php
