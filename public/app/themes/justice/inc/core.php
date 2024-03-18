@@ -7,11 +7,10 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Optimise
- * Actions and filters related to removing unused features from WordPress.
+ * Actions and filters related to removing unused features from WordPress core.
  */
 
-class Optimise
+class Core
 {
 
     public function __construct()
@@ -19,7 +18,7 @@ class Optimise
         $this->addHooks();
     }
 
-    public function addHooks()
+    public function addHooks() : void
     {
         // Remove the welcome panel.
         add_action('admin_init', [$this, 'removeWelcomePanel']);
@@ -31,16 +30,24 @@ class Optimise
         add_filter('translations_api', fn () => []);
     }
 
-    public function removeWelcomePanel()
+    /**
+     * Remove the welcome panel from the dashboard.
+     * 
+     * @return void
+     */
+
+    public function removeWelcomePanel() : void
     {
         remove_action('welcome_panel', 'wp_welcome_panel');
     }
 
-    /*
-     * removeDefaultDashboardWidgets
+    /**
      * Removes various default dashboard widgets.
+     * 
      * Some of them create unnecessary transient entries in the database.
      * Others are only relevant to posts, and will likely never be used.
+     * 
+     * @return void
      */
 
     public function removeDefaultDashboardWidgets(): void
