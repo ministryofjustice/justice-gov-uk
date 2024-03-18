@@ -60,7 +60,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 USER 82
 
 COPY ./composer.json ./composer.lock /var/www/html/
-RUN composer install --no-dev --no-autoloader
+RUN composer install --no-dev
 
 RUN composer dump-autoload -o
 
