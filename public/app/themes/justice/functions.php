@@ -29,6 +29,7 @@ require_once 'inc/optimise.php';
 require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/taxonomies.php';
+require_once 'inc/utils.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();

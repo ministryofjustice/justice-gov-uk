@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Filters template part.
  */
 
