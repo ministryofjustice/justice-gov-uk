@@ -1483,19 +1483,26 @@ span.view-all {
     color: #333333;
 }
 
-#content .filter span.title {
+
+/* Migration edit: move filter into content-left */
+#content-left .filter span.title {
     float: left;
     padding: 1em 0 2em 0;
     color: #3c3c2c;
     font-size: 1.3em;
 }
 
-#content .filter-btns {
+#content-left .filter-btns {
     float: left;
     width: 162px;
     margin-top: 20px;
     text-align: right;
 }
+
+#content-left .filter-btns input {
+    width: auto;
+}
+/* End migration edit */
 
 #content-left .org-logo {
     float: left;

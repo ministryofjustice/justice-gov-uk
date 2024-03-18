@@ -12,14 +12,18 @@ class PostMeta
 {
 
     protected int | false $post_id = 0;
+    protected array | null $panels_in = null;
 
     /**
      * Constructor.
      */
 
-    public function __construct(int | string $post_id = 0)
+    public function __construct(int | string $post_id = 0, array $options = [])
     {
         $this->post_id = $post_id ? (int) $post_id : \get_the_ID();
+        if (isset($options['panels_in'])) {
+            $this->panels_in = $options['panels_in'];
+        }
     }
 
     /**
@@ -41,6 +45,9 @@ class PostMeta
 
     public function hasPanel(string $panel, string | int $post_id = 0): bool
     {
+        if (isset($this->panels_in)) {
+            return in_array($panel, $this->panels_in);
+        }
         return get_post_meta($post_id ?: $this->post_id, "_panel_$panel", true);
     }
 
