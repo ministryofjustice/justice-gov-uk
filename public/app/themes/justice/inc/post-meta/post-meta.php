@@ -89,9 +89,8 @@ class PostMeta
      * Get the modified at date.
      */
 
-    public function getModifiedAt(string | int $post_id = 0): string
+    public function getModifiedAt(string | int $post_id = 0, $date_format = 'l, j F Y'): string
     {
-        $date_format = 'l, j F Y';
         try {
             $modified_at_override = get_post_meta($post_id ?: $this->post_id, '_modified_at_override', true);
             return $modified_at_override ? date($date_format, strtotime($modified_at_override)) : get_the_modified_date($date_format);
