@@ -11,6 +11,3 @@ License: MIT
 License URI: https://github.com/ministryofjustice/justice.gov.uk/blob/main/LICENSE
 Text Domain: justice_gov_uk
 */
-
-@import url("dist/css/global.css");
-@import url("dist/css/media.queries.css");
