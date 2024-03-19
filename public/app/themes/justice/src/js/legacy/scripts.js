@@ -1,176 +1,24 @@
 import jQuery from 'jquery';
-import {
-  SetCookie,
-  DeleteCookie,
-  getCookieVal,
-  GetCookie,
-  SetCookieConsent
-} from "./cookies";
+import { GetCookie, SetCookieConsent } from "./cookies";
+import nselect from "./nselect";
 
-//variables
-var moj_rhs_panels = [
-  ['PANELS.mostPopular', '#panel-mostPopular'],
-  ['PANELS.related', '#panel-relatedContent'],
-  ['PANELS.emailAlerts', '#panel-emailAlerts'],
-  ['PANELS.findForm', '#panel-findForm'],
-  ['PANELS.findCourtForm', '#panel-findCourtForm'],
-  ['STDATA.ContactSwitch', '#panel-STContact'],
-  ['SD.SEARCHSwitch', '#panel-SDsearch']
-  //['LPA.LPASwitch','#panel-lpa']
-];
-
-/*
-  replaces select tags with custom versions
-  optional arg allows this to run on a separate piece of html (eg. ajax calls)
-*/
-function nselect(html) {
-  var offset = 0;
-
-  if (typeof (html) == 'undefined' || html.length == 0)
-    html = jQuery('body');
-  else
-    offset = jQuery('[id^="nselect"]').length;
-
-  jQuery(html).find('select').each(function (i) {
-    if (typeof jQuery(this).attr('class') != 'undefined' && jQuery(this).attr('class').indexOf('no-nselect') > -1) return;
-
-    var pos = i + offset;
-    var select = this;
-    var nselect = "#nselect" + pos;
-    var nselect_current = nselect + ' .current';
-    var nselect_ul = nselect + ' ul';
-    var nselect_li = nselect_ul + ' li';
-    //hide select
-    jQuery(this).hide();
-    //build
-    jQuery(this).after('<div id="nselect' + pos + '" class="nselect" style="z-index:' + (1000 - pos) + ';" tabindex="0"><div class="current"></div><ul class="inner-list" style="display:none;"></ul></div>');
-    var selected_val = '';
-    jQuery(select).children('option').each(function (j) {
-      jQuery(nselect_ul).append('<li class="option' + j + '"><span>' + jQuery(this).html() + '</span><input type="hidden" value="' + jQuery(this).val() + '" /></li>');
-      if (jQuery(this).is(':selected')) selected_val = jQuery(this).html();
-    });
-    if (selected_val.length == 0) selected_val = jQuery(nselect_ul + ' li.option0').html();
-    jQuery(nselect).children('.current').html(selected_val);
-    //events
-    jQuery(nselect).focus(function () {
-      jQuery(nselect_ul).show();
-    });
-    jQuery(nselect).blur(function () {
-      jQuery(nselect_ul).hide();
-      jQuery(nselect_ul).children('li.hover').removeClass('hover');
-      jQuery(nselect_ul).children('li.selected').addClass('hover');
-    });
-    jQuery(nselect).click(function () {
-      jQuery(nselect).focus();
-    });
-    jQuery(nselect).keydown(function (e) {
-      switch (e.which) {
-        case 13: // enter
-          e.preventDefault();
-          jQuery(nselect_ul).children('li.hover').click();
-          break;
-        case 32: // space
-          e.preventDefault();
-          jQuery(nselect_ul).toggle();
-          break;
-        case 38: // arrow-up
-          e.preventDefault();
-          if (!jQuery(nselect_ul).is(":visible")) {
-            jQuery(nselect_ul).show();
-            break;
-          }
-          if (jQuery(nselect_ul).children('li.hover').length > 0) {
-            var ind = jQuery(nselect_ul).children('li.hover').index();
-            if (ind > 0) {
-              jQuery(jQuery(nselect_ul).children('li')[ind]).removeClass('hover');
-              jQuery(jQuery(nselect_ul).children('li')[ind - 1]).addClass('hover');
-            } else {
-              jQuery(jQuery(nselect_ul).children('li')[ind]).removeClass('hover');
-              jQuery(jQuery(nselect_ul).children('li')[jQuery(nselect_ul).children('li').length - 1]).addClass('hover');
-            }
-          } else jQuery(jQuery(nselect_ul).children('li')[jQuery(nselect_ul).children('li').length - 1]).addClass('hover');
-          break;
-        case 40: // arrow-down
-          e.preventDefault();
-          if (!jQuery(nselect_ul).is(":visible")) {
-            jQuery(nselect_ul).show();
-            break;
-          }
-          if (jQuery(nselect_ul).children('li.hover').length > 0) {
-            var ind = jQuery(nselect_ul).children('li.hover').index();
-            if (ind < jQuery(nselect_ul).children('li').length - 1) {
-              jQuery(jQuery(nselect_ul).children('li')[ind]).removeClass('hover');
-              jQuery(jQuery(nselect_ul).children('li')[ind + 1]).addClass('hover');
-            } else {
-              jQuery(jQuery(nselect_ul).children('li')[ind]).removeClass('hover');
-              jQuery(jQuery(nselect_ul).children('li')[0]).addClass('hover');
-            }
-          } else jQuery(jQuery(nselect_ul).children('li')[0]).addClass('hover');
-          break;
-      }
-      if (e.which >= 65 && e.which <= 90) {
-        var current = jQuery(nselect_ul).children('li.hover').length > 0 ? jQuery(nselect_ul).children('li.hover').index() : -1;
-        var stop = false;
-        for (var i = current + 1; i < jQuery(nselect_ul).children('li').length; i++) {
-          var _this = jQuery(nselect_ul).children('li')[i];
-          if (jQuery(_this).html().charAt(6).toLowerCase() == String.fromCharCode(e.which).toLowerCase()) {
-            jQuery(nselect_ul).show();
-            jQuery(nselect_ul).children('li.hover').removeClass('hover');
-            jQuery(jQuery(nselect_ul).children('li')[i]).addClass('hover');
-            stop = true;
-            break;
-          }
-        }
-        if (!stop) for (var i = 0; i <= current; i++) {
-          var _this = jQuery(nselect_ul).children('li')[i];
-          if (jQuery(_this).html().charAt(6).toLowerCase() == String.fromCharCode(e.which).toLowerCase()) {
-            jQuery(nselect_ul).show();
-            jQuery(nselect_ul).children('li.hover').removeClass('hover');
-            jQuery(jQuery(nselect_ul).children('li')[i]).addClass('hover');
-            break;
-          }
-        }
-      }
-      // Scroll to element position
-      var ind = jQuery(nselect_ul).children('li.hover').index();
-      var h = 0;
-      jQuery(nselect_ul).children('li').each(function (i) {
-        if (i == ind) return false;
-        if (i > 0) h += jQuery(this).outerHeight();
-      });
-      jQuery(nselect_ul).scrollTop(h);
-    });
-    jQuery(nselect_ul).children('li').hover(function () {
-      jQuery(nselect_ul).children('li.hover').removeClass('hover');
-      jQuery(this).addClass('hover');
-    });
-    jQuery(nselect_li).click(function (e) {
-      e.stopPropagation();
-      jQuery(select).val(jQuery(this).children('input').val());
-      jQuery(nselect_current).html(jQuery(this).children('span').html());
-      jQuery(nselect_ul).hide();
-      jQuery(select).trigger('change');
-      jQuery(nselect_ul).children('li.hover').removeClass('hover');
-      jQuery(nselect_ul).children('li.selected').removeClass('selected');
-      jQuery(this).addClass('selected').addClass('hover');
-    });
-    jQuery(select).change(function () {
-      jQuery(nselect_current).html(jQuery(this).children('option:selected').html());
-    })
-    //move 'device-only' class
-    if (jQuery(select).hasClass('device-only')) {
-      jQuery(select).removeClass('device-only');
-      jQuery(nselect).addClass('device-only');
-    }
-  });
-}
-
-
-jQuery.noConflict();
+// jQuery.noConflict();
 jQuery(document).ready(function () {
-  //mobile/full version links (requires cookies.js)
-  jQuery('#links-top').append('<li class="device-only">.</li>');
-  jQuery('#links-top').append('<li class="device-only"><form id="mqueries-sel" method="post"><input id="mqueries-val" name="mqueries-val" type="hidden" value="" /></form></li>');
+
+  /**
+   * Custom selects are used on the search page.
+   */
+
+  nselect();
+
+  /**
+   * The following code is legacy and is not yet fully understood.
+   */
+
+  /**
+   * Cookies
+   */
+
   if (GetCookie("moj-mqueries-val") != "true") {
     jQuery('#mqueries-val').val('full');
     jQuery('#mqueries-sel').append('<a href="#">Full site</a>');
@@ -179,10 +27,12 @@ jQuery(document).ready(function () {
     jQuery('#mqueries-sel').append('<a href="#">Mobile site</a>');
     jQuery('#links-top li').removeClass('device-only');
   }
+  
   jQuery('#mqueries-sel a').click(function (e) {
     e.preventDefault();
     jQuery(this).closest('form').submit();
   });
+
   if (GetCookie('moj-consent') != "true") {
     //define banner
     jQuery('#cookieDirective').append('<div class="cookie-policy"><img src="./?a=55304" width="56" height="64" style="float:left; padding:9px;"><div class="explanation"><p><strong>We use cookies on this website to enable social sharing and monitor site usage. </strong></p><p>Disabling cookies will stop social sharing and prevent us monitoring site usage.</p></div><div id="accept-cookies"><form class="styled" id="set-cookie"><input type="button" name="opt-in" id="opt-in" value="Thanks, I&rsquo;ve read this" class="go-btn"></form><p><a href="/privacy/cookies/">How to manage cookies</a></p></div></div>');
@@ -195,6 +45,10 @@ jQuery(document).ready(function () {
     //set cookie
     SetCookieConsent("moj-consent", "true", "730");
   }
+
+  //mobile/full version links (requires cookies.js)
+  jQuery('#links-top').append('<li class="device-only">.</li>');
+  jQuery('#links-top').append('<li class="device-only"><form id="mqueries-sel" method="post"><input id="mqueries-val" name="mqueries-val" type="hidden" value="" /></form></li>');
 
   //tab-group
   jQuery('.tab-group .tabs').each(function () {
@@ -280,38 +134,52 @@ jQuery(document).ready(function () {
     });
   }
 
-  //custom selects
-  nselect();
-
+  // Migration: News is now on gov.uk. In case we ned this do it with PHP.
   //news section selected state
-  jQuery('#section-sub li').each(function () {
-    if (jQuery(this).children('a').html().replace('All news', 'News') == jQuery('#breadcrumb li:last a').html()) jQuery(this).addClass('selected');
-  });
+  // jQuery('#section-sub li').each(function () {
+  //   if (jQuery(this).children('a').html().replace('All news', 'News') == jQuery('#breadcrumb li:last a').html()) jQuery(this).addClass('selected');
+  // });
 
+  // Migration: don't use panels switch. Use php to enable/disable panels.
+  //variables
+  // var moj_rhs_panels = [
+  //   ['PANELS.mostPopular', '#panel-mostPopular'],
+  //   ['PANELS.related', '#panel-relatedContent'],
+  //   ['PANELS.emailAlerts', '#panel-emailAlerts'],
+  //   ['PANELS.findForm', '#panel-findForm'],
+  //   ['PANELS.findCourtForm', '#panel-findCourtForm'],
+  //   ['STDATA.ContactSwitch', '#panel-STContact'],
+  //   ['SD.SEARCHSwitch', '#panel-SDsearch']
+  //   //['LPA.LPASwitch','#panel-lpa']
+  // ];
+
+  // Migration: don't use panels switch. Use php to enable/disable panels.
   //rhs panels switch
-  jQuery.each(moj_rhs_panels, function () {
-    if (jQuery('meta[name="' + jQuery(this)[0] + '"]').length > 0 && jQuery('meta[name="' + jQuery(this)[0] + '"]').attr('content') == 1) jQuery(jQuery(this)[1]).show();
-  });
+  // jQuery.each(moj_rhs_panels, function () {
+  //   if (jQuery('meta[name="' + jQuery(this)[0] + '"]').length > 0 && jQuery('meta[name="' + jQuery(this)[0] + '"]').attr('content') == 1) jQuery(jQuery(this)[1]).show();
+  // });
 
+  // Migration: don't load content in php template, not with ajax.
   //most popular widget
-  if (jQuery('body.home #popular-wrapper').length > 0) {
-    //load widget (home)
-    jQuery('#popular-wrapper').load('/?a=31472&SQ_DESIGN_NAME=blank&SQ_PAINT_NAME=blank&source=' + jQuery('meta[name="MostPopularOverride"]').attr('content'));
-  }
-  else if (jQuery('meta[name="PANELS.mostPopular"]').attr('content') == 1) {
-    //load widget (panels)
-    jQuery('#panel-mostPopular-wrapper').load('/?a=31431&SQ_DESIGN_NAME=blank&SQ_PAINT_NAME=blank&source=' + jQuery('meta[name="MostPopularOverride"]').attr('content'), function () {
-      jQuery('#panel-mostPopular').show();
-    });
-  }
+  // if (jQuery('body.home #popular-wrapper').length > 0) {
+  //   //load widget (home)
+  //   jQuery('#popular-wrapper').load('/?a=31472&SQ_DESIGN_NAME=blank&SQ_PAINT_NAME=blank&source=' + jQuery('meta[name="MostPopularOverride"]').attr('content'));
+  // }
+  // else if (jQuery('meta[name="PANELS.mostPopular"]').attr('content') == 1) {
+  //   //load widget (panels)
+  //   jQuery('#panel-mostPopular-wrapper').load('/?a=31431&SQ_DESIGN_NAME=blank&SQ_PAINT_NAME=blank&source=' + jQuery('meta[name="MostPopularOverride"]').attr('content'), function () {
+  //     jQuery('#panel-mostPopular').show();
+  //   });
+  // }
 
+  // Migration: don't load content in php template, not with ajax.
   //related content widget
-  if (jQuery('meta[name="PANELS.related"]').attr('content') == 1) {
-    //load widget
-    jQuery('#panel-relatedContent-wrapper').load('/?a=31357&SQ_DESIGN_NAME=blank&SQ_PAINT_NAME=blank&source=' + jQuery('meta[name="RelatedContentOverride"]').attr('content') + '&assetname=' + jQuery('meta[name="DC.title"]').attr('content').replace(/\s+/g, '-'), function () {
-      jQuery('#panel-relatedContent').show();
-    });
-  }
+  // if (jQuery('meta[name="PANELS.related"]').attr('content') == 1) {
+  //   //load widget
+  //   jQuery('#panel-relatedContent-wrapper').load('/?a=31357&SQ_DESIGN_NAME=blank&SQ_PAINT_NAME=blank&source=' + jQuery('meta[name="RelatedContentOverride"]').attr('content') + '&assetname=' + jQuery('meta[name="DC.title"]').attr('content').replace(/\s+/g, '-'), function () {
+  //     jQuery('#panel-relatedContent').show();
+  //   });
+  // }
 
   //tribunals search
   jQuery('form#tribunal').submit(function (e) {
@@ -320,13 +188,13 @@ jQuery(document).ready(function () {
   });
 
   //clear filter button
-  jQuery('.filter .go-btn-grey').click(function () {
-    var filter = jQuery(this).closest('.filter');
-    jQuery(filter).find('select').each(function () {
-      jQuery(this).children('option:first-child').attr('selected', 'selected').trigger('change');
-    });
-    jQuery(filter).children('form').submit();
-  });
+  // jQuery('.filter .go-btn-grey').click(function () {
+  //   var filter = jQuery(this).closest('.filter');
+  //   jQuery(filter).find('select').each(function () {
+  //     jQuery(this).children('option:first-child').attr('selected', 'selected').trigger('change');
+  //   });
+  //   jQuery(filter).children('form').submit();
+  // });
 
   //find a court panel
   var courtFinder = '';
@@ -388,26 +256,28 @@ jQuery(document).ready(function () {
   });
 
   //court finder
-  jQuery.ajax({
-    url: _mojCourtFinderSearchXML,
-    dataType: "xml",
-    success: function (xmlResponse) {
-      var data = jQuery("crt", xmlResponse).map(function () {
-        return {
-          value: jQuery("cname", this).text(),
-          id: jQuery("id", this).text()
-        };
-      }).get();
+  // Migration: disable temporarily.
+  // jQuery.ajax({
+  //   url: _mojCourtFinderSearchXML,
+  //   dataType: "xml",
+  //   success: function (xmlResponse) {
+  //     var data = jQuery("crt", xmlResponse).map(function () {
+  //       return {
+  //         value: jQuery("cname", this).text(),
+  //         id: jQuery("id", this).text()
+  //       };
+  //     }).get();
 
-      jQuery("#courtcomplete").autocomplete({
-        source: data,
-        minLength: 0,
-        select: function (event, ui) {
-          jQuery('#court_id').val(ui.item.id);
-        }
-      });
-    }
-  });
+  //     jQuery("#courtcomplete").autocomplete({
+  //       source: data,
+  //       minLength: 0,
+  //       select: function (event, ui) {
+  //         jQuery('#court_id').val(ui.item.id);
+  //       }
+  //     });
+  //   }
+  // });
+
   jQuery("#court-search").click(function (event) {
     event.preventDefault();
 
