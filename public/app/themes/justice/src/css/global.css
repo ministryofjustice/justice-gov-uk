@@ -2236,7 +2236,9 @@ body.inner-cr .search-wrapper .search {
 }
 
 .search .results article {
-    float: left;
+    /* Migration: remove float */
+    /* float: left; */
+    clear: both;
     padding-top: 2em;
 }
 
@@ -2821,7 +2823,7 @@ a[href$='.xls'], a[href$='.xlsx'], a[href$='.csv'], a[href$='.xlt'], a[href$='.x
     *display: block;
     padding-left: 18px;
     line-height: 18px;
-    background: transparent url(img/icon/xls.png) center left no-repeat;
+    background: transparent url(../img/icon/xls.png) center left no-repeat;
 }
 
 a[href$='.ppt'], a[href$='.pptx'], a[href$='.pps'] {

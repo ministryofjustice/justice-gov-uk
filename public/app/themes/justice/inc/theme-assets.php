@@ -20,16 +20,28 @@ class ThemeAssets
 
     public function addHooks() : void
     {
-        add_action('wp_enqueue_scripts', array($this, 'loadScripts'));
-        add_action('wp_enqueue_scripts', array($this, 'loadStyles'));
+        add_action('wp_enqueue_scripts', [$this, 'loadStyles']);
+        add_action('wp_enqueue_scripts', [$this, 'loadScripts']);
+        add_action('wp_default_scripts', [$this, 'removeJqueryMigrate']);
+    }
+
+    /**
+     * Load the main app styles.
+     *
+     * @return void
+     */
+
+    public function loadStyles(): void
+    {
+        wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css');
     }
 
     /**
      * Load the main app script.
-     * 
+     *
      * This is also the best place to load any other scripts that are needed on every page.
      * After wp_register_script, localise_script can be used to pass data to the script if necessary.
-     * 
+     *
      * @return void
      */
 
@@ -56,13 +68,21 @@ class ThemeAssets
     }
 
     /**
-     * Load the main app styles.
-     * 
+     * Remove the unnecessary jquery migrate script.
+     *
+     * @param object $scripts
      * @return void
      */
 
-    public function loadStyles(): void
+    public function removeJqueryMigrate($scripts): void
     {
-        wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css');
+        if (! is_admin() && isset($scripts->registered['jquery'])) {
+            $script = $scripts->registered['jquery'];
+
+            if ($script->deps) {
+                // Check whether the script has any dependencies
+                $script->deps = array_diff($script->deps, array( 'jquery-migrate' ));
+            }
+        }
     }
 }
