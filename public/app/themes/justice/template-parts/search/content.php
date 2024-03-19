@@ -1,8 +1,8 @@
 <?php
 
-use MOJ\Justice\Utils;
-
-
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 ?>
 
@@ -14,13 +14,11 @@ use MOJ\Justice\Utils;
     </h1>
 
     <!-- QUERY BIASED SUMMARY (WITH DATE)-->
-    <span class="date"><?php  ?></span>
+    <span class="date"><?= $args['modified_at'] ?></span>
     <span class="content">
         <?php the_excerpt(); ?>
     </span>
 
-    <span style="color:#008000;">www.justice.gov.uk/downloads/offenders/probation-instructions<br>/pi-43-2014-eye-tests.doc</span>
-
-    <span style="color:#008000; overflow-wrap: break-word; hyphens: none; overflow: hidden;"><?= formattedUrl(get_permalink()); ?></span>
+    <span style="color:#008000;"><?= $args['formatted_url'] ?></span>
 
 </article>

@@ -1,14 +1,12 @@
 <?php
 
+use MOJ\Justice\PostMeta;
+use MOJ\Justice\Search;
+
 get_header();
 
-function formattedUrl ($url) {
-    $url = str_replace('http://', '', $url);
-    $url = str_replace('https://', '', $url);
-    $url = str_replace('/', '/&#8203;', $url);
-    // $url = str_replace('-', '&#8288;-&#8288;', $url);
-    return $url;
-}
+$post_meta = new PostMeta();
+$search = new Search();
 
 ?>
 
@@ -39,7 +37,7 @@ function formattedUrl ($url) {
 
             <div class="search">
 
-                <?php get_template_part('template-parts/search/search-bar') ?>
+                <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount()]) ?>
 
                 <?php get_template_part('template-parts/search/sort') ?>
 
@@ -48,15 +46,19 @@ function formattedUrl ($url) {
                 <div class="results">
 
                 <?php
-                    if ( have_posts() ) {
-                        while ( have_posts() ) {
-                            the_post();
-                            get_template_part( 'template-parts/search/content', get_post_type() );
-                        }
-                    } else {
-                        get_template_part('template-parts/search/no-results');
+                if (have_posts()) {
+                    while (have_posts()) {
+                        the_post();
+                        $args = [
+                            'formatted_url' => $search->formattedUrl(get_the_permalink()),
+                            'modified_at' => $post_meta->getModifiedAt(\get_the_ID(), 'j F Y')
+                        ];
+                        get_template_part('template-parts/search/content', get_post_type(), $args);
                     }
-                    ?>
+                } else {
+                    get_template_part('template-parts/search/no-results');
+                }
+                ?>
 
                 </div>
 
