@@ -29,6 +29,7 @@ require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/search.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/taxonomies.php';
+require_once 'inc/theme-assets.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();
@@ -41,6 +42,7 @@ new Justice\Documents();
 new Justice\Layout();
 new Justice\Search();
 new Justice\SimpleGutenFields();
+new Justice\ThemeAssets();
 
 $block_editor = new Justice\BlockEditor();
 $block_editor->addHooks();
@@ -50,12 +52,6 @@ $post_meta->addHooks();
 
 $taxonomies = new Justice\Taxonomies();
 $taxonomies->addHooks();
-
-add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('style-name', get_stylesheet_uri()));
-
-add_action('wp_enqueue_scripts', fn() => wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/app.min.css'));
-
-add_editor_style();
 
 add_action('init', fn() => register_nav_menus([
     'header-menu' => __('Header Menu'),
