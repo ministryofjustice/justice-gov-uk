@@ -6,7 +6,7 @@
  */
 
 use Roots\WPConfig\Config;
-use function Env\env;
+use function MOJ\Justice\env;
 
 $as3_settings = array(
     // Storage Provider ('aws', 'do', 'gcp')
@@ -57,7 +57,7 @@ if (env('AWS_ACCESS_KEY_ID') && env('AWS_SECRET_ACCESS_KEY')) {
     unset($as3_settings['use-server-roles']);
 
     $as3_settings = array_merge($as3_settings, [
-         // Access Key ID for Storage Provider (aws and do only, replace '*')
+        // Access Key ID for Storage Provider (aws and do only, replace '*')
         'access-key-id' => env('AWS_ACCESS_KEY_ID'),
         // Secret Access Key for Storage Providers (aws and do only, replace '*')
         'secret-access-key' => env('AWS_SECRET_ACCESS_KEY'),

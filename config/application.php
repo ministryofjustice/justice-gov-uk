@@ -1,4 +1,7 @@
 <?php
+
+require 'env.php';
+
 /**
  * Your base production configuration goes in this file. Environment-specific
  * overrides go in their respective config/environments/{{WP_ENV}}.php file.
@@ -9,7 +12,7 @@
  */
 
 use Roots\WPConfig\Config;
-use function Env\env;
+use function MOJ\Justice\env;
 
 /**
  * Directory containing all the site's files
@@ -81,9 +84,9 @@ Config::define('DB_CHARSET', 'utf8mb4');
 Config::define('DB_COLLATE', '');
 
 // If the request origin is from a test suite, use the test database.
-$is_test_request = ( isset($_SERVER['HTTP_X_TEST_REQUEST']) && $_SERVER['HTTP_X_TEST_REQUEST'] )
-|| ( isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'wp-browser' )
-|| getenv('WPBROWSER_HOST_REQUEST');
+$is_test_request = (isset($_SERVER['HTTP_X_TEST_REQUEST']) && $_SERVER['HTTP_X_TEST_REQUEST'])
+    || (isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT'] === 'wp-browser')
+    || env('WPBROWSER_HOST_REQUEST');
 
 // Set the table prefix based on the request origin.
 $table_prefix =  $is_test_request ? 'test_' : (env('DB_PREFIX') ?: 'wp_');
@@ -168,7 +171,7 @@ Config::apply();
 if (env('SENTRY_DSN')) {
     Sentry\init([
         'dsn' => env('SENTRY_DSN'),
-        'environment'=> WP_ENV . (env('SENTRY_DEV_ID') ?? ''),
+        'environment' => WP_ENV . (env('SENTRY_DEV_ID') ?? ''),
         'traces_sample_rate' => Config::get('SENTRY_TRACES_SAMPLE_RATE'),
         'profiles_sample_rate' => Config::get('SENTRY_PROFILE_SAMPLE_RATE')
     ]);

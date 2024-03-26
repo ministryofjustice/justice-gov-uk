@@ -4,7 +4,7 @@
  */
 
 use Roots\WPConfig\Config;
-use function Env\env;
+use function MOJ\Justice\env;
 
 Config::define('SAVEQUERIES', true);
 Config::define('WP_DEBUG', true);
