@@ -18,9 +18,10 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
 require_once 'inc/admin.php';
 require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
+require_once 'inc/core.php';
 require_once 'inc/debug.php';
 require_once 'inc/disable-comments.php';
-require_once 'inc/documents.php';
+require_once 'inc/documents/documents.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
 require_once 'inc/layout.php';
@@ -30,6 +31,7 @@ require_once 'inc/search.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/taxonomies.php';
 require_once 'inc/theme-assets.php';
+require_once 'inc/utils.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();
@@ -38,6 +40,7 @@ if (getenv('WP_ENV') === 'development') {
 
 new Justice\Admin();
 new Justice\Comments();
+new Justice\Core();
 new Justice\Documents();
 new Justice\Layout();
 new Justice\Search();

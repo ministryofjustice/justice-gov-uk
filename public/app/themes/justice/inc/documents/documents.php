@@ -6,13 +6,18 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once 'columns.php';
+require_once 'filters.php';
+
 /**
- * Documents
  * Actions and filters related to WordPress documents post type.
  */
 
 class Documents
 {
+
+    use DocumentColumns;
+    use DocumentFilters;
 
     // File extensions to mark as downloadable in S3.
     private $content_disposition_extensions = [
@@ -35,14 +40,27 @@ class Documents
 
     // Is the wordpress-importer plugin running?
     private $is_importing = false;
+    // PostMeta instance - set in the constructor.
+    private $post_meta = null;
+    // Utils instance - set in the constructor.
+    private $utils = null;
 
     public function __construct()
     {
         $this->addHooks();
         $this->removeHooks();
+        $this->post_meta = new PostMeta();
+        $this->utils = new Utils();
     }
 
-    public function addHooks()
+
+    /**
+     * Add hooks to related to WordPress document post type.
+     *
+     * @return void
+     */
+
+    public function addHooks() : void
     {
         // Set default plugin options.
         add_filter('document_slug', fn () => $this->document_slug);
@@ -51,6 +69,8 @@ class Documents
         add_action('import_start', fn () => $this->is_importing = true);
         add_action('import_end', fn () => $this->is_importing = false);
         // Dashboard
+        add_action('restrict_manage_posts', [$this, 'addFilteringDropdown']);
+        add_filter('parse_query', [$this, 'editorFiltering']);
         add_action('admin_init', [$this, 'hideEditor']);
         add_action('edit_form_after_title', [$this, 'modifiedPrepareEditor']);
         // Serving documents
@@ -72,22 +92,32 @@ class Documents
         add_filter('upload_mimes', [$this,  'removeFileSupport'], 10, 3);
         // Limits on uploads. * Affects documents & non-documents.
         add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
+
+        add_filter('manage_' . $this->slug . '_posts_columns', [$this, 'addColumns']);
+        add_filter('manage_' . $this->slug . '_posts_custom_column', [$this, 'addColumnContent'], null, 2);
     }
+
 
     /**
      * Remove the editor for the document post type.
+     *
+     * @return void
      */
 
-    public function hideEditor()
+    public function hideEditor() : void
     {
         remove_post_type_support($this->slug, 'editor');
     }
 
     /**
      * Remove the title: Document Description
+     *
+     * @global wdpr $wpdr The global instance of the wp-document-revisions plugin.
+     *
+     * @return void
      */
 
-    public function removeHooks()
+    public function removeHooks() : void
     {
         global $wpdr;
         if (!isset($wpdr)) {
@@ -97,7 +127,10 @@ class Documents
     }
 
     /**
-     * isDocument
+     * Is a post of CPT document?
+     *
+     * @param int|\WP_Post|null $post
+     * @return bool
      */
 
     public function isDocument(int|\WP_Post|null $post): bool
@@ -114,8 +147,10 @@ class Documents
     }
 
     /**
-     * isDocumentAttachment
      * Check if the attachment is attached to a document post.
+     *
+     * @param int $attach_id
+     * @return bool
      */
 
     public function isDocumentAttachment($attach_id): bool
@@ -124,11 +159,13 @@ class Documents
     }
 
     /**
-     * modifiedPrepareEditor
-     * Add a hint to the editor to explain the slug.
+     * Echo a hint to the editor to explain the slug.
+     *
+     * @param \WP_Post $post
+     * @return void
      */
 
-    public function modifiedPrepareEditor($post)
+    public function modifiedPrepareEditor($post) : void
     {
         if (!$this->isDocument($post)) {
             return;
@@ -142,11 +179,15 @@ class Documents
     }
 
     /**
-     * filterGzip
      * Should the file be gzipped? Don't gzip zip files.
+     *
+     * @param bool $gzip
+     * @param string $mimetype
+     * @param int $filesize
+     * @return bool
      */
 
-    public function filterGzip($gzip, $mimetype, $filesize)
+    public function filterGzip($gzip, $mimetype, $filesize) : bool
     {
 
         if ('application/zip' === $mimetype) {
@@ -157,8 +198,16 @@ class Documents
     }
 
     /**
-     * maybeRedirectToAttachmentUrl
      * Stream the file via php, or redirect the user to the attachment URL (could be S3, CDN etc.).
+     *
+     * This function will either:
+     * - Stream the file via php, if the filesize is below the limit.
+     * - Redirect the user to the attachment URL, if the filesize is above the limit.
+     *
+     * @param string $file
+     * @param int $post_id
+     * @param int $attach_id
+     * @return string
      */
 
     public function maybeRedirectToAttachmentUrl($file, $post_id, $attach_id)
@@ -186,10 +235,15 @@ class Documents
     }
 
     /**
-     * redirectLegacyDocumentUrls
+     * Redirect to the new document URL if the request matches a _source_path.
+     *
      * During migration it was not possible to have an exact match between old and new document URLs.
      * The the path of the old document is stored in the source_path meta field.
      * If we have a 404 and the request matches a _source_path then redirect to the new document URL.
+     *
+     * @global \WP $wp
+     *
+     * @return void
      */
 
     public function redirectLegacyDocumentUrls(): void
@@ -202,7 +256,7 @@ class Documents
         global $wp;
         $ext = pathinfo($wp->request, PATHINFO_EXTENSION);
 
-        if (!$ext) {
+        if (!$ext || $ext === 'php') {
             return;
         }
 
@@ -226,10 +280,14 @@ class Documents
     }
 
     /**
-     * addObjectMeta
      * Add object meta to the S3 object.
+     *
      * This function is called whenever any file is upladed to S3.
      * Via the Media Library or the Document post type.
+     *
+     * @param array $args
+     * @param int $attach_id
+     * @return array
      */
 
     public function addObjectMeta($args, $attach_id)
@@ -274,7 +332,7 @@ class Documents
         return $args;
     }
 
-    /**
+    /*
      * 4 functions related to adding a parent page to the document post type.
      * - addMetaBoxes
      * - metaBoxContent
@@ -283,21 +341,23 @@ class Documents
      */
 
     /**
-     * addMetaBoxes
      * Add a parent page meta box to the document post type.
+     *
+     * @return void
      */
 
-    public function addMetaBoxes()
+    public function addMetaBoxes() : void
     {
         add_meta_box('page', 'Document Attributes', [$this, 'metaBoxContent'], $this->slug, 'side', 'default');
     }
 
     /**
-     * metaBoxContent
      * Echo the dropdown of parent pages.
+     *
+     * @param \WP_Post $post
      */
 
-    public function metaBoxContent($post)
+    public function metaBoxContent($post) : void
     {
         $pages = wp_dropdown_pages(
             array(
@@ -312,7 +372,6 @@ class Documents
 
         $verb = $post->post_parent ? 'Changing' : 'Setting';
 
-
         if (!empty($pages)) {
             echo '<label class="screen-reader-text" for="parent_id">Parent page</label>';
             echo '<p>Parent page</p>';
@@ -323,9 +382,13 @@ class Documents
     }
 
     /**
-     * addParentPagesToPermalink
      * Modifies the permalink of a document to include the parent page.
-     * e.g. /grand-parent-page/parent-page/document-name.ext
+     *
+     * e.g. /documents/document-name.ext -> /grand-parent-page/parent-page/documents/document-name.ext
+     *
+     * @param string $link
+     * @param \WP_Post $document
+     * @return string
      */
 
     public function addParentPagesToPermalink($link, $document)
@@ -338,14 +401,17 @@ class Documents
     }
 
     /**
-     * addRewriteRules
      * Add rewrite rules to accommodate the parent page in the document permalink.
+     *
      * Means that example.com/documents/my-file.doc will work as usual.
      * Also means that example.com/grand-parent-page/parent-page/documents/my-file.doc will work.
      * grand-parent-page/parent-page/documents/ is matched by the regex pattern: `.*\/documents/`
+     *
+     * @param array $rules
+     * @return array
      */
 
-    public function addRewriteRules($rules)
+    public function addRewriteRules(array $rules) : array
     {
 
         $new_rules = [];
@@ -361,7 +427,7 @@ class Documents
         return array_merge($new_rules, $rules);
     }
 
-    /**
+    /*
      * Functions related to documents, also having an effect on non-documents.
      * - isValidSlug
      * - mediaLibraryHint
@@ -371,22 +437,27 @@ class Documents
 
 
     /**
-     * isValidSlug
      * Prevent all single posts, of any post type, from using the document(s) slug.
+     *
      * This prevents a conflict, where nested pages may make a url like /documents/my-document
+     *
+     * @param bool $is_invalid_slug
+     * @param string $slug
+     * @return bool
      */
 
-    public function isValidSlug(bool $bad_slug, string $slug): bool
+    public function isValidSlug(bool $is_invalid_slug, string $slug): bool
     {
         if (in_array($slug, [$this->slug, $this->document_slug])) {
             return true;
         }
-        return $bad_slug;
+        return $is_invalid_slug;
     }
 
     /**
-     * mediaLibraryHint
-     * Help users to understand that documents should not be loaded to the Media Library.
+     * Echo hint to help users to understand that documents should not be loaded to the Media Library.
+     *
+     * @return void
      */
 
     public function mediaLibraryHint(): void
@@ -399,8 +470,11 @@ class Documents
     }
 
     /**
-     * removeFileSupport
      * Remove support for document file types from the Media Library.
+     *
+     * @param array $mime_types
+     * @param int|\WP_User|null $user
+     * @return array
      */
 
     public function removeFileSupport(array $mime_types, int|\WP_User|null $user): array
@@ -428,9 +502,13 @@ class Documents
     }
 
     /**
-     * setUploadSizeLimit
+     * Set an upload size limit based on the post type.
+     *
      * As we're setting a very high limit for uploads at the server level,
      * we need to limit the upload size for the media library at the application level.
+     *
+     * @param int $size
+     * @return int
      */
 
     public function setUploadSizeLimit(int $size): int
