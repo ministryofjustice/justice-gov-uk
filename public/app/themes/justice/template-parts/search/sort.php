@@ -1,3 +1,15 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+if(!have_posts()) {
+    return;
+}
+
+?>
+
 <ul class="sort">
     <li>Sort by:</li>
 

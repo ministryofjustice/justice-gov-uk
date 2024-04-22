@@ -1,3 +1,11 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+?>
+
 <div class="search-bar">
     <form>
         
@@ -7,9 +15,11 @@
 
     </form>
 
-    <div class="search-info">
-        <?= $args['result_count'] ?> result<?= $args['result_count'] === 1 ? '' : 's' ?>
-    </div>
+    <?php if($args['result_count'] !== null) : ?>
+        <div class="search-info">
+            <?= $args['result_count'] ?> result<?= $args['result_count'] === 1 ? '' : 's' ?>
+        </div>
+    <?php endif; ?>
 
     <div class="search-suggestion">
     </div>

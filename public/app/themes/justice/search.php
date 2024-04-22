@@ -45,20 +45,22 @@ $search = new Search();
 
                 <div class="results">
 
-                <?php
-                if (have_posts()) {
-                    while (have_posts()) {
-                        the_post();
-                        $args = [
-                            'formatted_url' => $search->formattedUrl(get_the_permalink()),
-                            'modified_at' => $post_meta->getModifiedAt(\get_the_ID(), 'j F Y')
-                        ];
-                        get_template_part('template-parts/search/content', get_post_type(), $args);
+                    <?php
+                    if (!$search->hasEmptyQuery() && have_posts()) {
+                        while (have_posts()) {
+                            the_post();
+                            $args = [
+                                'formatted_url' => $search->formattedUrl(get_the_permalink()),
+                                'modified_at' => $post_meta->getModifiedAt(\get_the_ID(), 'j F Y')
+                            ];
+                            get_template_part('template-parts/search/content', get_post_type(), $args);
+                        }
                     }
-                } else {
-                    get_template_part('template-parts/search/no-results');
-                }
-                ?>
+                    ?>
+
+                    <?php !$search->hasEmptyQuery() && !have_posts() && get_template_part('template-parts/search/no-results'); ?>
+
+                    <?php $search->hasEmptyQuery() && get_template_part('template-parts/search/no-query') ?>
 
                 </div>
 
