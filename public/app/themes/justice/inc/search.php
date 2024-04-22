@@ -17,18 +17,22 @@ class Search
     public function addHooks()
     {
         // Add a rewrite rule to handle an empty search.
-        add_action('init',  fn () => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
+        add_action('init', fn () => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
         // Add a rewrite rule to handle the old search urls.
         add_action('init', [$this, 'redirectOldSearchUrls']);
         add_filter('posts_search', [$this, 'handleEmptySearch'], 10, 2);
         add_action('pre_get_posts', [$this, 'includeDocumentsInSearchResults']);
-        add_action('pre_get_posts', [$this, 'search_filter']);
+        add_action('pre_get_posts', [$this, 'searchFilter']);
         add_filter('the_excerpt', [$this, 'highlightResults']);
+
+        add_filter('relevanssi_didyoumean_alphabet', function ($alphabet) {
+            return $alphabet . '0123456789';
+        });
     }
 
     /**
      * Check if the search query is empty.
-     * 
+     *
      * @return bool True if the search query is empty, false otherwise.
      */
 
@@ -39,7 +43,7 @@ class Search
 
     /**
      * Get the number of search results.
-     * 
+     *
      * @return int|null The number of search results.
      */
 
@@ -55,7 +59,7 @@ class Search
 
     /**
      * Get the sort options for the search results.
-     * 
+     *
      * @return array An array of sort options.
      */
 
@@ -65,20 +69,33 @@ class Search
         return [
             'relevance' => [
                 'label' => 'Relevance',
-                'url' => '/search/?s=' . get_query_var('s'),
+                'url' => '/search/' . get_query_var('s'),
                 'selected' => empty($orderby) || $orderby === 'relevance',
             ],
             'date' => [
                 'label' => 'Most recent',
-                'url' => '/search/?s=' . get_query_var('s') . '&orderby=date',
+                'url' => '/search/' . get_query_var('s') . '?orderby=date',
                 'selected' => $orderby === 'date',
             ],
         ];
     }
 
+    public function getSuggestion(): ?string
+    {
+        if (empty(get_search_query())) {
+            return null;
+        }
+        return null;
+        // $q = get_search_query(false);
+        // error_log(print_r('$q: ' . $q, true));
+        // $s = \relevanssi_didyoumean($q, '', '', 5);
+        // error_log(print_r($s, true));
+        // return 'x';
+    }
+
     /**
      * Redirect old search URLs to the new search page.
-     * 
+     *
      * @return void
      */
 
@@ -138,7 +155,7 @@ class Search
         }
     }
 
-    function search_filter($query)
+    public function searchFilter($query)
     {
         if (!is_admin() && $query->is_main_query()) {
             if ($query->is_search) {
@@ -150,7 +167,7 @@ class Search
 
     /**
      * Highlight the search terms in the search results.
-     * 
+     *
      * @param string $text The text to highlight.
      * @return string The highlighted text.
      */
@@ -167,7 +184,7 @@ class Search
 
     /**
      * Format the URL to display in the search results.
-     * 
+     *
      * @param string $url The URL to format.
      * @return string The formatted URL.
      */

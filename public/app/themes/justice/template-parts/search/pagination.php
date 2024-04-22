@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-if(!have_posts()) {
+if (!have_posts()) {
     return;
 }
 

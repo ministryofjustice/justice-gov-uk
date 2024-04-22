@@ -37,7 +37,7 @@ $search = new Search();
 
             <div class="search">
 
-                <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount()]) ?>
+                <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount(), 'suggestion' => $search->getSuggestion()]) ?>
 
                 <?php get_template_part('template-parts/search/sort', null, ['search_options' => $search->getSortOptions()]) ?>
 
