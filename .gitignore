@@ -49,3 +49,7 @@ spec/_output/*
 !spec/_output/.keep
 spec/Support/_generated/*
 !spec/Support/_generated/.keep
+
+# Docs
+.phpdoc/build
+.phpdoc/cache/*
