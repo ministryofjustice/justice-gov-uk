@@ -39,7 +39,7 @@ $search = new Search();
 
                 <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount()]) ?>
 
-                <?php get_template_part('template-parts/search/sort') ?>
+                <?php get_template_part('template-parts/search/sort', null, ['search_options' => $search->getSortOptions()]) ?>
 
                 <?php get_template_part('template-parts/search/pagination') ?>
 

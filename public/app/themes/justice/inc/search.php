@@ -76,4 +76,23 @@ class Search
 
         return $url;
     }
+
+    public function getSortOptions ()
+    {
+        $orderby = get_query_var('orderby');
+        return [
+            'relevance' => [
+                'label' => 'Relevance',
+                'url' => '/search/?s=' . get_query_var('s'),
+                'selected' => empty($orderby) || $orderby === 'relevance',
+            ],
+            'date' => [
+                'label' => 'Most recent',
+                'url' => '/search/?s=' . get_query_var('s') . '&orderby=date',
+                'selected' => $orderby === 'date',
+            ],
+        ];
+    }
+
+
 }
