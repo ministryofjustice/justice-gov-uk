@@ -34,6 +34,10 @@
         },
         {
             "type": "composer",
+            "url": "https://composer.wp.dsd.io"
+        },
+        {
+            "type": "composer",
             "url": "https://wp-languages.github.io"
         }
     ],
@@ -45,6 +49,7 @@
         "koodimonni-language/core-en_gb": "^6.4",
         "oscarotero/env": "^2.1",
         "php-http/guzzle7-adapter": "^1.0",
+        "relevanssi/relevanssi-premium": "^2.23.0",
         "roots/bedrock-autoloader": "^1.0",
         "roots/bedrock-disallow-indexing": "^2.0",
         "roots/wordpress": "^6.4",
