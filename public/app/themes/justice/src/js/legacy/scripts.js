@@ -182,10 +182,10 @@ jQuery(document).ready(function () {
   // }
 
   //tribunals search
-  jQuery('form#tribunal').submit(function (e) {
-    e.preventDefault();
-    window.location = jQuery(this).find('select').val();
-  });
+  // jQuery('form#tribunal').submit(function (e) {
+  //   e.preventDefault();
+  //   window.location = jQuery(this).find('select').val();
+  // });
 
   //clear filter button
   // jQuery('.filter .go-btn-grey').click(function () {
