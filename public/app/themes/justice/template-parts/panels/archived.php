@@ -1,3 +1,9 @@
+<?php
+
+defined('ABSPATH') || exit;
+
+?>
+
 <div class="grey-box">
   <div class="content">
     <span class="archived-page">Archived pages</span>

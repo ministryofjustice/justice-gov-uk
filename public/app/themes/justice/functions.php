@@ -3,9 +3,7 @@
 use MOJ\Justice;
 use Roots\WPConfig\Config;
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined('ABSPATH') || exit;
 
 if (defined('WP_CLI') && WP_CLI) {
     require_once 'inc/commands.php';

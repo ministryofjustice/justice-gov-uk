@@ -1,3 +1,9 @@
+<?php
+
+defined('ABSPATH') || exit;
+
+?>
+
 <div id="panel-SDsearch" class="grey-box">
     <div class="header">
         <span>Search this collection</span>

@@ -1,3 +1,9 @@
+<?php
+
+defined('ABSPATH') || exit;
+
+?>
+
 <div id="rhs-banner" class="phone">
     <a href="">
         <img
