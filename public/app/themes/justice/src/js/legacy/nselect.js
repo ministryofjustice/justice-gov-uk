@@ -27,7 +27,9 @@ export default function nselect(html) {
       jQuery(this).after('<div id="nselect' + pos + '" class="nselect" style="z-index:' + (1000 - pos) + ';" tabindex="0"><div class="current"></div><ul class="inner-list" style="display:none;"></ul></div>');
       var selected_val = '';
       jQuery(select).children('option').each(function (j) {
-        jQuery(nselect_ul).append('<li class="option' + j + '"><span>' + jQuery(this).html() + '</span><input type="hidden" value="' + jQuery(this).val() + '" /></li>');
+        // Migration edit - wrap value in encodeURIComponent to handle special characters and prevent XSS.
+        jQuery(nselect_ul).append('<li class="option' + j + '"><span>' + jQuery(this).html() + '</span><input type="hidden" value="' + encodeURIComponent(jQuery(this).val()) + '" /></li>');
+        // jQuery(nselect_ul).append('<li class="option' + j + '"><span>' + jQuery(this).html() + '</span><input type="hidden" value="' + jQuery(this).val() + '" /></li>');
         if (jQuery(this).is(':selected')) selected_val = jQuery(this).html();
       });
       if (selected_val.length == 0) selected_val = jQuery(nselect_ul + ' li.option0').html();
