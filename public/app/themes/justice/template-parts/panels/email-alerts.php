@@ -1,3 +1,9 @@
+<?php
+
+defined('ABSPATH') || exit;
+
+?>
+
 <div id="panel-emailAlerts" class="grey-box">
     <div class="header"><span>Get email alerts</span></div>
     <div class="content">

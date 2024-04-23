@@ -1,3 +1,9 @@
+<?php
+
+defined('ABSPATH') || exit;
+
+?>
+
 <div id="popular-wrapper">
     <div id="popular">
         <h2>Most popular</h2>

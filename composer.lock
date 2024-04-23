@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de86aa09caf287a8d905187f1300d315",
+    "content-hash": "a4c14b635f6c99d57c4b7381f54a97dd",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -2799,6 +2799,16 @@
                 }
             ],
             "time": "2023-11-16T16:21:57+00:00"
+        },
+        {
+            "name": "relevanssi/relevanssi-premium",
+            "version": "2.23.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.wp.dsd.io/dist/relevanssi/relevanssi-premium/relevanssi-relevanssi-premium-2.23.0.zip",
+                "shasum": "c94c1d9a66c01f673227e2e37d581de4c29c0f94"
+            },
+            "type": "wordpress-plugin"
         },
         {
             "name": "roots/bedrock-autoloader",

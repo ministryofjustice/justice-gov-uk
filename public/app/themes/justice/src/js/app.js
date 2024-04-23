@@ -1,1 +1,1 @@
-
+import "./legacy/scripts";

@@ -1483,19 +1483,32 @@ span.view-all {
     color: #333333;
 }
 
-#content .filter span.title {
-    float: left;
+
+/* Migration edit: move filter into content-left */
+#content-left .filter span.title {
+    /* float: left; */
     padding: 1em 0 2em 0;
     color: #3c3c2c;
     font-size: 1.3em;
 }
 
-#content .filter-btns {
+#content-left select {
+    /* Match the width and height to nselect */
+    width: 162px;
+    height: 2.3em;
+}
+
+#content-left .filter-btns {
     float: left;
     width: 162px;
     margin-top: 20px;
     text-align: right;
 }
+
+#content-left .filter-btns input {
+    width: auto;
+}
+/* End migration edit */
 
 #content-left .org-logo {
     float: left;
@@ -2223,7 +2236,9 @@ body.inner-cr .search-wrapper .search {
 }
 
 .search .results article {
-    float: left;
+    /* Migration: remove float */
+    /* float: left; */
+    clear: both;
     padding-top: 2em;
 }
 
@@ -2808,7 +2823,7 @@ a[href$='.xls'], a[href$='.xlsx'], a[href$='.csv'], a[href$='.xlt'], a[href$='.x
     *display: block;
     padding-left: 18px;
     line-height: 18px;
-    background: transparent url(img/icon/xls.png) center left no-repeat;
+    background: transparent url(../img/icon/xls.png) center left no-repeat;
 }
 
 a[href$='.ppt'], a[href$='.pptx'], a[href$='.pps'] {

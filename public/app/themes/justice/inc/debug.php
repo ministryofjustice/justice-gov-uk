@@ -70,7 +70,15 @@ class Debug
             return;
         }
 
-        $source_url = get_post_meta(\get_the_ID(), '_source_url', true);
+        $source_url = null;
+
+        if (is_search()) {
+            $source_url = 'https://www.justice.gov.uk/search';
+        }
+
+        if (is_page()) {
+            $source_url = get_post_meta(\get_the_ID(), '_source_url', true);
+        }
 
         if (!$source_url) {
             return;

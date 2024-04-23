@@ -2,7 +2,7 @@
 
 use MOJ\Justice\PostMeta;
 
-$post_meta = new PostMeta();
+$post_meta = new PostMeta(\get_the_ID(), $args);
 
 if ($post_meta->hasPanel('brand')) {
     get_template_part('template-parts/panels/brand');
@@ -30,4 +30,8 @@ if ($post_meta->hasPanel('popular')) {
 
 if ($post_meta->hasPanel('other_websites')) {
     get_template_part('template-parts/panels/other-websites');
+}
+
+if ($post_meta->hasPanel('search-find-a-form')) {
+    get_template_part('template-parts/panels/search-find-a-form');
 }

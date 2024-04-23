@@ -27,9 +27,8 @@ class SimpleGutenFields
      */
     public function loadScripts()
     {
-        $dir = __DIR__;
 
-        $script_asset_path = "$dir/../../dist/php/block-editor.asset.php";
+        $script_asset_path = get_template_directory() . "/dist/php/block-editor.asset.php";
         if (!file_exists($script_asset_path)) {
             throw new \Error(
                 'You need to run `npm start` or `npm run build` for the "create-block/simple-guten-fields" block first.'
