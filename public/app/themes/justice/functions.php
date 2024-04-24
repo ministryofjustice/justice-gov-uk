@@ -26,6 +26,7 @@ require_once 'inc/layout.php';
 require_once 'inc/mail.php';
 require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/search.php';
+require_once 'inc/simple-definition-list-blocks.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/taxonomies.php';
 require_once 'inc/theme-assets.php';
@@ -43,6 +44,7 @@ new Justice\Documents();
 new Justice\Layout();
 new Justice\Search();
 new Justice\SimpleGutenFields();
+new Justice\SimpleDefinitionsListBlocks();
 new Justice\ThemeAssets();
 
 $block_editor = new Justice\BlockEditor();

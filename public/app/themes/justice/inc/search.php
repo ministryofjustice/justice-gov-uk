@@ -101,6 +101,10 @@ class Search
 
     public function redirectOldSearchUrls()
     {
+        // Don't redirect if we're in the admin.
+        if (is_admin()) {
+            return;
+        }
 
         $search_params = ['s' => null];
 

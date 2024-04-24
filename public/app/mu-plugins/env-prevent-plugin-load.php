@@ -9,11 +9,21 @@
  * This is the only place from which regular plugins can be disabled programmatically.
  */
 
-/* Disable specified plugins in non-development environments */
-if (getenv('WP_ENV') !== 'development' && is_admin()) {
-    $plugins = array(
-        'wordpress-importer/wordpress-importer.php'
-    );
-    require_once(ABSPATH . 'wp-admin/includes/plugin.php');
-    deactivate_plugins($plugins);
+defined('ABSPATH') || exit;
+
+if (!is_admin()) {
+    return;
 }
+
+// List of plugins to disable.
+$plugins = [
+    'simple-definition-list-blocks/simple-definition-list-blocks.php'
+];
+
+// Disable specified plugins in non-development environments.
+if (getenv('WP_ENV') !== 'development') {
+    $plugins[] = 'wordpress-importer/wordpress-importer.php';
+}
+
+require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+deactivate_plugins($plugins);

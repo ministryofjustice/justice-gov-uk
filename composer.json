@@ -63,6 +63,7 @@
         "wpackagist-plugin/debug-bar": "^1.1",
         "wpackagist-plugin/query-monitor": "^3.15",
         "wpackagist-plugin/simple-301-redirects": "^2.0",
+        "wpackagist-plugin/simple-definition-list-blocks": "6.0.1",
         "wpackagist-plugin/wordpress-importer": "~0.8.2",
         "wpackagist-plugin/wp-document-revisions": "^3.5.0"
     },
@@ -105,7 +106,20 @@
                 "vendor:koodimonni-theme-language"
             ]
         },
-        "wordpress-install-dir": "public/wp"
+        "wordpress-install-dir": "public/wp",
+        "meta-comments": {
+            "description": [
+                "As comments are not allowed in composer.json, use this section for comments.",
+                "After adding comments here, run a benign composer command like ",
+                "`composer update paragonie/random_compat` to update composer.lock's hash."
+            ],
+            "wpackagist-plugin/simple-definition-list-blocks": [
+                "This version is pinned as the plugin maintainer is untrusted.",
+                "The code has been reviewed by Davey Brown and it doesn't introduce any security issues.",
+                "The attack surface has been further reduced by disabling the plugin programmatically and",
+                "loading it's js within the theme."
+            ]
+        }
     },
     "scripts": {
         "test": [
