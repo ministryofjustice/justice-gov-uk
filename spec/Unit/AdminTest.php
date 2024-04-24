@@ -47,7 +47,7 @@ final class AdminTest extends \Codeception\Test\Unit
 
         WP_Mock::userFunction('wp_enqueue_style', [
             'times' => 1,
-            'args' => ['justice-admin-style', $this->example_theme_url . '/dist/css/wp-admin-override.css'],
+            'args' => ['justice-admin-style', $this->example_theme_url . '/dist/css/editor.min.css'],
         ]);
 
         Admin::enqueueStyles();

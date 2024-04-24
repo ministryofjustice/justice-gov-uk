@@ -3129,14 +3129,18 @@ div#content-wrapper div.container-wrapper div#content article div.article form#g
     color: #4E6280;
 }
 
+/* Migration edit - see justice/src/components/simple-definition-list-blocks */
+
 /* Civil Procedure Rules definition list (dl)*/
-#content div.article dl.glossary dt.expression {
+/* #content div.article dl.glossary dt.expression {
     font-weight: bold;
 }
 
 #content div.article dl.glossary dd.meaning {
     margin-left: 20px;
-}
+} */
+
+/* End migration edit */
 
 #content div.article h1.headingblock span.preTitleText {
     display: block;
