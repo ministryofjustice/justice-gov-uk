@@ -105,7 +105,7 @@ WORKDIR /var/www/html
 COPY --chown=www-data:www-data ./config ./config
 COPY --chown=www-data:www-data ./public ./public
 
-# Replace paths with dependanies from build-fpm-composer
+# Replace paths with dependencies from build-fpm-composer
 ARG path="/var/www/html"
 COPY --from=build-fpm-composer ${path}/public/app/mu-plugins public/app/mu-plugins
 COPY --from=build-fpm-composer ${path}/public/app/plugins public/app/plugins
