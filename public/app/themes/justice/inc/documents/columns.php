@@ -51,8 +51,12 @@ trait DocumentColumns
             $results = $wpdb->get_results($sql, ARRAY_A);
 
             if ($results) {
-                $attachment_count = $this->utils->arrayFind($results, fn ($row) => $row['post_type'] === 'attachment')['count'];
-                $revision_count = $this->utils->arrayFind($results, fn ($row) => $row['post_type'] === 'revision')['count'];
+                $attachment_row = $this->utils->arrayFind($results, fn ($row) => $row['post_type'] === 'attachment');
+                $attachment_count = $attachment_row ? $attachment_row['count'] : 0;
+
+                $revision_row = $this->utils->arrayFind($results, fn ($row) => $row['post_type'] === 'revision');
+                $revision_count = $revision_row ? $revision_row['count'] : 0;
+
                 echo "$revision_count / $attachment_count";
             } else {
                 echo '0 / 0';
