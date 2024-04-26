@@ -65,7 +65,7 @@
         "wpackagist-plugin/simple-301-redirects": "^2.0",
         "wpackagist-plugin/simple-definition-list-blocks": "6.0.1",
         "wpackagist-plugin/wordpress-importer": "~0.8.2",
-        "wpackagist-plugin/wp-document-revisions": "^3.5.0"
+        "wpackagist-plugin/wp-document-revisions": "^3.6.0"
     },
     "require-dev": {
         "10up/wp_mock": "^1.0.1",
@@ -118,10 +118,18 @@
                 "The code has been reviewed by Davey Brown and it doesn't introduce any security issues.",
                 "The attack surface has been further reduced by disabling the plugin programmatically and",
                 "loading it's js within the theme."
+            ],
+            "wpackagist-plugin/wp-document-revisions": [
+                "Version 3.6.0 of this plugin has a typo in file class-wp-document-revisions.php",
+                "The post-package-install script replaces the typo subdtr with the correct spelling subdir",
+                "This is a temporary fix until the plugin is updated upstream."
             ]
         }
     },
     "scripts": {
+        "post-package-install": [
+            "sed -i 's/subdtr/subdir/g' public/app/plugins/wp-document-revisions/includes/class-wp-document-revisions.php"
+        ],
         "test": [
             "phpcs --report=summary"
         ],
