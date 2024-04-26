@@ -26,9 +26,10 @@ spec:
   ingressClassName: default
   tls:
   - hosts:
-    - justice-gov-uk-demo.apps.live.cloud-platform.service.justice.gov.uk
+    - demo.justice.gov.uk
+    secretName: justice-gov-uk-demo-cert-secret
   rules:
-  - host: justice-gov-uk-demo.apps.live.cloud-platform.service.justice.gov.uk
+  - host: demo.justice.gov.uk
     http:
       paths:
       - path: /
