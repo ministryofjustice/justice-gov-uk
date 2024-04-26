@@ -24,11 +24,13 @@ metadata:
       }
 spec:
   ingressClassName: default
+  # Note. `stage` not the typical `staging` subdomain, because that was unavailable.
   tls:
   - hosts:
-    - justice-gov-uk-staging.apps.live.cloud-platform.service.justice.gov.uk
+    - stage.justice.gov.uk
+    secretName: justice-gov-uk-staging-cert-secret
   rules:
-  - host: justice-gov-uk-staging.apps.live.cloud-platform.service.justice.gov.uk
+  - host: stage.justice.gov.uk
     http:
       paths:
       - path: /
