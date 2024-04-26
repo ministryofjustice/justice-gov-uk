@@ -41,7 +41,7 @@ jobs:
           BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
           BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
         run: |
-          export BASIC_AUTH_BASE64=$(htpasswd -nbm "$BASIC_AUTH_USER" "$BASIC_AUTH_PASS" | base64)
+          export BASIC_AUTH_BASE64=$(htpasswd -nbm "$BASIC_AUTH_USER" "$BASIC_AUTH_PASS" | base64 -w 0)
           cat $TPL_PATH/secret.tpl | envsubst > $TPL_PATH/secret.yaml
           cat $TPL_PATH/deployment.tpl | envsubst > $TPL_PATH/deployment.yaml
 
