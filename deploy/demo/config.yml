@@ -6,5 +6,5 @@ metadata:
 data:
   WP_ENV: "production"
   WP_HOME: 'https://demo.justice.gov.uk'
-  WP_SITEURL: 'https://demojustice.gov.uk/wp'
+  WP_SITEURL: 'https://demo.justice.gov.uk/wp'
   SENTRY_DEV_ID: '-demo'
