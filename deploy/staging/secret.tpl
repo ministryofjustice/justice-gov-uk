@@ -14,3 +14,11 @@ stringData:
   NONCE_SALT: "${NONCE_SALT}"
   SECURE_AUTH_KEY: "${SECURE_AUTH_KEY}"
   SECURE_AUTH_SALT: "${SECURE_AUTH_SALT}"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: basic-auth-secret
+type: Opaque
+data:
+  auth: "${BASIC_AUTH_BASE64}"
