@@ -19,7 +19,8 @@ class Taxonomies
         'object_type' => ['document', 'page'],
         'args' => [
             'show_admin_column' => true,
-            'rewrite' => false
+            'rewrite' => false,
+            'show_in_rest' => true,
         ],
     ];
 
@@ -68,6 +69,8 @@ class Taxonomies
                 'plural_name' => 'Types',
                 'add_new_item' => 'Add New Type',
             ],
+            // Add rest base for custom endpoint, because `type` conflicts with wp core.
+            'rest_base' => 'moj-type',
         ],
     ];
 

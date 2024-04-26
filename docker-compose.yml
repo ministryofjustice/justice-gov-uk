@@ -134,6 +134,9 @@ services:
         - local_ssh:/home/ssh-user/.ssh
       env_file:
         - .env
+      environment:
+        VIRTUAL_HOST: ssh.${SERVER_NAME}
+        VIRTUAL_PORT: 2222
       ports:
         - 2222:22
       profiles:
