@@ -5,8 +5,10 @@
  * Only allowed in development environment.
  */
 
-if (!defined('ABSPATH') || getenv('WP_ENV') !== 'development') {
-    exit;
+defined('ABSPATH') || exit;
+
+if (getenv('WP_ENV') !== 'development') {
+    return;
 }
 
 /**
