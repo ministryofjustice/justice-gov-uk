@@ -7,8 +7,10 @@
  * It is within WordPress because WordPress modifies error options at runtime.
  */
 
-if (!defined('ABSPATH') || getenv('WP_ENV') !== 'development') {
-    exit;
+defined('ABSPATH') || exit;
+
+if (getenv('WP_ENV') !== 'development') {
+    return;
 }
 
 error_log('Source function: `error_log`. Source file: page_errors.php');
