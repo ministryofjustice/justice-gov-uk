@@ -65,7 +65,7 @@
         "wpackagist-plugin/simple-301-redirects": "^2.0",
         "wpackagist-plugin/simple-definition-list-blocks": "6.0.1",
         "wpackagist-plugin/wordpress-importer": "~0.8.2",
-        "wpackagist-plugin/wp-document-revisions": "^3.5.0"
+        "wpackagist-plugin/wp-document-revisions": "^3.6.0"
     },
     "require-dev": {
         "10up/wp_mock": "^1.0.1",
@@ -113,6 +113,10 @@
                 "After adding comments here, run a benign composer command like ",
                 "`composer update paragonie/random_compat` to update composer.lock's hash."
             ],
+            "koodimonni-language/core-en_gb": [
+                "Version 6.5 of this package doesn't pass phpcs. It fails on no new lines at end of file.",
+                "So these files are ignored in the phpcs/phpcbf tests."
+            ],
             "wpackagist-plugin/simple-definition-list-blocks": [
                 "This version is pinned as the plugin maintainer is untrusted.",
                 "The code has been reviewed by Davey Brown and it doesn't introduce any security issues.",
@@ -123,13 +127,13 @@
     },
     "scripts": {
         "test": [
-            "phpcs --report=summary"
+            "phpcs --ignore=public/app/languages/* --report=summary"
         ],
         "test:full": [
-            "phpcs"
+            "phpcs --ignore=public/app/languages/*"
         ],
         "test:fix": [
-            "phpcbf"
+            "phpcbf --ignore=public/app/languages/*"
         ],
         "test:unit": [
             "vendor/bin/codecept run -c spec/codeception.yml Unit"
