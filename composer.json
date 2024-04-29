@@ -121,14 +121,18 @@
             ],
             "wpackagist-plugin/wp-document-revisions": [
                 "Version 3.6.0 of this plugin has a typo in file class-wp-document-revisions.php",
-                "The post-package-install script replaces the typo subdtr with the correct spelling subdir",
-                "This is a temporary fix until the plugin is updated upstream."
+                "The composer-post-install script replaces the typo subdtr with the correct spelling subdir",
+                "This is a temporary fix until the plugin is updated upstream.",
+                "https://github.com/wp-document-revisions/wp-document-revisions/pull/346"
             ]
         }
     },
     "scripts": {
-        "post-package-install": [
-            "sed -i 's/subdtr/subdir/g' public/app/plugins/wp-document-revisions/includes/class-wp-document-revisions.php"
+        "post-install-cmd": [
+            "bin/composer-post-install.sh"
+        ],
+        "post-update-cmd": [
+            "bin/composer-post-install.sh"
         ],
         "test": [
             "phpcs --report=summary"
