@@ -59,10 +59,11 @@ ARG COMPOSER_PASS
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-COPY ./bin/composer-auth.sh composer-auth.sh
+COPY ./bin/composer-auth.sh ./bin/composer-post-install.sh ./bin/
 
-RUN chmod +x composer-auth.sh && \
-    ./composer-auth.sh
+RUN chmod +x ./bin/composer-auth.sh && \
+    ./bin/composer-auth.sh
+RUN chmod +x ./bin/composer-post-install.sh
 
 # non-root
 USER 82

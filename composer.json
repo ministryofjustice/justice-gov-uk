@@ -122,10 +122,22 @@
                 "The code has been reviewed by Davey Brown and it doesn't introduce any security issues.",
                 "The attack surface has been further reduced by disabling the plugin programmatically and",
                 "loading it's js within the theme."
+            ],
+            "wpackagist-plugin/wp-document-revisions": [
+                "Version 3.6.0 of this plugin has a typo in file class-wp-document-revisions.php",
+                "The composer-post-install script replaces the typo subdtr with the correct spelling subdir",
+                "This is a temporary fix until the plugin is updated upstream.",
+                "https://github.com/wp-document-revisions/wp-document-revisions/pull/346"
             ]
         }
     },
     "scripts": {
+        "post-install-cmd": [
+            "bin/composer-post-install.sh"
+        ],
+        "post-update-cmd": [
+            "bin/composer-post-install.sh"
+        ],
         "test": [
             "phpcs --ignore=public/app/languages/* --report=summary"
         ],

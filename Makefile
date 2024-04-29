@@ -25,6 +25,7 @@ node-assets:
 	npm run watch
 
 composer-assets:
+	@chmod +x ./bin/composer-post-install.sh
 	@chmod +x ./bin/local-composer-assets.sh
 	@docker compose exec php-fpm ./bin/local-composer-assets.sh ash
 
