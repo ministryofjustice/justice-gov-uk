@@ -1,4 +1,4 @@
-#!/usr/bin/env ash
+#!/usr/bin/env sh
 
 # Fix a typo in the wp-document-revisions plugin.
 
