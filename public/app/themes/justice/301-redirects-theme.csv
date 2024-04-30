@@ -1,33 +1,33 @@
-request,destination
-/__data/asset_types/word_doc/icon.png,/app/themes/justice/dist/img/icon/doc.png
-/__data/assets/image/0004/33709/icon_pdf.png,/app/themes/justice/dist/img/icon/pdf.png
-/__data/asset_types/pdf_file/icon.png,/app/themes/justice/dist/img/icon/pdf.png
-/__data/asset_types/excel_doc/icon.png,/app/themes/justice/dist/img/icon/xls.png
-/__data/assets/image/0017/33713/icon_ppt.png,/app/themes/justice/dist/img/icon/ppt.png
-/__data/assets/image/0016/33712/icon_zip.gif,/app/themes/justice/dist/img/icon/zip.gif
-/__data/assets/image/0020/2495/phone-menu-top-arrow.png,/app/themes/justice/dist/img/phone-menu-top-arrow.png
-/__data/assets/image/0020/2495/phone-menu-top-arrow-back.png,/app/themes/justice/dist/img/phone-menu-top-arrow-back.png
-/__data/assets/image/0019/991/archived-page.png,/app/themes/justice/dist/img/archived-page.png
-/__data/assets/image/0004/43609/closed-icon2.gif,/app/themes/justice/dist/img/closed-icon2.gif
-/__data/assets/image/0014/509/gallery-next.png,/app/themes/justice/dist/img/gallery-next.png
-/__data/assets/image/0006/510/gallery-prev.png,/app/themes/justice/dist/img/gallery-prev.png
-/__data/assets/image/0006/49884/govuk-logo.png,/app/themes/justice/dist/img/govuk-logo.png
-/__data/assets/image/0008/503/highlight-arrowup.png,/app/themes/justice/dist/img/highlight-arrowup.png
-/__data/assets/image/0008/512/home-tab25p.png,/app/themes/justice/dist/img/home-tab25p.png
-/__data/assets/image/0009/513/home-tab50p.png,/app/themes/justice/dist/img/home-tab50p.png
-/__data/assets/image/0007/511/home-tab-content.png,/app/themes/justice/dist/img/home-tab-content.png
-/__data/assets/image/0013/508/logo.png,/app/themes/justice/dist/img/logo.png
-/__data/assets/image/0019/658/logo-businesslink.png,/app/themes/justice/dist/img/logo-businesslink.png
-/__data/assets/image/0020/659/logo-directgov.png,/app/themes/justice/dist/img/logo-directgov.png
-/__data/assets/image/0011/49907/logo-govuk-black.png,/app/themes/justice/dist/img/logo-govuk-black.png
-/__data/assets/image/0010/514/menu-top-divider.png,/app/themes/justice/dist/img/menu-top-divider.png
-/__data/assets/image/0012/507/noise-bg.jpg,/app/themes/justice/dist/img/noise-bg.jpg
-/__data/assets/image/0010/505/noise-bg-blue.jpg,/app/themes/justice/dist/img/noise-bg-blue.jpg
-/__data/assets/image/0011/506/noise-bg-hover.jpg,/app/themes/justice/dist/img/noise-bg-hover.jpg
-/__data/assets/image/0014/43610/open-icon2.gif,/app/themes/justice/dist/img/open-icon2.gif
-/__data/assets/image/0014/1535/quote-start.png,/app/themes/justice/dist/img/quote-start.png
-/__data/assets/image/0013/1534/quote-end.png,/app/themes/justice/dist/img/quote-end.png
-/__data/assets/image/0003/142824/varieties/large.jpg,/app/themes/justice/dist/img/scales-of-justice.jpg
-/__data/assets/image/0017/980/select-btn.png,/app/themes/justice/dist/img/select-btn.png
-/__data/assets/image/0018/657/social-media.png,/app/themes/justice/dist/img/social-media.png
-/__data/assets/image/0009/504/tab-arrowdown.png,/app/themes/justice/dist/img/tab-arrowdown.png
+source,target,code,order,notes
+/__data/asset_types/word_doc/icon.png,/app/themes/justice/dist/img/icon/doc.png,301,900,Theme redirect
+/__data/assets/image/0004/33709/icon_pdf.png,/app/themes/justice/dist/img/icon/pdf.png,301,900,Theme redirect
+/__data/asset_types/pdf_file/icon.png,/app/themes/justice/dist/img/icon/pdf.png,301,900,Theme redirect
+/__data/asset_types/excel_doc/icon.png,/app/themes/justice/dist/img/icon/xls.png,301,900,Theme redirect
+/__data/assets/image/0017/33713/icon_ppt.png,/app/themes/justice/dist/img/icon/ppt.png,301,900,Theme redirect
+/__data/assets/image/0016/33712/icon_zip.gif,/app/themes/justice/dist/img/icon/zip.gif,301,900,Theme redirect
+/__data/assets/image/0020/2495/phone-menu-top-arrow.png,/app/themes/justice/dist/img/phone-menu-top-arrow.png,301,900,Theme redirect
+/__data/assets/image/0020/2495/phone-menu-top-arrow-back.png,/app/themes/justice/dist/img/phone-menu-top-arrow-back.png,301,900,Theme redirect
+/__data/assets/image/0019/991/archived-page.png,/app/themes/justice/dist/img/archived-page.png,301,900,Theme redirect
+/__data/assets/image/0004/43609/closed-icon2.gif,/app/themes/justice/dist/img/closed-icon2.gif,301,900,Theme redirect
+/__data/assets/image/0014/509/gallery-next.png,/app/themes/justice/dist/img/gallery-next.png,301,900,Theme redirect
+/__data/assets/image/0006/510/gallery-prev.png,/app/themes/justice/dist/img/gallery-prev.png,301,900,Theme redirect
+/__data/assets/image/0006/49884/govuk-logo.png,/app/themes/justice/dist/img/govuk-logo.png,301,900,Theme redirect
+/__data/assets/image/0008/503/highlight-arrowup.png,/app/themes/justice/dist/img/highlight-arrowup.png,301,900,Theme redirect
+/__data/assets/image/0008/512/home-tab25p.png,/app/themes/justice/dist/img/home-tab25p.png,301,900,Theme redirect
+/__data/assets/image/0009/513/home-tab50p.png,/app/themes/justice/dist/img/home-tab50p.png,301,900,Theme redirect
+/__data/assets/image/0007/511/home-tab-content.png,/app/themes/justice/dist/img/home-tab-content.png,301,900,Theme redirect
+/__data/assets/image/0013/508/logo.png,/app/themes/justice/dist/img/logo.png,301,900,Theme redirect
+/__data/assets/image/0019/658/logo-businesslink.png,/app/themes/justice/dist/img/logo-businesslink.png,301,900,Theme redirect
+/__data/assets/image/0020/659/logo-directgov.png,/app/themes/justice/dist/img/logo-directgov.png,301,900,Theme redirect
+/__data/assets/image/0011/49907/logo-govuk-black.png,/app/themes/justice/dist/img/logo-govuk-black.png,301,900,Theme redirect
+/__data/assets/image/0010/514/menu-top-divider.png,/app/themes/justice/dist/img/menu-top-divider.png,301,900,Theme redirect
+/__data/assets/image/0012/507/noise-bg.jpg,/app/themes/justice/dist/img/noise-bg.jpg,301,900,Theme redirect
+/__data/assets/image/0010/505/noise-bg-blue.jpg,/app/themes/justice/dist/img/noise-bg-blue.jpg,301,900,Theme redirect
+/__data/assets/image/0011/506/noise-bg-hover.jpg,/app/themes/justice/dist/img/noise-bg-hover.jpg,301,900,Theme redirect
+/__data/assets/image/0014/43610/open-icon2.gif,/app/themes/justice/dist/img/open-icon2.gif,301,900,Theme redirect
+/__data/assets/image/0014/1535/quote-start.png,/app/themes/justice/dist/img/quote-start.png,301,900,Theme redirect
+/__data/assets/image/0013/1534/quote-end.png,/app/themes/justice/dist/img/quote-end.png,301,900,Theme redirect
+/__data/assets/image/0003/142824/varieties/large.jpg,/app/themes/justice/dist/img/scales-of-justice.jpg,301,900,Theme redirect
+/__data/assets/image/0017/980/select-btn.png,/app/themes/justice/dist/img/select-btn.png,301,900,Theme redirect
+/__data/assets/image/0018/657/social-media.png,/app/themes/justice/dist/img/social-media.png,301,900,Theme redirect
+/__data/assets/image/0009/504/tab-arrowdown.png,/app/themes/justice/dist/img/tab-arrowdown.png,301,900,Theme redirect
