@@ -18,12 +18,12 @@ class Core
         $this->addHooks();
     }
 
-    public function addHooks() : void
+    public function addHooks(): void
     {
         // Remove the welcome panel.
         add_action('admin_init', [$this, 'removeWelcomePanel']);
         // Remove default dashboard widgets.
-        add_action('wp_dashboard_setup', array($this, 'removeDefaultDashboardWidgets'));
+        add_action('wp_dashboard_setup', [$this, 'removeDefaultDashboardWidgets']);
         // Disable remote block patterns. Avoids unnecessary transient entry in the database.
         add_filter('should_load_remote_block_patterns', '__return_false');
         // Avoids unnecessary transient entry in the database, by returning an empty array.
@@ -36,7 +36,7 @@ class Core
      * @return void
      */
 
-    public function removeWelcomePanel() : void
+    public function removeWelcomePanel(): void
     {
         remove_action('welcome_panel', 'wp_welcome_panel');
     }
