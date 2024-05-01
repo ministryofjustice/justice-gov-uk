@@ -2,6 +2,7 @@ request,destination
 /__data/asset_types/word_doc/icon.png,/app/themes/justice/dist/img/icon/doc.png
 /__data/assets/image/0004/33709/icon_pdf.png,/app/themes/justice/dist/img/icon/pdf.png
 /__data/asset_types/pdf_file/icon.png,/app/themes/justice/dist/img/icon/pdf.png
+/__data/assets/image/0008/19772/pdf_icon.gif,/app/themes/justice/dist/img/icon/pdf.png
 /__data/asset_types/excel_doc/icon.png,/app/themes/justice/dist/img/icon/xls.png
 /__data/assets/image/0017/33713/icon_ppt.png,/app/themes/justice/dist/img/icon/ppt.png
 /__data/assets/image/0016/33712/icon_zip.gif,/app/themes/justice/dist/img/icon/zip.gif
