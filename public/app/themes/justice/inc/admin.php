@@ -51,6 +51,15 @@ class Admin
                  display: none;
                }
                .pressshack-admin-wrapper {
+                 a {
+                  color: #2271b1;
+                  &:hover {
+                    color: #135e96;
+                  }
+                  &:focus {
+                    color: #043959;
+                  }
+                }
                  .inner-sidebar {
                    display: none;
                  }
