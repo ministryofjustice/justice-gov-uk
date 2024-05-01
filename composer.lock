@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "185f3f24bdeb952f3566918593312978",
+    "content-hash": "7f45779f116ae27e62ba24f8ca0804dd",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -6914,22 +6914,22 @@
             "homepage": "https://wordpress.org/plugins/query-monitor/"
         },
         {
-            "name": "wpackagist-plugin/simple-301-redirects",
-            "version": "2.0.9",
+            "name": "wpackagist-plugin/safe-redirect-manager",
+            "version": "2.1.1",
             "source": {
                 "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/simple-301-redirects/",
-                "reference": "tags/2.0.9"
+                "url": "https://plugins.svn.wordpress.org/safe-redirect-manager/",
+                "reference": "tags/2.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/simple-301-redirects.2.0.9.zip"
+                "url": "https://downloads.wordpress.org/plugin/safe-redirect-manager.2.1.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/simple-301-redirects/"
+            "homepage": "https://wordpress.org/plugins/safe-redirect-manager/"
         },
         {
             "name": "wpackagist-plugin/simple-definition-list-blocks",
