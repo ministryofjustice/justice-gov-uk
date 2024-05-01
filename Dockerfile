@@ -19,6 +19,13 @@ RUN apk add --update nano nodejs npm inotify-tools
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Maybe move to wordpress-base-fpm
+ENV TZ=Europe/London
+RUN apk add dpkg tzdata && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN printf '[Date]\ndate.timezone="%s"\n' $TZ > /usr/local/etc/php/conf.d/tzone.ini
+
 # www-data
 USER 82
 
