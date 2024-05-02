@@ -24,7 +24,7 @@ class Admin
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
         add_action('admin_menu', [$this, 'removeCustomizer'], 999);
         add_action('admin_head', [$this, 'removePublishPressUpsellBranding']);
-
+        add_action('admin_init', [$this, 'addPublishEditorCapsToRevisorRole']);
     }
 
     public static function enqueueStyles()
@@ -37,6 +37,17 @@ class Admin
         // We need this because the submenu's link (key from the array too) will always be generated with the current SERVER_URI in mind.
         $customizer_url = add_query_arg('return', urlencode(remove_query_arg(wp_removable_query_args(), wp_unslash($_SERVER['REQUEST_URI']))), 'customize.php');
         remove_submenu_page('themes.php', $customizer_url);
+    }
+    public static function addPublishEditorCapsToRevisorRole() {
+        // get the the role object
+        $editor_object = get_role('editor');
+        // get the capabilities
+        $editor_caps = $editor_object->capabilities;
+        $revisor_object = get_role('revisor');
+        // Update revisor permissions to include additional permissions that match 'revisor' user role
+        // foreach($editor_caps as $key => $state) {
+        //   $revisor_object->add_cap($key);
+        // }
     }
 
     public static function removePublishPressUpsellBranding()
@@ -69,6 +80,9 @@ class Admin
                }
                .ppseries-settings-body-content {
                  width: 100% !important;
+               }
+               .rvy-creation-ui {
+                 display: none;
                }
              </style>';
     }
