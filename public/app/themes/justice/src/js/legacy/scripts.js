@@ -1,6 +1,8 @@
 import jQuery from 'jquery';
 import { GetCookie, SetCookieConsent } from "./cookies";
 import nselect from "./nselect";
+import "./jquery-ui-1.8.16.custom.min";
+import "./funnelback";
 
 // jQuery.noConflict();
 jQuery(document).ready(function () {
@@ -290,5 +292,22 @@ jQuery(document).ready(function () {
     } else {
       jQuery("#crt_msg").show();
     }
+  });
+});
+
+
+
+jQuery(function() {
+  jQuery('#searchbox-top').fbcompletion({
+    'enabled'    : 'enabled',
+    'collection' : 'moj-matrix-dev-web',
+    'program'    : '/fb-mirror-search/padre-qs.cgi',
+    'format'     : 'extended',
+    'alpha'      : '.5',
+    'show'       : '10',
+    'sort'       : '0', 
+    'length'     : '3',
+    'delay'      : '0',
+    'source'     : 'internal'
   });
 });

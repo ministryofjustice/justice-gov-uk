@@ -23,11 +23,6 @@ class Search
         // Add a query var for the parent page. This will be handled in relevanssiParentFilter.
         add_filter('query_vars', fn ($qv) =>  array_merge($qv, array('parent')));
 
-        // Not necessary with Relevanssi.
-        // add_action('pre_get_posts', [$this, 'includeDocumentsInSearchResults']);
-        // add_action('pre_get_posts', [$this, 'searchFilter']);
-        // add_filter('the_excerpt', [$this, 'highlightResults']);
-
         // Relevanssi - prevent sending documents to the Relevanssi API.
         add_filter('option_relevanssi_do_not_call_home', fn () => 'on');
         add_filter('default_option_relevanssi_do_not_call_home', fn () => 'on');
@@ -183,57 +178,6 @@ class Search
     }
 
     /**
-     * This function modifies the main WordPress query to include an array of
-     * post types instead of the default 'post' post type.
-     *
-     * @param object $query The main WordPress query.
-     * @return void
-     */
-
-    public function includeDocumentsInSearchResults($query): void
-    {
-        if ($query->is_main_query() && $query->is_search() && !is_admin()) {
-            $query->set('post_type', array('page', 'document'));
-        }
-    }
-
-    /**
-     * Pagination support for non-relevanssi search results.
-     *
-     * @param object $query The main WordPress query.
-     * @return void
-     */
-
-    public function searchFilter($query): void
-    {
-        if (!is_admin() && $query->is_main_query()) {
-            if ($query->is_search) {
-                $query->set('paged', (get_query_var('paged')) ? get_query_var('paged') : 1);
-                $query->set('posts_per_page', 10);
-            }
-        }
-    }
-
-    /**
-     * Highlight the search terms in the search results.
-     *
-     * This is not necessary with Relevanssi.
-     *
-     * @param string $text The text to highlight.
-     * @return string The highlighted text.
-     */
-
-    public function highlightResults(string $text): string
-    {
-        if (is_search()) {
-            $sr = get_query_var('s');
-            $keys = explode(" ", $sr);
-            $text = preg_replace('/(' . implode('|', $keys) . ')/iu', '<strong class="search-excerpt">' . $sr . '</strong>', $text);
-        }
-        return $text;
-    }
-
-    /**
      * Format the URL to display in the search results.
      *
      * @param string $url The URL to format.
@@ -242,7 +186,6 @@ class Search
 
     public function formattedUrl(string $url): string
     {
-        return $url;
         $split_length = 80;
         // Remove the protocol from the URL.
         $url = preg_replace('/http\:(s)?\/\//', '', $url);
