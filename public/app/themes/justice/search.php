@@ -79,9 +79,7 @@ $search = new Search();
 
         </div>
 
-        <div id="content-right">
-            <?php get_sidebar('right', ['panels_in' => ['search-find-a-form']]); ?>
-        </div>
+        <div id="content-right"></div>
 
     </article>
 </main>
