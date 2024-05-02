@@ -17,7 +17,7 @@ class Search
         // Add a rewrite rule to handle an empty search.
         add_action('init', fn () => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
         // Add a rewrite rule to handle the old search urls.
-        add_action('init', [$this, 'redirectOldSearchUrls']);
+        add_action('template_redirect', [$this, 'redirectOldSearchUrls']);
         // Add a rewrite rule to handle the search string.
         add_filter('posts_search', [$this, 'handleEmptySearch'], 10, 2);
         // Add a query var for the parent page. This will be handled in relevanssiParentFilter.
@@ -36,6 +36,8 @@ class Search
         add_filter('option_relevanssi_click_tracking', fn () => 'off');
         add_filter('default_option_relevanssi_click_tracking', fn () => 'off');
 
+        // Relevanssi - filters the did you mean url, to use /search instead of s=.
+        add_filter('relevanssi_didyoumean_url', [$this, 'didYouMeanUrl'], 10, 3);
         // Relevanssi - add numbers to the did you mean alphabet.
         add_filter('relevanssi_didyoumean_alphabet', fn ($alphabet) => $alphabet . '0123456789');
 
@@ -71,6 +73,43 @@ class Search
     }
 
     /**
+     * Get the URL for the search results.
+     *
+     * @param string $search The search query.
+     * @param array $args An array of query parameters to add or modify.
+     * @return string The URL for the search results.
+     */
+
+    public function getSearchUrl($search, $args = [])
+    {
+        $url_append = '';
+        $pass_through_params = ['parent', 'orderby', 'section', 'organisation', 'type', 'audience'];
+        $query_array = [];
+
+        foreach ($pass_through_params as $param) {
+            $value = get_query_var($param);
+            if (!empty($value)) {
+                $query_array[$param] = $value;
+            }
+        }
+
+        foreach ($args as $key => $value) {
+            if ($value === null) {
+                unset($query_array[$key]);
+                continue;
+            } else {
+                $query_array[$key] = $value;
+            }
+        }
+
+        if (!empty($query_array)) {
+            $url_append = '?' . http_build_query($query_array);
+        }
+
+        return home_url('/search/' . $search .  $url_append);
+    }
+
+    /**
      * Get the sort options for the search results.
      *
      * @return array An array of sort options.
@@ -79,25 +118,19 @@ class Search
     public function getSortOptions(): array
     {
         $orderby = get_query_var('orderby');
+
         return [
             'relevance' => [
                 'label' => 'Relevance',
-                'url' => '/search/' . get_query_var('s'),
+                'url' =>  $this->getSearchUrl(get_query_var('s'), ['orderby' => null]),
                 'selected' => empty($orderby) || $orderby === 'relevance',
             ],
             'date' => [
                 'label' => 'Most recent',
-                'url' => '/search/' . get_query_var('s') . '?orderby=date',
+                'url' => $this->getSearchUrl(get_query_var('s'), ['orderby' => 'date']),
                 'selected' => $orderby === 'date',
             ],
         ];
-    }
-
-    public function getSuggestion(): ?string
-    {
-        $query = get_search_query();
-
-        return empty($query) ? null : \relevanssi_didyoumean($query, '', '', 5, false);
     }
 
     /**
@@ -113,21 +146,21 @@ class Search
             return;
         }
 
-        $search_params = ['s' => null];
+        $search = null;
 
         if (isset($_GET['s'])) {
             // Redirect the s parameter to the new search page.
-            $search_params['s'] = $_GET['s'];
+            $search = $_GET['s'];
         } else if (isset($_GET['query'])) {
             // Redirect old search URLs to the new search page.
-            $search_params['s'] = $_GET['query'];
+            $search = $_GET['query'];
         }
 
-        if (!$search_params['s']) {
+        if (!$search) {
             return;
         }
 
-        wp_redirect('/search/' . $search_params['s']);
+        wp_redirect($this->getSearchUrl($search));
         exit;
     }
 
@@ -166,7 +199,7 @@ class Search
 
     /**
      * Pagination support for non-relevanssi search results.
-     * 
+     *
      * @param object $query The main WordPress query.
      * @return void
      */
@@ -183,7 +216,7 @@ class Search
 
     /**
      * Highlight the search terms in the search results.
-     * 
+     *
      * This is not necessary with Relevanssi.
      *
      * @param string $text The text to highlight.
@@ -230,12 +263,26 @@ class Search
     }
 
     /**
+     * Filter the did you mean URL to use /search instead of s=.
+     *
+     * @param string $url The URL to filter.
+     * @param string $query The search query.
+     * @param string $suggestion The suggested search query.
+     * @return string The filtered URL.
+     */
+
+    public function didYouMeanUrl($url, $query, $suggestion): string
+    {
+        return empty($suggestion) ? $url : $this->getSearchUrl($suggestion);
+    }
+
+    /**
      * Filters the search results to only include the descendants of the parent page.
-     * 
+     *
      * This is useful for returning search results for Civil Procedure Rules (CPR) pages.
-     * 
+     *
      * @see https://www.relevanssi.com/knowledge-base/searching-for-all-descendants-of-a-page/
-     * 
+     *
      * @param array $hits The search results.
      * @return array The filtered search results.
      */

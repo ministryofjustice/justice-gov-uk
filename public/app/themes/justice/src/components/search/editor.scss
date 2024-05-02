@@ -1,0 +1,28 @@
+.wp-block-moj-search {
+  .search-bar {
+      display: flex;
+      width: 600px;
+      max-width: 100%;
+      padding: 10px 20px;
+      background: #eff0f2;
+      align-items: stretch;
+
+
+    #query {
+      display: inline-flex;
+      width: 270px;
+      max-width: 60%;
+      padding: 0 0.5em;
+      border: 1px solid #d5d4d4;
+      border-radius: 0;
+    }
+
+    input.go-btn {
+      display: inline-flex;
+      padding: 0 18px 3px 18px;
+      color: #ffffff;
+      border: 0 none;
+      background: -webkit-linear-gradient(top, #a09b8c 0%, #52524b 100%);
+    }
+  }
+}

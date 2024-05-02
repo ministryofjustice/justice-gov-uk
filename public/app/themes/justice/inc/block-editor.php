@@ -21,9 +21,8 @@ class BlockEditor
 
     public function registerBlocks()
     {
-        register_block_type('moj/inline-menu', array(
-            'render_callback' => [$this, 'inlineMenu']
-        ));
+        register_block_type('moj/inline-menu', ['render_callback' => [$this, 'inlineMenu']]);
+        register_block_type('moj/search', ['render_callback' => [$this, 'search']]);
     }
 
     /**
@@ -64,5 +63,27 @@ class BlockEditor
         return $this->templatePartToVariable('template-parts/common/inline-list', null, [
             'entries' => $entries
         ]);
+    }
+
+    /**
+     * Render callback for the search block.
+     *
+     * Parent page is passed as an argument to the search form.
+     * So that the search form will return results containing only children of the current page.
+     *
+     * @return string
+     */
+
+    public function search(): string
+    {
+        $args = [
+            'parent' => get_the_ID(),
+            'submit' => 'Search'
+        ];
+
+        return sprintf(
+            '<div class="search wp-block-moj-search">%s</div>',
+            $this->templatePartToVariable('template-parts/search/search-bar', null, $args)
+        );
     }
 }
