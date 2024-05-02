@@ -2,9 +2,7 @@
 
 namespace MOJ\Justice;
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined('ABSPATH') || exit;
 
 class Search
 {
@@ -20,14 +18,29 @@ class Search
         add_action('init', fn () => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
         // Add a rewrite rule to handle the old search urls.
         add_action('init', [$this, 'redirectOldSearchUrls']);
+        // Add a rewrite rule to handle the search string.
         add_filter('posts_search', [$this, 'handleEmptySearch'], 10, 2);
-        add_action('pre_get_posts', [$this, 'includeDocumentsInSearchResults']);
-        add_action('pre_get_posts', [$this, 'searchFilter']);
-        add_filter('the_excerpt', [$this, 'highlightResults']);
+        // Add a query var for the parent page. This will be handled in relevanssiParentFilter.
+        add_filter('query_vars', fn ($qv) =>  array_merge($qv, array('parent')));
 
-        add_filter('relevanssi_didyoumean_alphabet', function ($alphabet) {
-            return $alphabet . '0123456789';
-        });
+        // Not necessary with Relevanssi.
+        // add_action('pre_get_posts', [$this, 'includeDocumentsInSearchResults']);
+        // add_action('pre_get_posts', [$this, 'searchFilter']);
+        // add_filter('the_excerpt', [$this, 'highlightResults']);
+
+        // Relevanssi - prevent sending documents to the Relevanssi API.
+        add_filter('option_relevanssi_do_not_call_home', fn () => 'on');
+        add_filter('default_option_relevanssi_do_not_call_home', fn () => 'on');
+
+        // Relevanssi - prevent click tracking. We don't need it and it makes the search results url messy.
+        add_filter('option_relevanssi_click_tracking', fn () => 'off');
+        add_filter('default_option_relevanssi_click_tracking', fn () => 'off');
+
+        // Relevanssi - add numbers to the did you mean alphabet.
+        add_filter('relevanssi_didyoumean_alphabet', fn ($alphabet) => $alphabet . '0123456789');
+
+        // Relevanssi - filters the search results to only include the descendants.
+        add_filter('relevanssi_hits_filter', [$this, 'relevanssiParentFilter']);
     }
 
     /**
@@ -82,15 +95,9 @@ class Search
 
     public function getSuggestion(): ?string
     {
-        if (empty(get_search_query())) {
-            return null;
-        }
-        return null;
-        // $q = get_search_query(false);
-        // error_log(print_r('$q: ' . $q, true));
-        // $s = \relevanssi_didyoumean($q, '', '', 5);
-        // error_log(print_r($s, true));
-        // return 'x';
+        $query = get_search_query();
+
+        return empty($query) ? null : \relevanssi_didyoumean($query, '', '', 5, false);
     }
 
     /**
@@ -142,8 +149,6 @@ class Search
         return $search;
     }
 
-    // TODO: Redirect old query string search URLs to the new search page.
-
     /**
      * This function modifies the main WordPress query to include an array of
      * post types instead of the default 'post' post type.
@@ -159,7 +164,14 @@ class Search
         }
     }
 
-    public function searchFilter($query)
+    /**
+     * Pagination support for non-relevanssi search results.
+     * 
+     * @param object $query The main WordPress query.
+     * @return void
+     */
+
+    public function searchFilter($query): void
     {
         if (!is_admin() && $query->is_main_query()) {
             if ($query->is_search) {
@@ -171,12 +183,14 @@ class Search
 
     /**
      * Highlight the search terms in the search results.
+     * 
+     * This is not necessary with Relevanssi.
      *
      * @param string $text The text to highlight.
      * @return string The highlighted text.
      */
 
-    public function highlightResults($text)
+    public function highlightResults(string $text): string
     {
         if (is_search()) {
             $sr = get_query_var('s');
@@ -195,7 +209,7 @@ class Search
 
     public function formattedUrl(string $url): string
     {
-
+        return $url;
         $split_length = 80;
         // Remove the protocol from the URL.
         $url = preg_replace('/http\:(s)?\/\//', '', $url);
@@ -213,5 +227,48 @@ class Search
         }
 
         return $url;
+    }
+
+    /**
+     * Filters the search results to only include the descendants of the parent page.
+     * 
+     * This is useful for returning search results for Civil Procedure Rules (CPR) pages.
+     * 
+     * @see https://www.relevanssi.com/knowledge-base/searching-for-all-descendants-of-a-page/
+     * 
+     * @param array $hits The search results.
+     * @return array The filtered search results.
+     */
+
+    public function relevanssiParentFilter(array $hits): array
+    {
+        global $wp_query;
+
+        if (!isset($wp_query->query_vars['parent'])) {
+            // No parent parameter set, do nothing.
+            return $hits;
+        }
+
+        $acc = [];
+        foreach ($hits[0] as $hit) {
+            // Loop through all the posts found.
+            if ($hit->ID === $wp_query->query_vars['parent']) {
+                // The page itself.
+                $acc[] = $hit;
+            } elseif ($hit->post_parent === $wp_query->query_vars['parent']) {
+                // A direct descendant.
+                $acc[] = $hit;
+            } elseif ($hit->post_parent > 0) {
+                $ancestors = get_post_ancestors($hit);
+                if (in_array(intval($wp_query->query_vars['parent']), $ancestors, true)) {
+                    // One of the lower level descendants.
+                    $acc[] = $hit;
+                }
+            }
+        }
+
+        // Only include the filtered posts.
+        $hits[0] = $acc;
+        return $hits;
     }
 }
