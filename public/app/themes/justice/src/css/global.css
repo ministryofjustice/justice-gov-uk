@@ -2692,23 +2692,39 @@ background: url('img/select-btn.png') no-repeat right -31px;
 }
 
 /* page nav, next and previous */
-.inner-lcr #content-wrapper .container-wrapper #content article .article ul.pag-nav {
+.inner-lcr #content-wrapper .container-wrapper #content article .article ul.pag-nav, .is-style-pag-nav {
     width: 520px;
     list-style-type: none;
 }
 
-.inner-lcr #content-wrapper .container-wrapper #content article .article ul.pag-nav li {
+.inner-lcr #content-wrapper .container-wrapper #content article .article ul.pag-nav li, .is-style-pag-nav li {
     float: left;
     margin-left: 2px;
     padding: 4px 6px;
     border: solid 1px #ccc;
 }
 
-.inner-lcr #content-wrapper .container-wrapper #content article .article ul.pag-nav li:hover {
+.inner-lcr #content-wrapper .container-wrapper #content article .article ul.pag-nav li:hover, .is-style-pag-nav li:hover {
     background-color: #EFF0F2;
     border: solid 1px #000;
 }
 
+
+/* The Gutenberg core/list block with the pag-nav style. */
+.is-style-pag-nav {
+    list-style-type: none!important;
+    padding-left: 0!important;
+}
+
+.is-style-pag-nav:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.is-style-pag-nav li {
+    padding: 4px 6px!important;
+}
 
 /* Temporary table styles */
 
