@@ -1,0 +1,33 @@
+.toplevel_page_revisionary-q {
+    a[href="admin.php?page=revisionary-pro"] {
+      display: none !important;
+    }
+  }
+  .pp-version-notice-bold-purple {
+    display: none;
+  }
+  .pressshack-admin-wrapper {
+    a {
+     color: #2271b1 !important;
+     &:hover {
+       color: #135e96 !important;
+     }
+     &:focus {
+       color: #043959 !important;
+     }
+   }
+}
+.pressshack-admin-wrapper {
+  .inner-sidebar {
+    display: none;
+  }
+  footer {
+    display: none;
+  }
+  .ppseries-settings-body-content {
+    width: 100% !important;
+  }
+}
+.rvy-creation-ui {
+  display: none;
+}
