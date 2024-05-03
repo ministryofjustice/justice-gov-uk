@@ -20,6 +20,8 @@ services:
         depends_on:
             - mariadb
             - minio
+        links:
+          - "nginx:${SERVER_NAME}"
 
     nginx:
       build:
@@ -38,7 +40,6 @@ services:
       ports:
         - "8080:8080"
       depends_on:
-        - php-fpm
         - node
 
     node:

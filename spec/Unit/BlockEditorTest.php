@@ -49,6 +49,11 @@ final class BlockEditorTest extends \Codeception\Test\Unit
             'args' => ['moj/inline-menu', ['render_callback' => [$block_editor, 'inlineMenu']]],
         ]);
 
+        WP_Mock::userFunction('register_block_type', [
+            'times' => 1,
+            'args' => ['moj/search',      ['render_callback' => [$block_editor, 'search']]],
+        ]);
+
         $block_editor = new BlockEditor();
         $block_editor->registerBlocks();
     }

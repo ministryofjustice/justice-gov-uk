@@ -65,6 +65,7 @@ class Documents
         // Set default plugin options.
         add_filter('document_slug', fn () => $this->document_slug);
         add_filter('option_document_link_date', '__return_true');
+        add_filter('default_option_document_link_date', '__return_true');
         // Importing.
         add_action('import_start', fn () => $this->is_importing = true);
         add_action('import_end', fn () => $this->is_importing = false);

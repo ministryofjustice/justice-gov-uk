@@ -2,9 +2,7 @@
 
 namespace MOJ\Justice;
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined('ABSPATH') || exit;
 
 class Search
 {
@@ -19,15 +17,27 @@ class Search
         // Add a rewrite rule to handle an empty search.
         add_action('init', fn () => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
         // Add a rewrite rule to handle the old search urls.
-        add_action('init', [$this, 'redirectOldSearchUrls']);
+        add_action('template_redirect', [$this, 'redirectOldSearchUrls']);
+        // Add a rewrite rule to handle the search string.
         add_filter('posts_search', [$this, 'handleEmptySearch'], 10, 2);
-        add_action('pre_get_posts', [$this, 'includeDocumentsInSearchResults']);
-        add_action('pre_get_posts', [$this, 'searchFilter']);
-        add_filter('the_excerpt', [$this, 'highlightResults']);
+        // Add a query var for the parent page. This will be handled in relevanssiParentFilter.
+        add_filter('query_vars', fn ($qv) =>  array_merge($qv, array('parent')));
 
-        add_filter('relevanssi_didyoumean_alphabet', function ($alphabet) {
-            return $alphabet . '0123456789';
-        });
+        // Relevanssi - prevent sending documents to the Relevanssi API.
+        add_filter('option_relevanssi_do_not_call_home', fn () => 'on');
+        add_filter('default_option_relevanssi_do_not_call_home', fn () => 'on');
+
+        // Relevanssi - prevent click tracking. We don't need it and it makes the search results url messy.
+        add_filter('option_relevanssi_click_tracking', fn () => 'off');
+        add_filter('default_option_relevanssi_click_tracking', fn () => 'off');
+
+        // Relevanssi - filters the did you mean url, to use /search instead of s=.
+        add_filter('relevanssi_didyoumean_url', [$this, 'didYouMeanUrl'], 10, 3);
+        // Relevanssi - add numbers to the did you mean alphabet.
+        add_filter('relevanssi_didyoumean_alphabet', fn ($alphabet) => $alphabet . '0123456789');
+
+        // Relevanssi - filters the search results to only include the descendants.
+        add_filter('relevanssi_hits_filter', [$this, 'relevanssiParentFilter']);
     }
 
     /**
@@ -58,6 +68,43 @@ class Search
     }
 
     /**
+     * Get the URL for the search results.
+     *
+     * @param string $search The search query.
+     * @param array $args An array of query parameters to add or modify.
+     * @return string The URL for the search results.
+     */
+
+    public function getSearchUrl($search, $args = [])
+    {
+        $url_append = '';
+        $pass_through_params = ['parent', 'orderby', 'section', 'organisation', 'type', 'audience'];
+        $query_array = [];
+
+        foreach ($pass_through_params as $param) {
+            $value = get_query_var($param);
+            if (!empty($value)) {
+                $query_array[$param] = $value;
+            }
+        }
+
+        foreach ($args as $key => $value) {
+            if ($value === null) {
+                unset($query_array[$key]);
+                continue;
+            } else {
+                $query_array[$key] = $value;
+            }
+        }
+
+        if (!empty($query_array)) {
+            $url_append = '?' . http_build_query($query_array);
+        }
+
+        return home_url('/search/' . $search .  $url_append);
+    }
+
+    /**
      * Get the sort options for the search results.
      *
      * @return array An array of sort options.
@@ -66,31 +113,19 @@ class Search
     public function getSortOptions(): array
     {
         $orderby = get_query_var('orderby');
+
         return [
             'relevance' => [
                 'label' => 'Relevance',
-                'url' => '/search/' . get_query_var('s'),
+                'url' =>  $this->getSearchUrl(get_query_var('s'), ['orderby' => null]),
                 'selected' => empty($orderby) || $orderby === 'relevance',
             ],
             'date' => [
                 'label' => 'Most recent',
-                'url' => '/search/' . get_query_var('s') . '?orderby=date',
+                'url' => $this->getSearchUrl(get_query_var('s'), ['orderby' => 'date']),
                 'selected' => $orderby === 'date',
             ],
         ];
-    }
-
-    public function getSuggestion(): ?string
-    {
-        if (empty(get_search_query())) {
-            return null;
-        }
-        return null;
-        // $q = get_search_query(false);
-        // error_log(print_r('$q: ' . $q, true));
-        // $s = \relevanssi_didyoumean($q, '', '', 5);
-        // error_log(print_r($s, true));
-        // return 'x';
     }
 
     /**
@@ -106,21 +141,21 @@ class Search
             return;
         }
 
-        $search_params = ['s' => null];
+        $search = null;
 
         if (isset($_GET['s'])) {
             // Redirect the s parameter to the new search page.
-            $search_params['s'] = $_GET['s'];
+            $search = $_GET['s'];
         } else if (isset($_GET['query'])) {
             // Redirect old search URLs to the new search page.
-            $search_params['s'] = $_GET['query'];
+            $search = $_GET['query'];
         }
 
-        if (!$search_params['s']) {
+        if (!$search) {
             return;
         }
 
-        wp_redirect('/search/' . $search_params['s']);
+        wp_redirect($this->getSearchUrl($search));
         exit;
     }
 
@@ -142,50 +177,6 @@ class Search
         return $search;
     }
 
-    // TODO: Redirect old query string search URLs to the new search page.
-
-    /**
-     * This function modifies the main WordPress query to include an array of
-     * post types instead of the default 'post' post type.
-     *
-     * @param object $query The main WordPress query.
-     * @return void
-     */
-
-    public function includeDocumentsInSearchResults($query): void
-    {
-        if ($query->is_main_query() && $query->is_search() && !is_admin()) {
-            $query->set('post_type', array('page', 'document'));
-        }
-    }
-
-    public function searchFilter($query)
-    {
-        if (!is_admin() && $query->is_main_query()) {
-            if ($query->is_search) {
-                $query->set('paged', (get_query_var('paged')) ? get_query_var('paged') : 1);
-                $query->set('posts_per_page', 10);
-            }
-        }
-    }
-
-    /**
-     * Highlight the search terms in the search results.
-     *
-     * @param string $text The text to highlight.
-     * @return string The highlighted text.
-     */
-
-    public function highlightResults($text)
-    {
-        if (is_search()) {
-            $sr = get_query_var('s');
-            $keys = explode(" ", $sr);
-            $text = preg_replace('/(' . implode('|', $keys) . ')/iu', '<strong class="search-excerpt">' . $sr . '</strong>', $text);
-        }
-        return $text;
-    }
-
     /**
      * Format the URL to display in the search results.
      *
@@ -195,7 +186,6 @@ class Search
 
     public function formattedUrl(string $url): string
     {
-
         $split_length = 80;
         // Remove the protocol from the URL.
         $url = preg_replace('/http\:(s)?\/\//', '', $url);
@@ -213,5 +203,62 @@ class Search
         }
 
         return $url;
+    }
+
+    /**
+     * Filter the did you mean URL to use /search instead of s=.
+     *
+     * @param string $url The URL to filter.
+     * @param string $query The search query.
+     * @param string $suggestion The suggested search query.
+     * @return string The filtered URL.
+     */
+
+    public function didYouMeanUrl($url, $query, $suggestion): string
+    {
+        return empty($suggestion) ? $url : $this->getSearchUrl($suggestion);
+    }
+
+    /**
+     * Filters the search results to only include the descendants of the parent page.
+     *
+     * This is useful for returning search results for Civil Procedure Rules (CPR) pages.
+     *
+     * @see https://www.relevanssi.com/knowledge-base/searching-for-all-descendants-of-a-page/
+     *
+     * @param array $hits The search results.
+     * @return array The filtered search results.
+     */
+
+    public function relevanssiParentFilter(array $hits): array
+    {
+        global $wp_query;
+
+        if (!isset($wp_query->query_vars['parent'])) {
+            // No parent parameter set, do nothing.
+            return $hits;
+        }
+
+        $acc = [];
+        foreach ($hits[0] as $hit) {
+            // Loop through all the posts found.
+            if ($hit->ID === $wp_query->query_vars['parent']) {
+                // The page itself.
+                $acc[] = $hit;
+            } elseif ($hit->post_parent === $wp_query->query_vars['parent']) {
+                // A direct descendant.
+                $acc[] = $hit;
+            } elseif ($hit->post_parent > 0) {
+                $ancestors = get_post_ancestors($hit);
+                if (in_array(intval($wp_query->query_vars['parent']), $ancestors, true)) {
+                    // One of the lower level descendants.
+                    $acc[] = $hit;
+                }
+            }
+        }
+
+        // Only include the filtered posts.
+        $hits[0] = $acc;
+        return $hits;
     }
 }
