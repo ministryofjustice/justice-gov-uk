@@ -11,8 +11,8 @@ defined('ABSPATH') || exit;
         <input name="s" id="query" type="text" value="<?= get_search_query() ?>" accesskey="q">
         <input class="go-btn" type="submit" value="<?= !empty($args['submit']) ? $args['submit'] : 'Go'; ?>">
 
-        <?php if (!empty(get_query_var('parent'))) : ?>
-            <input type="hidden" name="parent" value="<?= get_query_var('parent') ?>">
+        <?php if (!empty($args['parent'])) : ?>
+            <input type="hidden" name="parent" value="<?= $args['parent'] ?>">
         <?php endif; ?>
 
     </form>
