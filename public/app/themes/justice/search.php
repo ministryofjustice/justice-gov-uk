@@ -37,7 +37,7 @@ $search = new Search();
 
             <div class="search">
 
-                <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount(), 'suggestion' => $search->getSuggestion()]) ?>
+                <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount()]) ?>
 
                 <?php get_template_part('template-parts/search/sort', null, ['search_options' => $search->getSortOptions()]) ?>
 
@@ -79,9 +79,7 @@ $search = new Search();
 
         </div>
 
-        <div id="content-right">
-            <?php get_sidebar('right', ['panels_in' => ['search-find-a-form']]); ?>
-        </div>
+        <div id="content-right"></div>
 
     </article>
 </main>

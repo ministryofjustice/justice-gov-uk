@@ -19,18 +19,17 @@ if (empty($taxonomies)) {
         <?php foreach ($taxonomies as $taxonomy) : ?>
             <div>
 
-                
                 <label for="filter-<?= $taxonomy->name; ?>"><?= $taxonomy->label; ?></label>
-                
+
                 <select id="filter-<?= $taxonomy->name; ?>" name="<?= $taxonomy->name; ?>">
-                    
-                <option value="">All</option>
-                <?php foreach ($taxonomy->terms as $term) : ?>
-                    <option value="<?= $term->slug; ?>" <?= $term->selected ? "selected" : '' ?> >
-                        <?= $term->name; ?>
-                    </option>
-                <?php endforeach; ?>
-                    
+
+                    <option value="">All</option>
+                    <?php foreach ($taxonomy->terms as $term) : ?>
+                        <option value="<?= $term->slug; ?>" <?= $term->selected ? "selected" : '' ?> >
+                            <?= $term->name; ?>
+                        </option>
+                    <?php endforeach; ?>
+
                 </select>
             </div>
                 
@@ -38,6 +37,10 @@ if (empty($taxonomies)) {
 
         <label for="filter-web-only" id="filter-web-only-label">Web Pages Only</label>
         <input type="checkbox" name="web-only" id="filter-web-only" value="!pdf" />
+
+        <?php if (!empty(get_query_var('parent'))) : ?>
+            <input type="hidden" name="parent" value="<?= get_query_var('parent') ?>">
+        <?php endif; ?>
 
         <div class="filter-btns">
             <input class="go-btn" type="submit" value="Apply filter" />
