@@ -20,6 +20,7 @@ class Redirects
     public function addHooks()
     {
         add_filter('srm_restrict_to_capability', [$this, 'addRedirectToEditor']);
+        add_action('template_redirect', [$this, 'redirectToAdmin']);
     }
 
     /**
@@ -48,5 +49,40 @@ class Redirects
         }
 
         return $redirect_capability;
+    }
+
+    /**
+     * Redirect frontend urls appended with /_admin to the admin page.
+     * 
+     * @return void
+     */
+
+    public function redirectToAdmin(): void
+    {
+        // If not a 404 page then return.
+        if (!is_404()) {
+            return;
+        }
+
+        $url = $_SERVER['REQUEST_URI'];
+        $pattern = '/\/_admin$/';
+
+        // If url does not end in /_admin then return.
+        if (!preg_match($pattern, $url)) {
+            return;
+        }
+
+        // Remove /_admin.
+        $post_url = preg_replace($pattern, '', $url);
+
+        // Get the post id from the url.
+        $post_id = url_to_postid($post_url);
+
+        if (!$post_id) {
+            return;
+        }
+
+        wp_safe_redirect(get_edit_post_link($post_id, '_admin'), 302);
+        exit;
     }
 }
