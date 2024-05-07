@@ -53,7 +53,7 @@ class Redirects
 
     /**
      * Redirect frontend urls appended with /_admin to the admin page.
-     * 
+     *
      * @return void
      */
 
