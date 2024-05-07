@@ -64,12 +64,21 @@ class Redirects
             return;
         }
 
-        $url = $_SERVER['REQUEST_URI'];
+        global $wp;
+
+        $url = home_url($wp->request);
         $pattern = '/\/_admin$/';
 
         // If url does not end in /_admin then return.
         if (!preg_match($pattern, $url)) {
             return;
+        }
+
+        // Is user logged in?
+        if (!is_user_logged_in()) {
+            // Redirect to login page, with the current url as the redirect_to parameter.
+            wp_safe_redirect(wp_login_url($url));
+            exit;
         }
 
         // Remove /_admin.
@@ -82,7 +91,8 @@ class Redirects
             return;
         }
 
-        wp_safe_redirect(get_edit_post_link($post_id, '_admin'), 302);
+        // Redirect to the post edit page. 302 is the default status code.
+        wp_safe_redirect(get_edit_post_link($post_id, '_admin'));
         exit;
     }
 }
