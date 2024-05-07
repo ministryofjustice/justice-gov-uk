@@ -30,7 +30,7 @@ class Documents
 
     // Max filesize for wp-document-revisions to stream via php.
     private $php_stream_limit = 15 * 1024 * 1024; // 15MB
-    private $default_upload_limit = 128 * 1024 * 1024; // 64MB
+    private $default_upload_limit = 64 * 1024 * 1024; // 64MB
     private $document_upload_limit = 256 * 1024 * 1024; // 200MB
 
     // CPT slug. This is hardcoded in the plugin.
