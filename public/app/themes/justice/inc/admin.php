@@ -25,12 +25,13 @@ class Admin
         add_action('admin_menu', [$this, 'removeCustomizer'], 999);
     }
 
-    public static function enqueueStyles()
+    public static function enqueueStyles(): void
     {
         wp_enqueue_style('justice-admin-style', get_template_directory_uri() . '/dist/css/editor.min.css');
+        wp_enqueue_style('justice-admin-override', get_template_directory_uri() . '/dist/css/admin-override.css');
     }
 
-    public static function removeCustomizer()
+    public static function removeCustomizer(): void
     {
         // We need this because the submenu's link (key from the array too) will always be generated with the current SERVER_URI in mind.
         $customizer_url = add_query_arg('return', urlencode(remove_query_arg(wp_removable_query_args(), wp_unslash($_SERVER['REQUEST_URI']))), 'customize.php');

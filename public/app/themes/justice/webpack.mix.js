@@ -11,6 +11,7 @@ mix
     .sass('src/sass/editor.scss', 'dist/css/editor.min.css')
     .copy('src/img/', 'dist/img/')
     .css('src/css/editor-style.css', 'dist/css/')
+    .css('src/css/admin-override.css', 'dist/css/')
     .copy('dist/*.asset.php', 'dist/php')
     .options({ processCssUrls: false })
 
