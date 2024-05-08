@@ -5,6 +5,7 @@ namespace MOJ\Justice;
 use Exception;
 use WP;
 use WP_Post;
+use WP_Query;
 use const WP_CLI;
 
 if (!defined('ABSPATH')) {
@@ -100,6 +101,8 @@ class Documents
 
         add_filter('manage_' . $this->slug . '_posts_columns', [$this, 'addColumns']);
         add_filter('manage_' . $this->slug . '_posts_custom_column', [$this, 'addColumnContent'], null, 2);
+
+        add_action( 'pre_get_posts', [$this, 'redirectAdminFilter'], 10, 2);
     }
 
 
@@ -522,5 +525,29 @@ class Documents
             $this->slug => min($size, $this->document_upload_limit),
             default => min($size, $this->default_upload_limit)
         };
+    }
+
+    /**
+      * Hide the redirects created by administrators for editors
+      *
+      * Having 5000+ legacy redirects might be confusing for editors so we'll filter any 
+      * that were created by administrators out of the redirect manager list
+      *
+      * @param WP_Query $query
+      *
+      * @return WP_Query
+    */
+    public function redirectAdminFilter( WP_Query $query): WP_Query
+    {
+        if ($query->get('post_type') === 'redirect_rule') {
+            if (!current_user_can('administrator')) {
+                $user_ids = get_users([
+                    'role'   => 'administrator',
+                    'fields' => 'ID'
+                ] );
+                $query->set( 'author__not_in', $user_ids );
+            }
+        }
+        return $query;
     }
 }
