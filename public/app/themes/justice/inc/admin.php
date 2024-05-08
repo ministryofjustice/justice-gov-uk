@@ -25,7 +25,7 @@ class Admin
     {
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
         add_action('admin_menu', [$this, 'removeCustomizer'], 999);
-        add_filter('rest_page_query', [$this, 'increaseDropdownLimit'], 2, 20);
+        add_filter('rest_page_query', [$this, 'increaseDropdownLimit'], 9, 2);
     }
 
     public static function enqueueStyles()
@@ -53,6 +53,7 @@ class Admin
         if (is_user_logged_in()) {
             if ($request->get_query_params()['context'] === 'edit') {
                 $args['posts_per_page'] = 2000;
+                $args['orderby'] = 'title menu_order';
             }
         }
         return $args;
