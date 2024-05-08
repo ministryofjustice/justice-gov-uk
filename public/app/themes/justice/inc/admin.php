@@ -48,7 +48,7 @@ class Admin
      *
      * @return array $args The modified WP_Query array
      */
-    function increaseDropdownLimit($args, $request)
+    public static function increaseDropdownLimit($args, $request)
     {
         if (is_user_logged_in()) {
             if ($request->get_query_params()['context'] === 'edit') {
