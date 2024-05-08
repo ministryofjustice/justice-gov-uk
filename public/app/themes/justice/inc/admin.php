@@ -27,8 +27,8 @@ class Admin
 
     public static function enqueueStyles(): void
     {
-        wp_enqueue_style('justice-admin-style', get_template_directory_uri() . '/dist/css/editor.min.css');
-        wp_enqueue_style('justice-admin-override', get_template_directory_uri() . '/dist/css/admin-override.css');
+        wp_enqueue_style('justice-admin-style', get_template_directory_uri() . '/dist/css/admin.min.css');
+        wp_enqueue_style('justice-editor-style', get_template_directory_uri() . '/dist/css/editor.min.css');
     }
 
     public static function removeCustomizer(): void

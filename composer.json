@@ -60,14 +60,14 @@
         "vlucas/phpdotenv": "^5.5",
         "wp-cli/wp-cli-bundle": "^2.10",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^3.2",
+        "wpackagist-plugin/cms-tree-page-view": "^1.6.8",
         "wpackagist-plugin/debug-bar": "^1.1",
         "wpackagist-plugin/query-monitor": "^3.15",
         "wpackagist-plugin/safe-redirect-manager": "^2.1.1",
         "wpackagist-plugin/simple-definition-list-blocks": "6.0.1",
         "wpackagist-plugin/wordpress-importer": "~0.8.2",
         "wpackagist-plugin/wp-crontrol": "^1.16",
-        "wpackagist-plugin/wp-document-revisions": "^3.6.0",
-        "wpackagist-plugin/cms-tree-page-view":"1.6.8"
+        "wpackagist-plugin/wp-document-revisions": "^3.6.0"
     },
     "require-dev": {
         "10up/wp_mock": "^1.0.1",
