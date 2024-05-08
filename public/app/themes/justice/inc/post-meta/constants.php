@@ -2,9 +2,7 @@
 
 namespace MOJ\Justice;
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined('ABSPATH') || exit;
 
 class PostMetaConstants
 {
@@ -52,6 +50,13 @@ class PostMetaConstants
             'meta_key'  => '_short_title',
             'help'      =>
             'Optional. This is used in breadcrumb & menu navigation.' .
+                'Default: Page title.'
+        ];
+
+        $fields_array[] = [
+            'meta_key'  => '_title_tag',
+            'help'      =>
+            'Optional. Used for search engine page titles and browser tabs.' .
                 'Default: Page title.'
         ];
 
