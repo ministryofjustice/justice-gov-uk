@@ -10,7 +10,6 @@ mix
     .sass('src/sass/app.scss', 'dist/css/app.min.css')
     .sass('src/sass/admin.scss', 'dist/css/admin.min.css')
     .sass('src/sass/editor.scss', 'dist/css/editor.min.css')
-    .sass('src/sass/admin.scss', 'dist/css/admin.min.css')
     .copy('src/img/', 'dist/img/')
     .css('src/css/editor-style.css', 'dist/css/')
     .copy('dist/*.asset.php', 'dist/php')
