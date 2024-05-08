@@ -117,14 +117,14 @@ class PostMeta
      * Otherwise, return the default title.
      *
      * @param array $title_parts
-     * @return array 
+     * @return array
      */
 
     public function titleFilter(array $title_parts): array
     {
         $title_tag = $this->getMeta('_title_tag', get_the_ID());
 
-        if(!empty($title_tag)) {
+        if (!empty($title_tag)) {
             $title_parts['title'] = trim($title_tag);
             unset($title_parts['tagline']);
             unset($title_parts['site']);
