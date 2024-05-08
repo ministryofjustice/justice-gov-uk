@@ -102,6 +102,7 @@ class Documents
         add_filter('manage_' . $this->slug . '_posts_columns', [$this, 'addColumns']);
         add_filter('manage_' . $this->slug . '_posts_custom_column', [$this, 'addColumnContent'], null, 2);
 
+        // Hide legacy redirects from users with the Editor capability
         add_action('pre_get_posts', [$this, 'redirectAdminFilter'], 10, 2);
     }
 
