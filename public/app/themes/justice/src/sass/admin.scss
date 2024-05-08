@@ -2,8 +2,10 @@
 
 // Hide the upsell menu link
 .toplevel_page_revisionary-q {
-  a[href="https://publishpress.com/links/revisions-menu"] {
-    display: none !important;
+  ul.wp-submenu-wrap {
+    li:last-child {
+      display: none !important;
+    }
   }
 }
 // Hide the upsell banner on the listing pages
@@ -44,4 +46,9 @@
 // Hide the promo banner
 div.cms_tpv_promo_above_wrapper {
     display: none !important;
+}
+
+// Recolour edit banner to better fit the theme
+.rvy_preview_msgspan {
+  background-color: #373737 !important;
 }
