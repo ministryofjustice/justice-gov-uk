@@ -2,6 +2,11 @@
 
 namespace MOJ\Justice;
 
+use Exception;
+use WP;
+use WP_Post;
+use const WP_CLI;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -12,7 +17,6 @@ require_once 'filters.php';
 /**
  * Actions and filters related to WordPress documents post type.
  */
-
 class Documents
 {
 
@@ -20,30 +24,30 @@ class Documents
     use DocumentFilters;
 
     // File extensions to mark as downloadable in S3.
-    private $content_disposition_extensions = [
+    private array $content_disposition_extensions = [
         'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
     ];
 
-    private $disallow_in_media_library = [
+    private array $disallow_in_media_library = [
         'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
     ];
 
     // Max filesize for wp-document-revisions to stream via php.
-    private $php_stream_limit = 15 * 1024 * 1024; // 15MB
-    private $default_upload_limit = 64 * 1024 * 1024; // 64MB
-    private $document_upload_limit = 200 * 1024 * 1024; // 200MB
+    private int|float $php_stream_limit = 15 * 1024 * 1024; // 15MB
+    private int|float $default_upload_limit = 64 * 1024 * 1024; // 64MB
+    private int|float $document_upload_limit = 256 * 1024 * 1024; // 256MB
 
     // CPT slug. This is hardcoded in the plugin.
-    public $slug = 'document';
+    public string $slug = 'document';
     // Hardcoded document slug. We don't want this to be changed by the user.
-    public $document_slug = 'documents';
+    public string $document_slug = 'documents';
 
     // Is the wordpress-importer plugin running?
-    private $is_importing = false;
+    private bool $is_importing = false;
     // PostMeta instance - set in the constructor.
-    private $post_meta = null;
+    private PostMeta $post_meta;
     // Utils instance - set in the constructor.
-    private $utils = null;
+    private Utils $utils;
 
     public function __construct()
     {
@@ -60,38 +64,39 @@ class Documents
      * @return void
      */
 
-    public function addHooks() : void
+    public function addHooks(): void
     {
         // Set default plugin options.
-        add_filter('document_slug', fn () => $this->document_slug);
+        add_filter('document_slug', fn() => $this->document_slug);
         add_filter('option_document_link_date', '__return_true');
+        add_filter('default_option_document_link_date', '__return_true');
         // Importing.
-        add_action('import_start', fn () => $this->is_importing = true);
-        add_action('import_end', fn () => $this->is_importing = false);
+        add_action('import_start', fn() => $this->is_importing = true);
+        add_action('import_end', fn() => $this->is_importing = false);
         // Dashboard
         add_action('restrict_manage_posts', [$this, 'addFilteringDropdown']);
         add_filter('parse_query', [$this, 'editorFiltering']);
         add_action('admin_init', [$this, 'hideEditor']);
         add_action('edit_form_after_title', [$this, 'modifiedPrepareEditor']);
         // Serving documents
-        add_filter('document_serve_use_gzip', [$this, 'filterGzip'], null, 3);
+        add_filter('document_serve_use_gzip', [$this, 'filterGzip'], null, 2);
         add_filter('document_serve', [$this, 'maybeRedirectToAttachmentUrl'], null, 3);
         add_action('template_redirect', [$this, 'redirectLegacyDocumentUrls']);
         // S3
-        add_filter('as3cf_object_meta', [$this,  'addObjectMeta'], 10, 4);
+        add_filter('as3cf_object_meta', [$this, 'addObjectMeta'], 10, 4);
         // Add parent page to the document post type.
         add_action('add_meta_boxes', [$this, 'addMetaBoxes']);
-        add_filter('document_permalink', [$this,  'addParentPagesToPermalink'], 20, 2);
-        add_filter('document_rewrite_rules', [$this,  'addRewriteRules'], null, 2);
+        add_filter('document_permalink', [$this, 'addParentPagesToPermalink'], 20, 2);
+        add_filter('document_rewrite_rules', [$this, 'addRewriteRules'], null, 2);
         // Prevent posts using document(s) slug. * Affects documents & non-documents.
         add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [$this, 'isValidSlug'], 10, 2);
         add_filter('wp_unique_post_slug_is_bad_flat_slug', [$this, 'isValidSlug'], 10, 2);
         // Media Library hint regarding unsupported file types. * Affects non-documents.
-        add_filter('post-upload-ui', [$this,  'mediaLibraryHint'], 10);
+        add_filter('post-upload-ui', [$this, 'mediaLibraryHint'], 10);
         // Remove support for document file types from the Media Library. * Affects non-documents.
-        add_filter('upload_mimes', [$this,  'removeFileSupport'], 10, 3);
+        add_filter('upload_mimes', [$this, 'removeFileSupport'], 10);
         // Limits on uploads. * Affects documents & non-documents.
-        add_filter('upload_size_limit', [$this,  'setUploadSizeLimit'], 10, 3);
+        add_filter('upload_size_limit', [$this, 'setUploadSizeLimit'], 10, 3);
 
         add_filter('manage_' . $this->slug . '_posts_columns', [$this, 'addColumns']);
         add_filter('manage_' . $this->slug . '_posts_custom_column', [$this, 'addColumnContent'], null, 2);
@@ -104,7 +109,7 @@ class Documents
      * @return void
      */
 
-    public function hideEditor() : void
+    public function hideEditor(): void
     {
         remove_post_type_support($this->slug, 'editor');
     }
@@ -112,12 +117,12 @@ class Documents
     /**
      * Remove the title: Document Description
      *
-     * @global wdpr $wpdr The global instance of the wp-document-revisions plugin.
-     *
      * @return void
+     * @global $wpdr
+     *
      */
 
-    public function removeHooks() : void
+    public function removeHooks(): void
     {
         global $wpdr;
         if (!isset($wpdr)) {
@@ -129,11 +134,11 @@ class Documents
     /**
      * Is a post of CPT document?
      *
-     * @param int|\WP_Post|null $post
+     * @param int|WP_Post|null $post
      * @return bool
      */
 
-    public function isDocument(int|\WP_Post|null $post): bool
+    public function isDocument(int|WP_Post|null $post): bool
     {
         if ($post === null) {
             return false;
@@ -153,7 +158,7 @@ class Documents
      * @return bool
      */
 
-    public function isDocumentAttachment($attach_id): bool
+    public function isDocumentAttachment(int $attach_id): bool
     {
         return $this->isDocument(wp_get_post_parent_id($attach_id));
     }
@@ -161,11 +166,11 @@ class Documents
     /**
      * Echo a hint to the editor to explain the slug.
      *
-     * @param \WP_Post $post
+     * @param WP_Post $post
      * @return void
      */
 
-    public function modifiedPrepareEditor($post) : void
+    public function modifiedPrepareEditor(WP_Post $post): void
     {
         if (!$this->isDocument($post)) {
             return;
@@ -183,11 +188,10 @@ class Documents
      *
      * @param bool $gzip
      * @param string $mimetype
-     * @param int $filesize
      * @return bool
      */
 
-    public function filterGzip($gzip, $mimetype, $filesize) : bool
+    public function filterGzip(bool $gzip, string $mimetype): bool
     {
 
         if ('application/zip' === $mimetype) {
@@ -210,7 +214,7 @@ class Documents
      * @return string
      */
 
-    public function maybeRedirectToAttachmentUrl($file, $post_id, $attach_id)
+    public function maybeRedirectToAttachmentUrl(string $file, int $post_id, int $attach_id): string
     {
 
         // Only redirect published files to the CDN.
@@ -225,7 +229,7 @@ class Documents
         if ($file_size > $this->php_stream_limit) {
             // Be aware that this url will still work even if the document visibility is later changed to private.
             // This should not be a problem with justice.gov.uk as the document visibility is always public.
-            // It it becomes an issue, let's sign the URLs with a short expiry time.
+            // It is becoming an issue, let's sign the URLs with a short expiry time.
             $url = wp_get_attachment_url($attach_id);
             wp_redirect($url);
             exit;
@@ -237,18 +241,17 @@ class Documents
     /**
      * Redirect to the new document URL if the request matches a _source_path.
      *
-     * During migration it was not possible to have an exact match between old and new document URLs.
-     * The the path of the old document is stored in the source_path meta field.
+     * During migration, it was not possible to have an exact match between old and new document URLs.
+     * The path of the old document is stored in the source_path meta field.
      * If we have a 404 and the request matches a _source_path then redirect to the new document URL.
      *
-     * @global \WP $wp
-     *
      * @return void
+     * @global WP $wp
+     *
      */
 
     public function redirectLegacyDocumentUrls(): void
     {
-
         if (!is_404()) {
             return;
         }
@@ -282,7 +285,7 @@ class Documents
     /**
      * Add object meta to the S3 object.
      *
-     * This function is called whenever any file is upladed to S3.
+     * This function is called whenever any file is uploaded to S3.
      * Via the Media Library or the Document post type.
      *
      * @param array $args
@@ -290,7 +293,7 @@ class Documents
      * @return array
      */
 
-    public function addObjectMeta($args, $attach_id)
+    public function addObjectMeta(array $args, int $attach_id): array
     {
 
         // Return if we're not dealing with a document attachment.
@@ -299,10 +302,10 @@ class Documents
         }
 
         // Get info based on the attachment URL.
-        $pathinfo = pathinfo($args['Key']);
+        $path_info = pathinfo($args['Key']);
 
         // Return if we don't need to mark the url as a download, based on file extension.
-        if (!in_array($pathinfo['extension'], $this->content_disposition_extensions)) {
+        if (!in_array($path_info['extension'], $this->content_disposition_extensions)) {
             return $args;
         }
 
@@ -310,7 +313,7 @@ class Documents
         $args['ContentDisposition'] = 'attachment';
 
         // If filename is hex & 32 chars long, then set a ContentDisposition filename.
-        if (preg_match('/^[a-f0-9]{32}$/', $pathinfo['filename'])) {
+        if (preg_match('/^[a-f0-9]{32}$/', $path_info['filename'])) {
             // Get the basename from the request.
             $content_disposition_basename = sanitize_file_name($_REQUEST['name']);
 
@@ -322,7 +325,7 @@ class Documents
             if (!str_contains($document_permalink, '?post_type=document&p=')) {
                 $document_filename = pathinfo($document_permalink, PATHINFO_FILENAME);
                 // Build a basename from the document permalink filename with the file extension.
-                $content_disposition_basename = $document_filename . '.' . $pathinfo['extension'];
+                $content_disposition_basename = $document_filename . '.' . $path_info['extension'];
             }
 
             // Write a filename to S3 metadata. This is what the downloaded file will be called.
@@ -346,18 +349,19 @@ class Documents
      * @return void
      */
 
-    public function addMetaBoxes() : void
+    public function addMetaBoxes(): void
     {
-        add_meta_box('page', 'Document Attributes', [$this, 'metaBoxContent'], $this->slug, 'side', 'default');
+        add_meta_box('page', 'Document Attributes', [$this, 'metaBoxContent'], $this->slug, 'side');
     }
 
     /**
      * Echo the dropdown of parent pages.
      *
-     * @param \WP_Post $post
+     * @param WP_Post $post
+     * @throws Exception
      */
 
-    public function metaBoxContent($post) : void
+    public function metaBoxContent(WP_Post $post): void
     {
         $pages = wp_dropdown_pages(
             array(
@@ -387,11 +391,11 @@ class Documents
      * e.g. /documents/document-name.ext -> /grand-parent-page/parent-page/documents/document-name.ext
      *
      * @param string $link
-     * @param \WP_Post $document
+     * @param WP_Post $document
      * @return string
      */
 
-    public function addParentPagesToPermalink($link, $document)
+    public function addParentPagesToPermalink(string $link, WP_Post $document): string
     {
         if ($document->post_parent) {
             $link = str_replace(home_url(), get_permalink($document->post_parent), $link);
@@ -411,14 +415,14 @@ class Documents
      * @return array
      */
 
-    public function addRewriteRules(array $rules) : array
+    public function addRewriteRules(array $rules): array
     {
 
         $new_rules = [];
 
         foreach ($rules as $key => $value) {
             // If starts with documents/ then prefix with a  pattern to match any page slug.
-            if (strpos($key, $this->document_slug . '/') === 0) {
+            if (str_starts_with($key, $this->document_slug . '/')) {
                 $new_key = '.*\/' . $key;
                 $new_rules[$new_key] = $value;
             }
@@ -439,7 +443,7 @@ class Documents
     /**
      * Prevent all single posts, of any post type, from using the document(s) slug.
      *
-     * This prevents a conflict, where nested pages may make a url like /documents/my-document
+     * This prevents a conflict, where nested pages may make a URL like /documents/my-document
      *
      * @param bool $is_invalid_slug
      * @param string $slug
@@ -473,15 +477,14 @@ class Documents
      * Remove support for document file types from the Media Library.
      *
      * @param array $mime_types
-     * @param int|\WP_User|null $user
      * @return array
      */
 
-    public function removeFileSupport(array $mime_types, int|\WP_User|null $user): array
+    public function removeFileSupport(array $mime_types): array
     {
 
         // We're using the WP CLI or running the wordpress-import plugin.
-        if ((defined('WP_CLI') && \WP_CLI) || $this->is_importing) {
+        if ((defined('WP_CLI') && WP_CLI) || $this->is_importing) {
             return $mime_types;
         }
 
@@ -513,14 +516,11 @@ class Documents
 
     public function setUploadSizeLimit(int $size): int
     {
-
         $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
 
-        switch ($post_type) {
-            case $this->slug:
-                return min($size, $this->document_upload_limit);
-            default:
-                return min($size, $this->default_upload_limit);
-        }
+        return match ($post_type) {
+            $this->slug => min($size, $this->document_upload_limit),
+            default => min($size, $this->default_upload_limit)
+        };
     }
 }
