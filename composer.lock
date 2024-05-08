@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7be8f66d0977cbef4f6b2de687612e6",
+    "content-hash": "d80a85019a97dd12bd2e83265f65bd25",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -6915,15 +6915,15 @@
         },
         {
             "name": "wpackagist-plugin/revisionary",
-            "version": "3.5.8.2",
+            "version": "3.5.9",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/revisionary/",
-                "reference": "tags/3.5.8.2"
+                "reference": "tags/3.5.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/revisionary.3.5.8.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/revisionary.3.5.9.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"

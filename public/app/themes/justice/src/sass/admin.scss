@@ -1,22 +1,28 @@
+// Styling for the PublishPress Revisions plugin
+
+// Hide the upsell menu link
 .toplevel_page_revisionary-q {
-    a[href="admin.php?page=revisionary-pro"] {
-      display: none !important;
+  a[href="admin.php?page=revisionary-pro"] {
+    display: none !important;
+  }
+}
+// Hide the upsell banner on the listing pages
+.pp-version-notice-bold-purple {
+  display: none;
+}
+// Use Wordpress colours as the module defaults aren't accessible
+.pressshack-admin-wrapper {
+  a {
+    color: #2271b1 !important;
+    &:hover {
+      color: #135e96 !important;
+    }
+    &:focus {
+      color: #043959 !important;
     }
   }
-  .pp-version-notice-bold-purple {
-    display: none;
-  }
-  .pressshack-admin-wrapper {
-    a {
-     color: #2271b1 !important;
-     &:hover {
-       color: #135e96 !important;
-     }
-     &:focus {
-       color: #043959 !important;
-     }
-   }
 }
+// Hide the upsell and support banner on the side of the settings
 .pressshack-admin-wrapper {
   .inner-sidebar {
     display: none;
@@ -27,7 +33,4 @@
   .ppseries-settings-body-content {
     width: 100% !important;
   }
-}
-.rvy-creation-ui {
-  display: none;
 }
