@@ -37,7 +37,7 @@ class PostMeta
         add_filter('sgf_register_fields', [$post_meta_constants, 'navigationFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'metaFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'panelFields'], 5);
-        add_filter('document_title_parts', [$this, 'titleFilter'], 10, 2);
+        add_filter('document_title_parts', [$this, 'titleFilter']);
     }
 
     /**
