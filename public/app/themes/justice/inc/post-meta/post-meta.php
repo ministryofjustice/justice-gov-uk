@@ -112,10 +112,10 @@ class PostMeta
 
     /**
      * Filter the title.
-     * 
+     *
      * If metadata is set for the title tag, return that.
      * Otherwise, trim spaces and the separator from the start and end of the default title.
-     * 
+     *
      * @param string $title
      * @param string $sep
      * @return string
