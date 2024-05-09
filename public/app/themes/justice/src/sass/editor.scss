@@ -1,3 +1,8 @@
 @import "../components/core-list/editor";
 @import "../components/search/editor";
 @import "../components/simple-definition-list-blocks/editor";
+
+// Triple the height of the suggestion list for the combobox component
+.components-form-token-field__suggestions-list {
+  max-height: 384px !important;
+}
