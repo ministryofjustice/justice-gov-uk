@@ -33,6 +33,7 @@ require_once 'inc/simple-definition-list-blocks.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/taxonomies.php';
 require_once 'inc/theme-assets.php';
+require_once 'inc/theme.php';
 require_once 'inc/utils.php';
 
 if (getenv('WP_ENV') === 'development') {
@@ -52,6 +53,7 @@ new Justice\Search();
 new Justice\SimpleGutenFields();
 new Justice\SimpleDefinitionsListBlocks();
 new Justice\ThemeAssets();
+new Justice\Theme();
 
 $block_editor = new Justice\BlockEditor();
 $block_editor->addHooks();

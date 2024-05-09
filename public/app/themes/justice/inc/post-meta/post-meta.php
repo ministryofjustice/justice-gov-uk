@@ -37,7 +37,7 @@ class PostMeta
         add_filter('sgf_register_fields', [$post_meta_constants, 'navigationFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'metaFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'panelFields'], 5);
-        add_filter('wp_title', [$this, 'titleFilter'], 10, 2);
+        add_filter('document_title_parts', [$this, 'titleFilter']);
     }
 
     /**
@@ -114,18 +114,22 @@ class PostMeta
      * Filter the title.
      *
      * If metadata is set for the title tag, return that.
-     * Otherwise, trim spaces and the separator from the start and end of the default title.
+     * Otherwise, return the default title.
      *
-     * @param string $title
-     * @param string $sep
-     * @return string
+     * @param array $title_parts
+     * @return array
      */
 
-    public function titleFilter(string $title, string $sep): string
+    public function titleFilter(array $title_parts): array
     {
-
         $title_tag = $this->getMeta('_title_tag', get_the_ID());
 
-        return empty($title_tag) ? trim($title, " " . $sep) : esc_html(trim($title_tag));
+        if (!empty($title_tag)) {
+            $title_parts['title'] = trim($title_tag);
+            unset($title_parts['tagline']);
+            unset($title_parts['site']);
+        }
+
+        return $title_parts;
     }
 }
