@@ -22,6 +22,8 @@ class Search
         add_filter('posts_search', [$this, 'handleEmptySearch'], 10, 2);
         // Add a query var for the parent page. This will be handled in relevanssiParentFilter.
         add_filter('query_vars', fn ($qv) =>  array_merge($qv, array('parent')));
+        // Update the search query.
+        add_action('pre_get_posts', [$this, 'searchFilter']);
 
         // Relevanssi - prevent sending documents to the Relevanssi API.
         add_filter('option_relevanssi_do_not_call_home', fn () => 'on');
@@ -175,6 +177,21 @@ class Search
         }
 
         return $search;
+    }
+
+     * Update the search query.
+     * 
+     * Setting the default value for paged is important to highlight page 1 in pagination.
+     * 
+     * @param \WP_Query $query The main WordPress query.
+     * @return void
+     */
+
+    public function searchFilter($query)
+    {
+        if (!is_admin() && $query->is_main_query() && $query->is_search) {
+            $query->set('paged', (get_query_var('paged')) ? get_query_var('paged') : 1);
+        }
     }
 
     /**
