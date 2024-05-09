@@ -103,7 +103,10 @@ class Search
             $url_append = '?' . http_build_query($query_array);
         }
 
-        return home_url('/search/' . $search .  $url_append);
+        // Unslash because wp adds \ before quotes. Then immediately urlencode.
+        $encoded_search = urlencode(wp_unslash($search));
+
+        return home_url('/search/' . $encoded_search .  $url_append);
     }
 
     /**
