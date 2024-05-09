@@ -25,18 +25,25 @@ if (empty($taxonomies)) {
 
                     <option value="">All</option>
                     <?php foreach ($taxonomy->terms as $term) : ?>
-                        <option value="<?= $term->slug; ?>" <?= $term->selected ? "selected" : '' ?> >
+                        <option value="<?= $term->slug; ?>" <?= $term->selected ? "selected" : '' ?>>
                             <?= $term->name; ?>
                         </option>
                     <?php endforeach; ?>
 
                 </select>
             </div>
-                
+
         <?php endforeach; ?>
 
         <label for="filter-web-only" id="filter-web-only-label">Web Pages Only</label>
-        <input type="checkbox" name="web-only" id="filter-web-only" value="!pdf" />
+        <?php
+        /*
+         * There is a known bug where post_type=page is not being passed to the search query.
+         * Relevanssi introduces a new query var, post_types, to handle this.
+         * @see https://www.relevanssi.com/knowledge-base/post_type-page-fail/
+         */
+        ?>
+        <input type="checkbox" name="post_types" id="filter-web-only" value="page" <?= get_query_var('post_types') === 'page' ? 'checked="checked"' : '' ?> />
 
         <?php if (!empty(get_query_var('parent'))) : ?>
             <input type="hidden" name="parent" value="<?= get_query_var('parent') ?>">

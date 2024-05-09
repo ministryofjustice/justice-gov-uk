@@ -60,6 +60,7 @@
         "vlucas/phpdotenv": "^5.5",
         "wp-cli/wp-cli-bundle": "^2.10",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^3.2",
+        "wpackagist-plugin/cms-tree-page-view": "^1.6.8",
         "wpackagist-plugin/debug-bar": "^1.1",
         "wpackagist-plugin/query-monitor": "^3.15",
         "wpackagist-plugin/safe-redirect-manager": "^2.1.1",
