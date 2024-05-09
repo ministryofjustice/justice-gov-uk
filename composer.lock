@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52cdebfb46cafee030c0292ca4120abf",
+    "content-hash": "3e5d43303367c2f4ea6addcbedc84185",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -1807,6 +1807,46 @@
                 "source": "https://github.com/mck89/peast/tree/v1.16.2"
             },
             "time": "2024-03-05T09:16:03+00:00"
+        },
+        {
+            "name": "ministryofjustice/cookie-compliance-for-wordpress",
+            "version": "3.4.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ministryofjustice/cookie-compliance-for-wordpress.git",
+                "reference": "6d92be512cbc5c94c17203c22b509ce03f7be4ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://composer.wp.dsd.io/dist/ministryofjustice/cookie-compliance-for-wordpress/ministryofjustice-cookie-compliance-for-wordpress-6d92be512cbc5c94c17203c22b509ce03f7be4ae-zip-2807e8.zip",
+                "reference": "6d92be512cbc5c94c17203c22b509ce03f7be4ae",
+                "shasum": "0553c4f3ea68e67580a0e9d30dc6f61574b951b2"
+            },
+            "require-dev": {
+                "composer/composer": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "wordpress-plugin",
+            "scripts": {
+                "phpcs-config-set": [
+                    "phpcs --config-set ignore_warnings_on_exit 1"
+                ],
+                "phpcs": [
+                    "phpcs --extensions=php --ignore=*/vendor/* --standard=PSR12 ."
+                ],
+                "phpcbf": [
+                    "phpcbf --extensions=php --ignore=*/vendor/* --standard=PSR12 ."
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "WP plugin that presents visitor with a cookie consent banner and opt-in setting page.",
+            "support": {
+                "source": "https://github.com/ministryofjustice/cookie-compliance-for-wordpress/tree/3.4.9",
+                "issues": "https://github.com/ministryofjustice/cookie-compliance-for-wordpress/issues"
+            },
+            "time": "2024-04-10T09:55:27+00:00"
         },
         {
             "name": "mustache/mustache",
