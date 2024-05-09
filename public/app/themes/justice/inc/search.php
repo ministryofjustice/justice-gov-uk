@@ -179,6 +179,7 @@ class Search
         return $search;
     }
 
+    /**
      * Update the search query.
      * 
      * Setting the default value for paged is important to highlight page 1 in pagination.
