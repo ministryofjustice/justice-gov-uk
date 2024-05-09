@@ -114,7 +114,7 @@ class Taxonomies
      * @return array
      */
 
-    public function getTaxonomiesForFilter() : array
+    public function getTaxonomiesForFilter(): array
     {
         // Get all taxonomies.
         $taxonomies = get_object_taxonomies('page', 'objects');
@@ -138,6 +138,27 @@ class Taxonomies
                     'hide_empty' => false,
                 ])
             ),
+        ], $taxonomies);
+    }
+
+    /**
+     * Returns an array of taxonomies with value, for use in form hidden inputs.
+     *
+     * @return array
+     */
+
+    public function getTaxonomiesForHiddenInputs(): array
+    {
+        // Get all taxonomies.
+        $taxonomies = get_object_taxonomies('page', 'objects');
+
+        // Filter out post_tag, and where value is null.
+        $taxonomies = array_filter($taxonomies, fn ($taxonomy) =>  $taxonomy->name !== 'post_tag' && !empty(get_query_var($taxonomy->name)));
+
+        // Map over the taxonomies and return an object with the name and value.
+        return array_map(fn ($taxonomy) => (object) [
+            'name' => $taxonomy->name,
+            'value' => !empty(get_query_var($taxonomy->name)) ? get_query_var($taxonomy->name) : null
         ], $taxonomies);
     }
 }

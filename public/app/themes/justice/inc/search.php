@@ -80,7 +80,7 @@ class Search
     public function getSearchUrl($search, $args = [])
     {
         $url_append = '';
-        $pass_through_params = ['parent', 'orderby', 'section', 'organisation', 'type', 'audience'];
+        $pass_through_params = ['parent', 'post_types', 'orderby', 'section', 'organisation', 'type', 'audience'];
         $query_array = [];
 
         foreach ($pass_through_params as $param) {
@@ -181,9 +181,9 @@ class Search
 
     /**
      * Update the search query.
-     * 
+     *
      * Setting the default value for paged is important to highlight page 1 in pagination.
-     * 
+     *
      * @param \WP_Query $query The main WordPress query.
      * @return void
      */
