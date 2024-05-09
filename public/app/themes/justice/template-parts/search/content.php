@@ -11,8 +11,7 @@ defined('ABSPATH') || exit;
         </a>
     </h1>
 
-    <!-- QUERY BIASED SUMMARY (WITH DATE)-->
-    <span class="date"><?= $args['modified_at'] ?></span>
+    <span class="date"><?php the_date('j F Y'); ?></span>
     <span class="content">
         <?php the_excerpt(); ?>
     </span>
