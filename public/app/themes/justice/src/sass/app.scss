@@ -8,3 +8,8 @@
 @import "layout";
 @import "common";
 @import "debug";
+
+// Recolour PublishPress preview banner to better fit the theme
+.rvy_preview_msgspan {
+  background-color: #373737 !important;
+}
