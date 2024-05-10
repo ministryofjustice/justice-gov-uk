@@ -11,7 +11,12 @@ defined('ABSPATH') || exit;
         </a>
     </h1>
 
-    <span class="date"><?php the_date('j F Y'); ?></span>
+    <?php
+    /*
+     * Use get_the_date here because the_date will not echo any duplicate dates.
+     */
+    ?>
+    <span class="date"><?= get_the_date('j F Y'); ?></span>
     <span class="content">
         <?php the_excerpt(); ?>
     </span>
