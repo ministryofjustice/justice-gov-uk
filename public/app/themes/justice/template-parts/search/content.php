@@ -2,12 +2,14 @@
 
 defined('ABSPATH') || exit;
 
+use MOJ\Justice\PostMeta;
+
 ?>
 
 <article>
     <h1>
         <a href="<?php the_permalink(); ?>" title="<?php the_permalink(); ?>">
-            <?php the_title() ?>
+            <?= (new PostMeta())->getSearchResultTitle() ?>
         </a>
     </h1>
 
