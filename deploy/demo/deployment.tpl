@@ -33,6 +33,12 @@ spec:
           volumeMounts:
             - name: uploads
               mountPath: /var/www/html/public/app/uploads
+          resources:
+            requests:
+              cpu: 1000m
+            limits:
+              cpu: 1000m
+
         - name: fpm
           image: ${ECR_URL}:${IMAGE_TAG_FPM}
           ports:
@@ -40,6 +46,11 @@ spec:
           volumeMounts:
             - name: uploads
               mountPath: /var/www/html/public/app/uploads
+          resources:
+            requests:
+              cpu: 2000m
+            limits:
+              cpu: 2000m
           securityContext:
               runAsUser: 82
           env:
