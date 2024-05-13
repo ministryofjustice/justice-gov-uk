@@ -35,9 +35,11 @@ spec:
               mountPath: /var/www/html/public/app/uploads
           resources:
             requests:
-              cpu: 1000m
+              cpu: 500m
+              memory: 500Mi
             limits:
-              cpu: 1000m
+              cpu: 500m
+              memory: 500Mi
 
         - name: fpm
           image: ${ECR_URL}:${IMAGE_TAG_FPM}
@@ -49,8 +51,10 @@ spec:
           resources:
             requests:
               cpu: 2000m
+              memory: 1000Mi
             limits:
               cpu: 2000m
+              memory: 1000Mi
           securityContext:
               runAsUser: 82
           env:
