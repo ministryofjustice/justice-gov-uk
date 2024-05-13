@@ -2,12 +2,13 @@
 
 namespace MOJ\Justice;
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+use WP_Error;
+use Roots\WPConfig\Config;
+
+defined('ABSPATH') || exit;
 
 /**
- * Actions and filters related to removing unused features from WordPress core.
+ * Actions and filters related to WordPress core.
  */
 
 class Core
@@ -28,6 +29,8 @@ class Core
         add_filter('should_load_remote_block_patterns', '__return_false');
         // Avoids unnecessary transient entry in the database, by returning an empty array.
         add_filter('translations_api', fn () => []);
+        // Handle loopback requests.
+        add_filter('pre_http_request', [$this, 'handleLoopbackRequests'], 10, 3);
     }
 
     /**
@@ -58,5 +61,43 @@ class Core
         // Posts.
         remove_meta_box('dashboard_quick_press', 'dashboard', 'side');      // Quick Press/Quick Draft
         remove_meta_box('dashboard_activity', 'dashboard', 'normal');       // Activity
+    }
+
+    /**
+     * Handle loopback requests.
+     *
+     * Handle requests to the application host, by sending them to the loopback url.
+     *
+     * @param false|array|WP_Error $preempt
+     * @param array $args
+     * @param string $url
+     * @return false|array|WP_Error
+     */
+
+    public function handleLoopbackRequests(false|array|WP_Error $preempt, array $args, string $url): false|array|WP_Error
+    {
+        $loopback_url = Config::get('WP_LOOPBACK');
+
+        // Do we have a loopback url?
+        if (empty($loopback_url)) {
+            return $preempt;
+        }
+
+        // Is the request url to the application host?
+        if (parse_url($url, PHP_URL_HOST) !== parse_url(get_home_url(), PHP_URL_HOST)) {
+            return $preempt;
+        }
+
+        // Replace the URL.
+        $new_url = str_replace(get_home_url(), $loopback_url, $url);
+
+        // We don't need to verify ssl, calling a trusted container.
+        $args['sslverify'] = false;
+
+        // Get an instance of WP_Http.
+        $http = _wp_http_get_object();
+
+        // Return the result.
+        return $http->request($new_url, $args);
     }
 }
