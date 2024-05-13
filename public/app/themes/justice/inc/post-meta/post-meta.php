@@ -135,7 +135,7 @@ class PostMeta
 
     /**
      * Get the title for internal search.
-     * 
+     *
      * @return string
      */
 
@@ -143,7 +143,7 @@ class PostMeta
     {
         $custom_title = $this->getMeta('_title_tag', get_the_ID());
 
-        if(!empty(trim($custom_title))) {
+        if (!empty(trim($custom_title))) {
             return $custom_title;
         }
 
