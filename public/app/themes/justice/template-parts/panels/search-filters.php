@@ -45,6 +45,10 @@ if (empty($taxonomies)) {
         ?>
         <input type="checkbox" name="post_types" id="filter-web-only" value="page" <?= get_query_var('post_types') === 'page' ? 'checked="checked"' : '' ?> />
 
+        <?php if (!empty(get_query_var('orderby'))) : ?>
+            <input type="hidden" name="orderby" value="<?= get_query_var('orderby') ?>">
+        <?php endif; ?>
+
         <?php if (!empty(get_query_var('parent'))) : ?>
             <input type="hidden" name="parent" value="<?= get_query_var('parent') ?>">
         <?php endif; ?>

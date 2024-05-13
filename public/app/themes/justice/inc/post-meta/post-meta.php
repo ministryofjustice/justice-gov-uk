@@ -2,9 +2,9 @@
 
 namespace MOJ\Justice;
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+use Exception;
+
+defined('ABSPATH') || exit;
 
 require 'constants.php';
 
@@ -20,7 +20,7 @@ class PostMeta
 
     public function __construct(int | string $post_id = 0, array $options = [])
     {
-        $this->post_id = $post_id ? (int) $post_id : \get_the_ID();
+        $this->post_id = $post_id ? (int) $post_id : get_the_ID();
         if (isset($options['panels_in'])) {
             $this->panels_in = $options['panels_in'];
         }
@@ -37,6 +37,7 @@ class PostMeta
         add_filter('sgf_register_fields', [$post_meta_constants, 'navigationFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'metaFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'panelFields'], 5);
+        add_filter('document_title_parts', [$this, 'titleTagFilter']);
     }
 
     /**
@@ -94,7 +95,7 @@ class PostMeta
         try {
             $modified_at_override = get_post_meta($post_id ?: $this->post_id, '_modified_at_override', true);
             return $modified_at_override ? date($date_format, strtotime($modified_at_override)) : get_the_modified_date($date_format);
-        } catch (\Exception) {
+        } catch (Exception) {
             return get_the_modified_date($date_format);
         }
     }
@@ -107,5 +108,45 @@ class PostMeta
     public function getMeta(string $meta_key, string | int $post_id = 0, bool $single = true)
     {
         return get_metadata('post', $post_id ?: $this->post_id, $meta_key, $single);
+    }
+
+    /**
+     * Filter the title.
+     *
+     * If metadata is set for the title tag, return that.
+     * Otherwise, return the default title.
+     *
+     * @param array $title_parts
+     * @return array
+     */
+
+    public function titleTagFilter(array $title_parts): array
+    {
+        $title_tag = $this->getMeta('_title_tag', get_the_ID());
+
+        if (!empty($title_tag)) {
+            $title_parts['title'] = trim($title_tag);
+            unset($title_parts['tagline']);
+            unset($title_parts['site']);
+        }
+
+        return $title_parts;
+    }
+
+    /**
+     * Get the title for internal search.
+     *
+     * @return string
+     */
+
+    public function getSearchResultTitle(): string
+    {
+        $custom_title = $this->getMeta('_title_tag', get_the_ID());
+
+        if (!empty(trim($custom_title))) {
+            return $custom_title;
+        }
+
+        return get_the_title();
     }
 }

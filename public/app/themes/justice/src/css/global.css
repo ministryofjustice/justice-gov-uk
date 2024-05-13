@@ -373,7 +373,7 @@ Migration edit: moved to layout.scss
     box-shadow: inset 0px 0px 3px 2px #aaaaaa;
 }
 
-form.styled .go-btn, .search .go-btn, #looking-for .go-btn, .go-btn-grey, #tribunal .go-btn, #search-top .go-btn, #content-right .go-btn, #content-right .go-btn-grey, .filter .go-btn, .filter .go-btn-grey, #comment-box .go-btn, #general-form input.go-btn, #general-form #sq_submit_accessible_captcha, a.button {
+form.styled .go-btn, .search .go-btn, #looking-for .go-btn, .go-btn-grey, #tribunal .go-btn, #search-top .go-btn, #content-right .go-btn, #content-right .go-btn-grey, .filter .go-btn, .filter .go-btn-grey, #comment-box .go-btn, #general-form input.go-btn, #general-form #sq_submit_accessible_captcha, #content-wrapper a.button {
     width: auto;
     height: 32px;
     margin-left: 1px;
@@ -399,7 +399,7 @@ form.styled .go-btn, .search .go-btn, #looking-for .go-btn, .go-btn-grey, #tribu
 }
 
 a.button {
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     display: block;
     padding: 10px 15px 0;
     margin-top: 20px;

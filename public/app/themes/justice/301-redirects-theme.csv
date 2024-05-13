@@ -5,6 +5,8 @@ source,target,code,order,notes
 /__data/assets/image/0008/19772/pdf_icon.gif,/app/themes/justice/dist/img/icon/pdf.png,301,900,Theme redirect
 /__data/asset_types/excel_doc/icon.png,/app/themes/justice/dist/img/icon/xls.png,301,900,Theme redirect
 /__data/assets/image/0017/33713/icon_ppt.png,/app/themes/justice/dist/img/icon/ppt.png,301,900,Theme redirect
+/__data/assets/image/0003/18399/winzip_icon.gif,/app/themes/justice/dist/img/icon/winzip.gif,301,900,Theme redirect
+/courts/procedure-rules/family/images/winzip_icon.gif,/app/themes/justice/dist/img/icon/winzip.gif,301,900,Theme redirect
 /__data/assets/image/0016/33712/icon_zip.gif,/app/themes/justice/dist/img/icon/zip.gif,301,900,Theme redirect
 /__data/assets/image/0020/2495/phone-menu-top-arrow.png,/app/themes/justice/dist/img/phone-menu-top-arrow.png,301,900,Theme redirect
 /__data/assets/image/0020/2495/phone-menu-top-arrow-back.png,/app/themes/justice/dist/img/phone-menu-top-arrow-back.png,301,900,Theme redirect

@@ -1,11 +1,9 @@
 <?php
 
-use MOJ\Justice\PostMeta;
 use MOJ\Justice\Search;
 
 get_header();
 
-$post_meta = new PostMeta();
 $search = new Search();
 
 ?>
@@ -50,8 +48,7 @@ $search = new Search();
                         while (have_posts()) {
                             the_post();
                             $args = [
-                                'formatted_url' => $search->formattedUrl(get_the_permalink()),
-                                'modified_at' => $post_meta->getModifiedAt(\get_the_ID(), 'j F Y')
+                                'formatted_url' => $search->formattedUrl(get_the_permalink())
                             ];
                             get_template_part('template-parts/search/content', get_post_type(), $args);
                         }
