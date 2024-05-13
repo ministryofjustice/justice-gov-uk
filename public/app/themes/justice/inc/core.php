@@ -68,36 +68,36 @@ class Core
      *
      * Handle requests to the application host, by sending them to the loopback url.
      *
-     * @param false|array|WP_Error $preempt
-     * @param array $args
+     * @param false|array|WP_Error $response
+     * @param array $parsed_args
      * @param string $url
      * @return false|array|WP_Error
      */
 
-    public function handleLoopbackRequests(false|array|WP_Error $preempt, array $args, string $url): false|array|WP_Error
+    public function handleLoopbackRequests(false|array|WP_Error $response, array $parsed_args, string $url): false|array|WP_Error
     {
         $loopback_url = Config::get('WP_LOOPBACK');
 
         // Do we have a loopback url?
         if (empty($loopback_url)) {
-            return $preempt;
+            return $response;
         }
 
         // Is the request url to the application host?
         if (parse_url($url, PHP_URL_HOST) !== parse_url(get_home_url(), PHP_URL_HOST)) {
-            return $preempt;
+            return $response;
         }
 
         // Replace the URL.
         $new_url = str_replace(get_home_url(), $loopback_url, $url);
 
         // We don't need to verify ssl, calling a trusted container.
-        $args['sslverify'] = false;
+        $parsed_args['sslverify'] = false;
 
         // Get an instance of WP_Http.
         $http = _wp_http_get_object();
 
         // Return the result.
-        return $http->request($new_url, $args);
+        return $http->request($new_url, $parsed_args);
     }
 }
