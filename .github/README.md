@@ -18,7 +18,7 @@
 This code-base is the website for the Ministry of Justice which hosts Civil and Family Procedure Committee Rules content
 only.
 
-> Nb. `README.md` is located in `.github/`, the preferred location for a clean repository.
+> Nb. `README.md` is located in `.github/`
 
 ## Architecture
 
@@ -291,6 +291,33 @@ To verify that S3 & CloudFront are working correctly.
 - Image should be shown correctly in the Media Library.
 - The img source domain should be CloudFront.
 - Directly trying to access an image via the S3 bucket url should return an access denied message.
+
+
+### YAML template files
+
+#### `deploy/[stack]/[file].tpl.yml`
+
+At the start of this project we understood that our production image would be
+managed by environment variables. These variables would change the behaviour of our image, rendering a single image useful in development, staging and demo environments, in addition to production.
+
+We believe that thinking in this way, allows the team to reduce complexities in our application. Making an image reusable in this way presents us with a challenge; we must introduce variables into the image in a highly dynamic way. 
+
+Ergo, we were presented with the following challenge to introduce dynamism:
+
+1. Use Helm, or
+2. Use native tools available in shell scripting
+
+Considering our goal to ***reduce complexity***, we opted to use tools already available in the native scripting language. Our intention is to find/replace environment variables using shells' [`envsubst` command](https://linux.die.net/man/1/envsubst).
+
+To achieve this, we create YAML files denoted as templates `[file].tpl.yml`, ones to house our variable names.
+
+In our workflow file located in `.github/workflows/deploy.yml` we inject environment variables.
+
+We find this approach is simple, highly readable and portable, and considering our CI/CD image build and deploy takes 
+just 1 minute 20 seconds to reach development, and then just 10 seconds to deploy across other stacks is testament to 
+the impact our goal has on performance. 
+
+---
 
 
 <!-- License badge -->
