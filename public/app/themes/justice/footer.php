@@ -31,7 +31,7 @@
                 <li><a href="<?php echo home_url('/copyright'); ?>">Copyright</a></li>
                 <li><a href="<?php echo home_url('/help'); ?>">Help</a></li>
                 <li><a href="<?php echo home_url('/privacy'); ?>">Privacy</a></li>
-                <li><a href="<?php echo home_url('/ministry-of-justice-webchats'); ?>">Web chats</a></li>
+                <li><a href="<?php echo home_url('/ministry-of-justice-webchats'); ?>">Webchats</a></li>
                 <li><a href="<?php echo home_url('/website-queries'); ?>">Website queries</a></li>
             </ul>
             <div class="f-line"></div>

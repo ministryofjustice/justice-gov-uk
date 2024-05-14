@@ -17,6 +17,7 @@ require_once 'inc/admin.php';
 require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/commands.php';
+require_once 'inc/content.php';
 require_once 'inc/core.php';
 require_once 'inc/debug.php';
 require_once 'inc/disable-comments.php';
@@ -44,6 +45,7 @@ if (getenv('WP_ENV') === 'development') {
 new Justice\Admin();
 new Justice\Commands();
 new Justice\Comments();
+new Justice\Content();
 new Justice\Core();
 new Justice\Documents();
 new Justice\Layout();

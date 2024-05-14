@@ -6,7 +6,7 @@ metadata:
   labels:
     app: ${KUBE_NAMESPACE}
 spec:
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -41,7 +41,7 @@ spec:
             - name: uploads
               mountPath: /var/www/html/public/app/uploads
           securityContext:
-              runAsUser: 82
+            runAsUser: 82
           env:
             - name: S3_BUCKET_NAME
               valueFrom:

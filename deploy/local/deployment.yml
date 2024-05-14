@@ -20,15 +20,19 @@ spec:
     spec:
       volumes:
         - name: uploads
-          emptyDir: {}
+          emptyDir: { }
         - name: nginx-cache
-          emptyDir: {}
+          emptyDir: { }
       terminationGracePeriodSeconds: 35
       containers:
         - name: nginx
           image: justice-nginx:latest
           imagePullPolicy: Never
-          resources: {}
+          resources:
+            requests:
+              cpu: 1000m
+            limits:
+              cpu: 1000m
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -46,6 +50,10 @@ spec:
           volumeMounts:
             - name: uploads
               mountPath: /var/www/html/public/app/uploads
-          resources: {}
+          resources:
+            requests:
+              cpu: 2000m
+            limits:
+              cpu: 2000m
           ports:
             - containerPort: 9000

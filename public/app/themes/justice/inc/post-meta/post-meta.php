@@ -37,7 +37,7 @@ class PostMeta
         add_filter('sgf_register_fields', [$post_meta_constants, 'navigationFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'metaFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'panelFields'], 5);
-        add_filter('document_title_parts', [$this, 'titleFilter']);
+        add_filter('document_title_parts', [$this, 'titleTagFilter']);
     }
 
     /**
@@ -120,7 +120,7 @@ class PostMeta
      * @return array
      */
 
-    public function titleFilter(array $title_parts): array
+    public function titleTagFilter(array $title_parts): array
     {
         $title_tag = $this->getMeta('_title_tag', get_the_ID());
 
@@ -131,5 +131,22 @@ class PostMeta
         }
 
         return $title_parts;
+    }
+
+    /**
+     * Get the title for internal search.
+     *
+     * @return string
+     */
+
+    public function getSearchResultTitle(): string
+    {
+        $custom_title = $this->getMeta('_title_tag', get_the_ID());
+
+        if (!empty(trim($custom_title))) {
+            return $custom_title;
+        }
+
+        return get_the_title();
     }
 }
