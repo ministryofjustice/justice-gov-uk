@@ -70,7 +70,7 @@ jQuery(document).ready(function () {
       var index = jQuery('#highlight .tabs li.selected').index();
       var size = jQuery('#highlight .tabs li').length;
       index < size - 1 ? jQuery('#highlight .tabs li:eq(' + (index + 1) + ')').trigger('click', ['auto']) : jQuery('#highlight .tabs li:eq(0)').trigger('click', ['auto']);
-  }, 5000);
+    }, 5000);
   }
 
   //split lv2-listing
