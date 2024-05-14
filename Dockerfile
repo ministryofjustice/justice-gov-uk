@@ -44,9 +44,6 @@ USER 82
 
 ###
 
-
-
-
 ## target: dev
 FROM base-fpm AS dev
 RUN apk add --update nano nodejs npm inotify-tools

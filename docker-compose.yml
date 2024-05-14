@@ -19,17 +19,6 @@ services:
             - mariadb
             - minio
 
-    nginx-builder:
-      build:
-        context: ./nginx-build
-        dockerfile: Dockerfile.alpine
-        args:
-          ENABLED_MODULES: cachepurge
-          NGINX_FROM_IMAGE: nginx:1.26.0-alpine
-      image: my-nginx-with-cachepurge:v1
-      profiles:
-        - nginx-builder
-
     nginx:
       build:
         context: .
