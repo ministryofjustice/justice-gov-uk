@@ -2,13 +2,21 @@ FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 
 ###
 
-FROM nginxinc/nginx-unprivileged:1.24-alpine AS base-nginx
+FROM nginxinc/nginx-unprivileged:1.26-alpine AS base-nginx
 
 USER root
 
-RUN apk add nginx-mod-http-cache-purge && \
-    mkdir /var/run/nginx-cache && \
-    chown nginx:nginx /var/run/nginx-cache
+# Debug.
+RUN echo "${NGINX_VERSION}-${PKG_RELEASE}"
+
+ARG path="/usr/lib/nginx/modules"
+
+# Copy from my-nginx-with-cachepurge:v1
+COPY --from=my-nginx-with-cachepurge:v1  --chown=www-data:www-data ${path}/ngx_http_cache_purge_module.so       ${path}/ngx_http_cache_purge_module.so
+COPY --from=my-nginx-with-cachepurge:v1  --chown=www-data:www-data ${path}/ngx_http_cache_purge_module-debug.so ${path}/ngx_http_cache_purge_module-debug.so
+
+RUN mkdir /var/run/nginx-cache && \
+    chown 82:82 /var/run/nginx-cache
 
 # contains gzip and module include
 COPY --chown=www-data:www-data deploy/config/nginx.conf /etc/nginx/nginx.conf
