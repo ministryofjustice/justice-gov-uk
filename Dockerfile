@@ -2,9 +2,16 @@ FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 
 ###
 
-FROM nginxinc/nginx-unprivileged:1.25-alpine AS base-nginx
+FROM nginxinc/nginx-unprivileged:1.24-alpine AS base-nginx
 
 USER root
+
+RUN apk add nginx-mod-http-cache-purge && \
+    mkdir /var/run/nginx-cache && \
+    chown nginx:nginx /var/run/nginx-cache
+
+# contains gzip and module include
+COPY --chown=www-data:www-data deploy/config/nginx.conf /etc/nginx/nginx.conf
 
 COPY deploy/config/init/* /docker-entrypoint.d/
 RUN chmod +x /docker-entrypoint.d/*
