@@ -7,3 +7,4 @@ data:
   WP_ENV: "staging"
   WP_HOME: 'https://stage.justice.gov.uk'
   WP_SITEURL: 'https://stage.justice.gov.uk/wp'
+  WP_LOOPBACK: 'http://localhost:8080'

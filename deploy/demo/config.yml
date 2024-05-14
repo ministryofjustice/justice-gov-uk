@@ -7,4 +7,5 @@ data:
   WP_ENV: "production"
   WP_HOME: 'https://demo.justice.gov.uk'
   WP_SITEURL: 'https://demo.justice.gov.uk/wp'
+  WP_LOOPBACK: 'http://localhost:8080'
   SENTRY_DEV_ID: '-demo'
