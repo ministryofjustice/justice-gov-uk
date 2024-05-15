@@ -3010,7 +3010,7 @@ div#content-wrapper div.container-wrapper div#content article div.article form#g
         color: #FFFFFF;
     }
 
-    &:hover{
+    &:hover {
         svg.ccfw-settings-button__background-triangle path {
             fill: #000000;
         }
@@ -3022,7 +3022,7 @@ div#content-wrapper div.container-wrapper div#content article div.article form#g
         }
     }
 
-    &:focus,&:active {
+    &:focus, &:active {
         svg.ccfw-settings-button__background-triangle path {
             fill: #FFDD00;
         }
