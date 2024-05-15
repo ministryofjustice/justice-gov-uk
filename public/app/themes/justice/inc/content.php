@@ -41,10 +41,10 @@ class Content
     public function fixNationalArchiveLinks($content)
     {
 
-        if (Config::get('WP_ENVIRONMENT_TYPE') !== 'production') {
-            // Match strings that start with https://webarchive.nationalarchives.gov.uk and contain: //dev //demo ///stage.
-            $pattern = '/(https:\/\/webarchive.nationalarchives.gov.uk.*)(\/\/dev)|(\/\/demo)|(\/\/stage)/';
-            return preg_replace($pattern, '$1//www', $content);
+        if (Config::get('WP_ENVIRONMENT_TYPE') === 'staging') {
+            // Match strings that start with https://webarchive.nationalarchives.gov.uk any amount words and / then ://stage
+            $pattern = '/(https:\/\/webarchive\.nationalarchives\.gov\.uk)([\w\/]*)(:\/\/stage)/';
+            return preg_replace($pattern, '$1$2://www', $content);
         }
 
         return $content;
