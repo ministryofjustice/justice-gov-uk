@@ -1,5 +1,4 @@
 import jQuery from 'jquery';
-import { GetCookie, SetCookieConsent } from "./cookies";
 import nselect from "./nselect";
 
 // jQuery.noConflict();
@@ -14,41 +13,6 @@ jQuery(document).ready(function () {
   /**
    * The following code is legacy and is not yet fully understood.
    */
-
-  /**
-   * Cookies
-   */
-
-  if (GetCookie("moj-mqueries-val") != "true") {
-    jQuery('#mqueries-val').val('full');
-    jQuery('#mqueries-sel').append('<a href="#">Full site</a>');
-  } else {
-    jQuery('#mqueries-val').val('mobile');
-    jQuery('#mqueries-sel').append('<a href="#">Mobile site</a>');
-    jQuery('#links-top li').removeClass('device-only');
-  }
-  
-  jQuery('#mqueries-sel a').click(function (e) {
-    e.preventDefault();
-    jQuery(this).closest('form').submit();
-  });
-
-  if (GetCookie('moj-consent') != "true") {
-    //define banner
-    jQuery('#cookieDirective').append('<div class="cookie-policy"><img src="./?a=55304" width="56" height="64" style="float:left; padding:9px;"><div class="explanation"><p><strong>We use cookies on this website to enable social sharing and monitor site usage. </strong></p><p>Disabling cookies will stop social sharing and prevent us monitoring site usage.</p></div><div id="accept-cookies"><form class="styled" id="set-cookie"><input type="button" name="opt-in" id="opt-in" value="Thanks, I&rsquo;ve read this" class="go-btn"></form><p><a href="/privacy/cookies/">How to manage cookies</a></p></div></div>');
-    //show banner
-    jQuery('#cookieDirective').show();
-    //hide function
-    jQuery('input#opt-in').click(function () {
-      jQuery('div#cookieDirective').slideUp(800);
-    });
-    //set cookie
-    SetCookieConsent("moj-consent", "true", "730");
-  }
-
-  //mobile/full version links (requires cookies.js)
-  jQuery('#links-top').append('<li class="device-only">.</li>');
-  jQuery('#links-top').append('<li class="device-only"><form id="mqueries-sel" method="post"><input id="mqueries-val" name="mqueries-val" type="hidden" value="" /></form></li>');
 
   //tab-group
   jQuery('.tab-group .tabs').each(function () {
@@ -101,12 +65,13 @@ jQuery(document).ready(function () {
   });
 
   //highlight auto-cycle
-  if (jQuery('#highlight').length > 0)
-    jQuery(document).everyTime(5000, 'highlight', function () {
+  if (jQuery('#highlight').length > 0) {
+    setInterval(function() {
       var index = jQuery('#highlight .tabs li.selected').index();
       var size = jQuery('#highlight .tabs li').length;
       index < size - 1 ? jQuery('#highlight .tabs li:eq(' + (index + 1) + ')').trigger('click', ['auto']) : jQuery('#highlight .tabs li:eq(0)').trigger('click', ['auto']);
-    });
+    }, 5000);
+  }
 
   //split lv2-listing
   if (jQuery('div.lv2-listing').length > 0) {
