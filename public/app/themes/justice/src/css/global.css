@@ -2996,32 +2996,43 @@ div#content-wrapper div.container-wrapper div#content article div.article form#g
 }
 
 /* MOJ cookie consent */
-#cookieDirective .cookie-policy {
-    color: #000;
-    margin: 0 auto;
-}
 
-#cookieDirective .explanation {
-    float: left;
-    width: 55%;
-}
+/* Update the styling on the cookie settings button to meet accessibility standards */
+.ccfw-settings-button {
+    background: #505A5F !important;
+    svg.ccfw-settings-button__background-triangle path {
+        fill: #505A5F;
+    }
+    svg.ccfw-settings-button__icon path {
+        fill: #FFFFFF;
+    }
+    span.ccfw-settings-button__text {
+        color: #FFFFFF;
+    }
 
-#cookieDirective #accept-cookies {
-    float: left;
-    padding: 10px 0 0 0;
-    width: 35%;
-}
+    &:hover {
+        svg.ccfw-settings-button__background-triangle path {
+            fill: #000000;
+        }
+        svg.ccfw-settings-button__icon path {
+            fill: #FFFFFF;
+        }
+        span.ccfw-settings-button__text {
+            color: #FFFFFF;
+        }
+    }
 
-#cookieDirective #accept-cookies form#set-cookie input {
-    margin-bottom: 0;
-}
-
-#cookieDirective #accept-cookies p {
-    font-size: 1em;
-}
-
-#cookieDirective #accept-cookies p a {
-    text-decoration: underline;
+    &:focus, &:active {
+        svg.ccfw-settings-button__background-triangle path {
+            fill: #FFDD00;
+        }
+        svg.ccfw-settings-button__icon path {
+            fill: #000000;
+        }
+        span.ccfw-settings-button__text {
+            color: #000000;
+        }
+    }
 }
 
 /* Root Element for Accordion */
