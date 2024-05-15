@@ -126,14 +126,15 @@ Config::define('GOV_NOTIFY_API_KEY', env('GOV_NOTIFY_API_KEY') ?? null);
 Config::define('WP_OFFLOAD_MEDIA_PRESET', false);
 
 // Sentry settings
-Config::define('SENTRY_TRACES_SAMPLE_RATE', 0.3);
-Config::define('SENTRY_PROFILE_SAMPLE_RATE', 0.3);
+Config::define('SENTRY_TRACES_SAMPLE_RATE', 1);
+Config::define('SENTRY_PROFILE_SAMPLE_RATE', 1);
 
 /**
  * Debugging Settings
  */
 Config::define('WP_DEBUG_DISPLAY', false);
-Config::define('WP_DEBUG_LOG', false);
+Config::define('WP_DEBUG', true);
+Config::define('WP_DEBUG_LOG', '/dev/stderr');
 Config::define('SCRIPT_DEBUG', false);
 ini_set('display_errors', '0');
 
