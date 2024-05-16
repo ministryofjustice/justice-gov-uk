@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: justice-gov-uk-production
+  namespace: justice-gov-uk-production
+data:
+  WP_ENV: "production"
+  WP_HOME: 'https://www.justice.gov.uk'
+  WP_SITEURL: 'https://www.justice.gov.uk/wp'
+  WP_LOOPBACK: 'http://localhost:8080'
