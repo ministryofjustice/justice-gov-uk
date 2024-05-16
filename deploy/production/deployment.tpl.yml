@@ -47,8 +47,6 @@ spec:
 
         - name: fpm
           image: "${ECR_URL}:${IMAGE_TAG_FPM}"
-          ports:
-            - containerPort: 9000
           volumeMounts:
             - name: uploads
               mountPath: /var/www/html/public/app/uploads
