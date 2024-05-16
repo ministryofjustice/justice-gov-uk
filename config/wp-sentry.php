@@ -12,7 +12,7 @@ $root_dir = dirname(__DIR__);
  */
 define('WP_SENTRY_PHP_DSN', env('SENTRY_DSN'));
 define('WP_SENTRY_BROWSER_DSN', env('SENTRY_DSN'));
-define( 'WP_SENTRY_ENV', WP_ENV . (env('SENTRY_DEV_ID') ?? '') );
+define('WP_SENTRY_ENV', WP_ENV . (env('SENTRY_DEV_ID') ?? ''));
 
 const WP_SENTRY_SEND_DEFAULT_PII = true;
 const WP_SENTRY_ERROR_TYPES = E_ALL & ~E_NOTICE & ~E_USER_NOTICE;
