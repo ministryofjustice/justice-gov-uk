@@ -6,6 +6,9 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-production-ingress-justice-gov-uk-production-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
+    nginx.ingress.kubernetes.io/auth-realm: 'Production User | Authentication Required'
     nginx.ingress.kubernetes.io/proxy-body-size: "200m"
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /health {
@@ -23,10 +26,12 @@ spec:
   ingressClassName: default
   tls:
   - hosts:
-    - www.justice.gov.uk
-    secretName: justice-gov-uk-production-cert-secret
+    - production-justice-gov-uk.apps.live.cloud-platform.service.justice.gov.uk
+  # - hosts:
+  #   - www.justice.gov.uk
+  #   secretName: justice-gov-uk-prod-cert-secret
   rules:
-  - host: www.justice.gov.uk
+  - host: production-justice-gov-uk.apps.live.cloud-platform.service.justice.gov.uk
     http:
       paths:
       - path: /
@@ -36,3 +41,13 @@ spec:
             name: nginx-service
             port:
               number: 8080
+  # - host: www.justice.gov.uk
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: nginx-service
+  #           port:
+  #             number: 8080
