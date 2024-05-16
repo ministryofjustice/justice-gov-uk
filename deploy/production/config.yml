@@ -5,6 +5,6 @@ metadata:
   namespace: justice-gov-uk-production
 data:
   WP_ENV: "production"
-  WP_HOME: 'https://production-justice-gov-uk.apps.live.cloud-platform.service.justice.gov.uk'
-  WP_SITEURL: 'https://production-justice-gov-uk.apps.live.cloud-platform.service.justice.gov.uk/wp'
+  WP_HOME: 'https://www.justice.gov.uk'
+  WP_SITEURL: 'https://www.justice.gov.uk/wp'
   WP_LOOPBACK: 'http://localhost:8080'
