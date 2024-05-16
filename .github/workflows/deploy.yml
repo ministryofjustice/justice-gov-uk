@@ -41,13 +41,7 @@ jobs:
           BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
           BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
         run: |
-          export BASIC_AUTH_BASE64=$(htpasswd -nbm "$BASIC_AUTH_USER" "$BASIC_AUTH_PASS" | base64 -w 0)
-          cat $TPL_PATH/secret.tpl.yml | envsubst > $TPL_PATH/secret.yaml
-          cat $TPL_PATH/deployment.tpl.yml | envsubst > $TPL_PATH/deployment.yaml
-          
-          # remove template files before apply
-          rm $TPL_PATH/secret.tpl.yml
-          rm $TPL_PATH/deployment.tpl.yml
+          ./.github/bin/deploy-run-script.sh
 
       - name: "Authenticate to the cluster"
         env:

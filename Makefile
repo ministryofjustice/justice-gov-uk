@@ -1,9 +1,20 @@
 .DEFAULT_GOAL := d-shell
 
+##  █░█  ▄▀█  █▀█  █  ▄▀█  █▄▄  █░░  █▀▀  █▀
+##  ▀▄▀  █▀█  █▀▄  █  █▀█  █▄█  █▄▄  ██▄  ▄█
+##  populate as needed for testing
+##  ... never commit!
+COMPOSER_USER := ***
+COMPOSER_PASS := ***
+
+##  ... commit these :o)
 kube := kind
 k8s_prt := 8080:80
 k8s_nsp := default
 k8s_pod := kubectl -n $(k8s_nsp) get pod -l app=justice-gov-uk-local -o jsonpath="{.items[0].metadata.name}"
+
+# ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
+
 
 init: setup run
 
@@ -92,14 +103,16 @@ test-fixes:
 #####
 build-nginx:
 	@echo "\n-->  Building local Nginx  <---------------------------|\n"; sleep 3;
-	docker image build -t justice-nginx:latest --target build-nginx .
+	docker image build -t justice-nginx:latest --target build-nginx \
+		--build-arg COMPOSER_USER="${COMPOSER_USER}" --build-arg COMPOSER_PASS="${COMPOSER_PASS}" .
 
 # FastCGI Process Manager for PHP
 # https://www.php.net/manual/en/install.fpm.php
 # https://www.plesk.com/blog/various/php-fpm-the-future-of-php-handling/
 build-fpm:
 	@echo "\n-->  Building local FPM  <---------------------------|\n"; sleep 3;
-	docker image build -t justice-fpm:latest --target build-fpm .
+	docker image build -t justice-fpm:latest --target build-fpm \
+		--build-arg COMPOSER_USER="${COMPOSER_USER}" --build-arg COMPOSER_PASS="${COMPOSER_PASS}" .
 
 build: build-fpm build-nginx
 	@if [ ${kube} == 'kind' ]; then kind load docker-image justice-fpm:latest; kind load docker-image justice-nginx:latest; fi
