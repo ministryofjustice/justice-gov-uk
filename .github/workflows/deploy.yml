@@ -41,7 +41,7 @@ jobs:
           BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
           BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
         run: |
-          ./.github/bin/deploy-run-script.sh
+          ./bin/deploy-run-script.sh
 
       - name: "Authenticate to the cluster"
         env:
