@@ -55,7 +55,7 @@
         "roots/wordpress": "^6.5",
         "roots/wp-config": "^1.0",
         "roots/wp-password-bcrypt": "^1.1.0",
-        "sentry/sentry": "^3.22",
+        "stayallive/wp-sentry": "^7.11.0",
         "symfony/filesystem": "<7.0",
         "symfony/process": "<7.0",
         "vlucas/phpdotenv": "^5.5",
