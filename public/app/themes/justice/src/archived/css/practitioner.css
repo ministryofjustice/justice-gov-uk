@@ -1,0 +1,81 @@
+/* COLOR SETTINGS */
+
+/* BODY STYLES */
+
+#practitioner h1, #practitioner h3
+{
+color:#007cc6;
+}
+
+/* FOR COURT LISTINGS ONLY */
+#practitioner .court-listings h3 {
+   color: #000;
+}
+
+/* COLUMNS */
+
+/* LEFT NAV */
+
+.nav
+{
+background:#b2daec;
+}
+
+/* LEFT NAV */
+
+#practitioner .nav li.on a {
+	background:#007cc6;
+}
+
+#practitioner .nav li.anc a {
+	background:#4ca3d7;
+	color:#fff;
+	border-top:1px solid #fff;
+}
+
+#practitioner .nav li.anc-first a {
+	background:#4ca3d7;
+	color:#fff;
+}
+
+#practitioner .nav li a {
+	color:#007cc6;
+	text-decoration:none;
+	background:#b2daec;
+}
+
+#practitioner .nav li a:hover {
+	color:#fff;
+	text-decoration:none;
+	background:#007cc6;
+}
+
+#practitioner .nav li.on a, .nav li.anc a {
+	color:#fff;
+}
+
+/* MAIN COLUMN */
+
+.box h3, .box-last h3
+{
+color:#007cc6;
+border-bottom:5px solid #007cc6;
+}
+
+.box h3 a, .box-last h3 a
+{
+color:#007cc6;
+}
+
+/* CENTRED TEXT FOR COURT LISTINGS */
+.court-listings {
+   margin-top: 20px;
+   text-align:center;
+}
+
+/* FOOTER */
+
+#practitioner #footer
+{
+border-top:5px solid #007cc6;
+}

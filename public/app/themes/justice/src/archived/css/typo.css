@@ -1,0 +1,218 @@
+/* FONT SETTINGS */
+
+body, table, tr, td, a, p, h1, h2, h3, h4, h5, blockquote {
+	/*font-family: arial, helvetica, sans-serif;*/
+	font-family:  Verdana, Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3, h4 {
+	margin:0 0 10px 0;
+
+}
+
+h1 {
+	font-size:1.5em;
+	line-height:26px;
+}
+
+h2 {
+	font-size:1.25em;
+	line-height:25px;
+}
+
+h3{
+	font-size:1.1em;
+	line-height:22px;
+}
+
+h4{
+	font-size:0.9em;
+	line-height:18px;
+font-weight:bold;
+}
+
+p, address {
+	font-size: 0.8em;
+}
+
+ul li, ol li {
+	font-size: 0.8em;
+}
+
+ul ul li, ol ol li {
+	font-size: 1em;
+}
+
+ul ol li, ol ul li {
+	font-size: 1em;
+}
+
+ul li p {
+	font-size: 1em;
+}
+
+blockquote {
+	font-size: 0.8em;
+}
+
+
+/* HEADER */
+
+#search-box ul
+{
+/*font-size:0.7em;*/
+font-size:0.9em;
+width:470px;
+/*width:480px;
+margin-right:10px;*/
+}
+
+.search-section label
+{
+font-size:0.8em!important;
+}
+
+.head_nav li a 
+{
+	/*font-size:1.1em;*/
+	font-size:1em;
+}
+
+/* MAIN CONTAINER */
+
+.welsh-switch {
+	font-size:0.8em;
+}
+
+.news-list h4
+{
+font-weight:bold;
+font-size:1em;
+}
+
+.box h3, .box-last h3
+{
+font-size:1em;
+font-weight:normal;
+}
+
+.news-list .news-list-date
+{
+font-size:1em;
+}
+
+.news-box-img-title
+{
+font-size:0.96em;
+font-weight:bold;
+}
+
+.month-list li a
+{
+font-size:1em;
+}
+
+.news-list h4
+{
+line-height:16px;
+}
+
+#news-box-list h4
+{
+font-size:1.1em;
+}
+
+.jobs-row h3
+{
+font-size:1em;
+font-weight:normal;
+}
+
+.jobs-box, .jobs-box-last
+{
+	font-size:1.1em;
+}
+
+
+/* LEFT NAV */
+
+#left-column .nav
+{
+font-size:1.2em;
+}
+
+/* WIDGETS */
+
+.panel h3
+{
+font-weight:bold;
+font-size:1.05em;
+}
+
+.panel h4
+{
+font-size:1.1em;
+}
+
+.panel-promo p
+{
+font-size:1.1em;
+}
+
+#right-column .small-text a, p
+{
+font-size:0.8em;
+}
+
+.panel-share-list
+{
+font-size:0.6em;
+}
+
+.panel-share-list
+{
+font-size:0.6em;
+}
+
+.nav-widget h3
+{
+	font-size:0.9em;
+	text-align:center;
+}
+
+.pdf-widget ul a
+{
+font-size:0.9em;
+}
+
+.video h3
+{
+font-weight:bold;
+font-size:1.05em;
+color: #999;
+}
+
+/* FOOTER */
+
+#footer 
+{
+font-size:0.9em;	
+}
+
+.footer-list-title
+{
+font-weight:bold;
+}
+
+/* MISC */
+
+.big-text
+{
+font-size:1.4em;
+font-weight:bold;
+}
+
+.small-text
+{
+font-size:0.8em;
+}
