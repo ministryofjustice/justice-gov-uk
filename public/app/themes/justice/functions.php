@@ -32,6 +32,7 @@ require_once 'inc/redirects.php';
 require_once 'inc/search.php';
 require_once 'inc/simple-definition-list-blocks.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
+require_once 'inc/sitemap.php';
 require_once 'inc/taxonomies.php';
 require_once 'inc/theme-assets.php';
 require_once 'inc/theme.php';
@@ -54,6 +55,7 @@ new Justice\Redirects();
 new Justice\Search();
 new Justice\SimpleGutenFields();
 new Justice\SimpleDefinitionsListBlocks();
+new Justice\Sitemap();
 new Justice\ThemeAssets();
 new Justice\Theme();
 
