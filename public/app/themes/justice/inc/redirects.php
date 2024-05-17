@@ -96,4 +96,5 @@ class Redirects
         wp_safe_redirect(get_edit_post_link($post_id, '_admin'));
         exit;
     }
+
 }

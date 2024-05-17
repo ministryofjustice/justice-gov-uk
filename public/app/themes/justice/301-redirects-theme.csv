@@ -34,3 +34,14 @@ source,target,code,order,notes
 /__data/assets/image/0017/980/select-btn.png,/app/themes/justice/dist/img/select-btn.png,301,900,Theme redirect
 /__data/assets/image/0018/657/social-media.png,/app/themes/justice/dist/img/social-media.png,301,900,Theme redirect
 /__data/assets/image/0009/504/tab-arrowdown.png,/app/themes/justice/dist/img/tab-arrowdown.png,301,900,Theme redirect
+/css/framework.css,/app/themes/justice/dist/archived/css/framework.css,301,900,Theme redirect
+/css/global.css,/app/themes/justice/dist/archived/css/global.css,301,900,Theme redirect
+/css/practitioner.css,/app/themes/justice/dist/archived/css/practitioner.css,301,900,Theme redirect
+/css/print-listings.css,/app/themes/justice/dist/archived/css/print-listings.css,301,900,Theme redirect
+/css/typo.css,/app/themes/justice/dist/archived/css/typo.css,301,900,Theme redirect
+/css/xhibit.css,/app/themes/justice/dist/archived/css/xhibit.css,301,900,Theme redirect
+/images/logo-guidance.gif,/app/themes/justice/dist/archived/images/logo-guidance.gif,301,900,Theme redirect
+/scripts/cookies.js,/app/themes/justice/dist/archived/scripts/cookies.js,301,900,Theme redirect
+/scripts/general.js,/app/themes/justice/dist/archived/scripts/general.js,301,900,Theme redirect
+/scripts/icons.js,/app/themes/justice/dist/archived/scripts/icons.js,301,900,Theme redirect
+/scripts/jquery-1.4.js,/app/themes/justice/dist/archived/scripts/jquery-1.4.js,301,900,Theme redirect
