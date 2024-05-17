@@ -133,8 +133,7 @@ Config::define('SENTRY_PROFILE_SAMPLE_RATE', 1);
  * Debugging Settings
  */
 Config::define('WP_DEBUG_DISPLAY', false);
-Config::define('WP_DEBUG', true);
-Config::define('WP_DEBUG_LOG', '/dev/stderr');
+Config::define('WP_DEBUG_LOG', false);
 Config::define('SCRIPT_DEBUG', false);
 ini_set('display_errors', '0');
 
