@@ -29,7 +29,7 @@ class Sitemap
      * @param WP_Sitemaps_Provider $provider Instance of a WP_Sitemaps_Provider
      * @param string $name Name of the sitemap provider
      *
-     * @return bool|WP_Sitemaps_Provider $provider False if the sitemap is users, otherwise return the unmodified provided instance
+     * @return bool|WP_Sitemaps_Provider $provider False if the sitemap is users, otherwise return the unmodified provider instance
      */
     public function removeUsersFromSitemap($provider, $name)
     {
