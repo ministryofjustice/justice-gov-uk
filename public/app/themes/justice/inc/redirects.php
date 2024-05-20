@@ -100,7 +100,7 @@ class Redirects
 
     /**
      * Remove special chars from url, because some legacy urls had commas.
-     * 
+     *
      * This is used in cases where the content has internal links with URLs that have commas in them.
      * To avoid updating this content, let's handle these links and redirect them to pages, if a page exists.
      *
