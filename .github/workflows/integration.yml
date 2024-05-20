@@ -1,4 +1,4 @@
-name: Deploy to MoJ Cloud Platform
+name: "Justice.Gov.UK --> Deployment"
 
 on:
   workflow_dispatch:
