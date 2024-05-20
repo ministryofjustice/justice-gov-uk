@@ -54,18 +54,18 @@
                 [
                     'title' => 'Courts',
                     'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
-                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/courts') . "'])"
+                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Courts', page_location: '" . home_url('/courts') . "' });"
                 ],
                 [
                     'title' => 'Procedure rules',
                     'url' => home_url('/courts/procedure-rules'),
-                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/procedure-rules') . "'])",
-                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules'))
+                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules')),
+                    'onclick' => null
                 ],
                 [
                     'title' => 'Offenders',
                     'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
-                    'onclick' => "_gaq.push(['_trackPageview', '" . home_url('/offenders') . "'])"
+                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Offenders', page_location: '" . home_url('/offenders') . "' });"
                 ]
             ];
             ?>
@@ -73,7 +73,9 @@
                 <ul class="menu-top">
                     <?php foreach ($menu_items as $item) : ?>
                         <li <?php echo !empty($item['active']) ? 'class="active"' : '' ?>>
-                            <a href="<?php echo $item['url']; ?>" onclick="<?php echo $item['onclick']; ?>"><?php echo $item['title']; ?></a>
+                            <a href="<?php echo $item['url']; ?>" onclick="<?= $item['onclick'] ?? '' ?>">
+                                <?= $item['title'] ?>
+                            </a>
                             <div class="finish"></div>
                             <span></span>
                         </li>
