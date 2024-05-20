@@ -59,7 +59,8 @@
                 [
                     'title' => 'Procedure rules',
                     'url' => home_url('/courts/procedure-rules'),
-                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules'))
+                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules')),
+                    'onclick' => null
                 ],
                 [
                     'title' => 'Offenders',
@@ -72,7 +73,7 @@
                 <ul class="menu-top">
                     <?php foreach ($menu_items as $item) : ?>
                         <li <?php echo !empty($item['active']) ? 'class="active"' : '' ?>>
-                            <a href="<?php echo $item['url']; ?>" <?= isset($item['onclick']) ? sprintf('onclick="%1$s"', $item['onclick']) : ''; ?>>
+                            <a href="<?php echo $item['url']; ?>" onclick="<?= $item['onclick'] ?? '' ?>">
                                 <?= $item['title'] ?>
                             </a>
                             <div class="finish"></div>
