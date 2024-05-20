@@ -54,7 +54,7 @@
                 [
                     'title' => 'Courts',
                     'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
-                    'onclick' => "gtag && gtag.('event', 'page_view', { page_title: 'Courts', page_location: '" . home_url('/courts') . "' });"
+                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Courts', page_location: '" . home_url('/courts') . "' });"
                 ],
                 [
                     'title' => 'Procedure rules',
@@ -64,7 +64,7 @@
                 [
                     'title' => 'Offenders',
                     'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
-                    'onclick' => "gtag && gtag?.('event', 'page_view', { page_title: 'Offenders', page_location: '" . home_url('/offenders') . "' });"
+                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Offenders', page_location: '" . home_url('/offenders') . "' });"
                 ]
             ];
             ?>
