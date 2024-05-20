@@ -1,4 +1,5 @@
 source,target,code,order,notes
+/index.htm,/,301,900,Theme redirect
 /__data/asset_types/word_doc/icon.png,/app/themes/justice/dist/img/icon/doc.png,301,900,Theme redirect
 /__data/assets/image/0004/33709/icon_pdf.png,/app/themes/justice/dist/img/icon/pdf.png,301,900,Theme redirect
 /__data/asset_types/pdf_file/icon.png,/app/themes/justice/dist/img/icon/pdf.png,301,900,Theme redirect
@@ -40,7 +41,11 @@ source,target,code,order,notes
 /css/print-listings.css,/app/themes/justice/dist/archived/css/print-listings.css,301,900,Theme redirect
 /css/typo.css,/app/themes/justice/dist/archived/css/typo.css,301,900,Theme redirect
 /css/xhibit.css,/app/themes/justice/dist/archived/css/xhibit.css,301,900,Theme redirect
+/images/b-arrow.gif	,/app/themes/justice/dist/archived/images/b-arrow.gif	,301,900,Theme redirect
+/images/brand_logos/hmcts.gif,/app/themes/justice/dist/archived/images/brand_logos/hmcts.gif,301,900,Theme redirect
+/images/dot-w.gif ,/app/themes/justice/dist/archived/images/dot-w.gif ,301,900,Theme redirect
 /images/logo-guidance.gif,/app/themes/justice/dist/archived/images/logo-guidance.gif,301,900,Theme redirect
+/images/shadow.jpg,/app/themes/justice/dist/archived/images/shadow.jpg,301,900,Theme redirect
 /scripts/cookies.js,/app/themes/justice/dist/archived/scripts/cookies.js,301,900,Theme redirect
 /scripts/general.js,/app/themes/justice/dist/archived/scripts/general.js,301,900,Theme redirect
 /scripts/icons.js,/app/themes/justice/dist/archived/scripts/icons.js,301,900,Theme redirect
