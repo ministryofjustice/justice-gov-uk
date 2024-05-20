@@ -1,4 +1,4 @@
-name: "Justice.Gov.UK --> deploying to the Cloud Platform"
+name: "Justice.Gov.UK --> Deployment"
 
 on:
   workflow_dispatch:
