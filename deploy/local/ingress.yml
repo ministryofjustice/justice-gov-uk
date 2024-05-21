@@ -16,9 +16,6 @@ metadata:
         auth_basic off;
         return 301 https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt;
       }
-      if ($http_x_thousandeyes_agent) {
-        return 403;
-      }
 spec:
   rules:
   - host: justice.local
