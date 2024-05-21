@@ -35,6 +35,8 @@ source,target,code,order,notes
 /__data/assets/image/0017/980/select-btn.png,/app/themes/justice/dist/img/select-btn.png,301,900,Theme redirect
 /__data/assets/image/0018/657/social-media.png,/app/themes/justice/dist/img/social-media.png,301,900,Theme redirect
 /__data/assets/image/0009/504/tab-arrowdown.png,/app/themes/justice/dist/img/tab-arrowdown.png,301,900,Theme redirect
+/images/top_icon.gif,/app/themes/justice/dist/img/top_icon.gif,301,900,Theme redirect
+/images/back_icon.gif,/app/themes/justice/dist/img/back_icon.gif,301,900,Theme redirect
 /css/framework.css,/app/themes/justice/dist/archived/css/framework.css,301,900,Theme redirect
 /css/global.css,/app/themes/justice/dist/archived/css/global.css,301,900,Theme redirect
 /css/practitioner.css,/app/themes/justice/dist/archived/css/practitioner.css,301,900,Theme redirect
