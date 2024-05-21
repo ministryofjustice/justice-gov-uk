@@ -52,3 +52,4 @@ source,target,code,order,notes
 /scripts/general.js,/app/themes/justice/dist/archived/scripts/general.js,301,900,Theme redirect
 /scripts/icons.js,/app/themes/justice/dist/archived/scripts/icons.js,301,900,Theme redirect
 /scripts/jquery-1.4.js,/app/themes/justice/dist/archived/scripts/jquery-1.4.js,301,900,Theme redirect
+/favicon.ico,/app/themes/justice/dist/img/icon/fav/favicon.ico,301,900,Theme redirect
