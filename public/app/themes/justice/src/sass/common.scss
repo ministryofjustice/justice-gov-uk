@@ -10,3 +10,26 @@
     padding-left: 0 !important;
   }
 }
+
+#ccfw-page-banner {
+  .ccfw-banner__toggle-slider {
+
+    &:focus {
+      -webkit-text-fill-color: #1d1b1b;
+      box-shadow: none;
+      color: #0b0c0c;
+
+      :before {
+        border-color: #1d1b1b
+      }
+    }
+
+    &[aria-checked=true]:before {
+      left: 7px
+    }
+
+    & > span {
+      top: 7.5px !important;
+    }
+  }
+}
