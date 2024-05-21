@@ -1,3 +1,7 @@
+body {
+    min-width: fit-content;
+}
+
 /*yui2 reset*/
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
     margin: 0;
@@ -2047,9 +2051,9 @@ span.view-all {
 .grey-box .header span {
     float: left;
     display: block;
-    width: 162px;
     height: 20px;
     padding: 10px 14px;
+    width: calc(100% - 28px) !important;
     font-size: 1.2em;
     color: #ffffff;
     background: #373737;
