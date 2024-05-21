@@ -1,4 +1,4 @@
-name: "Justice.Gov.UK --> Deployment"
+name: "Justice.Gov.UK -- Deployment"
 
 on:
   workflow_dispatch:
@@ -27,16 +27,6 @@ jobs:
       registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
-  deploy_staging:
-    name: "Staging"
-    needs: [image, deploy_dev]
-    if: github.event.ref == 'refs/heads/main'
-    uses: ./.github/workflows/deploy.yml
-    with:
-      environment: staging
-      registry: ${{ needs.image.outputs.registry }}
-    secrets: inherit
-
   deploy_demo:
     name: "Demo"
     needs: [image, deploy_dev]
@@ -44,6 +34,16 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
+      registry: ${{ needs.image.outputs.registry }}
+    secrets: inherit
+
+  deploy_staging:
+    name: "Staging"
+    needs: [image, deploy_dev]
+    if: github.event.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: staging
       registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
