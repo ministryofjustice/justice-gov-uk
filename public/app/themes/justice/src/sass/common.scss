@@ -10,3 +10,33 @@
     padding-left: 0 !important;
   }
 }
+
+/**
+ * #ccfw-page-banner
+ * The following rules apply a slight mod to a plugins display
+ * https://github.com/ministryofjustice/cookie-compliance-for-wordpress
+ *
+ * Update context:
+ * https://github.com/ministryofjustice/justice-gov-uk/pull/173
+ */
+#ccfw-page-banner {
+  .ccfw-banner__toggle-slider {
+
+    &:focus {
+      -webkit-text-fill-color: #1d1b1b;
+      box-shadow: none;
+
+      :before {
+        border-color: #1d1b1b
+      }
+    }
+
+    &[aria-checked=true]:before {
+      left: 7px
+    }
+
+    & > span {
+      top: 7.5px !important;
+    }
+  }
+}
