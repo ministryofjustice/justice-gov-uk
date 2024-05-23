@@ -7,6 +7,7 @@ metadata:
     external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-production-ingress-justice-gov-uk-production-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     nginx.ingress.kubernetes.io/proxy-body-size: "200m"
+    # Squiz uses ThousandEyes for monitoring. Since migrating we no long need this so can block the requests here.
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /health {
         auth_basic off;
@@ -18,6 +19,9 @@ metadata:
       location = /.well-known/security.txt {
         auth_basic off;
         return 301 https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt;
+      }
+      if ($http_x_thousandeyes_agent) {
+        return 403;
       }
 spec:
   ingressClassName: default
