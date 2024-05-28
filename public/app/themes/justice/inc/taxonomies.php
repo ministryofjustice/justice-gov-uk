@@ -161,4 +161,30 @@ class Taxonomies
             'value' => !empty(get_query_var($taxonomy->name)) ? get_query_var($taxonomy->name) : null
         ], $taxonomies);
     }
+
+    /**
+     * Return taxonomies in an associative array for use in html head.
+     *
+     * @return array
+     */
+
+    public function getTaxonomiesForHeaderMeta(): array
+    {
+        $post_id = get_the_ID();
+
+        $taxonomy_names = [
+            'audience',
+            'section',
+            'type'
+        ];
+
+        $return_object = [];
+
+        foreach ($taxonomy_names as $taxonomy_name) {
+            $term_obj_list = get_the_terms($post_id, $taxonomy_name);
+            $return_object[$taxonomy_name] = join('; ', wp_list_pluck($term_obj_list, 'name'));
+        }
+
+        return $return_object;
+    }
 }

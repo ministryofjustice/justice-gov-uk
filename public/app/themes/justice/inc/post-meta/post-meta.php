@@ -38,6 +38,7 @@ class PostMeta
         add_filter('sgf_register_fields', [$post_meta_constants, 'metaFields'], 5);
         add_filter('sgf_register_fields', [$post_meta_constants, 'panelFields'], 5);
         add_filter('document_title_parts', [$this, 'titleTagFilter']);
+        add_action('wp_head', [$this, 'headMetaTags']);
     }
 
     /**
@@ -148,5 +149,24 @@ class PostMeta
         }
 
         return get_the_title();
+    }
+
+    /**
+     * Get the meta tags for the html head.
+     *
+     * The data is stored in WordPress meta, and taxonomies.
+     *
+     * @return void
+     */
+
+    public function headMetaTags(): void
+    {
+        $meta_data = (new Taxonomies())->getTaxonomiesForHeaderMeta();
+
+        $date_format = 'Y-m-d';
+        $meta_data['created'] = get_the_date($date_format);
+        $meta_data['modified'] = $this->getModifiedAt(get_the_ID(), $date_format);
+
+        get_template_part('template-parts/head/meta', null, $meta_data);
     }
 }
