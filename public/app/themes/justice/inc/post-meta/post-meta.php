@@ -152,9 +152,9 @@ class PostMeta
     }
 
     /**
-     * Get the meta tags for the html head.
+     * Get & echo the meta tags for the html head.
      *
-     * The data is stored in WordPress meta, and taxonomies.
+     * This function uses data from WordPress meta, and taxonomy terms.
      *
      * @return void
      */
@@ -163,9 +163,7 @@ class PostMeta
     {
         $meta_data = (new Taxonomies())->getTaxonomiesForHeaderMeta();
 
-        $date_format = 'Y-m-d';
-        $meta_data['created'] = get_the_date($date_format);
-        $meta_data['modified'] = $this->getModifiedAt(get_the_ID(), $date_format);
+        $meta_data['modified'] = $this->getModifiedAt(get_the_ID(), 'Y-m-d');
 
         get_template_part('template-parts/head/meta', null, $meta_data);
     }
