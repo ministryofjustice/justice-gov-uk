@@ -1,6 +1,5 @@
-import "./legacy/scripts";
+import './legacy/scripts'
 
 // GA4 - Enable the gtag.js API
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-window.gtag = gtag;
+window.dataLayer = window.dataLayer || []
+window.gtag = () => dataLayer.push(arguments);
