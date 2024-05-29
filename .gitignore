@@ -35,7 +35,8 @@ public/app/themes/justice/dist
 public/app/themes/justice/node_modules
 
 # WordPress
-public/wp
+public/wp/*
+!public/wp/.keep
 
 # WordPress Plugin additions
 public/app/ewww
