@@ -1,4 +1,3 @@
-import './legacy/localStorage'
 import './legacy/scripts'
 
 // GA4 - Enable the gtag.js API
