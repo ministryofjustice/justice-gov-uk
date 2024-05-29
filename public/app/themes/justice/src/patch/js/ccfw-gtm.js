@@ -6,7 +6,7 @@ import {Storage} from './ccfw-storage';
  */
 const CCFW = {
     gtm: ('; ' + document.cookie).split('; ccfw_gtm_id=').pop().split(';').shift(),
-    gtmID: document.getElementById('ccfw-page-banner').getAttribute('data-gtm-id'),
+    gtmID: encodeURIComponent(document.getElementById('ccfw-page-banner').getAttribute('data-gtm-id')),
     canRun: (id) => id.startsWith('GTM') || false,
     allowedIds: [],
     selector: {
@@ -178,8 +178,7 @@ const ccfwGTM = () => {
             let f = d.getElementsByTagName(s)[0],
             j = d.createElement(s), dl = l !== 'dataLayer' ? '&l=' + l : '';
             j.async = true;
-            j.src =
-            'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', CCFW.gtmID);
         return true;
