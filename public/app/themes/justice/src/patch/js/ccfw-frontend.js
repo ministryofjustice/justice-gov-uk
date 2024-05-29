@@ -66,7 +66,7 @@ import { CCFW } from './ccfw-gtm'
                 settingsModal.trapSettingsFocus()
                 this.$el.scrollTop(0)
 
-              // get allowed
+                // get allowed
                 let allowList = CCFW.storage.allowed.get() || []
                 $('.' + CCFW.selector.toggles).each(function (key, element) {
                     let allowed = $(element).data('allowlist')
@@ -255,7 +255,7 @@ function killCookieAndRelated(name)
 
 function killCookie(name)
 {
-  // kills cookies of name for our domains
+    // kills cookies of name for our domains
     document.cookie = name + '=; expires=Sun, 01 May 1707 00:00:00 UTC; path=/;'
     document.cookie = name + '=; expires=Sun, 01 May 1707 00:00:00 UTC; path=/;domain=' + location.host // e.g. magistrates.judiciary.uk
     document.cookie = name + '=; expires=Sun, 01 May 1707 00:00:00 UTC; path=/;domain=.' + location.host // e.g. .magistrates.judiciary.uk

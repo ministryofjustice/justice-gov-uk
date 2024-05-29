@@ -27,6 +27,7 @@ require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
+require_once 'inc/plugin-hacks.php';
 require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/redirects.php';
 require_once 'inc/search.php';
@@ -74,25 +75,3 @@ add_action('init', fn() => register_nav_menus([
     'header-menu' => __('Header Menu'),
     'footer-menu' => __('Footer Menu')
 ]));
-
-
-add_action('wp_enqueue_scripts', function () {
-    wp_deregister_script('ccfw-script-frontend');
-    wp_deregister_script('ccfw-script');
-
-    wp_enqueue_script(
-        'ccfw-script-frontend',
-        get_template_directory_uri() . '/dist/patch/js/ccfw-frontend.js',
-        ['jquery'],
-        1.0,
-        true
-    );
-
-    wp_enqueue_script(
-        'ccfw-script',
-        get_template_directory_uri() . '/dist/patch/js/ccfw-cookie-manage.js',
-        ['jquery'],
-        1.0,
-        true
-    );
-});

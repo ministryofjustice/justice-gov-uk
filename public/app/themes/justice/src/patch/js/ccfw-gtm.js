@@ -1,3 +1,4 @@
+import {Storage} from './ccfw-storage';
 /**
  * A dataLayer management script for GTM
  *
@@ -19,26 +20,25 @@ const CCFW = {
     },
     storage: {
         time: {
-            get: () => JSON.parse(window.localStorage.getItem('ccfw-time')),
-            set: () => window.localStorage.setItem(
+            get: () => JSON.parse(Storage.getItem('ccfw-time')),
+            set: () => Storage.setItem(
                 'ccfw-time',
                 JSON.stringify(new Date(new Date().setFullYear(new Date().getFullYear() + 1)).getTime())
             )
         },
         allowed: {
-            get: () => JSON.parse(window.localStorage.getItem('ccfw-gtm-allowed')),
-            set: (value) => window.localStorage.setItem('ccfw-gtm-allowed', JSON.stringify(value))
+            get: () => JSON.parse(Storage.getItem('ccfw-gtm-allowed')),
+            set: (value) => Storage.setItem('ccfw-gtm-allowed', JSON.stringify(value))
         },
         bannerHidden: {
-            get: () => JSON.parse(window.localStorage.getItem('ccfw-banner-hidden')),
-            set: (value) => window.localStorage.setItem('ccfw-banner-hidden', JSON.stringify(value))
+            get: () => JSON.parse(Storage.getItem('ccfw-banner-hidden')),
+            set: (value) => Storage.setItem('ccfw-banner-hidden', JSON.stringify(value))
         },
-        clear: (key) => window.localStorage.removeItem(key)
+        clear: (key) => Storage.removeItem(key)
     },
     listItem: {
         set: (value) => {
             dataLayer[0]['gtm.allowlist'] = value;
-          /*console.log(dataLayer);*/
             CCFW.storage.allowed.set(value);
         },
         clear: (key, value) => {
@@ -50,7 +50,7 @@ const CCFW = {
         }
     },
   /**
-   * Wrap the dataLayer.push function
+   * Wrap the dataLayer.push() function
    * @param event
    * @param object
    * @private
@@ -153,12 +153,12 @@ const ccfwGTM = () => {
     if (CCFW.canRun(CCFW.gtmID)) {
         window.dataLayer = [];
 
-      // INIT
-      // use existing list if present
-      // default to empty array if not
+        // INIT
+        // use existing list if present
+        // default to empty array if not
         let allowedList = CCFW.storage.allowed.get() || []; // default to empty array
 
-      //Always allow variables and triggers - https://developers.google.com/tag-manager/web/restrict
+        //Always allow variables and triggers - https://developers.google.com/tag-manager/web/restrict
         let ccfwTriggers = ['evl', 'cl', 'fsl', 'hl', 'jel', 'lcl', 'sdl', 'tl', 'ytl'];
         let ccfwVariables = ['k', 'v', 'c', 'ctv', 'e', 'jsm', 'dpg', 'd', 'vis', 'gas', 'f', 'j', 'smm', 'r', 'remm', 'u'];
 

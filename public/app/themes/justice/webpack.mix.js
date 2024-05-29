@@ -9,7 +9,6 @@ mix
     /** patch code for CCFW **/
     .js('src/patch/js/ccfw-cookie-manage.js', 'dist/patch/js/ccfw-cookie-manage.js')
     .js('src/patch/js/ccfw-frontend.js', 'dist/patch/js/ccfw-frontend.js')
-    .js('src/patch/js/ccfw-gtm.js', 'dist/patch/js/ccfw-gtm.js')
     /** -------------- **/
     .sass('src/sass/app.scss', 'dist/css/app.min.css')
     .sass('src/sass/admin.scss', 'dist/css/admin.min.css')
