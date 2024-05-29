@@ -3,6 +3,15 @@ import { CCFW, ccfwGTM, togglesChange } from './ccfw-gtm'
 const ccfwGtmRunning = ccfwGTM();
 
 (function ($) {
+
+    /**
+     * Some spiders and webcrawlers are causing errors in Sentry because they are not loading jQuery
+     * In a nutshell, if jQuery isn't available here, we cannot run.
+     */
+    if (typeof $ === undefined) {
+        return;
+    }
+
     $(function ($) {
         if (ccfwGtmRunning) {
             // cache all available allowlist identifiers
@@ -15,8 +24,6 @@ const ccfwGtmRunning = ccfwGTM();
 
             // clearStorage; performs clear if 1 year has past since the user first set their choices.
             CCFW.clearStorage();
-
-            // hello
         }
     })
 })(jQuery);

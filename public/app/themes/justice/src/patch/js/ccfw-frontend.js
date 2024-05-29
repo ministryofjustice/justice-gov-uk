@@ -3,9 +3,17 @@ import { CCFW } from './ccfw-gtm'
 (function ($) {
     'use strict'
 
-  /**
-   *  Define handlers for when the html/DOM is ready.
-   * */
+    /**
+     * Some spiders and webcrawlers are causing errors in Sentry because they are not loading jQuery
+     * In a nutshell, if jQuery isn't available here, we cannot run.
+     */
+    if (typeof $ === undefined) {
+        return;
+    }
+
+    /**
+    *  Define handlers for when the html/DOM is ready.
+    * */
     $(function ($) {
         // This is used so much make sure all modules use it to save calls to DOM
         const cacheMainElements = {
@@ -210,24 +218,30 @@ import { CCFW } from './ccfw-gtm'
 
 function clearOurCookies(allowList)
 {
-  // Function to clear our cookies if consent withdrawn
+    if (allowList === null) {
+        allowList = [];
+    }
+
+    // Function to clear our cookies if consent withdrawn
     if (!allowList.includes('ua')) {
-      //Google analytics
+        //Google Analytics
         killCookieAndRelated('_ga')
         killCookieAndRelated('_ga_')
         killCookie('_gid')
         killCookieAndRelated('_gat')
     }
+
     if (!allowList.includes('html')) {
-      //Facebook cookies
+        //Facebook cookies
         killCookie('fr')
         killCookie('tr')
         killCookie('_fbc')
         killCookie('_fbp')
         killCookie('PSUK_source')
     }
+
     if (!allowList.includes('gclidw')) {
-      //Google conversion linker cookies
+        //Google conversion linker cookies
         killCookie('_gcl_au')
         killCookie('_gcl_dc')
         killCookie('_gcl_aw')
