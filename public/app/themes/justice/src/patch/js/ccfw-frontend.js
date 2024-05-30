@@ -76,7 +76,7 @@ import { CCFW } from './ccfw-gtm'
 
                 // get allowed
                 let allowList = CCFW.storage.allowed.get() || []
-                $('.' + CCFW.selector.toggles).each(function (key, element) {
+                CCFW.jq.toggles.each(function (key, element) {
                     let allowed = $(element).data('allowlist')
 
                     if (allowList.indexOf(allowed) !== -1) {
@@ -157,6 +157,7 @@ import { CCFW } from './ccfw-gtm'
                 this.$buttonDecline = this.$settingsModal.find('#cookie-decline')
                 this.$buttonInfo = this.$settingsModal.find('#cookie-more-info')
                 this.$buttonSavePreferences = this.$settingsModal.find('#cookie-save-preferences')
+                this.$buttonSavePreferencesTop = this.$settingsModal.find('#cookie-save-preferences-top')
                 this.$buttonModalClose = this.$settingsModal.find('#ccfw-modal-close')
                 this.$body = cacheMainElements.$body
             },
@@ -164,6 +165,7 @@ import { CCFW } from './ccfw-gtm'
                 this.$buttonModalClose.on('click', this.modalDisplay.bind(this))
                 this.$buttonInfo.on('click', this.trapSettingsFocus.bind(this))
                 this.$buttonSavePreferences.on('click', this.saveCookiePreferences.bind(this))
+                this.$buttonSavePreferencesTop.on('click', this.saveCookiePreferences.bind(this))
             },
             modalDisplay: function () {
                 utilities.hideSettingsModal()
