@@ -49,5 +49,8 @@
         "react-select": [
             "This package is used in simple-guten-fields for a user friendly multi-select."
         ]
+    },
+    "dependencies": {
+        "react-icons": "^5.2.1"
     }
 }

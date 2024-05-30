@@ -1,6 +1,7 @@
 // // @ts-check
 
 import { registerFormatType } from "@wordpress/rich-text";
+import { anchor } from "./anchor";
 import { underline } from "./underline";
 
 /**
@@ -12,6 +13,10 @@ import { underline } from "./underline";
 function registerEditorsKitFormats() {
   const { name, ...settings } = underline;
   registerFormatType(name, settings);
+  {
+    const { name, ...settings } = anchor;
+    registerFormatType(name, settings);
+  }
 }
 
 wp.domReady(registerEditorsKitFormats);
