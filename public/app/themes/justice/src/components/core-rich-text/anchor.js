@@ -1,9 +1,7 @@
 // @ts-check
 
 /**
- * Adds support for underline of rich-text content in the block editor.
- *
- * @see https://github.com/CakeWP/block-options/blob/master/src/extensions/formats/underline/index.js
+ * Adds support for anchor destiantions to rich-text content in the block editor.
  */
 
 import { __ } from "@wordpress/i18n";
