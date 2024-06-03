@@ -115,8 +115,8 @@ const CCFW = {
                     allowList.push(allowed)
                 }
                 jQuery(element).attr('aria-checked', true)
-                jQuery('#ccfw-' + allowed + '-toggle-on'). removeAttr('aria-hidden'). show()
-                jQuery('#ccfw-' + allowed + '-toggle-off'). attr('aria-hidden', 'true'). hide()
+                jQuery('#ccfw-' + allowed + '-toggle-on'). removeAttr('aria-hidden').show()
+                jQuery('#ccfw-' + allowed + '-toggle-off'). attr('aria-hidden', 'true').hide()
             }
         })
 
@@ -160,8 +160,9 @@ const CCFW = {
         popup: {
             button: {
                 save: () => {
-                    const button = jQuery(CCFW.jq.button.save_preferences.find('button')).
-                    clone(true)
+                    const button = jQuery(
+                        CCFW.jq.button.save_preferences.find('button')
+                    ).clone(true)
 
                     button.attr({
                         id: 'cookie-save-preferences-top',
@@ -169,12 +170,12 @@ const CCFW = {
                         disabled: 'disabled'
                     }).text('Save')
 
-                CCFW.jq.button.save_preferences.find('button').
-                text('Save cookie preferences')
-                jQuery('#cookie-popup').prepend(button)
-                jQuery(CCFW.jq.toggles).
-                on('click', () => jQuery('#cookie-save-preferences-top').
-                removeAttr('disabled'))
+                    CCFW.jq.button.save_preferences.find('button').text('Save cookie preferences')
+                    jQuery('#cookie-popup').prepend(button)
+                    jQuery(CCFW.jq.toggles).on(
+                        'click',
+                        () => jQuery('#cookie-save-preferences-top').removeAttr('disabled')
+                    )
                 }
             }
         }
