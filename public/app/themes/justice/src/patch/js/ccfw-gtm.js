@@ -6,8 +6,7 @@ import { Storage } from './ccfw-storage'
  * First step; define some settings
  */
 const CCFW = {
-    gtmID: document.getElementById('ccfw-page-banner').
-    getAttribute('data-gtm-id'),
+    gtmID: document.getElementById('ccfw-page-banner').getAttribute('data-gtm-id'),
     isValidID: () => CCFW.gtmID.startsWith('GTM') || false,
     allowedIds: [],
     selector: {
