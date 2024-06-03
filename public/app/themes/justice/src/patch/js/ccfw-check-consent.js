@@ -1,4 +1,4 @@
-import { Init } from './ccfw-gtm'
+import { init } from './ccfw-gtm'
 
 /** start GTM **/
-Init();
+init();
