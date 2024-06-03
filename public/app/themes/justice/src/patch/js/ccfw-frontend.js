@@ -46,9 +46,10 @@ import { CCFW } from './ccfw-gtm'
             showBanner: function () {
                 this.$el.show()
                 this.$cookieSettingsButton.hide()
-                //the cookie banner is now at the top, so we scroll to the top
+
+                // the cookie banner is now at the top, so we scroll to the top
                 $([document.documentElement, document.body]).animate({
-                    scrollTop: $('#ccfw-page-banner').offset().top,
+                    scrollTop: $('#ccfw-page-banner').offset().top
                 }, 200)
             },
             hideBanner: function () {
@@ -81,20 +82,12 @@ import { CCFW } from './ccfw-gtm'
 
                     if (allowList.indexOf(allowed) !== -1) {
                         $(element).attr('aria-checked', true)
-                        $('#ccfw-' + allowed + '-toggle-on').
-                        removeAttr('aria-hidden').
-                        show()
-                        $('#ccfw-' + allowed + '-toggle-off').
-                        attr('aria-hidden', 'true').
-                        hide()
+                        $('#ccfw-' + allowed + '-toggle-on').removeAttr('aria-hidden').show()
+                        $('#ccfw-' + allowed + '-toggle-off').attr('aria-hidden', 'true').hide()
                     } else {
                         $(element).attr('aria-checked', false)
-                        $('#ccfw-' + allowed + '-toggle-off').
-                        removeAttr('aria-hidden').
-                        show()
-                        $('#ccfw-' + allowed + '-toggle-on').
-                        attr('aria-hidden', 'true').
-                        hide()
+                        $('#ccfw-' + allowed + '-toggle-off').removeAttr('aria-hidden').show()
+                        $('#ccfw-' + allowed + '-toggle-on').attr('aria-hidden', 'true').hide()
                     }
                 })
             },
@@ -172,14 +165,8 @@ import { CCFW } from './ccfw-gtm'
             bindEvents: function () {
                 this.$buttonModalClose.on('click', this.modalDisplay.bind(this))
                 this.$buttonInfo.on('click', this.trapSettingsFocus.bind(this))
-                this.$buttonSave.on(
-                    'click',
-                    this.savePreferences.bind(this)
-                )
-                this.$buttonSaveTop.on(
-                    'click',
-                    this.savePreferences.bind(this)
-                )
+                this.$buttonSave.on('click',this.savePreferences.bind(this))
+                this.$buttonSaveTop.on('click',this.savePreferences.bind(this))
             },
             modalDisplay: function () {
                 utilities.hideSettingsModal()
@@ -223,7 +210,7 @@ import { CCFW } from './ccfw-gtm'
                 clearOurCookies(CCFW.storage.allowed.get())
                 window.location.reload(false)
                 return false
-            },
+            }
         }
 
         cacheMainElements.init()
