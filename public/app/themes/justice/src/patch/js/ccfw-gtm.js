@@ -198,15 +198,15 @@ manageAll: (allowList, allowed, pressed) => {
  */
 const init = () => {
     if (CCFW.isValidID()) {
-      // check we have a dataLayer
+        // check we have a dataLayer
         if (!window.dataLayer) {
             window.dataLayer = []
         }
 
-      // INIT
+        // INIT
         let allowedList = CCFW.storage.allowed.get() || [] // default to empty array
 
-      // Always allow variables and triggers - https://developers.google.com/tag-manager/web/restrict
+        // Always allow variables and triggers - https://developers.google.com/tag-manager/web/restrict
         let ccfwTriggers = [
         'evl',
         'cl',
@@ -242,7 +242,7 @@ const init = () => {
             'gtm.allowlist': allowedList,
         });
 
-      // Drop GTM code
+        // Drop GTM code
         (function (w, d, s, l, i) {
             w[l] = w[l] || []
             w[l].push({
