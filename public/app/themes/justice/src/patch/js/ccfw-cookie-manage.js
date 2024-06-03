@@ -18,7 +18,7 @@ const gtmIsReady = Init();
             CCFW.listen.toggles();
 
             /** A button to save cookies at the top **/
-            CCFW.hack.popup.button.save();
+            CCFW.patch.popup.button.save();
 
             /** house cleaning; check if one year has passed **/
             CCFW.maybeExpired()

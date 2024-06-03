@@ -151,7 +151,7 @@ const CCFW = {
 
         return allowList
     },
-    hack: {
+    patch: {
         popup:{
             button: {
                 save:  () => {
