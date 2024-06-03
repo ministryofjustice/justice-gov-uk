@@ -3,17 +3,17 @@ import { CCFW } from './ccfw-gtm'
 (function ($) {
     'use strict'
 
-    /**
-     * Some spiders and webcrawlers are causing errors in Sentry because they are not loading jQuery
-     * In a nutshell, if jQuery isn't available here, we cannot run.
-     */
+  /**
+   * Some spiders and webcrawlers are causing errors in Sentry because they are not loading jQuery
+   * In a nutshell, if jQuery isn't available here, we cannot run.
+   */
     if (typeof $ === undefined) {
-        return;
+        return
     }
 
-    /**
-    *  Define handlers for when the html/DOM is ready.
-    * */
+  /**
+   *  Define handlers for when the html/DOM is ready.
+   * */
     $(function ($) {
         // This is used so much make sure all modules use it to save calls to DOM
         const cacheMainElements = {
@@ -22,11 +22,11 @@ import { CCFW } from './ccfw-gtm'
                 this.$notEl = $('#ccfw-page-banner ~ *') // everything after the cookie popup = the whole page
                 this.$body = $('body')
                 this.$html = $('html')
-            }
+            },
         }
-      /**
-       *  Helper functions for shared tasks
-       * */
+        /**
+         *  Helper functions for shared tasks
+         * */
         const utilities = {
             init: function () {
                 this.cacheDom()
@@ -46,9 +46,9 @@ import { CCFW } from './ccfw-gtm'
             showBanner: function () {
                 this.$el.show()
                 this.$cookieSettingsButton.hide()
-              //the cookie banner is now at the top, so we scroll to the top
+                //the cookie banner is now at the top, so we scroll to the top
                 $([document.documentElement, document.body]).animate({
-                    scrollTop: $('#ccfw-page-banner').offset().top
+                    scrollTop: $('#ccfw-page-banner').offset().top,
                 }, 200)
             },
             hideBanner: function () {
@@ -81,20 +81,28 @@ import { CCFW } from './ccfw-gtm'
 
                     if (allowList.indexOf(allowed) !== -1) {
                         $(element).attr('aria-checked', true)
-                        $('#ccfw-' + allowed + '-toggle-on').removeAttr('aria-hidden').show()
-                        $('#ccfw-' + allowed + '-toggle-off').attr('aria-hidden', 'true').hide()
+                        $('#ccfw-' + allowed + '-toggle-on').
+                        removeAttr('aria-hidden').
+                        show()
+                        $('#ccfw-' + allowed + '-toggle-off').
+                        attr('aria-hidden', 'true').
+                        hide()
                     } else {
                         $(element).attr('aria-checked', false)
-                        $('#ccfw-' + allowed + '-toggle-off').removeAttr('aria-hidden').show()
-                        $('#ccfw-' + allowed + '-toggle-on').attr('aria-hidden', 'true').hide()
+                        $('#ccfw-' + allowed + '-toggle-off').
+                        removeAttr('aria-hidden').
+                        show()
+                        $('#ccfw-' + allowed + '-toggle-on').
+                        attr('aria-hidden', 'true').
+                        hide()
                     }
                 })
-            }
+            },
         }
 
-      /**
-       *  Banner management and control
-       * */
+        /**
+         *  Banner management and control
+         * */
         const banner = {
             init: function () {
                 this.cacheDom()
@@ -121,7 +129,7 @@ import { CCFW } from './ccfw-gtm'
             },
             acceptAllButton: function () {
                 CCFW.listItem.set(
-                    CCFW.toggleAll(false)
+                    CCFW.toggleAll(false),
                 )
                 CCFW.storage.time.set()
                 CCFW.storage.bannerHidden.set(true)
@@ -131,7 +139,7 @@ import { CCFW } from './ccfw-gtm'
             },
             declineAllButton: function () {
                 CCFW.listItem.set(
-                    CCFW.toggleAll(true)
+                    CCFW.toggleAll(true),
                 )
                 CCFW.storage.time.set()
                 CCFW.storage.bannerHidden.set(true)
@@ -142,7 +150,7 @@ import { CCFW } from './ccfw-gtm'
             },
             chooseCookieSettingsButton: function () {
                 utilities.showSettingsModal()
-            }
+            },
         }
 
         const settingsModal = {
@@ -156,23 +164,35 @@ import { CCFW } from './ccfw-gtm'
                 this.$buttonAccept = this.$settingsModal.find('#cookie-accept')
                 this.$buttonDecline = this.$settingsModal.find('#cookie-decline')
                 this.$buttonInfo = this.$settingsModal.find('#cookie-more-info')
-                this.$buttonSavePreferences = this.$settingsModal.find('#cookie-save-preferences')
-                this.$buttonSavePreferencesTop = this.$settingsModal.find('#cookie-save-preferences-top')
+                this.$buttonSavePreferences = this.$settingsModal.find(
+                    '#cookie-save-preferences',
+                )
+                this.$buttonSavePreferencesTop = this.$settingsModal.find(
+                    '#cookie-save-preferences-top',
+                )
                 this.$buttonModalClose = this.$settingsModal.find('#ccfw-modal-close')
                 this.$body = cacheMainElements.$body
             },
             bindEvents: function () {
                 this.$buttonModalClose.on('click', this.modalDisplay.bind(this))
                 this.$buttonInfo.on('click', this.trapSettingsFocus.bind(this))
-                this.$buttonSavePreferences.on('click', this.saveCookiePreferences.bind(this))
-                this.$buttonSavePreferencesTop.on('click', this.saveCookiePreferences.bind(this))
+                this.$buttonSavePreferences.on(
+                    'click',
+                    this.saveCookiePreferences.bind(this),
+                )
+                this.$buttonSavePreferencesTop.on(
+                    'click',
+                    this.saveCookiePreferences.bind(this),
+                )
             },
             modalDisplay: function () {
                 utilities.hideSettingsModal()
             },
             trapSettingsFocus: function () {
                 this.$settingsModal.focus()
-                let focusable = $('#cookie-popup a[href], #cookie-popup details, #cookie-popup button, #cookie-popup input[type="checkbox"]')
+                let focusable = $(
+                    '#cookie-popup a[href], #cookie-popup details, #cookie-popup button, #cookie-popup input[type="checkbox"]',
+                )
                 let first = focusable[0]
                 let last = focusable[focusable.length - 1]
 
@@ -207,7 +227,7 @@ import { CCFW } from './ccfw-gtm'
                 clearOurCookies(CCFW.storage.allowed.get())
                 window.location.reload(false)
                 return false
-            }
+            },
         }
 
         cacheMainElements.init()
@@ -221,7 +241,7 @@ import { CCFW } from './ccfw-gtm'
 function clearOurCookies(allowList)
 {
     if (allowList === null) {
-        allowList = [];
+        allowList = []
     }
 
     // Function to clear our cookies if consent withdrawn
@@ -252,33 +272,38 @@ function clearOurCookies(allowList)
 
 function killCookieAndRelated(name)
 {
-  //function for killing all cookies which start with <name>
-  // e.g. _ga will kill of _ga and _ga_123ABC
+    //function for killing all cookies which start with <name>
+    // e.g. _ga will kill of _ga and _ga_123ABC
     killCookie(name)
     const cookies = document.cookie.split(';') // array of cookies
     for (var i = 0; i < cookies.length; i++) {
         let cookie = cookies[i].trim()
+
         if (!cookie) {
             continue
-            let eqPos = cookie.indexOf('=')
-            let full_name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
-            if (full_name.substring(0, name.length) === name) {
-                killCookie(full_name)
-            }
+        }
+
+        let eqPos = cookie.indexOf('=')
+        let full_name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie
+        if (full_name.substring(0, name.length) === name) {
+            killCookie(full_name)
         }
     }
 }
 
 function killCookie(name)
 {
-    // kills cookies of name for our domains
-    document.cookie = name + '=; expires=Sun, 01 May 1707 00:00:00 UTC; path=/;'
-    document.cookie = name + '=; expires=Sun, 01 May 1707 00:00:00 UTC; path=/;domain=' + location.host // e.g. magistrates.judiciary.uk
-    document.cookie = name + '=; expires=Sun, 01 May 1707 00:00:00 UTC; path=/;domain=.' + location.host // e.g. .magistrates.judiciary.uk
+    let expires_path = 'expires=Sun, 01 May 1707 00:00:00 UTC; path=/;'
     let domain = location.host.split('.')
+
+    // multisite compliant; targets domains
+    document.cookie = name + '=; ' + expires_path
+    document.cookie = name + '=; ' + expires_path + ' domain=' + location.host
+    document.cookie = name + '=; ' + expires_path + ' domain=.' + location.host
+
     if (domain.length >= 3) {
         domain[0] = ''
         domain = domain.join('.')
-        document.cookie = name + '=; expires=Sun, 01 May 1707 00:00:00 UTC; path=/;domain=' + domain // e.g. .judiciary.uk
+        document.cookie = name + '=; ' + expires_path + ' domain=' + domain
     }
 }

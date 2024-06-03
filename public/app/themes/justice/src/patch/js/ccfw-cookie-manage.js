@@ -4,26 +4,26 @@ import { CCFW, init } from './ccfw-gtm'
 const gtmIsReady = init();
 
 (function ($) {
-    /** In a nutshell, if jQuery isn't available here, we cannot run. **/
+  /** In a nutshell, if jQuery isn't available here, we cannot run. **/
     if (typeof $ === undefined) {
         return
     }
 
     $(function () {
         if (gtmIsReady) {
-            /** cache available allowlist identifiers and set up listener **/
-            CCFW.cache();
+          /** cache available allowlist identifiers and set up listener **/
+            CCFW.cache()
 
-            /** set up toggle listeners **/
-            CCFW.listen.toggles();
+          /** set up toggle listeners **/
+            CCFW.listen.toggles()
 
-            /** A button to save cookies at the top **/
-            CCFW.patch.popup.button.save();
+          /** A button to save cookies at the top **/
+            CCFW.patch.popup.button.save()
 
-            /** house cleaning; check if one year has passed **/
+          /** house cleaning; check if one year has passed **/
             CCFW.maybeExpired()
         } else {
-            console.log('CCFW: GTM was not initialised.');
+            console.log('CCFW: GTM was not initialised.')
         }
     })
-})(jQuery);
+})(jQuery)
