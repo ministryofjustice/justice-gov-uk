@@ -109,23 +109,15 @@ const CCFW = {
 
             if (remove) {
                 jQuery(element).attr('aria-checked', false)
-                jQuery('#ccfw-' + allowed + '-toggle-off').
-                removeAttr('aria-hidden').
-                show()
-                jQuery('#ccfw-' + allowed + '-toggle-on').
-                attr('aria-hidden', 'true').
-                hide()
+                jQuery('#ccfw-' + allowed + '-toggle-off').removeAttr('aria-hidden').show()
+                jQuery('#ccfw-' + allowed + '-toggle-on').attr('aria-hidden', 'true').hide()
             } else {
                 if (allowList.indexOf(allowed) === -1) {
                     allowList.push(allowed)
                 }
                 jQuery(element).attr('aria-checked', true)
-                jQuery('#ccfw-' + allowed + '-toggle-on').
-                removeAttr('aria-hidden').
-                show()
-                jQuery('#ccfw-' + allowed + '-toggle-off').
-                attr('aria-hidden', 'true').
-                hide()
+                jQuery('#ccfw-' + allowed + '-toggle-on'). removeAttr('aria-hidden'). show()
+                jQuery('#ccfw-' + allowed + '-toggle-off'). attr('aria-hidden', 'true'). hide()
             }
         })
 
@@ -208,33 +200,12 @@ const init = () => {
 
         // Always allow variables and triggers - https://developers.google.com/tag-manager/web/restrict
         let ccfwTriggers = [
-        'evl',
-        'cl',
-        'fsl',
-        'hl',
-        'jel',
-        'lcl',
-        'sdl',
-        'tl',
-        'ytl']
+            'evl', 'cl', 'fsl', 'hl', 'jel', 'lcl', 'sdl', 'tl', 'ytl'
+        ]
 
         let ccfwVariables = [
-        'k',
-        'v',
-        'c',
-        'ctv',
-        'e',
-        'jsm',
-        'dpg',
-        'd',
-        'vis',
-        'gas',
-        'f',
-        'j',
-        'smm',
-        'r',
-        'remm',
-        'u']
+            'k', 'v', 'c', 'ctv', 'e', 'jsm', 'dpg', 'd', 'vis', 'gas', 'f', 'j', 'smm', 'r', 'remm', 'u'
+        ]
 
         allowedList = allowedList.concat(ccfwTriggers, ccfwVariables)
 
@@ -272,10 +243,12 @@ const toggle = function (e) {
     }
 
     e.preventDefault()
+
     let toggle = jQuery(this)
     let allowed = toggle.data('allowlist')
     let allowList = CCFW.storage.allowed.get() || []
     let pressed = toggle.attr('aria-checked') === 'true'
+
     toggle.attr('aria-checked', !pressed)
 
     if (allowed === 'all') {

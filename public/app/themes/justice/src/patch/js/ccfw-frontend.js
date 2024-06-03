@@ -129,7 +129,7 @@ import { CCFW } from './ccfw-gtm'
             },
             acceptAllButton: function () {
                 CCFW.listItem.set(
-                    CCFW.toggleAll(false),
+                    CCFW.toggleAll(false)
                 )
                 CCFW.storage.time.set()
                 CCFW.storage.bannerHidden.set(true)
@@ -139,7 +139,7 @@ import { CCFW } from './ccfw-gtm'
             },
             declineAllButton: function () {
                 CCFW.listItem.set(
-                    CCFW.toggleAll(true),
+                    CCFW.toggleAll(true)
                 )
                 CCFW.storage.time.set()
                 CCFW.storage.bannerHidden.set(true)
@@ -150,7 +150,7 @@ import { CCFW } from './ccfw-gtm'
             },
             chooseCookieSettingsButton: function () {
                 utilities.showSettingsModal()
-            },
+            }
         }
 
         const settingsModal = {
@@ -164,25 +164,21 @@ import { CCFW } from './ccfw-gtm'
                 this.$buttonAccept = this.$settingsModal.find('#cookie-accept')
                 this.$buttonDecline = this.$settingsModal.find('#cookie-decline')
                 this.$buttonInfo = this.$settingsModal.find('#cookie-more-info')
-                this.$buttonSavePreferences = this.$settingsModal.find(
-                    '#cookie-save-preferences',
-                )
-                this.$buttonSavePreferencesTop = this.$settingsModal.find(
-                    '#cookie-save-preferences-top',
-                )
+                this.$buttonSave = this.$settingsModal.find('#cookie-save-preferences')
+                this.$buttonSaveTop = this.$settingsModal.find('#cookie-save-preferences-top')
                 this.$buttonModalClose = this.$settingsModal.find('#ccfw-modal-close')
                 this.$body = cacheMainElements.$body
             },
             bindEvents: function () {
                 this.$buttonModalClose.on('click', this.modalDisplay.bind(this))
                 this.$buttonInfo.on('click', this.trapSettingsFocus.bind(this))
-                this.$buttonSavePreferences.on(
+                this.$buttonSave.on(
                     'click',
-                    this.saveCookiePreferences.bind(this),
+                    this.savePreferences.bind(this)
                 )
-                this.$buttonSavePreferencesTop.on(
+                this.$buttonSaveTop.on(
                     'click',
-                    this.saveCookiePreferences.bind(this),
+                    this.savePreferences.bind(this)
                 )
             },
             modalDisplay: function () {
@@ -219,7 +215,7 @@ import { CCFW } from './ccfw-gtm'
                     }
                 })
             },
-            saveCookiePreferences: function () {
+            savePreferences: function () {
                 CCFW.storage.bannerHidden.set('true')
                 CCFW.storage.time.set()
                 utilities.hideBanner()
