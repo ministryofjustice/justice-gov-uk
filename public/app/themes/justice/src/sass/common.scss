@@ -20,11 +20,15 @@
  * https://github.com/ministryofjustice/justice-gov-uk/pull/173
  */
 #ccfw-page-banner {
+  button {
+    cursor: pointer;
+  }
+
   .ccfw-banner__modal-container > button {
+
     &#cookie-save-preferences-top {
       float: right;
       margin-left: 35px;
-      cursor: pointer;
 
       &[disabled] {
         cursor: not-allowed;
