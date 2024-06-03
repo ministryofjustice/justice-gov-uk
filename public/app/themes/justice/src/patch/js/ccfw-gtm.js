@@ -59,7 +59,7 @@ const CCFW = {
         }
     },
     listen: {
-        toggles: () => CCFW.jq.toggles.on('click', Toggle)
+        toggles: () => CCFW.jq.toggles.on('click', toggle)
     },
   /**
    * Wrap the dataLayer.push() function
@@ -176,7 +176,7 @@ const CCFW = {
  * An init function to start the GTM feature
  * @returns {boolean}
  */
-const Init = () => {
+const init = () => {
     if (CCFW.isValidID()) {
       // check we have a dataLayer
         if (!window.dataLayer) {
@@ -217,7 +217,7 @@ const Init = () => {
     }
 }
 
-const Toggle = function (e) {
+const toggle = function (e) {
 
     if (typeof jQuery === undefined) {
         console.log('jQuery is not defined')
@@ -254,4 +254,4 @@ const Toggle = function (e) {
     return true
 }
 
-export { CCFW, Init }
+export { CCFW, init }

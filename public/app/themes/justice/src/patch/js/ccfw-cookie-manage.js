@@ -1,7 +1,7 @@
-import { CCFW, Init } from './ccfw-gtm'
+import { CCFW, init } from './ccfw-gtm'
 
 /** start GTM **/
-const gtmIsReady = Init();
+const gtmIsReady = init();
 
 (function ($) {
     /** In a nutshell, if jQuery isn't available here, we cannot run. **/
