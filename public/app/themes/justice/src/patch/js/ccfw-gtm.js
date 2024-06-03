@@ -13,16 +13,16 @@ const CCFW = {
     selector: {
         all: {
             accept: 'cookie-accept',
-            decline: 'cookie-decline',
+            decline: 'cookie-decline'
         },
         moreInfo: 'cookie-more-info',
-        settings: 'js-ccfw-settings-button',
+        settings: 'js-ccfw-settings-button'
     },
     jq: {
         toggles: jQuery('.ccfw-banner__toggle-slider'),
         button: {
             save_preferences: jQuery('.ccfw-banner__save-preferences'),
-        },
+        }
     },
     storage: {
         time: {
@@ -31,21 +31,21 @@ const CCFW = {
                 'ccfw-time',
                 JSON.stringify(new Date(
                     new Date().setFullYear(new Date().getFullYear() + 1)
-                ).getTime()),
-            ),
+                ).getTime())
+            )
         },
         allowed: {
             get: () => JSON.parse(Storage.getItem('ccfw-gtm-allowed')),
-            set: (value) => Storage.setItem('ccfw-gtm-allowed', JSON.stringify(value)),
+            set: (value) => Storage.setItem('ccfw-gtm-allowed', JSON.stringify(value))
         },
         bannerHidden: {
             get: () => JSON.parse(Storage.getItem('ccfw-banner-hidden')),
             set: (value) => Storage.setItem(
                 'ccfw-banner-hidden',
                 JSON.stringify(value)
-            ),
+            )
         },
-        clear: (key) => Storage.removeItem(key),
+        clear: (key) => Storage.removeItem(key)
     },
     listItem: {
         set: (value) => {
@@ -62,17 +62,17 @@ const CCFW = {
                     array.splice(index, 1)
                 }
             })
-        },
+        }
     },
     listen: {
-        toggles: () => CCFW.jq.toggles.on('click', toggle),
+        toggles: () => CCFW.jq.toggles.on('click', toggle)
     },
-  /**
-   * Wrap the dataLayer.push() function
-   * @param event
-   * @param object
-   * @private
-   */
+    /**
+    * Wrap the dataLayer.push() function
+    * @param event
+    * @param object
+    * @private
+    */
     trackEvent: (event, object) => {
         if (!object) {
             dataLayer.push({ 'event': event })
@@ -80,9 +80,9 @@ const CCFW = {
         }
         dataLayer.push(jQuery.extend({}, { 'event': event }, object))
     },
-  /**
-   * Runs on load
-   */
+    /**
+    * Runs on load
+    */
     maybeExpired: () => {
         let stored = CCFW.storage.time.get() // always a year from storage
         let now = new Date().getTime()
@@ -94,9 +94,9 @@ const CCFW = {
         }
     },
 
-  /**
-   * @param remove acknowledges that we are removing all allowed ids
-   */
+    /**
+    * @param remove acknowledges that we are removing all allowed ids
+    */
     toggleAll: function (remove) {
         let allowList = CCFW.storage.allowed.get() || []
 
@@ -123,41 +123,39 @@ const CCFW = {
 
         return allowList
     },
-    cache: () => CCFW.jq.toggles.each(
-        (key, element) => CCFW.allowedIds.push(jQuery(element).data('allowlist')),
-    ),
-manageAll: (allowList, allowed, pressed) => {
-    if (!allowList) {
-        return
-    }
+    cache: () => CCFW.jq.toggles.each((key, element) => CCFW.allowedIds.push(jQuery(element).data('allowlist'))),
+    manageAll: (allowList, allowed, pressed) => {
+        if (!allowList) {
+            return
+        }
 
-    let totalAllowed = CCFW.jq.toggles.length - 1
+        let totalAllowed = CCFW.jq.toggles.length - 1
 
-    if (allowed !== 'all') {
-        if (pressed) {
-            allowList = allowList.filter(item => item !== 'all')
-            jQuery('#ccfw-all-toggle-off').removeAttr('aria-hidden').show()
-            jQuery('#ccfw-all-toggle-on').attr('aria-hidden', 'true').hide()
-            if (allowList.length === 0) {
-                jQuery('button[data-allowlist="all"]').attr('aria-checked', false)
+        if (allowed !== 'all') {
+            if (pressed) {
+                allowList = allowList.filter(item => item !== 'all')
+                jQuery('#ccfw-all-toggle-off').removeAttr('aria-hidden').show()
+                jQuery('#ccfw-all-toggle-on').attr('aria-hidden', 'true').hide()
+                if (allowList.length === 0) {
+                    jQuery('button[data-allowlist="all"]').attr('aria-checked', false)
+                }
+            }
+
+            if (allowList.length > 0) {
+                jQuery('button[data-allowlist="all"]').attr('aria-checked', true)
+            }
+
+            if (totalAllowed === allowList.length) {
+                if (allowList.indexOf('all') === -1) {
+                    allowList.push('all')
+                }
+                jQuery('#ccfw-all-toggle-on').removeAttr('aria-hidden').show()
+                jQuery('#ccfw-all-toggle-off').attr('aria-hidden', 'true').hide()
+                jQuery('button[data-allowlist="all"]').attr('aria-checked', true)
             }
         }
 
-        if (allowList.length > 0) {
-            jQuery('button[data-allowlist="all"]').attr('aria-checked', true)
-        }
-
-        if (totalAllowed === allowList.length) {
-            if (allowList.indexOf('all') === -1) {
-                allowList.push('all')
-            }
-            jQuery('#ccfw-all-toggle-on').removeAttr('aria-hidden').show()
-            jQuery('#ccfw-all-toggle-off').attr('aria-hidden', 'true').hide()
-            jQuery('button[data-allowlist="all"]').attr('aria-checked', true)
-        }
-    }
-
-    return allowList
+        return allowList
     },
     patch: {
         popup: {
@@ -169,7 +167,7 @@ manageAll: (allowList, allowed, pressed) => {
                     button.attr({
                         id: 'cookie-save-preferences-top',
                         class: 'ccfw-banner__button',
-                        disabled: 'disabled',
+                        disabled: 'disabled'
                     }).text('Save')
 
                 CCFW.jq.button.save_preferences.find('button').
@@ -178,10 +176,10 @@ manageAll: (allowList, allowed, pressed) => {
                 jQuery(CCFW.jq.toggles).
                 on('click', () => jQuery('#cookie-save-preferences-top').
                 removeAttr('disabled'))
-                },
-            },
-        },
-    },
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -264,9 +262,7 @@ const toggle = function (e) {
             allowList.push(allowed)
         }
         jQuery('#ccfw-' + allowed + '-toggle-on').removeAttr('aria-hidden').show()
-        jQuery('#ccfw-' + allowed + '-toggle-off').
-        attr('aria-hidden', 'true').
-        hide()
+        jQuery('#ccfw-' + allowed + '-toggle-off'). attr('aria-hidden', 'true'). hide()
     }
 
     allowList = CCFW.manageAll(allowList, allowed, pressed)

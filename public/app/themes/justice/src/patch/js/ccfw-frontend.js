@@ -90,7 +90,7 @@ import { CCFW } from './ccfw-gtm'
                         $('#ccfw-' + allowed + '-toggle-on').attr('aria-hidden', 'true').hide()
                     }
                 })
-            },
+            }
         }
 
         /**
