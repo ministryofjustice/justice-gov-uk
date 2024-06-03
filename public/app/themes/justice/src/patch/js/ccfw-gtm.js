@@ -20,7 +20,7 @@ const CCFW = {
     jq: {
         toggles: jQuery('.ccfw-banner__toggle-slider'),
         button: {
-            save_preferences: jQuery('.ccfw-banner__save-preferences'),
+            save_preferences: jQuery('.ccfw-banner__save-preferences')
         }
     },
     storage: {
@@ -208,7 +208,7 @@ const init = () => {
         allowedList = allowedList.concat(ccfwTriggers, ccfwVariables)
 
         window.dataLayer.push({
-            'gtm.allowlist': allowedList,
+            'gtm.allowlist': allowedList
         });
 
         // Drop GTM code
