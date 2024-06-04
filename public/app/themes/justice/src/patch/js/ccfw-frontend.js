@@ -20,7 +20,6 @@ import { CCFW } from './ccfw-gtm'
         return false
     }
 
-
     /**
      *  Define handlers for when the html/DOM is ready.
      */
