@@ -104,17 +104,18 @@ const CCFW = {
         }
 
         CCFW.jq.toggles.each(function (key, element) {
-            let allowed = jQuery(element).data('allowlist')
+            const toggle = jQuery(element)
+            let allowed = toggle.data('allowlist')
 
             if (remove) {
-                jQuery(element).attr('aria-checked', false)
+                toggle.attr('aria-checked', false)
                 jQuery('#ccfw-' + allowed + '-toggle-off').removeAttr('aria-hidden').show()
                 jQuery('#ccfw-' + allowed + '-toggle-on').attr('aria-hidden', 'true').hide()
             } else {
                 if (allowList.indexOf(allowed) === -1) {
                     allowList.push(allowed)
                 }
-                jQuery(element).attr('aria-checked', true)
+                toggle.attr('aria-checked', true)
                 jQuery('#ccfw-' + allowed + '-toggle-on'). removeAttr('aria-hidden').show()
                 jQuery('#ccfw-' + allowed + '-toggle-off'). attr('aria-hidden', 'true').hide()
             }
