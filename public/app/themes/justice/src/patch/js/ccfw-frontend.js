@@ -1,19 +1,29 @@
+import { Storage } from './ccfw-storage'
 import { CCFW } from './ccfw-gtm'
 
 (function ($) {
     'use strict'
 
-  /**
-   * Some spiders and webcrawlers are causing errors in Sentry because they are not loading jQuery
-   * In a nutshell, if jQuery isn't available here, we cannot run.
-   */
+    /**
+     * Some spiders and webcrawlers are causing errors in Sentry because they are not loading jQuery
+     * In a nutshell, if jQuery isn't available here, we cannot run.
+     */
     if (typeof $ === undefined) {
-        return
+        return false
     }
 
-  /**
-   *  Define handlers for when the html/DOM is ready.
-   * */
+    /**
+     * We cannot run if we don't have a storage object
+     * Run a test to check the Storage engine can run
+     */
+    if (Object.hasOwn(Storage, 'disabled')) {
+        return false
+    }
+
+
+    /**
+     *  Define handlers for when the html/DOM is ready.
+     */
     $(function ($) {
         // This is used so much make sure all modules use it to save calls to DOM
         const cacheMainElements = {
