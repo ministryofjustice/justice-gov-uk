@@ -13,10 +13,10 @@ import { CCFW } from './ccfw-gtm'
     }
 
     /**
-     * We cannot run if we don't have a storage object
-     * Run a test to check the Storage engine
+     * We cannot run if Storage.disabled is set.
+     * Run a test to check the Storage engine, and return early if disabled.
      */
-    if (Object.hasOwn(Storage, 'disabled')) {
+    if (Storage.hasOwnProperty('disabled')){
         return false
     }
 
