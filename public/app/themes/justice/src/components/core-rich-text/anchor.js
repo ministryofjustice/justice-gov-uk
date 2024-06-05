@@ -7,8 +7,13 @@
 import { __ } from "@wordpress/i18n";
 import { RichTextToolbarButton } from "@wordpress/block-editor";
 import { Popover, TextControl } from "@wordpress/components";
-import { Fragment, useState } from "@wordpress/element";
-import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
+import { Fragment, useEffect, useState } from "@wordpress/element";
+import {
+  applyFormat,
+  toggleFormat,
+  useAnchor,
+  useAnchorRef,
+} from "@wordpress/rich-text";
 import { TfiAnchor } from "react-icons/tfi";
 
 const name = "moj/anchor";
@@ -24,30 +29,64 @@ export const anchor = {
   edit({ contentRef, isActive, value, onChange }) {
     const { activeFormats } = value;
 
-    const getActiveAttrs = () => {
-      const [format] = activeFormats.filter(
-        (format) => name === format["type"],
-      );
+    // const getActiveAttrs = () => {
+    //   const [format] = activeFormats.filter(
+    //     (format) => name === format["type"],
+    //   );
 
-      if (!format) {
-        return {};
-      }
+    //   if (!format) {
+    //     return {};
+    //   }
 
-      const { attributes, unregisteredAttributes } = format;
+    //   const { attributes, unregisteredAttributes } = format;
 
-      return Object.keys(attributes).length
-        ? attributes
-        : unregisteredAttributes || {};
-    };
+    //   return Object.keys(attributes).length
+    //     ? attributes
+    //     : unregisteredAttributes || {};
+    // };
 
     // State to show popover.
     const [showPopover, setShowPopover] = useState(false);
 
-    const [anchorName, setAnchorName] = useState(getActiveAttrs().name || "");
+    const [anchorName, setAnchorName] = useState(false);
 
-    const popoverAnchor = useAnchor({
-      editableContentElement: contentRef.current,
-    });
+    // Update the anchor name when the block is selected.
+    useEffect(() => {
+      setAnchorName(getActiveAttrs().name || "");
+    }, [isActive]);
+
+    // const popoverAnchor = useAnchor({
+    //   editableContentElement: contentRef.current,
+    // });
+
+    const anchorRef = useAnchorRef({ ref: contentRef, value });
+
+    const getActiveAttrs = () => {
+      const formats = activeFormats.filter((format) => name === format.type);
+
+      if (formats.length > 0) {
+        const format = formats[0];
+        const { attributes, unregisteredAttributes } = format;
+
+        let appliedAttributes = unregisteredAttributes;
+
+        if (attributes && attributes.length) {
+          appliedAttributes = attributes;
+        }
+
+        // If we have no attributes, use the active colour.
+        if (!appliedAttributes) {
+          if (anchorName?.length) {
+            return { name: anchorName };
+          }
+          return {};
+        }
+
+        return appliedAttributes;
+      }
+
+      return {};
+    };
 
     const textControl = {
       label: "HTML Anchor",
@@ -95,7 +134,8 @@ export const anchor = {
         />
         {showPopover && (
           <Popover
-            anchor={popoverAnchor}
+            anchor={anchorRef}
+            // anchor={popoverAnchor}
             className="moj-anchor__popover"
             onClose={() => {
               commitAnchorState();
