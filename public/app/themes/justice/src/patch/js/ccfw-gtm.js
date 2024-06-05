@@ -189,15 +189,11 @@ const CCFW = {
  */
 const init = () => {
     /**
-     * We cannot run if we don't have a storage object
-     * Run a test to check the Storage engine
-     * 
-     * Checks to see if the Storage object has a property of disabled,
-     * and that it's truthy. To make sure we don't throw an error if Storage
-     * is not defined, we use the optional chaining operator '?'.
+     * We cannot run if Storage.disabled is set.
+     * Run a test to check the Storage engine, and return early if disabled.
      */
-    if (Storage?.disabled) {
-        return false;
+    if (Storage.hasOwnProperty('disabled')){
+        return false
     }
 
     if (CCFW.isValidID()) {
