@@ -189,8 +189,9 @@ COPY deploy/config/server.conf /etc/nginx/conf.d/default.conf
 WORKDIR /var/www/html
 
 # WordPress view bootstrapper
-COPY public/index.php                      public/index.php
-COPY public/app/themes/justice/error-pages public/app/themes/justice/error-pages/
+COPY public/index.php                         public/index.php
+COPY public/app/themes/justice/error-pages    public/app/themes/justice/error-pages/
+COPY public/app/themes/justice/screenshot.png public/app/themes/justice/screenshot.png
 
 
 # Only take what Nginx needs (current configuration)

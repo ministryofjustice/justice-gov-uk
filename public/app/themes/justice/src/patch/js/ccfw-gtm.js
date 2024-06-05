@@ -188,6 +188,14 @@ const CCFW = {
  * @returns {boolean}
  */
 const init = () => {
+    /**
+     * We cannot run if we don't have a storage object
+     * Run a test to check the Storage engine
+     */
+    if (Object.hasOwn(Storage, 'disabled')) {
+        return false;
+    }
+
     if (CCFW.isValidID()) {
         // check we have a dataLayer
         if (!window.dataLayer) {
