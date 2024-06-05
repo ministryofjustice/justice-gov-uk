@@ -1,4 +1,4 @@
-FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
+FROM ministryofjustice/wordpress-base-fpm:0.0.5 AS base-fpm
 
 # Make the Nginx user available in this container
 RUN addgroup -g 101 -S nginx; adduser -u 101 -S -D -G nginx nginx
@@ -21,7 +21,7 @@ WORKDIR /var/www/html
 
 ###
 
-FROM nginx:1.26.0-alpine as nginx-module-builder
+FROM nginx:1.26-alpine as nginx-module-builder
 
 SHELL ["/bin/ash", "-exo", "pipefail", "-c"]
 
