@@ -5,66 +5,63 @@
  * we disable storage all together.
  */
 
-/**
- * Storage Object
- * A declared default object to identify if localStorage or Cookies are available
- *
- * If the user browser has storage blocked, this object will remain. The
- * application uses this as an indicator that it cannot proceed.
- *
- * @type {{disabled: boolean}}
- */
-let Storage = {
-    disabled: true
-}
-
 const CCFWStorage = {
-    /**
-     * Both local() and cookie() return booleans
-     * false = invalid
-     * true = valid
-     * First we test for localStorage, if this is false, we test for cookies
-     * If cookie returns true, valid() returns true, otherwise, valid() returns
-     * false.
-     *
-     * @returns {boolean}
-     */
+  /**
+   * Both local() and cookie() return booleans
+   * false = invalid
+   * true = valid
+   * First we test for localStorage, if this is false, we test for cookies
+   * If cookie returns true, valid() returns true, otherwise, valid() returns
+   * false.
+   *
+   * @returns {boolean}
+   */
     valid: () => {
         return CCFWStorage.local() || CCFWStorage.cookie()
     },
     local: () => {
-        const mod = 'ccfw';
+        const mod = 'ccfw'
         try {
-            localStorage.setItem(mod, mod);
-            localStorage.removeItem(mod);
-            return true;
+            localStorage.setItem(mod, mod)
+            localStorage.removeItem(mod)
+            return true
         } catch (e) {
             return false
         }
     },
     cookie: () => {
-        const mod = 'ccfw';
+        const mod = 'ccfw'
         try {
-            // try and set it...
+          // try and set it...
             document.cookie = mod + '=1'
-            // test it exists...
+          // test it exists...
             const cookiesEnabled = document.cookie.indexOf(mod + '=') !== -1
-            // remove it...
+          // remove it...
             document.cookie = mod + '=1; expires=Thu, 01-Jan-1970 00:00:01 GMT'
             return cookiesEnabled
         } catch (e) {
-            // Catch and ignore if cookies are disabled.
+          // Catch and ignore if cookies are disabled.
             return false
         }
-    }
-}
+    },
+    getStorage: () => {
+        if (!CCFWStorage.valid()) {
+            return {
+                disabled: true
+            }
+        }
 
-if (CCFWStorage.valid()) {
-    /**
-     * If localStorage isn't available, we can use cookies
-     */
-    if (!CCFWStorage.local()) {
-        Storage = {
+        /**
+         * If localStorage is available...
+         */
+        if (CCFWStorage.local()) {
+            return window.localStorage
+        }
+
+        /**
+         * If we are here, return the cookie polyfill
+         */
+        return {
             getItem: (key) => {
                 const value = `; ${document.cookie}`
                 const parts = value.split(`; ${key}=`)
@@ -77,7 +74,7 @@ if (CCFWStorage.valid()) {
             },
             setItem: (key, value, set = true) => {
                 const date = new Date(
-                    new Date().setFullYear(new Date().getFullYear() + 1)
+                    new Date().setFullYear(new Date().getFullYear() + 1),
                 ).toUTCString()
                 document.cookie = key + '=' + (value || '') + '; expires=' + (set ? date : '') + '; path=/'
             },
@@ -85,9 +82,12 @@ if (CCFWStorage.valid()) {
                 Storage.setItem(key, null, false)
             }
         }
-    } else {
-        Storage = window.localStorage
     }
 }
+
+/**
+ * Storage Object
+ */
+const Storage = CCFWStorage.getStorage()
 
 export { Storage }
