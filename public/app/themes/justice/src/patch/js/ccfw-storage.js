@@ -4,6 +4,16 @@
  * Falls back to cookies if localStorage is unavailable, otherwise
  * we disable storage all together.
  */
+
+/**
+ * Storage Object
+ * A declared default object to identify if localStorage or Cookies are available
+ *
+ * If the user browser has storage blocked, this object will remain. The
+ * application uses this as an indicator that it cannot proceed.
+ *
+ * @type {{disabled: boolean}}
+ */
 let Storage = {
     disabled: true
 }
@@ -23,7 +33,7 @@ const CCFWStorage = {
         return CCFWStorage.local() || CCFWStorage.cookie()
     },
     local: () => {
-        let mod = 'ccfw';
+        const mod = 'ccfw';
         try {
             localStorage.setItem(mod, mod);
             localStorage.removeItem(mod);
@@ -33,16 +43,17 @@ const CCFWStorage = {
         }
     },
     cookie: () => {
+        const mod = 'ccfw';
         try {
             // try and set it...
-            document.cookie = 'cookie_test=1'
+            document.cookie = mod + '=1'
             // test it exists...
-            const cookiesEnabled = document.cookie.indexOf('cookie_test=') !== -1
+            const cookiesEnabled = document.cookie.indexOf(mod + '=') !== -1
             // remove it...
-            document.cookie = 'cookie_test=1; expires=Thu, 01-Jan-1970 00:00:01 GMT'
+            document.cookie = mod + '=1; expires=Thu, 01-Jan-1970 00:00:01 GMT'
             return cookiesEnabled
         } catch (e) {
-            // Catch and handle the error if cookies are disabled.
+            // Catch and ignore if cookies are disabled.
             return false
         }
     }
