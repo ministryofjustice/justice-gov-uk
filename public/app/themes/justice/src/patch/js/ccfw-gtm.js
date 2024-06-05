@@ -192,7 +192,7 @@ const init = () => {
      * We cannot run if we don't have a storage object
      * Run a test to check the Storage engine
      */
-    if (Object.hasOwn(Storage, 'disabled')) {
+    if (Storage?.disabled) {
         return false;
     }
 
