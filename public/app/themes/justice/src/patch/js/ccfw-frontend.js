@@ -15,6 +15,10 @@ import { CCFW } from './ccfw-gtm'
     /**
      * We cannot run if we don't have a storage object
      * Run a test to check the Storage engine
+     * 
+     * Checks to see if the Storage object has a property of disabled,
+     * and that it's truthy. To make sure we don't throw an error if Storage
+     * is not defined, we use the optional chaining operator '?'.
      */
     if (Storage?.disabled) {
         return false
