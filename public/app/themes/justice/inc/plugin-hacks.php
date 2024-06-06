@@ -8,7 +8,7 @@ add_action('wp_enqueue_scripts', function () {
         'ccfw-script-frontend',
         get_template_directory_uri() . '/dist/patch/js/ccfw-frontend.js',
         ['jquery'],
-        1.1,
+        1.2,
         true
     );
 
@@ -16,7 +16,7 @@ add_action('wp_enqueue_scripts', function () {
         'ccfw-script',
         get_template_directory_uri() . '/dist/patch/js/ccfw-cookie-manage.js',
         ['jquery'],
-        1.1,
+        1.2,
         true
     );
 });
