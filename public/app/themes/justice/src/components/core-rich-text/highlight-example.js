@@ -4,6 +4,9 @@
  * Highlighter with a colour selector popover.
  */
 
+// React Imports.
+import PropTypes from "prop-types";
+
 // Import WordPress Components.
 import {
   ColorPalette,
@@ -20,6 +23,9 @@ import {
   useAnchorRef,
 } from "@wordpress/rich-text";
 
+// Import Styles.
+// import '../style.scss';
+
 const name = "wholesome/highlighter";
 const cssClass = "wholesome-highlight";
 
@@ -30,8 +36,9 @@ const HighlighterButton = (props) => {
   // Remove deprecated anchorRef.
   const anchorRef = useAnchorRef({ ref: contentRef, value });
   // Use the new popoverAnchor. https://stackoverflow.com/a/77746915/6671505
-  // const [popoverAnchor, setPopoverAnchor] = useState(contentRef.current);
+  // const [popoverAnchor, setPopoverAnchor ] = useState(contentRef.current);
 
+  /* eslint-disable max-len */
   // Custom Icon SVG.
   const highlighterIcon = (
     <svg
@@ -55,6 +62,7 @@ const HighlighterButton = (props) => {
       />
     </svg>
   );
+  /* eslint-enable max-len */
 
   // State to show popover.
   const [showPopover, setShowPopover] = useState(false);
@@ -73,42 +81,44 @@ const HighlighterButton = (props) => {
 
   // Function to get active colour from format.
   const getActiveColor = () => {
-    const formats = activeFormats.filter((format) => name === format["type"]);
+    const formats = activeFormats.filter((format) => name === format.type);
 
     if (formats.length > 0) {
       const format = formats[0];
       const { attributes, unregisteredAttributes } = format;
 
-      let atts = unregisteredAttributes;
+      let appliedAttributes = unregisteredAttributes;
 
       if (attributes && attributes.length) {
-        atts = attributes;
+        appliedAttributes = attributes;
       }
 
       // If we have no attributes, use the active colour.
-      if (!atts) {
+      if (!appliedAttributes) {
         if (activeColor) {
           return { backgroundColor: activeColor };
         }
-        return;
+        return {};
       }
 
-      if (atts.hasOwnProperty("class")) {
+      if (Object.prototype.hasOwnProperty.call(appliedAttributes, "class")) {
         // If the format has set a colour via the class.
-        const parts = atts.class.split("--");
+        const parts = appliedAttributes.class.split("--");
         const colorName = parts[parts.length - 1];
         const selectedColor = colors.filter(
           (item) => colorName === item.name.toLowerCase(),
         )[0];
         return { backgroundColor: selectedColor.color };
-      } else if (atts.hasOwnProperty("style")) {
+      }
+      if (Object.prototype.hasOwnProperty.call(appliedAttributes, "style")) {
         // If the format has set a colour via an inline style.
-        const { style } = atts;
+        const { style } = appliedAttributes;
         const parts = style.split(": ");
         const selectedColor = parts[parts.length - 1].replace(";", "");
         return { backgroundColor: selectedColor };
       }
     }
+    return {};
   };
 
   // Note that we set a custom icon that has a highlighter colour overlay.
@@ -129,11 +139,14 @@ const HighlighterButton = (props) => {
           </>
         }
         key={isActive ? "text-color" : "text-color-not-active"}
-        name={isActive ? "text-color" : undefined}
+        // Setting this to "text-color" means the button doesn't show, so there's no way to clear highlighting.
+        // name={isActive ? "text-color" : undefined}
         onClick={() => {
           setShowPopover(true);
         }}
         title={__("A Highlight", "wholesome-highlighter")}
+        // Optional
+        isActive={isActive}
       />
       {showPopover && (
         <URLPopover
@@ -186,3 +199,13 @@ registerFormatType(name, {
   tagName: "mark",
   title: __("A Highlight", "wholesome-highlighter"),
 });
+
+// Component Typechecking.
+HighlighterButton.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  contentRef: PropTypes.shape({}).isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.shape({
+    activeFormats: PropTypes.arrayOf(PropTypes.shape({})),
+  }).isRequired,
+};
