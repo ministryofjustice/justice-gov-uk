@@ -16,6 +16,8 @@ import {
 } from "@wordpress/rich-text";
 import { TfiAnchor } from "react-icons/tfi";
 
+// TODO - on domReady detect any anchors and adjust the formatting to moj-anchor.
+
 const name = "moj/anchor";
 
 export const anchor = {
