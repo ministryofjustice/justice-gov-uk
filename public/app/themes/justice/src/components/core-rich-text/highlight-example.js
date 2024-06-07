@@ -85,7 +85,7 @@ const HighlighterButton = (props) => {
 
       let appliedAttributes = unregisteredAttributes;
 
-      if (attributes && attributes.length) {
+      if (attributes && Object.keys(attributes).length) {
         appliedAttributes = attributes;
       }
 
@@ -182,12 +182,6 @@ const HighlighterButton = (props) => {
   );
 };
 
-const settings = {
-  className: cssClass,
-  edit: HighlighterButton,
-  tagName: "mark",
-  title: __("A Highlight", "wholesome-highlighter"),
-};
 
 const InlineUI = ({ onChange, colors, onClose, contentRef }) => {
   // It's annoying that settings is required here for useAnchor to work.
@@ -207,6 +201,17 @@ const InlineUI = ({ onChange, colors, onClose, contentRef }) => {
     </URLPopover>
   );
 };
+
+
+// Define the Highlighter Format settings, it's used in the registerFormatType function and InlineUI component.
+const settings = {
+  className: cssClass,
+  edit: HighlighterButton,
+  tagName: "mark",
+  title: __("A Highlight", "wholesome-highlighter"),
+};
+
+console.log('hi3');
 
 // Register the Format.
 registerFormatType(name, settings);
