@@ -203,18 +203,21 @@ const InlineUI = ({ onChange, colors, onClose, contentRef }) => {
 };
 
 
-// Define the Highlighter Format settings, it's used in the registerFormatType function and InlineUI component.
+/**
+ * Define the Highlighter Format settings, it's used in the registerFormatType function and InlineUI component.
+ * 
+ * @typedef {import('@wordpress/rich-text/src/register-format-type').WPFormat } WPFormat
+ * @type {WPFormat}
+ */
 const settings = {
+  name,
   className: cssClass,
   edit: HighlighterButton,
   tagName: "mark",
   title: __("A Highlight", "wholesome-highlighter"),
 };
 
-console.log('hi3');
-
-// Register the Format.
-registerFormatType(name, settings);
+export default settings
 
 // Component Typechecking.
 HighlighterButton.propTypes = {

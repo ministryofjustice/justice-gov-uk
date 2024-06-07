@@ -8,12 +8,9 @@ import { __ } from "@wordpress/i18n";
 import { RichTextToolbarButton } from "@wordpress/block-editor";
 import { Popover, TextControl } from "@wordpress/components";
 import { Fragment, useEffect, useState } from "@wordpress/element";
-import {
-  applyFormat,
-  toggleFormat,
-  useAnchor,
-} from "@wordpress/rich-text";
+import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
 import { TfiAnchor } from "react-icons/tfi";
+
 
 // TODO - on domReady detect any anchors and adjust the formatting to moj-anchor.
 
@@ -24,39 +21,32 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
 
   // State to show popover.
   const [showPopover, setShowPopover] = useState(false);
-  const [activeAnchorName, setActiveAnchorName] = useState(false);
+  const [activeAnchorName, setActiveAnchorName] = useState('');
 
   const getActiveAttrs = () => {
     const formats = activeFormats.filter((format) => name === format.type);
 
-    if (formats.length > 0) {
-      const format = formats[0];
-      const { attributes, unregisteredAttributes } = format;
+    if (!formats.length) {
+      return {};
+    }
 
-      let appliedAttributes = unregisteredAttributes;
-      
-      if (attributes && Object.keys(attributes).length) {
-        appliedAttributes = attributes;
-      }
+    const { attributes, unregisteredAttributes } = formats[0];
 
-      // If we have no attributes, use the active colour.
-      if (!appliedAttributes) {
-        if (activeAnchorName?.length) {
-          return { name: activeAnchorName };
-        }
-        return {};
-      }
+    const appliedAttributes =
+      attributes && Object.keys(attributes).length
+        ? attributes
+        : unregisteredAttributes;
 
+    if (appliedAttributes) {
       return appliedAttributes;
     }
 
-    return {};
+    // If we have no attributes, use the active anchor name from state.
+    return { name: activeAnchorName };
   };
 
-  
-
-  const commitAnchorState = ({newValue}) => {
-    console.log({newValue});
+  const commitAnchorState = ({ newValue }) => {
+    console.log({ newValue });
     setActiveAnchorName(newValue);
     onChange(
       applyFormat(value, {
@@ -82,13 +72,13 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
       />
       {showPopover && (
         <InlineUI
-          onClose={({newValue}) => {
-            commitAnchorState({newValue});
+          onClose={({ newValue }) => {
+            commitAnchorState({ newValue });
             setShowPopover(false);
           }}
-          onSubmit={(e, {newValue}) => {
+          onSubmit={(e, { newValue }) => {
             e.preventDefault();
-            commitAnchorState({newValue});
+            commitAnchorState({ newValue });
             setShowPopover(false);
           }}
           onClear={() => {
@@ -106,8 +96,6 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
 };
 
 const InlineUI = ({ onSubmit, onClear, onClose, contentRef, initialState }) => {
-
-  console.log({initialState})
 
   const [anchorName, setAnchorName] = useState(initialState);
 
@@ -141,9 +129,9 @@ const InlineUI = ({ onSubmit, onClear, onClose, contentRef, initialState }) => {
     <Popover
       anchor={popoverAnchor}
       className="moj-anchor__popover"
-      onClose={() => onClose({newValue: anchorName})}
+      onClose={() => onClose({ newValue: anchorName })}
     >
-      <form onSubmit={(e) => onSubmit(e, {newValue: anchorName})}>
+      <form onSubmit={(e) => onSubmit(e, { newValue: anchorName })}>
         <TextControl
           value={anchorName}
           onChange={setAnchorName}
@@ -164,17 +152,20 @@ const InlineUI = ({ onSubmit, onClear, onClose, contentRef, initialState }) => {
   );
 };
 
+
+
+/**
+ * @typedef {import('@wordpress/rich-text/src/register-format-type').WPFormat } WPFormat
+ * @type {WPFormat}
+ */
+
 const settings = {
+  name,
   title: __("Anchor", "block-options"),
   tagName: "a",
   className: "moj-anchor",
-  attributes: {
-    name: "name",
-  },
   edit: Edit,
-}
-
-export const formatType = {
-  name,
-  ...settings
+  interactive: false,
 };
+
+export default settings

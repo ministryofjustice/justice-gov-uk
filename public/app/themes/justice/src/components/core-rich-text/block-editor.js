@@ -1,9 +1,9 @@
 // // @ts-check
 
 import { registerFormatType } from "@wordpress/rich-text";
-import { formatType as anchor } from "./anchor";
-import { underline } from "./underline";
-import  "./highlight-example";
+import anchor from "./anchor";
+import underline from "./underline";
+import highlightExample from "./highlight-example";
 
 /**
  * Add support to the rich text block.
@@ -12,12 +12,11 @@ import  "./highlight-example";
  */
 
 function registerEditorsKitFormats() {
-  const { name, ...settings } = underline;
-  registerFormatType(name, settings);
-  {
-    const { name, ...settings } = anchor;
+
+  [anchor, highlightExample, underline].forEach(({ name, ...settings }) => {
     registerFormatType(name, settings);
-  }
+  });
+
 }
 
 wp.domReady(registerEditorsKitFormats);
