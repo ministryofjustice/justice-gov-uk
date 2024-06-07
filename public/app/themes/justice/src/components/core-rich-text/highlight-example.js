@@ -20,7 +20,7 @@ import {
   applyFormat,
   registerFormatType,
   toggleFormat,
-  useAnchorRef,
+  useAnchor
 } from "@wordpress/rich-text";
 
 // Import Styles.
@@ -33,10 +33,6 @@ const cssClass = "wholesome-highlight";
 const HighlighterButton = (props) => {
   const { contentRef, isActive, onChange, value } = props;
   const { activeFormats } = value;
-  // Remove deprecated anchorRef.
-  const anchorRef = useAnchorRef({ ref: contentRef, value });
-  // Use the new popoverAnchor. https://stackoverflow.com/a/77746915/6671505
-  // const [popoverAnchor, setPopoverAnchor ] = useState(contentRef.current);
 
   /* eslint-disable max-len */
   // Custom Icon SVG.
@@ -149,56 +145,71 @@ const HighlighterButton = (props) => {
         isActive={isActive}
       />
       {showPopover && (
-        <URLPopover
-          // Remove deprecated anchorRef.
-          anchorRef={anchorRef}
-          // Use the new popoverAnchor.
-          // anchor={popoverAnchor}
-          className="components-inline-color-popover"
-          onClose={() => setShowPopover(false)}
-        >
-          <ColorPalette
-            colors={colors}
-            onChange={(color) => {
-              setShowPopover(false);
-              setActiveColor(color);
-              // Set a colour or apply a class if these are custom colours.
-              if (color) {
-                const selectedColor = colors.filter(
-                  (item) => color === item.color,
-                );
-                const attributes = {};
-                if (selectedColor.length) {
-                  // Colour exists in custom colours, apply a class.
-                  attributes.class = `${cssClass}--${selectedColor[0].name.toLowerCase()}`;
-                } else {
-                  // Colour does not exist, set a background colour.
-                  attributes.style = `background-color: ${color};`;
-                }
-                onChange(
-                  applyFormat(value, {
-                    type: name,
-                    attributes,
-                  }),
-                );
+        <InlineUI
+          value={value}
+          onChange={(color) => {
+            setShowPopover(false);
+            setActiveColor(color);
+            // Set a colour or apply a class if these are custom colours.
+            if (color) {
+              const selectedColor = colors.filter(
+                (item) => color === item.color,
+              );
+              const attributes = {};
+              if (selectedColor.length) {
+                // Colour exists in custom colours, apply a class.
+                attributes.class = `${cssClass}--${selectedColor[0].name.toLowerCase()}`;
               } else {
-                onChange(toggleFormat(value, { type: name })); // Remove Format.
+                // Colour does not exist, set a background colour.
+                attributes.style = `background-color: ${color};`;
               }
-            }}
-          />
-        </URLPopover>
+              onChange(
+                applyFormat(value, {
+                  type: name,
+                  attributes,
+                }),
+              );
+            } else {
+              onChange(toggleFormat(value, { type: name })); // Remove Format.
+            }
+          }}
+          contentRef={contentRef}
+          colors={colors}
+          onClose={() => setShowPopover(false)}
+        />
       )}
     </>
   );
 };
 
-// Register the Format.
-registerFormatType(name, {
+const settings = {
   className: cssClass,
   edit: HighlighterButton,
   tagName: "mark",
   title: __("A Highlight", "wholesome-highlighter"),
-});
+};
+
+const InlineUI = ({ onChange, colors, onClose, contentRef }) => {
+  // It's annoying that settings is required here for useAnchor to work.
+  // It's almost like a cyclic dependency, but it's just spaghetti.
+  const popoverAnchor = useAnchor({
+    editableContentElement: contentRef.current,
+    settings,
+  });
+
+  return (
+    <URLPopover
+      anchor={popoverAnchor}
+      className="components-inline-color-popover"
+      onClose={onClose}
+    >
+      <ColorPalette colors={colors} onChange={onChange} />
+    </URLPopover>
+  );
+};
+
+// Register the Format.
+registerFormatType(name, settings);
 
 // Component Typechecking.
 HighlighterButton.propTypes = {
