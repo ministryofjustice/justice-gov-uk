@@ -7,21 +7,93 @@
 import { __ } from "@wordpress/i18n";
 import { RichTextToolbarButton } from "@wordpress/block-editor";
 import { Popover, TextControl } from "@wordpress/components";
-import { Fragment, useEffect, useState } from "@wordpress/element";
+import { select, subscribe } from "@wordpress/data";
+import { Fragment, useState } from "@wordpress/element";
 import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
 import { TfiAnchor } from "react-icons/tfi";
 
-
-// TODO - on domReady detect any anchors and adjust the formatting to moj-anchor.
-
 const name = "moj/anchor";
+
+/**
+ * A variable to keep track of the current editor mode.
+ * @type {'' | 'visual' | 'text' }
+ */
+
+let editorMode = "";
+
+/**
+ * A helper function that resolves when the visual editor is ready.
+ *
+ * @see https://stackoverflow.com/a/60907141/6671505
+ * @returns {Promise<void>}
+ */
+
+const visualEditorIsReady = () =>
+  new Promise((resolve) => {
+    const unsubscribe = subscribe(() => {
+      if (
+        select("core/editor").isCleanNewPost() ||
+        select("core/block-editor").getBlockCount() > 0
+      ) {
+        unsubscribe();
+        resolve();
+      }
+    });
+  });
+
+/**
+ * Subscribe to the editorMode change.
+ *
+ * When the editorMode changes to "visual", format legacy anchor links. E.g.
+ * - from `<a name="foo" id="foo"></a>` to `<a name="foo" id="foo" class="moj-anchor"> </a>`.
+ * - from `<a name="foo" id="foo">Text</a>` to `<a name="foo" id="foo" class="moj-anchor">Text</a>`.
+ */
+
+subscribe(async () => {
+  // Get the current editorMode
+  const newEditorMode = select("core/edit-post").getEditorMode();
+
+  // Only do something if editorMode has changed.
+  if (newEditorMode === editorMode) {
+    return;
+  }
+
+  // Update the editorMode variable.
+  editorMode = newEditorMode;
+
+  // Only do something if the editorMode is "visual".
+  if (newEditorMode !== "visual") {
+    return;
+  }
+
+  // Wait for the visual editor to be ready.
+  await visualEditorIsReady();
+
+  // Format legacy anchor links.
+  document
+    .querySelectorAll("a[name][id]:not([href]):not([class])")
+    .forEach((a) => {
+      // Add a class to the anchor.
+      a.classList.add(settings.className);
+      // If anchor text is empty, add a space - for compatibility and so the editor can see it.
+      if (a.textContent === "") {
+        a.textContent = " ";
+      }
+    });
+});
+
+/**
+ * The Edit react functional component.
+ *
+ * TODO - sligify inpur
+ */
 
 const Edit = ({ contentRef, isActive, value, onChange }) => {
   const { activeFormats } = value;
 
   // State to show popover.
   const [showPopover, setShowPopover] = useState(false);
-  const [activeAnchorName, setActiveAnchorName] = useState('');
+  const [activeAnchorName, setActiveAnchorName] = useState("");
 
   const getActiveAttrs = () => {
     const formats = activeFormats.filter((format) => name === format.type);
@@ -51,7 +123,7 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
     onChange(
       applyFormat(value, {
         type: name,
-        attributes: { name: newValue },
+        attributes: { name: newValue, id: newValue },
       }),
     );
   };
@@ -71,7 +143,7 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
         placeholder={null}
       />
       {showPopover && (
-        <InlineUI
+        <AnchorUI
           onClose={({ newValue }) => {
             commitAnchorState({ newValue });
             setShowPopover(false);
@@ -81,7 +153,7 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
             commitAnchorState({ newValue });
             setShowPopover(false);
           }}
-          onClear={() => {
+          onClear={(e) => {
             // Remove Format.
             onChange(toggleFormat(value, { type: name }));
             // Hide the popover.
@@ -95,8 +167,23 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
   );
 };
 
-const InlineUI = ({ onSubmit, onClear, onClose, contentRef, initialState }) => {
+/**
+ * The AnchorUI react functional component.
+ *
+ * This component is what is shown as a popover when the anchor button is clicked.
+ * It allows the user to enter and clear an anchor name.
+ *
+ * TODO - sligify input
+ *
+ * @param {Object} props description
+ * @param {any} props.contentRef description
+ * @param {string} props.initialState description
+ * @param {React.MouseEventHandler<HTMLButtonElement>} props.onClear description
+ * @param {Function} props.onClose description
+ * @param {Function} props.onSubmit description
+ */
 
+const AnchorUI = ({ contentRef, initialState, onClear, onClose, onSubmit }) => {
   const [anchorName, setAnchorName] = useState(initialState);
 
   // It's annoying that settings is required here for useAnchor to work.
@@ -152,8 +239,6 @@ const InlineUI = ({ onSubmit, onClear, onClose, contentRef, initialState }) => {
   );
 };
 
-
-
 /**
  * @typedef {import('@wordpress/rich-text/src/register-format-type').WPFormat } WPFormat
  * @type {WPFormat}
@@ -168,4 +253,4 @@ const settings = {
   interactive: false,
 };
 
-export default settings
+export default settings;
