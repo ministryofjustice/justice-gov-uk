@@ -19,9 +19,6 @@ function updateBlockSettings(settings, name) {
       break;
     case 'simple-definition-list-blocks/details':
       settings.title = 'Details';
-      console.log(settings.attributes.content.selector);
-
-      // settings.attributes.content.selector = 'x';
       break;
   }
 

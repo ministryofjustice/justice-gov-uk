@@ -9,15 +9,28 @@ import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
 import { cleanForSlug } from "@wordpress/url";
 import { TfiAnchor } from "react-icons/tfi";
 
+// TODO - button on RHS.
+
 /**
- * Adds support for anchor destiantions to rich-text content in the block editor.
- * 
+ * This file adds support for anchor destiantions to rich-text content in the block editor.
+ *
  * Import type definitions for JSDoc.
  * @typedef {import('@wordpress/rich-text').RichTextValue} RichTextValue
  * @typedef {import('@wordpress/rich-text/build-types/register-format-type').WPFormat } WPFormat
  */
 
-const name = "moj/anchor";
+/**
+ * The settings, without the edit function, that's added later.
+ * @type {Omit<WPFormat, 'edit'>}
+ */
+
+const settings = {
+  name: "moj/anchor",
+  className: "moj-anchor",
+  interactive: false,
+  tagName: "a",
+  title: __("Anchor", "block-options"),
+};
 
 /**
  * The textControl props, language for the Edit > AnchorUI > TextControl component.
@@ -77,7 +90,7 @@ let editorMode;
  * When the editorMode changes to "visual", format legacy anchor links. E.g.
  * - from `<a name="foo" id="foo"></a>` to `<a name="foo" id="foo" class="moj-anchor"> </a>`.
  * - from `<a name="foo" id="foo">Text</a>` to `<a name="foo" id="foo" class="moj-anchor">Text</a>`.
- * 
+ *
  * @returns {Promise<void>}
  */
 
@@ -134,17 +147,25 @@ subscribe(async () => {
 const Edit = ({ contentRef, isActive, value, onChange }) => {
   // State to show popover.
   const [showPopover, setShowPopover] = useState(false);
-  const [activeAnchorName, setActiveAnchorName] = useState("");
+
+  /**
+   * A helper function to get the active attributes.
+   *
+   * It will check the value from props and fallback to an empty object.
+   *
+   * @returns {{id: string, name: string}?}
+   */
 
   const getActiveAttrs = () => {
     const formats = value.activeFormats.filter(
-      (format) => name === format.type,
+      (format) => settings.name === format.type,
     );
 
     if (!formats.length) {
-      return {};
+      return { id: "", name: "" };
     }
 
+    // Check two properties, and prefer attributes over unregisteredAttributes.
     const { attributes, unregisteredAttributes } = formats[0];
 
     const appliedAttributes =
@@ -152,29 +173,30 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
         ? attributes
         : unregisteredAttributes;
 
-    if (appliedAttributes) {
-      return appliedAttributes;
-    }
-
-    // If we have no attributes, use the active anchor name from state.
-    return { name: activeAnchorName };
+    return appliedAttributes || { id: "", name: "" };
   };
 
-  const commitAnchorState = ({ newValue }) => {
-    const cleanValue = cleanForSlug(newValue);
+  /**
+   * A helper function to validate and apply a new id value.
+   *
+   * @param {string} newId the new value to validate and apply.
+   * @returns {void}
+   */
 
-    if (cleanValue !== newValue) {
+  const applyAttributes = (newId) => {
+    const cleanId = cleanForSlug(newId);
+
+    if (cleanId !== newId) {
       alert(
-        `Anchor name "${newValue}" is not a valid anchor name. It will be changed to "${cleanValue}".`,
+        `Anchor name "${newId}" is not a valid anchor name. It will be changed to "${cleanId}".`,
       );
     }
 
-    setActiveAnchorName(cleanValue);
-
     onChange(
       applyFormat(value, {
-        type: name,
-        attributes: { name: cleanValue, id: cleanValue },
+        type: settings.name,
+        // @ts-ignore
+        attributes: { id: cleanId, name: cleanId },
       }),
     );
   };
@@ -184,29 +206,28 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
       <RichTextToolbarButton
         // Use padding to correct the icon size.
         icon={(props) => <TfiAnchor {...props} style={{ padding: "0.2em" }} />}
+        isActive={isActive}
         title={__("Anchor", "block-options")}
         onClick={() => {
           setShowPopover(true);
         }}
-        isActive={isActive}
       />
       {showPopover && (
         <AnchorUI
           contentRef={contentRef}
-          initialState={getActiveAttrs().name || ""}
-          onClose={({ newValue }) => {
-            commitAnchorState({ newValue });
+          initialState={getActiveAttrs()?.id || ""}
+          onClose={({ newId }) => {
+            applyAttributes(newId);
             setShowPopover(false);
           }}
-          onSubmit={(e, { newValue }) => {
+          onSubmit={(e, { newId }) => {
             e.preventDefault();
-            commitAnchorState({ newValue });
+            applyAttributes(newId);
             setShowPopover(false);
           }}
           onClear={() => {
             // Remove Format.
-            onChange(toggleFormat(value, { type: name }));
-            // Hide the popover.
+            onChange(toggleFormat(value, { type: settings.name }));
             setShowPopover(false);
           }}
         />
@@ -220,7 +241,7 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
  *
  * This component is shown as a popover when the anchor button is clicked.
  * It allows the user to enter and clear an anchor name.
- * 
+ *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-rich-text/#useanchor
  * @see https://developer.wordpress.org/block-editor/reference-guides/components/popover/
  * @see https://developer.wordpress.org/block-editor/reference-guides/components/text-control/
@@ -235,25 +256,25 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
  */
 
 const AnchorUI = ({ contentRef, initialState, onClear, onClose, onSubmit }) => {
-  const [anchorName, setAnchorName] = useState(initialState);
+  const [anchorId, setAnchorId] = useState(initialState);
 
   // It's annoying that settings is required here for useAnchor to work.
   // It's almost like a cyclic dependency, but it's just spaghetti.
   const anchor = useAnchor({
     editableContentElement: contentRef.current,
-    settings,
+    settings: settingsWithEdit,
   });
 
   return (
     <Popover
       anchor={anchor}
       className={`${settings.className}__popover`}
-      onClose={() => onClose({ newValue: anchorName })}
+      onClose={() => onClose({ newId: anchorId })}
     >
-      <form onSubmit={(e) => onSubmit(e, { newValue: anchorName })}>
+      <form onSubmit={(e) => onSubmit(e, { newId: anchorId })}>
         <TextControl
-          value={anchorName}
-          onChange={setAnchorName}
+          value={anchorId}
+          onChange={setAnchorId}
           {...textControlProps}
         />
       </form>
@@ -272,16 +293,10 @@ const AnchorUI = ({ contentRef, initialState, onClear, onClose, onSubmit }) => {
 };
 
 /**
+ * Add the Edit function to the settings object.
  * @type {WPFormat}
  */
 
-const settings = {
-  name,
-  className: "moj-anchor",
-  edit: Edit,
-  interactive: false,
-  tagName: "a",
-  title: __("Anchor", "block-options"),
-};
+const settingsWithEdit = { ...settings, edit: Edit };
 
-export default settings;
+export default settingsWithEdit;
