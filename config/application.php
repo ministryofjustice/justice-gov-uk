@@ -116,6 +116,14 @@ Config::define('DISALLOW_FILE_EDIT', true);
 // Disable plugin and theme updates and installation from the admin
 Config::define('DISALLOW_FILE_MODS', true);
 
+// Disable php script concatenation at runtime - we serve WP assets via nginx
+Config::define('CONCATENATE_SCRIPTS', false);
+
+// For completeness, disable css and script compression at runtime
+// These should be irrelevant because CONCATENATE_SCRIPTS is false
+Config::define('COMPRESS_CSS', false);
+Config::define('COMPRESS_SCRIPTS', false);
+
 // Limit the number of post revisions
 Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 
