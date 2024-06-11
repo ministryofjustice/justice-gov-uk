@@ -192,7 +192,7 @@ export default function nselect(html)
         })
 
         _select.on('change', function () {
-            const new_text = jQuery(this).children('option:selected').text()
+            const new_text = jQuery(this).children('option:selected').html()
 
             if (new_text.toLowerCase() !== 'all') {
                 _nselect_current.addClass('selected')
