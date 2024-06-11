@@ -14,6 +14,7 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
 }
 
 require_once 'inc/admin.php';
+require_once 'inc/admin-branding.php';
 require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/commands.php';
@@ -46,6 +47,7 @@ if (getenv('WP_ENV') === 'development') {
 }
 
 new Justice\Admin();
+new Justice\AdminBranding();
 new Justice\Commands();
 new Justice\Comments();
 new Justice\Content();
