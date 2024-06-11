@@ -8,7 +8,7 @@ export default function nselect(html)
 {
     let offset = 0
 
-    if (typeof (html) == 'undefined' || html.length === 0) {
+    if (typeof html == 'undefined' || html.length === 0) {
         html = jQuery('body')
     } else {
         offset = jQuery('[id^="nselect"]').length
@@ -34,6 +34,7 @@ export default function nselect(html)
         const _nselect_current = jQuery(nselect + ' .current')
 
         let selected_val = ''
+        let selected_class = ''
         _select.children('option').each(function (j) {
             const _this = jQuery(this)
 
@@ -52,7 +53,11 @@ export default function nselect(html)
             selected_val = jQuery(nselect + ' ul li.option0').html()
         }
 
-        _nselect.children('.current').html(selected_val)
+        if (selected_val.toLowerCase() !== 'all') {
+            selected_class = 'selected'
+        }
+
+        _nselect.children('.current').addClass(selected_class).html(selected_val)
         //events
         _nselect.focus(function () {
             _nselect_ul.show()
@@ -175,7 +180,6 @@ export default function nselect(html)
         })
 
         _nselect_li.on('click', function (e) {
-            console.log(_nselect_current.text())
             const _this = jQuery(this)
             e.stopPropagation()
             _select.val(_this.children('input').val())
@@ -190,7 +194,7 @@ export default function nselect(html)
         _select.on('change', function () {
             const new_text = jQuery(this).children('option:selected').text()
 
-            if (new_text !== 'all') {
+            if (new_text.toLowerCase() !== 'all') {
                 _nselect_current.addClass('selected')
             } else {
                 _nselect_current.removeClass('selected')
