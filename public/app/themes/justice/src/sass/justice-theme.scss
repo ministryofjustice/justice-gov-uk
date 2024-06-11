@@ -337,22 +337,6 @@ ul#adminmenu > li.current > a.current:after {
   background: #0b0c0c;
 }
 
-div#wpadminbar #wp-admin-bar-wp-logo {
-  > .ab-item .ab-icon {
-    &:before {
-      background-image: url('../img/moj-logo-crest-white.svg');
-      background-position: 0 -1px;
-      background-size: cover;
-      color: rgba(0, 0, 0, 0);
-      font-size: 22px;
-    }
-  }
-
-  &.hover > .ab-item .ab-icon {
-    background-position: 0 0;
-  }
-}
-
 /**
 Gutenberg/WordPress logo override
  */
