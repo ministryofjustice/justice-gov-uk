@@ -364,13 +364,13 @@ body.is-fullscreen-mode {
         display: none;
       }
 
-      width: 72px;
+      width: 64px;
 
       &:before {
         background-image: url('../img/moj-logo-crest-white.svg');
         background-size: cover;
-        top: 2px;
-        bottom: 7px;
+        top: 7px;
+        bottom: 8px
       }
     }
   }
