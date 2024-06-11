@@ -10,11 +10,10 @@ import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
 import { cleanForSlug } from "@wordpress/url";
 import { TfiAnchor } from "react-icons/tfi";
 
-
 /**
  * This file adds support for anchor destiantions to rich-text content in the block editor.
- * 
- * In summary, this file does the following: 
+ *
+ * In summary, this file does the following:
  * - adds an anchor button to the toolbar.
  * - shows a popover when the button is clicked.
  * - allows the user to enter and clear an anchor id.
@@ -69,7 +68,7 @@ const textControlProps = {
 
 /**
  * The toggleControl props, language for the Edit > AnchorUI > ToggleControl component.
- * 
+ *
  * @see https://developer.wordpress.org/block-editor/reference-guides/components/toggle-control/
  */
 
@@ -157,9 +156,9 @@ subscribe(async () => {
 
 /**
  * Subscribe to the user's preference for showing anchor icons.
- * 
+ *
  * When the user's preference changes, add or remove a class from the post content element.
- * 
+ *
  * @returns {Promise<void>}
  */
 
@@ -172,6 +171,8 @@ subscribe(async () => {
   if (newShowIcons === showIcons) {
     return;
   }
+
+  showIcons = newShowIcons;
 
   const postContentClassname = "wp-block-post-content";
   const variationClassname = `${postContentClassname}--show-moj-anchor-icons`;
