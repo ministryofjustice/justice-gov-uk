@@ -5,7 +5,6 @@ import domReady from "@wordpress/dom-ready";
 
 import anchor from "./anchor";
 import underline from "./underline";
-import highlightExample from "./highlight-example";
 
 /**
  * Add support to the rich text block.
@@ -16,7 +15,7 @@ import highlightExample from "./highlight-example";
  */
 
 const registerEditorsKitFormats = () => {
-  [anchor, highlightExample, underline].forEach((settings) => {
+  [anchor, underline].forEach((settings) => {
     registerFormatType(settings.name, settings);
   });
 }
