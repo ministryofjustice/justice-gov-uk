@@ -2335,7 +2335,7 @@ background: url('img/select-btn.png') no-repeat right -31px;
     float: left;
     width: 175px !important;
     height: 19px !important;
-    padding: 5px;
+    padding: 7px 1px 4px 10px;
     overflow: hidden;
     color: #9b9b9b;
     border-top: 1px solid #b3b2b2;
@@ -2347,6 +2347,9 @@ background: url('img/select-btn.png') no-repeat right -31px;
     background: -ms-linear-gradient(top, #fefefe 0%, #dfdfdf 100%);
     background: linear-gradient(#fefefe 0%, #dfdfdf 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#dfdfdf', GradientType=0);
+}
+.nselect .current.selected {
+    color: #4e6280;
 }
 
 #content-right .nselect .current, .filter .nselect .current {

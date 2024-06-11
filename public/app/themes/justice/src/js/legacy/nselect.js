@@ -8,21 +8,20 @@ export default function nselect(html)
 {
     let offset = 0
 
-    if (typeof (html) == 'undefined' || html.length === 0) {
+    if (typeof html == 'undefined' || html.length === 0) {
         html = jQuery('body')
     } else {
         offset = jQuery('[id^="nselect"]').length
     }
 
     jQuery(html).find('select').each(function (i) {
-        let _select = jQuery(this)
+        const _select = jQuery(this)
         if (typeof _select.attr('class') != 'undefined' && _select.attr('class').indexOf('no-nselect') > -1) {
             return
         }
 
         const pos = i + offset
         const nselect = '#nselect' + pos
-        const _nselect_current = jQuery(nselect + ' .current')
 
         //hide select
         _select.hide()
@@ -32,8 +31,10 @@ export default function nselect(html)
         // We have DIV and UL elements, declare jQuery objects
         const _nselect = jQuery(nselect)
         const _nselect_ul = jQuery(nselect + ' ul')
+        const _nselect_current = jQuery(nselect + ' .current')
 
         let selected_val = ''
+        let selected_class = ''
         _select.children('option').each(function (j) {
             const _this = jQuery(this)
 
@@ -52,7 +53,11 @@ export default function nselect(html)
             selected_val = jQuery(nselect + ' ul li.option0').html()
         }
 
-        _nselect.children('.current').html(selected_val)
+        if (selected_val.toLowerCase() !== 'all') {
+            selected_class = 'selected'
+        }
+
+        _nselect.children('.current').addClass(selected_class).html(selected_val)
         //events
         _nselect.focus(function () {
             _nselect_ul.show()
@@ -187,7 +192,15 @@ export default function nselect(html)
         })
 
         _select.on('change', function () {
-            _nselect_current.html(jQuery(this).children('option:selected').html())
+            const new_text = jQuery(this).children('option:selected').html()
+
+            if (new_text.toLowerCase() !== 'all') {
+                _nselect_current.addClass('selected')
+            } else {
+                _nselect_current.removeClass('selected')
+            }
+
+            _nselect_current.html(new_text)
         })
 
         //move 'device-only' class
