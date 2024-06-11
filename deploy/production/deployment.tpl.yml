@@ -54,10 +54,10 @@ spec:
               mountPath: /sock
           resources:
             requests:
-              cpu: 500m
+              cpu: 600m
               memory: 500Mi
             limits:
-              cpu: 500m
+              cpu: 1000m
               memory: 500Mi
           securityContext:
             runAsUser: 101

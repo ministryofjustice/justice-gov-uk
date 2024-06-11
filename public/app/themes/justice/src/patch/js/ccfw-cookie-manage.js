@@ -1,29 +1,29 @@
-import { CCFW, ccfwGTM, togglesChange } from './ccfw-gtm'
+import { CCFW, init } from './ccfw-gtm'
 
-const ccfwGtmRunning = ccfwGTM();
+/** start GTM **/
+const gtmIsReady = init();
 
 (function ($) {
-
-    /**
-     * Some spiders and webcrawlers are causing errors in Sentry because they are not loading jQuery
-     * In a nutshell, if jQuery isn't available here, we cannot run.
-     */
+    /** In a nutshell, if jQuery isn't available here, we cannot run. **/
     if (typeof $ === undefined) {
-        return;
+        return
     }
 
-    $(function ($) {
-        if (ccfwGtmRunning) {
-            // cache all available allowlist identifiers
-            $('.ccfw-banner__toggle-slider').each(function (key, element) {
-                CCFW.allowedIds.push($(element).data('allowlist'))
-            });
+    $(function () {
+        if (gtmIsReady) {
+            /** cache available allowlist identifiers and set up listener **/
+            CCFW.cache()
 
-            // set up a listener on each toggle button
-            $('.' + CCFW.selector.toggles).on('click', togglesChange);
+            /** set up toggle listeners **/
+            CCFW.listen.toggles()
 
-            // clearStorage; performs clear if 1 year has past since the user first set their choices.
-            CCFW.clearStorage();
+            /** A button to save cookies at the top **/
+            CCFW.patch.popup.button.save()
+
+            /** house cleaning; check if one year has passed **/
+            CCFW.maybeExpired()
+        } else {
+            console.log('CCFW: GTM was not initialised.')
         }
     })
-})(jQuery);
+})(jQuery)
