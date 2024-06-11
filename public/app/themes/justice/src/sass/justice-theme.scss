@@ -344,7 +344,7 @@ body.is-fullscreen-mode {
   .edit-post-header a,
   .edit-site-navigation-toggle button {
     &.components-button {
-      > svg {
+      > svg, > img {
         display: none;
       }
 
