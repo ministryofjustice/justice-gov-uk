@@ -16,12 +16,17 @@ import {
 
 const name = "moj/underline";
 
-export const underline = {
+/**
+ * @typedef {import('@wordpress/rich-text/src/register-format-type').WPFormat } WPFormat
+ * @type {WPFormat}
+ */
+
+export default {
   name,
   title: __("Underline", "block-options"),
   tagName: "span",
   className: "underline",
-  attributes: null,
+  interactive: false,
   edit({ isActive, value, onChange }) {
     const onToggle = () => {
       onChange(

@@ -17,6 +17,7 @@ class BlockEditor
     public function addHooks()
     {
         add_action('init', [$this, 'registerBlocks']);
+        add_filter('the_content', [$this, 'formatMojAnchor']);
     }
 
     public function registerBlocks()
@@ -85,5 +86,28 @@ class BlockEditor
             '<div class="search wp-block-moj-search">%s</div>',
             $this->templatePartToVariable('template-parts/search/search-bar', null, $args)
         );
+    }
+
+    /**
+     * Format the moj-anchor anchor.
+     *
+     * This is rich text formatting that is added to the block editor via a JS.
+     * In the editor, a single space is used for compatibility, and so that the anchor can be selected.
+     * The space is removed when the content is rendered, so as not to break the layout.
+     *
+     * @param string $content
+     * @return string
+     */
+
+    public function formatMojAnchor($content)
+    {
+
+        // Match all a tags class of moj-anchor and a single space.
+        $pattern = '/(<a[^>]*class="moj-anchor"[^>]*>) (<\/a>)/';
+        // Remove the single space.
+        $replacement = '$1$2';
+        $content = preg_replace($pattern, $replacement, $content);
+
+        return $content;
     }
 }
