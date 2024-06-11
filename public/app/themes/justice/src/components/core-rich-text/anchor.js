@@ -11,7 +11,7 @@ import { cleanForSlug } from "@wordpress/url";
 import { TfiAnchor } from "react-icons/tfi";
 
 /**
- * This file adds support for anchor destiantions to rich-text content in the block editor.
+ * This file adds support for anchor destinations to rich-text content in the block editor.
  *
  * In summary, this file does the following:
  * - adds an anchor button to the toolbar.
