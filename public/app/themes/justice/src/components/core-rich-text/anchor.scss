@@ -1,26 +1,30 @@
 .moj-anchor {
-    // Position relative, so that the icon can be positioned absolutely.
-    position: relative;
-    // Indicate the anchor text. It canbe seen even if it's just a space.
+    // Indicate the anchor text. It can be seen even if it's just a space.
     border-bottom: 1px dotted blue;
-    // Make space for the anchor icon.
-    margin-left: 1em;
 
-    &:before {
-        // An absolutely positioned anchor icon.
-        display: block;
-        position: absolute;
-        // Necessary for pseudo-elements to work.
-        content: '';
-        // Size and position of the icon.
-        top: 0.1em;
-        left: -1em;
-        width: 1em;
-        height: 1em;
-        // The icon itself.
-        background-image: url('../img/icon/anchor.svg');
-        // Don't crop the icon.
-        background-size: contain;
+    // The anchor icon is only shown when the following bem variation class is set.
+    .wp-block-post-content--show-moj-anchor-icons & {
+        // Position relative, so that the icon can be positioned absolutely.
+        position: relative;
+        // Make space for the anchor icon.
+        margin-left: 1em;
+
+        &:before {
+            // An absolutely positioned anchor icon.
+            display: block;
+            position: absolute;
+            // Necessary for pseudo-elements to work.
+            content: "";
+            // Size and position of the icon.
+            top: 0.1em;
+            left: -1em;
+            width: 1em;
+            height: 1em;
+            // The icon itself.
+            background-image: url("../img/icon/anchor.svg");
+            // Don't crop the icon.
+            background-size: contain;
+        }
     }
 
     &__popover {
@@ -28,10 +32,10 @@
             min-width: 300px;
             padding: 1em;
         }
+
         &__row--button {
             display: flex;
             justify-content: flex-end;
         }
-
     }
 }

@@ -2,17 +2,27 @@
 
 import { __ } from "@wordpress/i18n";
 import { RichTextToolbarButton } from "@wordpress/block-editor";
-import { Popover, TextControl } from "@wordpress/components";
-import { select, subscribe } from "@wordpress/data";
+import { Popover, TextControl, ToggleControl } from "@wordpress/components";
+import { dispatch, select, subscribe, useSelect } from "@wordpress/data";
 import { Fragment, useState } from "@wordpress/element";
+import { store as preferencesStore } from "@wordpress/preferences";
 import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
 import { cleanForSlug } from "@wordpress/url";
 import { TfiAnchor } from "react-icons/tfi";
 
-// TODO - button on RHS.
 
 /**
  * This file adds support for anchor destiantions to rich-text content in the block editor.
+ * 
+ * In summary, this file does the following: 
+ * - adds an anchor button to the toolbar.
+ * - shows a popover when the button is clicked.
+ * - allows the user to enter and clear an anchor id.
+ * - validates and cleans the anchor id.
+ * - saves the anchor id and mirrors the value to the name attribute.
+ * - formats legacy anchor links.
+ * - subscribes to the user's preference for showing anchor icons.
+ * - adds or removes a class from the post content element based on the user's preference.
  *
  * Import type definitions for JSDoc.
  * @typedef {import('@wordpress/rich-text').RichTextValue} RichTextValue
@@ -58,6 +68,17 @@ const textControlProps = {
 };
 
 /**
+ * The toggleControl props, language for the Edit > AnchorUI > ToggleControl component.
+ * 
+ * @see https://developer.wordpress.org/block-editor/reference-guides/components/toggle-control/
+ */
+
+const toggleControlProps = {
+  label: "Show anchor icons",
+  help: "Update my preferences to show anchor icons.",
+};
+
+/**
  * A helper function that resolves when the visual editor is ready.
  *
  * @see https://stackoverflow.com/a/60907141/6671505
@@ -79,10 +100,17 @@ const visualEditorIsReady = () =>
 
 /**
  * A variable to keep track of the current editor mode.
- * @type {'visual' | 'text' }
+ * @type {'visual' | 'text'}
  */
 
 let editorMode;
+
+/**
+ * A variable to keep track of the user's preference.
+ * @type {boolean}
+ */
+
+let showIcons;
 
 /**
  * Subscribe to the editorMode change.
@@ -128,13 +156,51 @@ subscribe(async () => {
 });
 
 /**
+ * Subscribe to the user's preference for showing anchor icons.
+ * 
+ * When the user's preference changes, add or remove a class from the post content element.
+ * 
+ * @returns {Promise<void>}
+ */
+
+subscribe(async () => {
+  await visualEditorIsReady();
+
+  // @ts-ignore - due to WP's lack of types/docs.
+  const newShowIcons = select(preferencesStore).get(settings.name, "showIcons");
+
+  if (newShowIcons === showIcons) {
+    return;
+  }
+
+  const postContentClassname = "wp-block-post-content";
+  const variationClassname = `${postContentClassname}--show-moj-anchor-icons`;
+  const postContentElement = document.querySelector(`.${postContentClassname}`);
+
+  if (showIcons) {
+    postContentElement.classList.add(variationClassname);
+  } else {
+    postContentElement.classList.remove(variationClassname);
+  }
+});
+
+/**
+ * Set the user's preference for showing anchor icons to true by default.
+ */
+
+// @ts-ignore - due to WP's lack of types/docs.
+dispatch(preferencesStore).setDefaults(settings.name, {
+  showIcons: true,
+});
+
+/**
  * The Edit react functional component.
  *
  * This component is responsible for:
- * - rendering the anchor button in the toolbar
- * - showing the popover when the button is clicked
- * - handling the atribute and popover state
- * - validating and cleaning the anchor name
+ * - rendering the anchor button in the toolbar.
+ * - showing the popover when the button is clicked.
+ * - handling the atribute and popover state.
+ * - validating and cleaning the anchor name.
  *
  * @param {Object} props the props passed registerFormatType.
  * @param {React.RefObject<HTMLElement>} props.contentRef a reference to the content element.
@@ -147,6 +213,19 @@ subscribe(async () => {
 const Edit = ({ contentRef, isActive, value, onChange }) => {
   // State to show popover.
   const [showPopover, setShowPopover] = useState(false);
+
+  // Get the user's preference for showing anchor icons from local storage.
+  const showIcons = useSelect(
+    // @ts-ignore - due to WP's lack of types/docs.
+    (select) => select(preferencesStore).get(settings.name, "showIcons"),
+    [],
+  );
+
+  // Saves the user's preference for showing anchor icons to local storage.
+  const toggleShowIcons = () => {
+    // @ts-ignore - due to WP's lack of types/docs.
+    dispatch(preferencesStore).toggle(settings.name, "showIcons");
+  };
 
   /**
    * A helper function to get the active attributes.
@@ -195,7 +274,7 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
     onChange(
       applyFormat(value, {
         type: settings.name,
-        // @ts-ignore
+        // @ts-ignore - due to WP's lack of types/docs.
         attributes: { id: cleanId, name: cleanId },
       }),
     );
@@ -230,6 +309,8 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
             onChange(toggleFormat(value, { type: settings.name }));
             setShowPopover(false);
           }}
+          showIcons={showIcons}
+          toggleShowIcons={toggleShowIcons}
         />
       )}
     </Fragment>
@@ -252,10 +333,20 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
  * @param {React.MouseEventHandler<HTMLButtonElement>} props.onClear
  * @param {Function} props.onClose
  * @param {Function} props.onSubmit
+ * @param {boolean} props.showIcons
+ * @param {Function} props.toggleShowIcons
  * @returns {JSX.Element}
  */
 
-const AnchorUI = ({ contentRef, initialState, onClear, onClose, onSubmit }) => {
+const AnchorUI = ({
+  contentRef,
+  initialState,
+  onClear,
+  onClose,
+  onSubmit,
+  showIcons,
+  toggleShowIcons,
+}) => {
   const [anchorId, setAnchorId] = useState(initialState);
 
   // It's annoying that settings is required here for useAnchor to work.
@@ -278,6 +369,15 @@ const AnchorUI = ({ contentRef, initialState, onClear, onClose, onSubmit }) => {
           {...textControlProps}
         />
       </form>
+
+      {/* A toggle that updates the user's preference for showing anchor icons */}
+      <ToggleControl
+        {...toggleControlProps}
+        checked={showIcons}
+        onChange={() => {
+          toggleShowIcons();
+        }}
+      />
 
       <div className={`${settings.className}__popover__row--button`}>
         <button
