@@ -1,4 +1,5 @@
 import { CCFW, init } from './ccfw-gtm'
+import { frontend } from './ccfw-frontend'
 
 /** start GTM **/
 const gtmIsReady = init();
@@ -11,6 +12,7 @@ const gtmIsReady = init();
 
     $(function () {
         if (gtmIsReady) {
+            frontend.init($)
             /** cache available allowlist identifiers and set up listener **/
             CCFW.cache()
 
