@@ -15,14 +15,13 @@ export default function nselect(html)
     }
 
     jQuery(html).find('select').each(function (i) {
-        let _select = jQuery(this)
+        const _select = jQuery(this)
         if (typeof _select.attr('class') != 'undefined' && _select.attr('class').indexOf('no-nselect') > -1) {
             return
         }
 
         const pos = i + offset
         const nselect = '#nselect' + pos
-        const _nselect_current = jQuery(nselect + ' .current')
 
         //hide select
         _select.hide()
@@ -32,6 +31,7 @@ export default function nselect(html)
         // We have DIV and UL elements, declare jQuery objects
         const _nselect = jQuery(nselect)
         const _nselect_ul = jQuery(nselect + ' ul')
+        const _nselect_current = jQuery(nselect + ' .current')
 
         let selected_val = ''
         _select.children('option').each(function (j) {
@@ -175,6 +175,7 @@ export default function nselect(html)
         })
 
         _nselect_li.on('click', function (e) {
+            console.log(_nselect_current.text())
             const _this = jQuery(this)
             e.stopPropagation()
             _select.val(_this.children('input').val())
@@ -187,7 +188,19 @@ export default function nselect(html)
         })
 
         _select.on('change', function () {
-            _nselect_current.html(jQuery(this).children('option:selected').html())
+            const current = _nselect_current.text()
+            const new_text = jQuery(this).children('option:selected').text()
+
+            console.log(current)
+            console.log(new_text)
+
+            if (new_text !== 'all') {
+                _nselect_current.addClass('selected')
+            } else {
+                _nselect_current.removeClass('selected')
+            }
+
+            _nselect_current.html(new_text)
         })
 
         //move 'device-only' class
