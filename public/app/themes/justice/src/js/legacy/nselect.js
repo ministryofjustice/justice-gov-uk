@@ -188,11 +188,7 @@ export default function nselect(html)
         })
 
         _select.on('change', function () {
-            const current = _nselect_current.text()
             const new_text = jQuery(this).children('option:selected').text()
-
-            console.log(current)
-            console.log(new_text)
 
             if (new_text !== 'all') {
                 _nselect_current.addClass('selected')
