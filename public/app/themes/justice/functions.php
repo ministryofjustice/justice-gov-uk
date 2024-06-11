@@ -47,6 +47,7 @@ if (getenv('WP_ENV') === 'development') {
 }
 
 new Justice\Admin();
+new Justice\AdminBranding();
 new Justice\Commands();
 new Justice\Comments();
 new Justice\Content();
