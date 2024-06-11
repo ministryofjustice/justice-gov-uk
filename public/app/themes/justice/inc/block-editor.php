@@ -90,11 +90,11 @@ class BlockEditor
 
     /**
      * Format the moj-anchor anchor.
-     * 
+     *
      * This is rich text formatting that is added to the block editor via a JS.
      * In the editor, a single space is used for compatibility, and so that the anchor can be selected.
      * The space is removed when the content is rendered, so as not to break the layout.
-     * 
+     *
      * @param string $content
      * @return string
      */
