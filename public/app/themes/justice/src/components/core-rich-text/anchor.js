@@ -39,6 +39,11 @@ const settings = {
   interactive: false,
   tagName: "a",
   title: __("Anchor", "block-options"),
+  // @ts-ignore - this is valid according rich-text.js.
+  attributes: {
+    id:  "id",
+    name:  "name",
+  },
 };
 
 /**
@@ -264,11 +269,14 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
    */
 
   const applyAttributes = (newId) => {
-    const cleanId = cleanForSlug(newId);
+    // Utilise JS's decodeURI & encodeURI functions to ensure the newId is a valid url fragment.
+    const dummyUrl = "http://a.com/#";
+    const validUrl = encodeURI(decodeURI(`${dummyUrl}${newId}`));
+    const validId = validUrl.replace(dummyUrl, "");
 
-    if (cleanId !== newId) {
+    if (validId !== newId) {
       alert(
-        `Anchor name "${newId}" is not a valid anchor name. It will be changed to "${cleanId}".`,
+        `Anchor name "${newId}" is not a valid anchor name. It will be changed to "${validId}".`,
       );
     }
 
@@ -276,7 +284,7 @@ const Edit = ({ contentRef, isActive, value, onChange }) => {
       applyFormat(value, {
         type: settings.name,
         // @ts-ignore - due to WP's lack of types/docs.
-        attributes: { id: cleanId, name: cleanId },
+        attributes: { id: validId, name: validId },
       }),
     );
   };
