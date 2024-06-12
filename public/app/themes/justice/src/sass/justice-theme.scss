@@ -341,7 +341,7 @@ ul#adminmenu > li.current > a.current:after {
 Gutenberg/WordPress logo override
  */
 body.is-fullscreen-mode {
-  .edit-post-header a,
+  .edit-post-header a.edit-post-fullscreen-mode-close,
   .edit-site-navigation-toggle button {
     &.components-button {
       > svg, > img {
