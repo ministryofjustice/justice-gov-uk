@@ -179,7 +179,7 @@ subscribe(async () => {
 
   showIcons = newShowIcons;
 
-  const variationClassname = 'show-moj-anchor-icons';
+  const variationClassname = "show-moj-anchor-icons";
 
   if (showIcons) {
     document.body.classList.add(variationClassname);
