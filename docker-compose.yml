@@ -33,6 +33,7 @@ services:
       - ./deploy/config/local/php-fpm.conf:/etc/nginx/php-fpm.conf
       - ./deploy/config/local/server.conf:/etc/nginx/conf.d/default.conf
       - ./deploy/config/nginx.conf:/etc/nginx/nginx.conf
+      - ./deploy/config/redirects.conf:/etc/nginx/redirects.conf
       ### Assets
       - ./public/app/plugins:/var/www/html/public/app/plugins
       - ./public/app/themes/justice/screenshot.png:/var/www/html/public/app/themes/justice/screenshot.png
