@@ -37,7 +37,7 @@ class Theme
 
     /**
      * Disable update notifications for the Justice Theme.
-     * 
+     *
      * The Justice theme shares a name with a published theme at a higher version so Wordpress reports that our theme needs updating.
      * This will prevent the warning from showing.
      *
