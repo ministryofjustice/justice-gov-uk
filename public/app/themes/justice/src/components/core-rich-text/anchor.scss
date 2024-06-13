@@ -3,7 +3,7 @@
     border-bottom: 1px dotted blue;
 
     // The anchor icon is only shown when the following bem variation class is set.
-    .wp-block-post-content--show-moj-anchor-icons & {
+    body.show-moj-anchor-icons & {
         // Position relative, so that the icon can be positioned absolutely.
         position: relative;
         // Make space for the anchor icon.
