@@ -11,7 +11,7 @@ $taxonomies = (new Taxonomies())->getTaxonomiesForHiddenInputs();
 <div class="search-bar">
     <form>
 
-        <label for="searchbox">Search</label>
+        <label for="query">Search</label>
         <input name="s" id="query" type="text" value="<?= get_search_query() ?>" accesskey="q">
         <input class="go-btn" type="submit" value="<?= !empty($args['submit']) ? $args['submit'] : 'Go'; ?>">
 
