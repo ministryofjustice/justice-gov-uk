@@ -41,8 +41,8 @@ const settings = {
   title: __("Anchor", "block-options"),
   // @ts-ignore - this is valid according rich-text.js.
   attributes: {
-    id:  "id",
-    name:  "name",
+    id: "id",
+    name: "name",
   },
 };
 
@@ -179,14 +179,12 @@ subscribe(async () => {
 
   showIcons = newShowIcons;
 
-  const postContentClassname = "wp-block-post-content";
-  const variationClassname = `${postContentClassname}--show-moj-anchor-icons`;
-  const postContentElement = document.querySelector(`.${postContentClassname}`);
+  const variationClassname = 'show-moj-anchor-icons';
 
   if (showIcons) {
-    postContentElement.classList.add(variationClassname);
+    document.body.classList.add(variationClassname);
   } else {
-    postContentElement.classList.remove(variationClassname);
+    document.body.classList.remove(variationClassname);
   }
 });
 
