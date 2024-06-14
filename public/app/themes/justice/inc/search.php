@@ -314,7 +314,7 @@ class Search
 
     /**
      * Remove the User Searches & Admin Searches submenu for non-admins.
-     * 
+     *
      * @return void
      */
 

@@ -64,10 +64,10 @@ class Admin
 
     /**
      * Hide the update and maintenance nags for non-admins.
-     * 
+     *
      * @see https://developer.wordpress.org/reference/functions/update_nag/
      * @see https://developer.wordpress.org/reference/functions/maintenance_nag/
-     * 
+     *
      * @return void
      */
     public function hideNagsForNonAdmins()
