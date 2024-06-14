@@ -44,6 +44,8 @@ class Search
         // Relevanssi - remove columns for non-admins.
         add_filter('manage_page_posts_columns', [$this, 'removeColumns']);
         add_filter('manage_document_posts_columns', [$this, 'removeColumns']);
+
+        add_filter('admin_menu', [$this, 'removeUserSearchesSubMenu'], 999);
     }
 
     /**
@@ -307,5 +309,19 @@ class Search
         }
 
         return $columns;
+    }
+
+    /**
+     * Remove the User Searches & Admin Searches submenu for non-admins.
+     * 
+     * @return void
+     */
+
+    public function removeSearchesSubMenus()
+    {
+        if (!current_user_can('manage_options')) {
+            remove_submenu_page('index.php', 'relevanssi-premium/relevanssi.php');
+            remove_submenu_page('index.php', 'relevanssi_admin_search');
+        }
     }
 }
