@@ -27,6 +27,7 @@ class Admin
         add_action('admin_menu', [$this, 'removeCustomizer'], 999);
         add_filter('rest_page_query', [$this, 'increaseDropdownLimit'], 9, 2);
         add_action('admin_head', [$this, 'hideNagsForNonAdmins'], 1);
+        add_action('wp_before_admin_bar_render', array($this, 'filterAdminBar'));
     }
 
     public static function enqueueStyles(): void
@@ -76,5 +77,42 @@ class Admin
             remove_action('admin_notices', 'update_nag', 3);
             remove_action('admin_notices', 'maintenance_nag', 10);
         }
+    }
+
+    /**
+     * Filter the admin bar to remove unnecessary items and add a link to the documentation.
+     * 
+     * @return void
+     */
+    public function filterAdminBar()
+    {
+        global $wp_admin_bar;
+
+        $all_nodes = $wp_admin_bar->get_nodes();
+
+        $remove_keys = [
+            'about',
+            'contribute',
+            'feedback',
+            'learn',
+            'support-forums',
+            'wporg'
+        ];
+
+        foreach ($all_nodes as $key => $val) {
+            if (in_array($key, $remove_keys)) {
+                $wp_admin_bar->remove_node($key);
+            }
+        }
+
+        // Update the logo link.
+        $logo_node = $wp_admin_bar->get_node('wp-logo');
+        $logo_node->href = '/wp/wp-admin';
+        $wp_admin_bar->add_node($logo_node);
+
+        // Update the link to the documentation.
+        $documentation_node = $wp_admin_bar->get_node('documentation');
+        $documentation_node->href = '/docs';
+        $wp_admin_bar->add_node($documentation_node);
     }
 }
