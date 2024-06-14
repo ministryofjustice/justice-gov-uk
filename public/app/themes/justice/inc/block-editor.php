@@ -18,6 +18,7 @@ class BlockEditor
     {
         add_action('init', [$this, 'registerBlocks']);
         add_filter('the_content', [$this, 'formatMojAnchor']);
+        add_filter('allowed_block_types_all', [$this, 'filterAllowedBlockTypes'], 10, 0);
     }
 
     public function registerBlocks()
@@ -109,5 +110,32 @@ class BlockEditor
         $content = preg_replace($pattern, $replacement, $content);
 
         return $content;
+    }
+
+
+    /**
+     * Filters the list of allowed block types in the block editor.
+     *
+     * This function restricts the available block types to a predefined list.
+     *
+     * @return array The array of allowed block types.
+     */
+    public function filterAllowedBlockTypes()
+    {
+        return  [
+            'core/footnotes',
+            'core/heading',
+            'core/image',
+            'core/list',
+            'core/list-item',
+            'core/paragraph',
+            'core/table',
+            'moj/inline-menu',
+            'moj/search',
+            'moj/to-the-top',
+            'simple-definition-list-blocks/details',
+            'simple-definition-list-blocks/list',
+            'simple-definition-list-blocks/term',
+        ];
     }
 }
