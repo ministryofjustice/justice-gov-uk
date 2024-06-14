@@ -6,7 +6,8 @@
 // Hide the upsell menu link
 .toplevel_page_revisionary-q {
   a[href="admin.php?page=revisionary-pro"],
-  a[href="https://publishpress.com/links/revisions-menu"] {
+  a[href="https://publishpress.com/links/revisions-menu"]
+  {
     display: none !important;
   }
 }
@@ -47,5 +48,18 @@
 
 // Hide the promo banner
 div.cms_tpv_promo_above_wrapper {
-    display: none !important;
+  display: none !important;
+}
+
+// Stying the Profile update page.
+
+// Hide form fields for editors.
+body.profile-php:not(.admin-role-administrator) {
+  .user-url-wrap,
+  .user-description-wrap,
+  .application-passwords,
+  .tool-box // Feed secrets
+  {
+    display: none;
+  }
 }
