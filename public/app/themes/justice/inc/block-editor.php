@@ -19,6 +19,7 @@ class BlockEditor
         add_action('init', [$this, 'registerBlocks']);
         add_filter('the_content', [$this, 'formatMojAnchor']);
         add_filter('allowed_block_types_all', [$this, 'filterAllowedBlockTypes'], 10, 0);
+        add_filter('block_editor_settings_all', [$this, 'customiseSettings']);
     }
 
     public function registerBlocks()
@@ -137,5 +138,20 @@ class BlockEditor
             'simple-definition-list-blocks/list',
             'simple-definition-list-blocks/term',
         ];
+    }
+
+    /**
+     * Customise block editor settings.
+     * 
+     * @param array $settings The block editor settings.
+     * @return array The modified block editor settings.
+     */
+
+    public function customiseSettings($settings)
+    {
+        // Disable the Openverse media category.
+        $settings['enableOpenverseMediaCategory'] = false;
+
+        return $settings;
     }
 }
