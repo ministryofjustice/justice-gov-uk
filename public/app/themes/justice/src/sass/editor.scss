@@ -13,3 +13,10 @@ div.color-block-support-panel,
 div.typography-block-support-panel {
     display: none;
 }
+
+// Remove Relevanssi Premium link from the top bar.
+.edit-post-header__settings {
+  .components-button[aria-label="Relevanssi Premium"] {
+    display: none;
+  }
+}
