@@ -46,7 +46,7 @@ class Search
         add_filter('manage_document_posts_columns', [$this, 'removeColumns']);
 
         // Relevanssi - remove searches submenus for non-admins.
-        add_filter('admin_menu', [$this, 'removeUserSearchesSubMenu'], 999);
+        add_filter('admin_menu', [$this, 'removeSearchesSubMenus'], 999);
     }
 
     /**
