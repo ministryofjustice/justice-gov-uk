@@ -142,7 +142,7 @@ class BlockEditor
 
     /**
      * Customise block editor settings.
-     * 
+     *
      * @param array $settings The block editor settings.
      * @return array The modified block editor settings.
      */
