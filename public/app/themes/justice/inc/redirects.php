@@ -26,6 +26,7 @@ class Redirects
         add_action('template_redirect', [$this, 'tryCleanUrlRedirect']);
         add_filter('gettext_safe-redirect-manager', [$this, 'customTranslations']);
         add_filter('gettext_with_context_safe-redirect-manager', [$this, 'customTranslations']);
+        add_filter('default_post_metadata', [$this, 'customDefaults'], 10, 3);
     }
 
 
@@ -162,5 +163,22 @@ class Redirects
         $translation = preg_replace($pattern, $replacement, $translation);
 
         return $translation;
+    }
+
+    /**
+     * Set the default value for the _force_https meta key to true.
+     * 
+     * @param mixed $value
+     * @param int $object_id
+     * @param string $meta_key
+     * @return mixed
+     */
+
+    public function customDefaults($value, $object_id, $meta_key)
+    {
+        if (get_post_type($object_id) === 'redirect_rule' &&  $meta_key  === '_force_https') {
+            $value = true;
+        }
+        return $value;
     }
 }
