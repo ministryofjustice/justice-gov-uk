@@ -158,16 +158,18 @@ class Redirects
     public function customTranslations($translation)
     {
         // Regex replace 'Safe Redirect Manager' with 'Redirect Manager'.
-        $pattern = '/Safe Redirect Manager/';
-        $replacement = 'Redirect Manager';
-        $translation = preg_replace($pattern, $replacement, $translation);
+        $translation = preg_replace('/Safe Redirect Manager/', 'Redirect Manager', $translation);
+        // Update the 'Redirect from' text.
+        $translation = preg_replace('/this WordPress installation \(or the sub-site, if you are running a multi-site\)/', 'this website', $translation);
+        // Update the 'Redirect to' text.
+        $translation = preg_replace('/ \(not your WordPress installation\)/', '', $translation);
 
         return $translation;
     }
 
     /**
      * Set the default value for the _force_https meta key to true.
-     * 
+     *
      * @param mixed $value
      * @param int $object_id
      * @param string $meta_key
