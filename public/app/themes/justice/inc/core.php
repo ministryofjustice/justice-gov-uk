@@ -31,6 +31,8 @@ class Core
         add_filter('translations_api', fn () => []);
         // Handle loopback requests.
         add_filter('pre_http_request', [$this, 'handleLoopbackRequests'], 10, 3);
+        // Remove Available Tools from the admin menu.
+        add_action('admin_menu', [$this, 'removeSubmenus']);
     }
 
     /**
@@ -99,5 +101,16 @@ class Core
 
         // Return the result.
         return $http->request($new_url, $parsed_args);
+    }
+
+    /**
+     * Remove Available Tools from the admin menu.
+     *
+     * @return void
+     */
+
+    public function removeSubmenus(): void
+    {
+        remove_submenu_page('tools.php', 'tools.php');
     }
 }

@@ -23,7 +23,10 @@ class Redirects
         add_filter('srm_restrict_to_capability', [$this, 'addRedirectToEditor']);
         add_action('template_redirect', [$this, 'redirectToAdmin']);
         add_action('template_redirect', [$this, 'tryCleanUrlRedirect']);
+        add_filter('gettext_safe-redirect-manager', [$this, 'customTranslations']);
+        add_filter('gettext_with_context_safe-redirect-manager', [$this, 'customTranslations']);
     }
+
 
     /**
      * Add redirect capability to editor role.
@@ -138,5 +141,25 @@ class Redirects
         // 301 redirect to the correct page.
         wp_safe_redirect(get_the_permalink($post_id), 301);
         exit;
+    }
+
+    /**
+     * Custom translations for the plugin.
+     *
+     * Showing Safe Redirect Manager will not make sense to the editors,
+     * replace it with Redirect Manager.
+     *
+     * @param string $translation
+     * @return string
+     */
+
+    public function customTranslations($translation)
+    {
+        // Regex replace 'Safe Redirect Manager' with 'Redirect Manager'.
+        $pattern = '/Safe Redirect Manager/';
+        $replacement = 'Redirect Manager';
+        $translation = preg_replace($pattern, $replacement, $translation);
+
+        return $translation;
     }
 }
