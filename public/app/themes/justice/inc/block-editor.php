@@ -17,7 +17,7 @@ class BlockEditor
     public function addHooks()
     {
         add_action('init', [$this, 'registerBlocks']);
-        add_filter('the_content', [$this, 'formatMojAnchor']);
+        add_filter('the_content', [$this, 'formatBlocks']);
         add_filter('allowed_block_types_all', [$this, 'filterAllowedBlockTypes'], 10, 0);
         add_filter('block_editor_settings_all', [$this, 'customiseSettings']);
     }
@@ -91,28 +91,36 @@ class BlockEditor
     }
 
     /**
-     * Format the moj-anchor anchor.
+     * Format the moj-anchor anchor and footnotes blocks.
      *
+     * moj-anchor
      * This is rich text formatting that is added to the block editor via a JS.
      * In the editor, a single space is used for compatibility, and so that the anchor can be selected.
      * The space is removed when the content is rendered, so as not to break the layout.
+     *
+     * core/footnotes
+     * Edit the unicode character ↩︎ to "Back to text", to match the legacy content.
      *
      * @param string $content
      * @return string
      */
 
-    public function formatMojAnchor($content)
+    public function formatBlocks($content)
     {
 
         // Match all a tags class of moj-anchor and a single space.
-        $pattern = '/(<a[^>]*class="moj-anchor"[^>]*>) (<\/a>)/';
+        $moj_anchor_pattern = '/(<a[^>]*class="moj-anchor"[^>]*>) (<\/a>)/';
         // Remove the single space.
-        $replacement = '$1$2';
-        $content = preg_replace($pattern, $replacement, $content);
+        $moj_anchor_replacement = '$1$2';
+        $content = preg_replace($moj_anchor_pattern, $moj_anchor_replacement, $content);
+
+        // Match all footnotes and replace the unicode character ↩︎ with "Back to text".
+        $footnotes_pattern = '/(<a href="#[^"]*" aria-label="Jump to footnote reference \d+">)↩︎(<\/a>)/';
+        $footnotes_replacement = '$1Back to text$2';
+        $content = preg_replace($footnotes_pattern, $footnotes_replacement, $content);
 
         return $content;
     }
-
 
     /**
      * Filters the list of allowed block types in the block editor.
