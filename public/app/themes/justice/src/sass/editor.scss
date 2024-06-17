@@ -20,3 +20,16 @@ div.typography-block-support-panel {
     display: none;
   }
 }
+
+// Style the core/footnotes block.
+.wp-block-footnotes {
+  .rich-text + a {
+    // Hide the unicode character ↩︎.
+    color: transparent;
+    &:before { 
+      // Show text.
+      content: 'Back to text';
+      color: #0073aa;
+    }
+  }
+}
