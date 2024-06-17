@@ -63,3 +63,17 @@ body.profile-php:not(.admin-role-administrator) {
     display: none;
   }
 }
+
+// Styling the document edit page.
+
+// Hide the Custom Fields from the document edit page.
+body.post-type-document:not(.admin-role-administrator) {
+  // Screen options checkbox.
+  #screen-meta label[for="postcustom-hide"] {
+    display: none;
+  }
+  // Custom meta box.
+  #postcustom {
+    display: none;
+  }
+}
