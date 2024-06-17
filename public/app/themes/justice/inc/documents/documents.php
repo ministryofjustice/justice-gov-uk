@@ -473,11 +473,16 @@ class Documents
 
     public function mediaLibraryHint(): void
     {
-        echo sprintf(
-            '<p>Are you uploading file types: %1$s etc. ? Try to <a href="%2$s">add document</a> instead.</p>',
-            join(', ', $this->disallow_in_media_library),
-            admin_url('post-new.php?post_type=document')
-        );
+        $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
+
+        // We're not uploading a document.
+        if ($this->slug !== $post_type) {
+            echo sprintf(
+                '<p>Are you uploading file types: %1$s etc. ? Try to <a href="%2$s">add document</a> instead.</p>',
+                join(', ', $this->disallow_in_media_library),
+                admin_url('post-new.php?post_type=document')
+            );
+        }
     }
 
     /**
