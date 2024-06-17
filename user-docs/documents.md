@@ -36,10 +36,20 @@ To upload a new document, follow these steps (it's safe to click Update at any p
 - Right click the permalink to either copy the link or open it in a new tab.
 - This permalink can now be used to link to the document from other pages on the site.
 
+### Schedule publication
+
+A document can be scheduled for publication, by setting a published date in the future.
+
+- Click the Edit button next to the Publish Date.
+- Set the date and time you want the document to be published.
+- Click OK.
+- Click Schedule.
+
 ### Gotchas
 
 - If you don't set the document's Visibility to Public, then the document will not be accessible to the public.
   This is an easy step to miss, as the default visibility is Private, and as a logged in editor you will be able to see the document regardless of its visibility setting.
+- Setting a published date in the future is OK when creating a document, but be aware that it is not useful for scheduling a revision, because it will take all versions of the document offline until the scheduled date.
 
 ## Verifying a successful document upload
 
@@ -87,3 +97,5 @@ This process is similar to uploading a new document, but with a few differences:
 - Verify the document has been published successfully, by following the steps in the Verify section.
 
 At this stage you should avoid updating the permalink, as this will break any existing links to the document.
+
+### Scheduling a revision
