@@ -113,8 +113,9 @@ class BlockEditor
         // Remove the single space.
         $content = preg_replace($moj_anchor_pattern, '$1$2', $content);
 
-        // Match all footnotes and replace the unicode character ↩︎ with "Back to text".
+        // Match all footnotes.
         $footnotes_pattern = '/(<a href="#[^"]*" aria-label="Jump to footnote reference \d+">)↩︎(<\/a>)/';
+        // Replace the unicode character ↩︎ with "Back to text".
         $content = preg_replace($footnotes_pattern, '$1Back to text$2', $content);
 
         return $content;
