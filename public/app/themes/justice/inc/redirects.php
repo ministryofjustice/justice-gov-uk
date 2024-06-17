@@ -20,6 +20,7 @@ class Redirects
     public function addHooks()
     {
         add_filter('srm_max_redirects', fn () => 10000);
+        add_filter('srm_default_direct_status', fn () => 301);
         add_filter('srm_restrict_to_capability', [$this, 'addRedirectToEditor']);
         add_action('template_redirect', [$this, 'redirectToAdmin']);
         add_action('template_redirect', [$this, 'tryCleanUrlRedirect']);
