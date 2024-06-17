@@ -104,6 +104,9 @@ class Documents
 
         // Hide legacy redirects from users with the Editor capability
         add_action('pre_get_posts', [$this, 'redirectAdminFilter'], 10, 2);
+
+        // Hide the Validate Structure sub-menu from non-admins.
+        add_action('admin_menu', [$this, 'hideValidateStructureSubmenu'], 30);
     }
 
 
@@ -529,15 +532,15 @@ class Documents
     }
 
     /**
-      * Hide the redirects created by administrators for editors
-      *
-      * Having 5000+ legacy redirects might be confusing for editors so we'll filter any
-      * that were created by administrators out of the redirect manager list
-      *
-      * @param WP_Query $query
-      *
-      * @return WP_Query
-    */
+     * Hide the redirects created by administrators for editors
+     *
+     * Having 5000+ legacy redirects might be confusing for editors so we'll filter any
+     * that were created by administrators out of the redirect manager list
+     *
+     * @param WP_Query $query
+     *
+     * @return WP_Query
+     */
     public function redirectAdminFilter(WP_Query $query): WP_Query
     {
         if ($query->get('post_type') === 'redirect_rule') {
@@ -550,5 +553,18 @@ class Documents
             }
         }
         return $query;
+    }
+
+    /**
+     * Hide the Validate Structure sub-menu from non-admins.
+     *
+     * @return void
+     */
+
+    public function hideValidateStructureSubmenu()
+    {
+        if (!current_user_can('administrator')) {
+            remove_submenu_page('edit.php?post_type=document', 'wpdr_validate');
+        }
     }
 }
