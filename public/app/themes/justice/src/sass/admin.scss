@@ -77,3 +77,17 @@ body.post-type-document:not(.admin-role-administrator) {
     display: none;
   }
 }
+
+// Styling the Redirect edit page.
+
+// Hide the Custom Fields from the redirect edit page.
+body.post-type-redirect_rule:not(.admin-role-administrator) {
+  // Screen options checkbox.
+  #screen-meta label[for="slugdiv-hide"] {
+    display: none;
+  }
+  // Slug meta box.
+  #slugdiv {
+    display: none;
+  }
+}
