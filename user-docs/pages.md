@@ -20,6 +20,19 @@
 
 ## Creating a new page
 
+The justice website makes extensive use of page hierarchies to organise content. 
+When creating a new page, you will need to correctly set the parent page:
+it will determine the URL of the page, and where it will appear in the site's navigation.
+
+To set the parent page at the same time as creating a new page:
+
+- From the Sidebar, click Pages > Tree View.
+- Navigate the page tree to find the parent page.
+- Hover the parent page to and click 'Add new inside'.
+- Enter the page title(s).
+  You have the option to create multiple pages at once, but there is less risk of error if you create one page at a time.
+- Click Add.
+
 ### Editing page content
 
 For details on how to edit page content, see the Block Editor (TODO add link) documentation.
@@ -31,7 +44,7 @@ It's more likely that these will be set when creating a new page, rather than ed
 
 These settings can be accessed by clicking Page towards the top right of the page editor.
 
-Every setting has an explanation, the most used settings are:
+The most used settings are:
 
 - Navigation
   - Short title
@@ -40,10 +53,22 @@ Every setting has an explanation, the most used settings are:
   - Show updated at
   - Modified at (override)
 - Panels
-
-
+  - Show menu
+  - Show brand panel
+- Sections
+- Audiences
+- Page Attributes
+  - Parent
 
 ## Scheduling a new page for publication
+
+A new page can be scheduled for publication, by setting a published date in the future.
+
+- Navigate to to Page > Publish in the top right corner and click the Immediately button.
+- Set the date and time you want the page to be published.
+- Click x.
+- Click Schedule.
+- Verify the details and click Schedule again.
 
 ---
 
