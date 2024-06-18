@@ -247,6 +247,7 @@ class PostMetaConstants
             'default'       => true,
             'control'       => 'toggle',
             'label'         => 'Show brand panel',
+            'help'          => 'Show the logo on the right hand side.',
             'conditions'    => [
                 [
                     'target'    => 'attribute.template',
@@ -262,6 +263,7 @@ class PostMetaConstants
             'default'       => false,
             'control'       => 'toggle',
             'label'         => 'Show search panel',
+            'help'          => 'Show the Standard Direction search on the right hand side.',
             'conditions'    => [
                 [
                     'target'    => 'attribute.template',
@@ -285,6 +287,7 @@ class PostMetaConstants
             'default'       => false,
             'control'       => 'toggle',
             'label'         => 'Show archived panel',
+            'help'          => 'Show a link to nationalarchives.gov.uk on the right hand side.',
             'conditions'    => [
                 [
                     'target'    => 'attribute.template',
@@ -300,6 +303,7 @@ class PostMetaConstants
             'default'       => false,
             'control'       => 'toggle',
             'label'         => 'Show related pages panel',
+            'help'          => 'Show a list of user defined links to related pages on the right hand side.',
             'conditions'    => [
                 [
                     'target'    => 'attribute.template',
@@ -355,6 +359,7 @@ class PostMetaConstants
             'default'       => false,
             'control'       => 'toggle',
             'label'         => 'Show other websites panel',
+            'help'          => 'Show a list of user defined links to other pages on the right hand side.',
             'conditions'    => [
                 [
                     'target'    => 'attribute.template',
