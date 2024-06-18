@@ -104,6 +104,9 @@ class Documents
 
         // Hide legacy redirects from users with the Editor capability
         add_action('pre_get_posts', [$this, 'redirectAdminFilter'], 10, 2);
+
+        // Hide the Validate Structure sub-menu from non-admins.
+        add_action('admin_menu', [$this, 'hideValidateStructureSubmenu'], 30);
     }
 
 
@@ -470,11 +473,16 @@ class Documents
 
     public function mediaLibraryHint(): void
     {
-        echo sprintf(
-            '<p>Are you uploading file types: %1$s etc. ? Try to <a href="%2$s">add document</a> instead.</p>',
-            join(', ', $this->disallow_in_media_library),
-            admin_url('post-new.php?post_type=document')
-        );
+        $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
+
+        // We're not uploading a document.
+        if ($this->slug !== $post_type) {
+            echo sprintf(
+                '<p>Are you uploading file types: %1$s etc. ? Try to <a href="%2$s">add document</a> instead.</p>',
+                join(', ', $this->disallow_in_media_library),
+                admin_url('post-new.php?post_type=document')
+            );
+        }
     }
 
     /**
@@ -529,15 +537,15 @@ class Documents
     }
 
     /**
-      * Hide the redirects created by administrators for editors
-      *
-      * Having 5000+ legacy redirects might be confusing for editors so we'll filter any
-      * that were created by administrators out of the redirect manager list
-      *
-      * @param WP_Query $query
-      *
-      * @return WP_Query
-    */
+     * Hide the redirects created by administrators for editors
+     *
+     * Having 5000+ legacy redirects might be confusing for editors so we'll filter any
+     * that were created by administrators out of the redirect manager list
+     *
+     * @param WP_Query $query
+     *
+     * @return WP_Query
+     */
     public function redirectAdminFilter(WP_Query $query): WP_Query
     {
         if ($query->get('post_type') === 'redirect_rule') {
@@ -550,5 +558,18 @@ class Documents
             }
         }
         return $query;
+    }
+
+    /**
+     * Hide the Validate Structure sub-menu from non-admins.
+     *
+     * @return void
+     */
+
+    public function hideValidateStructureSubmenu()
+    {
+        if (!current_user_can('administrator')) {
+            remove_submenu_page('edit.php?post_type=document', 'wpdr_validate');
+        }
     }
 }

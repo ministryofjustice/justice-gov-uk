@@ -7,3 +7,29 @@
 .components-form-token-field__suggestions-list {
   max-height: 384px !important;
 }
+
+// Hide the colour and typography panels.
+div.color-block-support-panel,
+div.typography-block-support-panel {
+    display: none;
+}
+
+// Remove Relevanssi Premium link from the top bar.
+.edit-post-header__settings {
+  .components-button[aria-label="Relevanssi Premium"] {
+    display: none;
+  }
+}
+
+// Style the core/footnotes block.
+.wp-block-footnotes {
+  .rich-text + a {
+    // Hide the unicode character ↩︎.
+    color: transparent;
+    &:before { 
+      // Show text.
+      content: 'Back to text';
+      color: #0073aa;
+    }
+  }
+}

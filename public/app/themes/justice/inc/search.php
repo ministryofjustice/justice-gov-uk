@@ -40,6 +40,13 @@ class Search
 
         // Relevanssi - filters the search results to only include the descendants.
         add_filter('relevanssi_hits_filter', [$this, 'relevanssiParentFilter']);
+
+        // Relevanssi - remove columns for non-admins.
+        add_filter('manage_page_posts_columns', [$this, 'removeColumns']);
+        add_filter('manage_document_posts_columns', [$this, 'removeColumns']);
+
+        // Relevanssi - remove searches submenus for non-admins.
+        add_filter('admin_menu', [$this, 'removeSearchesSubMenus'], 999);
     }
 
     /**
@@ -281,5 +288,41 @@ class Search
         // Only include the filtered posts.
         $hits[0] = $acc;
         return $hits;
+    }
+
+    /**
+     * Remove columns from the admin edit screen e.g. All Pages.
+     *
+     * For a simpler editing experience, we remove some columns for non-admins.
+     *
+     * @param array $columns The columns for the admin screen.
+     * @return array The columns after removing any un-necessary ones.
+     */
+
+    public function removeColumns(array $columns): array
+    {
+        if (!current_user_can('manage_options')) {
+            unset($columns['exclude_post']);
+            unset($columns['ignore_content']);
+            unset($columns['pinned_keywords']);
+            unset($columns['pin_for_all']);
+            unset($columns['unpinned_keywords']);
+        }
+
+        return $columns;
+    }
+
+    /**
+     * Remove the User Searches & Admin Searches submenu for non-admins.
+     *
+     * @return void
+     */
+
+    public function removeSearchesSubMenus()
+    {
+        if (!current_user_can('manage_options')) {
+            remove_submenu_page('index.php', 'relevanssi-premium/relevanssi.php');
+            remove_submenu_page('index.php', 'relevanssi_admin_search');
+        }
     }
 }
