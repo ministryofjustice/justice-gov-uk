@@ -11,10 +11,10 @@
   - Scheduling a revision to an existing page
   - Verifying a scheduled revision 
   - Gotchas
-
-- ? Saving pages in draft and finding the draft page to re-edit at a later time
-- ? Cancelling pages in drafts where revisions have been made so it reverts back to the original text before revisions
-- ? How to change block types (I'm having trouble with this, for instance I copy the text and it produces as a list block but how can I change it to a paragraph block, nothing I do seems to work)
+- Q & A
+  - Saving drafts/revisions & finding later.
+  - Deleting a draft page.
+  - Deleting a revision to a page.
 
 ---
 
@@ -115,3 +115,43 @@ To see revisions that have gone live, click Revisions > Revision Archive from th
 
 When updating a page, ensure that you have correct page settings, in particular: check 'Meta data' > 'Modified at (override)'.
 Set this field, if you want to show a custom Updated date. Unset this field, if you want the page to show the last time it was updated.
+
+---
+
+Q: How do I save a page in draft status and find the draft page to re-edit at a later time?
+
+A: This is a 2 part answer depending on whether you are working on a new page, or an existing page.
+
+If you are working on a new page, you can create a page as usual - as in the 'Creating a new page' section.
+After editing, click Save Draft in the top right corner of the page editor.
+
+To find this page at a later date, you can navigate to it via Pages > Tree View.
+Alternatively, go to Pages > All Pages and click the Drafts tab towards the top of the screen.
+
+...
+
+If you are working on an existing page, you should create a new revision, not a draft.
+Follow the steps in the 'Scheduling a revision to an existing page' section.
+
+Except, submit the revision, but do not approve it, until you are ready for your changes to go live or be scheduled.
+To find this revision at a later date, you can navigate to it via Revisions > Revision Queue, 
+it will have the status of 'Submitted'.
+
+---
+
+Q: How do I delete a draft page?
+
+If you have created a draft page, and no longer need it, you can delete it by following these steps:
+
+- From the Sidebar, click Pages > All Pages.
+- Click the Drafts tab towards the top of the screen.
+- Hover the page you want to delete, and click the Bin/Trash link.
+
+---
+
+Q: How do I cancel a revision to a page?
+
+If you have created a revision to a page, and no longer need it, you can cancel it by following these steps:
+
+- From the Sidebar, click Revisions > Revision Queue.
+- Hover the revision you want to cancel, and click the Delete link.
