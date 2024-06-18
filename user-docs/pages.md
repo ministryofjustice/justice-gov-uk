@@ -15,6 +15,7 @@
   - Saving drafts/revisions & finding later.
   - Deleting a draft page.
   - Deleting a revision to a page.
+- Reporting an issue
 
 ---
 
@@ -157,3 +158,9 @@ If you have created a revision to a page, and no longer need it, you can cancel 
 
 - From the Sidebar, click Revisions > Revision Queue.
 - Hover the revision you want to cancel, and click the Delete link.
+
+---
+
+## Reporting an issue
+
+To report an issue or to raise a support query, please contact the CDPT at: justice-support@digital.justice.gov.uk

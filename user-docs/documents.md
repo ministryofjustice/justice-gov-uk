@@ -6,6 +6,7 @@
 - Verifying a document upload
 - Linking to a document from a page
 - Uploading a new version of a document
+- Reporting an issue
 
 ## Uploading a document
 
@@ -99,3 +100,11 @@ This process is similar to uploading a new document, but with a few differences:
 At this stage you should avoid updating the permalink, as this will break any existing links to the document.
 
 ### Scheduling a revision
+
+TODO
+
+---
+
+## Reporting an issue
+
+To report an issue or to raise a support query, please contact the CDPT at: justice-support@digital.justice.gov.uk

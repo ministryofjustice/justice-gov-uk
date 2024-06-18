@@ -2,22 +2,20 @@
 
 ## Content
 
-- Headings
-- Lists
-  - Bullet points
-  - Numbered lists
-- Links
-- Footnotes
-- Jump links
-  - Inline
-  - Block level
+- Add a block
+- Edit a block
 - Tables
-- Jump links
 - Footnotes
+- Definition lists
+- Inline menu - child pages
+- Search - child pages
+- To the top
+- Links & Jump links
+  - Creating a link
+  - Creating a jump link target
 - Q & A
   - How to change block types
-
-### Using the page editor
+- Reporting an issue
 
 ## Blocks
 
@@ -42,11 +40,13 @@ When you're editing a block, you'll see a toolbar appear above the block. This t
 
 Along the right hand side of the editor, you'll see a sidebar with additional block settings. This sidebar will change depending on the block you have selected.
 
-- Use the Advanced > HTML Anchor field to add a jump link to a block.
-
 ---
 
-## Anchors & Jump Links
+## Tables
+
+Upon creation of a table block, you can define then number of rows and columns.
+
+Rows and columns can be added or removed later by clicking table icon towards the right of the toolbar.
 
 ---
 
@@ -68,6 +68,84 @@ To use the footnote block:
 
 ---
 
+## Definition lists
+
+The definition list block is used to create a list of terms and their definitions.
+
+This is the ideal block to make a user and SEO friendly glossary of terms.
+
+To use this block follow these steps:
+
+- Create a Definition List block.
+- Click the + icon to add a Definition Term block - this is the term that will be defined.
+- Click the + icon to add a Definition Description block - this is the definition of the term.
+- Repeat the above steps to add more terms and definitions.
+
+---
+
+## Inline menu - child pages
+
+This block is used to insert a menu that will display child pages of the current page.
+
+It's currently only used on the 'Help' page.
+
+---
+
+## Search - child pages
+
+This block is used to insert a search bar that will search child pages of the current page.
+
+It's currently only used on the 'Civil Procedure Rules' page.
+
+---
+
+## To the top
+
+This block is used to create a link that will take the user back to the top of the page.
+As it may be added many times in a single page it's useful to remember the shortcut to add it.
+
+Press enter, then type `/` and then type `top` and press enter.
+
+---
+
+## Links and Jump Links
+
+### Creating a link
+
+To add links to content, follow these steps:
+
+- Highlight the text you want to link from.
+- Click the Link icon in the toolbar.
+- In the URL field, enter the URL you want to link to.
+  - This can be an external URL like `https://www.gov.uk/search/news-and-communications`
+  - Or, an internal URL like `/courts/procedure-rules/civil`
+  - Or, a jump link target like `#my-anchor`
+
+### Creating a jump link target
+
+Jump links can be used to link to a specific part of a page. This can be done one of 2 ways.
+
+If you're editing a block, you can jump to the block by following these steps: 
+
+- On the right hand side of the editor, click the Advanced tab.
+- In the HTML anchor field, enter the anchor name.
+- This should be a unique name that describes the content, e.g. `my-block-anchor`.
+- You can now create a link by following the steps in `Creating a link` and using the anchor name as the URL, 
+  e.g. `#my-block-anchor`
+
+If the block doesn't have the HTML Anchor field, or, you want to jump to the middle of a block, follow these steps:
+
+- Write a space character where you want the anchor to be.
+- Highlight the space character.
+- Click the down arrow towards the right of the toolbar.
+- Select 'Anchor' from the dropdown menu.
+- In the Anchor field, enter the anchor name.
+- This should be a unique name that describes the content, e.g. `my-inline-anchor`.
+- You can now create a link by following the steps in `Creating a link` and using the anchor name as the URL, 
+  e.g. `#my-inline-anchor`
+
+---
+
 ## Q & A
 
 Q: How do I change block types. e.g. from a list block to a paragraph(s) block?
@@ -78,3 +156,9 @@ This will open a dropdown menu where you can select the new block type.
 
 If you have a list block (bullets or numbers) you may need to click the block type icon twice.
 If your cursor is on a list item, the first click will select the list block, the second click will open the dropdown menu.
+
+---
+
+## Reporting an issue
+
+To report an issue or to raise a support query, please contact the CDPT at: justice-support@digital.justice.gov.uk

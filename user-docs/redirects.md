@@ -23,3 +23,9 @@ To create a redirect, follow these steps:
 - Be cautions not to create 2 redirects that direct to each other. This will create an loop and cause the page to fail to load.
 - When updating a redirect, be aware that if you change the 'Redirect From' URL, this may result in a 404 error error for the old URL.
 - Similarly, deleting a redirect rule could cause a 404 error for the old URL. It is usually best not to delete a redirect rule, but to update it to point to a new URL instead.
+
+---
+
+## Reporting an issue
+
+To report an issue or to raise a support query, please contact the CDPT at: justice-support@digital.justice.gov.uk
