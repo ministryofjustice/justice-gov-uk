@@ -64,6 +64,22 @@ services:
       - ./public/app/themes/justice/package-lock.json:/node/package-lock.json
       - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
 
+  jekyll:
+    build:
+      target: jekyll-dev
+    entrypoint: make
+    command: jekyll-serve
+    volumes:
+      - ./Makefile:/home/Makefile
+      - ./.github/pages:/home/pages
+    ports:
+      - "4000:4000"
+      - "35729:35729"
+    environment:
+      VIRTUAL_HOST: docs.${SERVER_NAME}
+      VIRTUAL_PORT: 4000
+
+
   mariadb:
     image: mariadb:10
     healthcheck:

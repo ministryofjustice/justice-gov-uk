@@ -1,4 +1,6 @@
-# Redirects
+---
+title:  "Redirects"
+---
 
 Due to the dynamic nature of the content on this website, it may be necessary to change or delete a page or document. When this happens, it is important to create a redirect to ensure that users are not met with a 404 error when trying to access the old URL.
 

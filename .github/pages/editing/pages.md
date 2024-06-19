@@ -1,4 +1,6 @@
-# Pages.
+---
+title:  "Pages"
+---
 
 ## Content
 

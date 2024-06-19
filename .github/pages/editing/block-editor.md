@@ -1,4 +1,6 @@
-# Block editor
+---
+title:  "Block editor"
+---
 
 ## Content
 

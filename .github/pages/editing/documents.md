@@ -1,4 +1,6 @@
-# Documents.
+---
+title:  "Documents"
+---
 
 ## Content
 
