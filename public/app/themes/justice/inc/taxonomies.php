@@ -16,7 +16,7 @@ class Taxonomies
 {
 
     public const TAXONOMY_DEFAULT = [
-        'object_type' => ['document', 'page'],
+        'object_type' => ['page'],
         'args' => [
             'show_admin_column' => true,
             'rewrite' => false,
