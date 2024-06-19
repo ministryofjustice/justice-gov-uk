@@ -181,4 +181,4 @@ If your cursor is on a list item, the first click will select the list block, th
 
 ## Reporting an issue
 
-To report an issue or to raise a support query, please contact the Central Digital Product Team at: justice-support@digital.justice.gov.uk
+To report an issue or to raise a support query, please contact the Central Digital Product Team

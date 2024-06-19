@@ -30,4 +30,4 @@ To create a redirect, follow these steps:
 
 ## Reporting an issue
 
-To report an issue or to raise a support query, please contact the Central Digital Product Team at: justice-support@digital.justice.gov.uk
+To report an issue or to raise a support query, please contact the Central Digital Product Team
