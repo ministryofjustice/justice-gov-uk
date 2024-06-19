@@ -1,0 +1,26 @@
+html {
+  scroll-padding-top: 4rem;
+}
+
+img {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.annotated-screenshot {
+  position: relative;
+
+  ol {
+    > li {
+      position: absolute;
+      list-style: none;
+
+      &:target {
+        text-decoration: underline;
+      }
+
+      &:before {
+        display: none;
+      }
+    }
+  }
+}
