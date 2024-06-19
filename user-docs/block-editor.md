@@ -144,6 +144,24 @@ If the block doesn't have the HTML Anchor field, or, you want to jump to the mid
 - You can now create a link by following the steps in `Creating a link` and using the anchor name as the URL, 
   e.g. `#my-inline-anchor`
 
+### Identifying a jump link target
+
+When you're editing a block you can see if it has a block level anchor by following these steps:
+
+- Select the block you want to check.
+- On the right hand side of the editor, click the Advanced tab.
+- In the HTML anchor field, you'll see the anchor name if it has one.
+
+Inline anchors are identified by a blue underline, these may be single spaces, or in some cases one or more word.
+To spot these more easily follow these steps:
+
+- Highlight the space or text that has a blue underline.
+- Click the down arrow towards the right of the toolbar.
+- Select 'Anchor' from the dropdown menu.
+- Toggle the 'Show anchor icons' switch to on.
+
+You'll now see a small anchor icon next to all inline anchors.
+
 ---
 
 ## Q & A
@@ -161,4 +179,4 @@ If your cursor is on a list item, the first click will select the list block, th
 
 ## Reporting an issue
 
-To report an issue or to raise a support query, please contact the CDPT at: justice-support@digital.justice.gov.uk
+To report an issue or to raise a support query, please contact the Central Digital Product Team at: justice-support@digital.justice.gov.uk

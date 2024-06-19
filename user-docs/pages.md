@@ -163,4 +163,4 @@ If you have created a revision to a page, and no longer need it, you can cancel 
 
 ## Reporting an issue
 
-To report an issue or to raise a support query, please contact the CDPT at: justice-support@digital.justice.gov.uk
+To report an issue or to raise a support query, please contact the Central Digital Product Team at: justice-support@digital.justice.gov.uk
