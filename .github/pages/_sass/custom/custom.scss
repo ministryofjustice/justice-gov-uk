@@ -14,11 +14,20 @@ img {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
+// Style figure cations.
+figure {
+  figcaption {
+    font-size: 0.8em;
+    font-style: italic;
+  }
+}
+
 // A custom block for annotated screenshots.
 .annotated-screenshot {
   position: relative;
 
   ol {
+    margin: 0;
     > li {
       position: absolute;
       list-style: none;
