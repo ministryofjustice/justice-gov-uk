@@ -99,8 +99,8 @@ class Admin
             'about',
             'contribute',
             'feedback',
-            'support-forums',
             'learn',
+            'support-forums',
             'wporg'
         ];
 
