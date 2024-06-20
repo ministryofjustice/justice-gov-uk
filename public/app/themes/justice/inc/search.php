@@ -265,9 +265,9 @@ class Search
         if (!isset($wp_query->query_vars['parent'])) {
             // No parent parameter set, do nothing.
             return $hits;
-        } else {
-            $parent_id = $wp_query->query_vars['parent'];
         }
+
+        $parent_id = $wp_query->query_vars['parent'];
 
         $acc = [];
         foreach ($hits[0] as $hit) {
