@@ -267,18 +267,20 @@ class Search
             return $hits;
         }
 
+        $parent_id = $wp_query->query_vars['parent'];
+
         $acc = [];
         foreach ($hits[0] as $hit) {
             // Loop through all the posts found.
-            if ($hit->ID === $wp_query->query_vars['parent']) {
+            if ($hit->ID === $parent_id) {
                 // The page itself.
                 $acc[] = $hit;
-            } elseif ($hit->post_parent === $wp_query->query_vars['parent']) {
+            } elseif ($hit->post_parent === $parent_id) {
                 // A direct descendant.
                 $acc[] = $hit;
             } elseif ($hit->post_parent > 0) {
                 $ancestors = get_post_ancestors($hit);
-                if (in_array(intval($wp_query->query_vars['parent']), $ancestors, true)) {
+                if (in_array(intval($parent_id), $ancestors, true)) {
                     // One of the lower level descendants.
                     $acc[] = $hit;
                 }
