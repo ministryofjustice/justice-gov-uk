@@ -40,6 +40,7 @@ jobs:
           SECURE_AUTH_SALT: ${{ secrets.SECURE_AUTH_SALT }}
           BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
           BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
+          SUPPORT_EMAIL: ${{ secrets.SUPPORT_EMAIL }}
         run: |
           BASIC_AUTH_BASE64=""
           

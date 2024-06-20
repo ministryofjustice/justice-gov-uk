@@ -39,6 +39,7 @@ if (file_exists($root_dir . '/.env')) {
 
     $dotenv->required(['WP_HOME', 'WP_SITEURL']);
     $dotenv->required(['DB_NAME', 'DB_USER', 'DB_PASSWORD']);
+    $dotenv->required(['SUPPORT_EMAIL']);
 }
 
 /**
@@ -129,6 +130,9 @@ Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 
 // API key for notifications.service.gov.uk email service
 Config::define('GOV_NOTIFY_API_KEY', env('GOV_NOTIFY_API_KEY') ?? null);
+
+// Support email address
+Config::define('SUPPORT_EMAIL', env('SUPPORT_EMAIL'));
 
 // Define initial preset value for the wp-offload-media plugin.
 Config::define('WP_OFFLOAD_MEDIA_PRESET', false);
