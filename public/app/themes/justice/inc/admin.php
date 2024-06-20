@@ -7,6 +7,7 @@
 
 namespace MOJ\Justice;
 
+use Roots\WPConfig\Config;
 use WP_REST_Request;
 
 if (!defined('ABSPATH')) {
@@ -90,6 +91,8 @@ class Admin
     {
         global $wp_admin_bar;
 
+        $support_email = Config::get('SUPPORT_EMAIL');
+
         $all_nodes = $wp_admin_bar->get_nodes();
 
         $remove_keys = [
@@ -116,6 +119,24 @@ class Admin
         $documentation_node = $wp_admin_bar->get_node('documentation');
         $documentation_node->href = '/docs';
         $wp_admin_bar->add_node($documentation_node);
+
+        // Add a link to the support email.
+        $wp_admin_bar->add_node(
+            array(
+                'parent' => 'wp-logo-external',
+                'id'     => 'support-link',
+                'title'  => 'Support',
+                'href'   => 'mailto:' . $support_email
+            )
+        );
+        // Add the support email (for copying to clipboard) to the admin bar.
+        $wp_admin_bar->add_node(
+            array(
+                'parent' => 'wp-logo-external',
+                'id'     => 'support-text',
+                'title'  => $support_email
+            )
+        );
     }
 
 
