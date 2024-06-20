@@ -9,6 +9,7 @@ Makefile
 
 bin/local-*
 .git*
+!.github/pages
 .editorconfig
 .env.example
 .dory.yml

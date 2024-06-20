@@ -150,6 +150,19 @@ RUN rm -rf node_modules
 
 ###
 
+FROM ruby:3 AS jekyll-dev
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Update the Ruby bundler and install Jekyll
+RUN gem update bundler && gem install bundler jekyll
+
+WORKDIR /home
+
+###
 
 FROM base-fpm AS build-fpm
 

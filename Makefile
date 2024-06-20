@@ -35,6 +35,10 @@ node-assets:
 	npm install
 	npm run watch
 
+jekyll-serve:
+	cd /home/pages && bundle install
+	cd /home/pages && bundle exec jekyll serve --host 0.0.0.0 --livereload --livereload-port 35729
+
 composer-assets:
 	@chmod +x ./bin/composer-post-install.sh
 	@chmod +x ./bin/local-composer-assets.sh
