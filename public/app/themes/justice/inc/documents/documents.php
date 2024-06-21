@@ -14,6 +14,7 @@ if (!defined('ABSPATH')) {
 
 require_once 'columns.php';
 require_once 'filters.php';
+require_once 'schedule.php';
 
 /**
  * Actions and filters related to WordPress documents post type.
@@ -23,6 +24,7 @@ class Documents
 
     use DocumentColumns;
     use DocumentFilters;
+    use DocumentSchedule;
 
     // File extensions to mark as downloadable in S3.
     private array $content_disposition_extensions = [
@@ -107,6 +109,14 @@ class Documents
 
         // Hide the Validate Structure sub-menu from non-admins.
         add_action('admin_menu', [$this, 'hideValidateStructureSubmenu'], 30);
+
+        // Schedule
+        add_action( 'add_meta_boxes', [$this, 'addScheduleMetaBox'] );
+        add_action( 'admin_head', [$this, 'swapRevisionMetaBox'] );
+        add_action( 'admin_enqueue_scripts', [$this, 'enqueueScheduleScripts'] );
+        // add_action( 'save_post_document', [$this, 'handleScheduleSave'], 5 );
+		// add_filter( 'wp_save_post_revision_post_has_changed', array( $this, 'onSaveRevision' ), 15, 3 );
+
     }
 
 
