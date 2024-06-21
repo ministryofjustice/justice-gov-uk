@@ -6,6 +6,7 @@ mix.setPublicPath('./dist/')
 mix
     .block("src/js/block-editor.js", "dist")
     .js('src/js/app.js', 'dist/app.min.js')
+    .js('src/js/document.js', 'dist/document.min.js')
     .js('src/js/login.js', 'dist/js/login.min.js')
     /** patch code for CCFW **/
     .js('src/patch/js/ccfw-cookie-manage.js', 'dist/patch/js/ccfw-cookie-manage.js')
@@ -24,5 +25,12 @@ mix
 if (mix.inProduction()) {
     mix.version()
 } else {
+    mix.browserSync({
+        proxy: process.env.PROXY,
+        // Don't open a new browser window when mix starts compiling.
+        open: false,
+        // Don't show any notifications in the browser.
+        notify: false
+    })
     mix.sourceMaps()
 }

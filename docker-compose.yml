@@ -63,6 +63,15 @@ services:
       - ./public/app/themes/justice/package.json:/node/package.json
       - ./public/app/themes/justice/package-lock.json:/node/package-lock.json
       - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
+    environment:
+      PROXY: ${SERVER_NAME}
+      VIRTUAL_HOST: node.${SERVER_NAME}
+      VIRTUAL_PORT: 3000
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "${SERVER_NAME}:host-gateway"
+
 
   jekyll:
     build:
