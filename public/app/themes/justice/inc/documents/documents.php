@@ -111,9 +111,9 @@ class Documents
         add_action('admin_menu', [$this, 'hideValidateStructureSubmenu'], 30);
 
         // Schedule
-        add_action( 'add_meta_boxes', [$this, 'addScheduleMetaBox'] );
-        add_action( 'admin_head', [$this, 'swapRevisionMetaBox'] );
-        add_action( 'admin_enqueue_scripts', [$this, 'enqueueScheduleScripts'] );
+        // add_action( 'add_meta_boxes', [$this, 'addScheduleMetaBox'] );
+        // add_action( 'admin_head', [$this, 'swapRevisionMetaBox'] );
+        // add_action( 'admin_enqueue_scripts', [$this, 'enqueueScheduleScripts'] );
         // add_action( 'save_post_document', [$this, 'handleScheduleSave'], 5 );
 		// add_filter( 'wp_save_post_revision_post_has_changed', array( $this, 'onSaveRevision' ), 15, 3 );
 
