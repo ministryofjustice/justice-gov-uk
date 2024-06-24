@@ -1,12 +1,37 @@
+@import "header";
+
 html {
   // Set some padding so that anchor targets on images have some context.
   scroll-padding-top: 4rem;
 }
 
+.moj-header {
+  // This is the lightest touch that we can do to make the header work with the theme layout.
+  // This moj-header style is here because _header.scss is a compiled file, we don't want to edit it.
+  position: sticky;
+  top: 0;
+  z-index: 3;
+
+  &__container {
+    max-width: 1000px;
+  }
+}
+
+// Hide the site title - because it's in the moj-header already.
 .site-title {
-  // Make the default font size smaller
-  // to fit the title on a single line.
-  @include fs-3;
+  opacity: 0;
+}
+
+// Improve the layout on medium up screens.
+@include mq(md) {
+  // Hide the site header.
+  .site-header {
+    display: none;
+  }
+  // Adjust padding.
+  .site-nav {
+    padding-top: 1rem;
+  }
 }
 
 img {
