@@ -98,6 +98,7 @@ class Admin
         $remove_keys = [
             'about',
             'contribute',
+            'documentation',
             'feedback',
             'learn',
             'support-forums',
@@ -115,10 +116,15 @@ class Admin
         $logo_node->href = '/wp/wp-admin';
         $wp_admin_bar->add_node($logo_node);
 
-        // Update the link to the documentation.
-        $documentation_node = $wp_admin_bar->get_node('documentation');
-        $documentation_node->href = '/docs';
-        $wp_admin_bar->add_node($documentation_node);
+        // Add a link to the HowTo.
+        $wp_admin_bar->add_node(
+            array(
+                'parent' => 'wp-logo-external',
+                'id'     => 'howto-admin',
+                'title'  => 'HowTo Admin',
+                'href'   => 'https://howto-admin.www.justice.gov.uk'
+            )
+        );
 
         // Add a link to the support email.
         $wp_admin_bar->add_node(
@@ -129,6 +135,7 @@ class Admin
                 'href'   => 'mailto:' . $support_email
             )
         );
+
         // Add the support email (for copying to clipboard) to the admin bar.
         $wp_admin_bar->add_node(
             array(
