@@ -10,8 +10,6 @@ if (!defined('ABSPATH')) {
 
 /**
  * Add compatibility with PublishPress Revisions, formerly known as Revisionary.
- * 
- * 
  */
 
 class WP_Document_Revisions_Compatibility
