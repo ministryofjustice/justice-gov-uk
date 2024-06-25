@@ -54,7 +54,6 @@ new Justice\Comments();
 new Justice\Content();
 new Justice\Core();
 new Justice\Documents();
-new Justice\DocumentRevisionsWithRevisionary();
 new Justice\Layout();
 new Justice\Posts();
 new Justice\Redirects();
@@ -65,6 +64,7 @@ new Justice\SimpleDefinitionsListBlocks();
 new Justice\Sitemap();
 new Justice\ThemeAssets();
 new Justice\Theme();
+new WPDR_RVY\WP_Document_Revisions_Compatibility();
 
 $block_editor = new Justice\BlockEditor();
 $block_editor->addHooks();
