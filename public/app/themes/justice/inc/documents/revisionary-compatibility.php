@@ -18,7 +18,6 @@ class WP_Document_Revisions_Compatibility
 {
 
     private $debug = false;
-    private $name = 'wpdr_rvy';
 
     public function __construct()
     {
@@ -64,7 +63,7 @@ class WP_Document_Revisions_Compatibility
             return;
         }
 
-        error_log($this->name . ': ' . $message . ' ' . print_r($data, true));
+        error_log('WPDR_RVY: ' . $message . ' ' . print_r($data, true));
     }
 
     /**
