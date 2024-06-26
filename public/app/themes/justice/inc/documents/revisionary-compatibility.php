@@ -10,6 +10,11 @@ if (!defined('ABSPATH')) {
 
 /**
  * Add compatibility with PublishPress Revisions, formerly known as Revisionary.
+ * 
+ * @see https://wp-document-revisions.github.io/wp-document-revisions/
+ * @see https://github.com/wp-document-revisions/wp-document-revisions
+ * @see https://publishpress.com/revisions/
+ * @see https://github.com/publishpress/PublishPress-Revisions
  */
 
 class WP_Document_Revisions_Compatibility
@@ -26,8 +31,13 @@ class WP_Document_Revisions_Compatibility
 
     public function addHooks(): void
     {
-        if (!in_array('revisionary/revisionary.php', (array) get_option('active_plugins', array()))) {
-            $this->log('Revisionary is not active');
+        if (!$this->is_plugin_active('revisionary/revisionary.php')) {
+            $this->log('PublishPress Revisions (Revisionary) is not active');
+            return;
+        }
+
+        if (!$this->is_plugin_active('wp-document-revisions/wp-document-revisions.php')) {
+            $this->log('WP Document Revisions is not active');
             return;
         }
 
@@ -37,14 +47,29 @@ class WP_Document_Revisions_Compatibility
         // Remove UI elements that don't make sense when editing a revision.
         add_action('admin_head', [$this, 'revisionStyles'], 10);
 
-        // Add a translation
+        // Add text replacements
         add_filter('gettext', [$this, 'updateRevisionText'], 10, 3);
 
-        // Modify the permalink for revisions.
-        add_filter('post_type_link', [$this, 'modifyPermalink'], 10, 4);
+        // Maybe redirect requests for revisions previews.
+        add_action('template_redirect', [$this, 'revisionRedirect'], 15);
 
         // Hook into the document_serve_attachment filter.
         add_filter('document_serve_attachment', [$this, 'serveAttachment'], 10);
+
+        // Add a custom Revision Log metabox
+        add_action('add_meta_boxes', [$this, 'addRevisionLogMetaBox'], 10);
+    }
+
+    /**
+     * Check if a plugin is active. Works when WordPress's is_plugin_active has not been loaded.
+     * 
+     * @param string $plugin The plugin file name.
+     * @return bool
+     */
+
+    public function is_plugin_active(string $plugin): bool
+    {
+        return in_array($plugin, (array) get_option('active_plugins', array()));
     }
 
     /**
@@ -73,15 +98,9 @@ class WP_Document_Revisions_Compatibility
 
     public function isDocument(int|WP_Post|null $post): bool
     {
-        if ($post === null) {
-            return false;
-        }
+        global $wpdr;
 
-        if (isset($post->post_type)) {
-            return $post->post_type === 'document';
-        }
-
-        return get_post_type($post) === 'document';
+        return $wpdr->verify_post_type($post);
     }
 
     /**
@@ -109,9 +128,10 @@ class WP_Document_Revisions_Compatibility
     }
 
     /**
-     * Remove the revision log meta box from the document edit screen, if we're editing a draft or pending revision.
+     * Remove the revision log meta box from the document edit screen.
      * 
-     * This is because it does not show the revisions correctly and could be confusing to users.
+     * If we're editing a draft or pending revision it does not make sense to show the Revision Log meta box.
+     * If we're editing a published revision, the Revision Log meta box is replaced with a custom one.
      * 
      * @return void
      */
@@ -120,7 +140,7 @@ class WP_Document_Revisions_Compatibility
     {
         $screen = get_current_screen();
 
-        if ($screen->post_type === 'document' && $screen->base === 'post' && $this->isDocumentRevision(get_the_ID())) {
+        if ($screen->post_type === 'document' && $screen->base === 'post' && $this->isDocument(get_the_ID())) {
             remove_meta_box('revision-log', 'document', 'normal');
         }
     }
@@ -144,6 +164,13 @@ class WP_Document_Revisions_Compatibility
     }
 
     /**
+     * Add to the Revision Log meta box.
+     * 
+     * Add revisions from the Revision Queue to the Revision Log meta box.
+     * 
+     */
+
+    /**
      * Update the text if we're editing a revision.
      * 
      * @param string $translation The translated text.
@@ -154,14 +181,20 @@ class WP_Document_Revisions_Compatibility
 
     public function updateRevisionText(string $translation, string $text, string $domain): string
     {
-        if (!$this->isDocumentRevision(get_the_ID())) {
-            return $translation;
+
+        $id = get_the_ID();
+        $is_document = $this->isDocument($id);
+        $is_revision = $this->isDocumentRevision($id);
+
+        if ($is_document && $domain === 'revisionary' && $text === 'Has Revision') {
+            return 'Has Revision in Queue';
         }
 
-        if ($domain === 'wp-document-revisions' && $text === 'Latest Version of the Document') {
+        if ($is_revision && $domain === 'wp-document-revisions' && $text === 'Latest Version of the Document') {
             return 'File for this Document Revision';
         }
-        if ($domain === 'wp-document-revisions' && $text === 'Download') {
+
+        if ($is_revision && $domain === 'wp-document-revisions' && $text === 'Download') {
             return 'Preview';
         }
 
@@ -169,27 +202,39 @@ class WP_Document_Revisions_Compatibility
     }
 
     /**
-     * Modify the permalink for revisions.
+     * Redirect document revision preview links - only on sites where home_url is different from site_url.
      * 
-     * This fixes the Preview buttons on the revision edit screen.
+     * This fixes the Preview button and the Download button 
+     * (that has been renamed to Preview) on the revision edit screen.
+     * e.g. https://mysite.com/wp/?post_type=document&p=123 -> https://mysite.com/?post_type=document&p=25397
      * 
-     * @param string $post_link The post link.
-     * @param WP_Post $post The post object.
-     * @return string The modified post link.
+     * @return void
      */
 
-    public  function modifyPermalink($post_link, $post): string
+    public function revisionRedirect(): void
     {
-
-        if (!$this->isDocumentRevision($post)) {
-            return $post_link;
+        // If we're not on a 404 page, or we're not viewing a document revision, return.
+        if (!is_404() || !isset($_GET['p']) || !$this->isDocumentRevision($_GET['p'])) {
+            return;
         }
 
-        $this->log('will modifyPermalink');
+        // If the home_url is the same as the site_url, we don't need to redirect.
+        if (get_site_url() === get_home_url()) {
+            return;
+        }
 
-        $post_link = str_replace(get_site_url(), get_home_url() . '/document', $post_link);
+        // Build up the current url from get_site_url and $_SERVER.
+        $current_url = parse_url(get_site_url(), PHP_URL_SCHEME) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-        return $post_link;
+        // Build a new url based on the current url.
+        $new_url = str_replace(get_site_url(), get_home_url(), $current_url);
+
+        // If the new url is different from the current url, redirect.
+        if ($new_url !== $current_url) {
+            $this->log('Redirecting to ', $new_url);
+            wp_redirect($new_url);
+            exit;
+        }
     }
 
     /**
@@ -220,35 +265,171 @@ class WP_Document_Revisions_Compatibility
      * @return WP_Post The attachment post object.
      */
 
-     public function serveAttachment($attach)
-     {
-         $this->log('In serveAttachment');
- 
-         // Get the global wpdb object.
-         global $wpdb;
-         $post_table = "{$wpdb->prefix}posts";
- 
-         // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-         $parent = $wpdb->get_var($wpdb->prepare("SELECT post_parent FROM `$post_table` WHERE ID = %d ", $attach->post_parent));
- 
-         // Is the parent of the attachment a document (correct) or a revision (approved revision)?
-         if (0 !== (int) $parent) {
- 
-             // The parent of the attachment is a revision.
-             $this->log('Attachment: ' . $attach->ID . ' has parent: ' . $attach->post_parent .  ' which is a revision. Updating parent to: ' . $parent);
- 
-             // Update attachment post in the database.
-             wp_update_post(array(
-                 'ID'          => $attach->ID,
-                 'post_parent' => $parent,
-             ));
- 
-             // Update the attachment post object.
-             $attach->post_parent = $parent;
-         }
- 
-         // Return the attachment post object.
-         return $attach;
-     }
- 
+    public function serveAttachment($attach)
+    {
+        $this->log('In serveAttachment');
+
+        // Get the global wpdb object.
+        global $wpdb;
+        $post_table = "{$wpdb->prefix}posts";
+
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+        $parent = $wpdb->get_var($wpdb->prepare("SELECT post_parent FROM `$post_table` WHERE ID = %d ", $attach->post_parent));
+
+        // Is the parent of the attachment a document (correct) or a revision (approved revision)?
+        if (0 !== (int) $parent) {
+
+            // The parent of the attachment is a revision.
+            $this->log('Attachment: ' . $attach->ID . ' has parent: ' . $attach->post_parent .  ' which is a revision. Updating parent to: ' . $parent);
+
+            // Update attachment post in the database.
+            wp_update_post(array(
+                'ID'          => $attach->ID,
+                'post_parent' => $parent,
+            ));
+
+            // Update the attachment post object.
+            $attach->post_parent = $parent;
+        }
+
+        // Return the attachment post object.
+        return $attach;
+    }
+
+
+
+
+    /**
+     * Add a custom Revision Log metabox.
+     * 
+     * This metabox is added to the document edit screen when editing a revision.
+     * 
+     * @return void
+     */
+
+    public function addRevisionLogMetaBox(): void
+    {
+        $screen = get_current_screen();
+
+        $this->log('in addRevisionLogMetaBox');
+
+        if ($screen->post_type === 'document' && $screen->base === 'post' && $this->isDocument(get_the_ID()) && ! $this->isDocumentRevision(get_the_ID())) {
+            add_meta_box(
+                'published-revision-log',
+                __('Revision Log', 'wp-document-revisions'),
+                [$this, 'revision_metabox'],
+                'document',
+                'normal',
+                'high'
+            );
+        }
+    }
+
+    /**
+     * Custom Revision Log metabox.
+     * 
+     * This metabox is added to the document edit screen when editing a revision.
+     * 
+     * @param WP_Post $post The post object.
+     * @return void
+     */
+
+/**
+	 * Creates revision log metabox.
+	 *
+	 * @since 0.5
+	 * @param object $post the post object.
+	 */
+	public function revision_metabox( $post ) {
+
+        global $wpdr;
+
+		$can_edit_doc = current_user_can( 'edit_document', $post->ID );
+		$revisions    = $wpdr->admin->get_revisions( $post->ID );
+		$key          = $wpdr->admin->get_feed_key();
+        
+        $revisionary_revisions = rvy_get_post_revisions($post->ID);
+
+        { ?>
+            <p>
+                The table shows the published revisions for this document.
+            </p>
+        <?php }
+
+        if ( $revisionary_revisions && sizeof($revisionary_revisions) ) { ?>
+            <p>
+                There are also non-published revision(s) in the 
+                <a href="<?php echo admin_url('/admin.php?page=revisionary-q'); ?>" >Revision Queue</a>
+            </p>
+        <?php }
+		?>
+		<table id="document-revisions">
+			<thead>
+			<tr class="header">
+				<th><?php esc_html_e( 'Modified', 'wp-document-revisions' ); ?></th>
+				<th><?php esc_html_e( 'User', 'wp-document-revisions' ); ?></th>
+				<th style="width:50%"><?php esc_html_e( 'Summary', 'wp-document-revisions' ); ?></th>
+				<?php
+				if ( $can_edit_doc ) {
+					?>
+					<th><?php esc_html_e( 'Actions', 'wp-document-revisions' ); ?></th>
+				<?php } ?>
+			</tr>
+			</thead>
+			<tbody>
+		<?php
+
+		$i = 0;
+		foreach ( $revisions as $revision ) {
+			++$i;
+			if ( ! current_user_can( 'read_document', $revision->ID ) ) {
+				continue;
+			}
+			// preserve original file extension on revision links.
+			// this will prevent mime/ext security conflicts in IE when downloading.
+			$attach = $wpdr->admin->get_document( $revision->ID );
+			if ( $attach ) {
+				$fn   = get_post_meta( $attach->ID, '_wp_attached_file', true );
+				$fno  = pathinfo( $fn, PATHINFO_EXTENSION );
+				$info = pathinfo( get_permalink( $revision->ID ) );
+				$fn   = $info['dirname'] . '/' . $info['filename'];
+				// Only add extension if permalink doesnt contain post id as it becomes invalid.
+				if ( ! strpos( $info['filename'], '&p=' ) ) {
+					$fn .= '.' . $fno;
+				}
+			} else {
+				$fn = get_permalink( $revision->ID );
+			}
+			?>
+			<tr>
+				<td><a href="<?php echo esc_url( $fn ); ?>" title="<?php echo esc_attr( $revision->post_modified ); ?>" class="timestamp"><?php echo esc_html( human_time_diff( strtotime( $revision->post_modified_gmt ), time() ) ); ?></a></td>
+				<td><?php echo esc_html( get_the_author_meta( 'display_name', $revision->post_author ) ); ?></td>
+				<td><?php echo esc_html( $revision->post_excerpt ); ?></td>
+				<?php if ( $can_edit_doc && $post->ID !== $revision->ID && $i > 2 ) { ?>
+					<td><a href="
+					<?php
+					echo esc_url(
+						wp_nonce_url(
+							add_query_arg(
+								array(
+									'revision' => $revision->ID,
+									'action'   => 'restore',
+								),
+								'revision.php'
+							),
+							"restore-post_$revision->ID"
+						)
+					);
+					?>
+				" class="revision"><?php esc_html_e( 'Restore', 'wp-document-revisions' ); ?></a></td>
+				<?php } ?>
+			</tr>
+			<?php
+		}
+		?>
+		</tbody>
+		</table>
+		<p style="padding-top: 10px;"><a href="<?php echo esc_url( add_query_arg( 'key', $key, get_post_comments_feed_link( $post->ID ) ) ); ?>"><?php esc_html_e( 'RSS Feed', 'wp-document-revisions' ); ?></a></p>
+		<?php
+	}
 }
