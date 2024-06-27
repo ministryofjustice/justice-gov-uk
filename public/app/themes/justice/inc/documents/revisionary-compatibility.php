@@ -41,8 +41,11 @@ class WP_Document_Revisions_Compatibility
             return;
         }
 
-        // Remove the revision log meta box from the document revision edit screen.
-        add_action('admin_head', [$this, 'removeRevisionLogMetaBox'], 10);
+        // Reorder the admin menu - Documents above Revisions.
+        add_action('admin_menu', [$this, 'reorderAdminMenu'], 20);
+
+        // Remove the revision log meta box from the document revision edit screen, swap it on document edit screen.
+        add_action('document_edit', [$this, 'removeAndSwapRevisionLogMetaBox'], 10);
 
         // Remove UI elements that don't make sense when editing a revision.
         add_action('admin_head', [$this, 'revisionStyles'], 10);
@@ -55,9 +58,6 @@ class WP_Document_Revisions_Compatibility
 
         // Hook into the document_serve_attachment filter.
         add_filter('document_serve_attachment', [$this, 'serveAttachment'], 10);
-
-        // Add a custom Revision Log metabox
-        add_action('add_meta_boxes', [$this, 'addRevisionLogMetaBox'], 10);
     }
 
     /**
@@ -128,6 +128,50 @@ class WP_Document_Revisions_Compatibility
     }
 
     /**
+     * Move the Revisions menu item below the Documents.
+     * 
+     * @return void
+     */
+
+    public function reorderAdminMenu(): void
+    {
+        $this->log('in reorderAdminMenu');
+
+        global $menu;
+
+        $revisionary_key = null;
+        $document_key = null;
+
+        // Loop over menu to get the keys for the revisionary-q and document menu items.
+        foreach ($menu as $key => $value) {
+            if ($value[2] === 'revisionary-q') {
+                $revisionary_key = $key;
+            }
+            if ($value[2] === 'edit.php?post_type=document') {
+                $document_key = $key;
+            }
+            if ($revisionary_key && $document_key) {
+                break;
+            }
+        }
+
+
+        if ($revisionary_key && $document_key &&  floatval($revisionary_key) < floatval($document_key)) {
+
+            $new_revisionary_key = $document_key + 1;
+
+            // Find a new key that doesn't exist.
+            while (isset($menu[$new_revisionary_key])) {
+                $new_revisionary_key++;
+            }
+
+            $this->log('moving revisionary-q menu item');
+            $menu[$new_revisionary_key] = $menu[$revisionary_key];
+            unset($menu[$revisionary_key]);
+        }
+    }
+
+    /**
      * Remove the revision log meta box from the document edit screen.
      * 
      * If we're editing a draft or pending revision it does not make sense to show the Revision Log meta box.
@@ -136,13 +180,54 @@ class WP_Document_Revisions_Compatibility
      * @return void
      */
 
-    public function removeRevisionLogMetaBox(): void
+    public function removeAndSwapRevisionLogMetaBox(): void
     {
-        $screen = get_current_screen();
+        remove_meta_box('revision-log', 'document', 'normal');
 
-        if ($screen->post_type === 'document' && $screen->base === 'post' && $this->isDocument(get_the_ID())) {
-            remove_meta_box('revision-log', 'document', 'normal');
+        $this->log('in addRevisionLogMetaBox');
+
+        if (!$this->isDocumentRevision(get_the_ID())) {
+            add_meta_box(
+                'revision-log',
+                __('Revision Log', 'wp-document-revisions'),
+                [$this, 'revisionMetabox'],
+                'document',
+                'normal',
+                'low'
+            );
         }
+    }
+
+    /**
+     * Custom Revision Log metabox.
+     * 
+     * This metabox is added to the document edit screen when editing a document (not a document revision).
+     * 
+     * @param WP_Post $post The post object.
+     * @return void
+     */
+
+    public function revisionMetabox($post)
+    {
+
+        global $wpdr;
+
+        if (!isset($wpdr) || !function_exists('rvy_get_post_revisions')) {
+            return;
+        }
+
+        $revisionary_revisions = rvy_get_post_revisions($post->ID);
+
+        echo '<p>' . _e('The table shows the <strong>published</strong> revisions for this document.', 'wp-document-revisions')  . ' </p>';
+
+        if ($revisionary_revisions && sizeof($revisionary_revisions)) {
+            echo '<p>';
+            _e('There are also <strong>non-published</strong> revision(s) in the ', 'wp-document-revisions');
+            echo sprintf('<a href="%s">%s</a>', admin_url('/admin.php?page=revisionary-q'), esc_html('Revision Queue', 'revisionary'));
+            echo '.</p>';
+        }
+
+        $wpdr->admin->revision_metabox($post);
     }
 
     /**
@@ -295,141 +380,4 @@ class WP_Document_Revisions_Compatibility
         // Return the attachment post object.
         return $attach;
     }
-
-
-
-
-    /**
-     * Add a custom Revision Log metabox.
-     * 
-     * This metabox is added to the document edit screen when editing a revision.
-     * 
-     * @return void
-     */
-
-    public function addRevisionLogMetaBox(): void
-    {
-        $screen = get_current_screen();
-
-        $this->log('in addRevisionLogMetaBox');
-
-        if ($screen->post_type === 'document' && $screen->base === 'post' && $this->isDocument(get_the_ID()) && ! $this->isDocumentRevision(get_the_ID())) {
-            add_meta_box(
-                'published-revision-log',
-                __('Revision Log', 'wp-document-revisions'),
-                [$this, 'revision_metabox'],
-                'document',
-                'normal',
-                'high'
-            );
-        }
-    }
-
-    /**
-     * Custom Revision Log metabox.
-     * 
-     * This metabox is added to the document edit screen when editing a revision.
-     * 
-     * @param WP_Post $post The post object.
-     * @return void
-     */
-
-/**
-	 * Creates revision log metabox.
-	 *
-	 * @since 0.5
-	 * @param object $post the post object.
-	 */
-	public function revision_metabox( $post ) {
-
-        global $wpdr;
-
-		$can_edit_doc = current_user_can( 'edit_document', $post->ID );
-		$revisions    = $wpdr->admin->get_revisions( $post->ID );
-		$key          = $wpdr->admin->get_feed_key();
-        
-        $revisionary_revisions = rvy_get_post_revisions($post->ID);
-
-        { ?>
-            <p>
-                The table shows the published revisions for this document.
-            </p>
-        <?php }
-
-        if ( $revisionary_revisions && sizeof($revisionary_revisions) ) { ?>
-            <p>
-                There are also non-published revision(s) in the 
-                <a href="<?php echo admin_url('/admin.php?page=revisionary-q'); ?>" >Revision Queue</a>
-            </p>
-        <?php }
-		?>
-		<table id="document-revisions">
-			<thead>
-			<tr class="header">
-				<th><?php esc_html_e( 'Modified', 'wp-document-revisions' ); ?></th>
-				<th><?php esc_html_e( 'User', 'wp-document-revisions' ); ?></th>
-				<th style="width:50%"><?php esc_html_e( 'Summary', 'wp-document-revisions' ); ?></th>
-				<?php
-				if ( $can_edit_doc ) {
-					?>
-					<th><?php esc_html_e( 'Actions', 'wp-document-revisions' ); ?></th>
-				<?php } ?>
-			</tr>
-			</thead>
-			<tbody>
-		<?php
-
-		$i = 0;
-		foreach ( $revisions as $revision ) {
-			++$i;
-			if ( ! current_user_can( 'read_document', $revision->ID ) ) {
-				continue;
-			}
-			// preserve original file extension on revision links.
-			// this will prevent mime/ext security conflicts in IE when downloading.
-			$attach = $wpdr->admin->get_document( $revision->ID );
-			if ( $attach ) {
-				$fn   = get_post_meta( $attach->ID, '_wp_attached_file', true );
-				$fno  = pathinfo( $fn, PATHINFO_EXTENSION );
-				$info = pathinfo( get_permalink( $revision->ID ) );
-				$fn   = $info['dirname'] . '/' . $info['filename'];
-				// Only add extension if permalink doesnt contain post id as it becomes invalid.
-				if ( ! strpos( $info['filename'], '&p=' ) ) {
-					$fn .= '.' . $fno;
-				}
-			} else {
-				$fn = get_permalink( $revision->ID );
-			}
-			?>
-			<tr>
-				<td><a href="<?php echo esc_url( $fn ); ?>" title="<?php echo esc_attr( $revision->post_modified ); ?>" class="timestamp"><?php echo esc_html( human_time_diff( strtotime( $revision->post_modified_gmt ), time() ) ); ?></a></td>
-				<td><?php echo esc_html( get_the_author_meta( 'display_name', $revision->post_author ) ); ?></td>
-				<td><?php echo esc_html( $revision->post_excerpt ); ?></td>
-				<?php if ( $can_edit_doc && $post->ID !== $revision->ID && $i > 2 ) { ?>
-					<td><a href="
-					<?php
-					echo esc_url(
-						wp_nonce_url(
-							add_query_arg(
-								array(
-									'revision' => $revision->ID,
-									'action'   => 'restore',
-								),
-								'revision.php'
-							),
-							"restore-post_$revision->ID"
-						)
-					);
-					?>
-				" class="revision"><?php esc_html_e( 'Restore', 'wp-document-revisions' ); ?></a></td>
-				<?php } ?>
-			</tr>
-			<?php
-		}
-		?>
-		</tbody>
-		</table>
-		<p style="padding-top: 10px;"><a href="<?php echo esc_url( add_query_arg( 'key', $key, get_post_comments_feed_link( $post->ID ) ) ); ?>"><?php esc_html_e( 'RSS Feed', 'wp-document-revisions' ); ?></a></p>
-		<?php
-	}
 }
