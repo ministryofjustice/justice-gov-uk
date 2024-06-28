@@ -111,7 +111,7 @@ Login details located in `docker-compose.yml`
 
 **Jekyll**<br>
 Transforms the markdown docs in `.github/pages` to HTML. <br>
-The output is served at http://docs.justice.docker
+The output is served at http://pages.justice.docker
 
 > There is no need to install application software on your computer.<br>
 > All required software is built within the services and all services are ephemeral.

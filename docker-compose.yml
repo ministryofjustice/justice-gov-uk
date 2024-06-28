@@ -85,7 +85,7 @@ services:
       - "4000:4000"
       - "35729:35729"
     environment:
-      VIRTUAL_HOST: docs.${SERVER_NAME}
+      VIRTUAL_HOST: pages.${SERVER_NAME}
       VIRTUAL_PORT: 4000
 
 
