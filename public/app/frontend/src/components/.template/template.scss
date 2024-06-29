@@ -1,0 +1,11 @@
+@import '../../../style';
+
+.template {
+    background-color: var(--justice-primary-grey);
+    &__text {
+        font-size: 1rem;
+    }
+    &__variable {
+        font-size: 1.5rem;
+    }
+}
