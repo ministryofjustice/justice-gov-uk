@@ -1,5 +1,7 @@
 public/app/uploads/*
 public/app/themes/justice/node_modules
+public/app/frontend/.storybook
+public/app/frontend/node_modules
 public/wp
 vendor
 deploy

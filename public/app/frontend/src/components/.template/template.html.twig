@@ -1,0 +1,17 @@
+{#
+    @file
+    This is an example component template
+
+    Available variables:
+        - templateVariable: An example variable
+
+    example:
+        {% include '@components/template/template.html.twig' with {
+            templateVariable: 'Example variable'
+        }%}
+#}
+
+<div class="template">
+    <p class="template__text">This is an example component</p>
+    <span class="template__variable">{{templateVariable}}</span>
+</div>
