@@ -1,0 +1,124 @@
+import { Meta, Unstyled, Canvas } from '@storybook/blocks';
+import * as LayoutWithSidebar from '../../layouts/with-sidebar/with-sidebar.stories';
+
+<Meta title="Design/Grid" />
+
+export const wrapperStyle = {background: '#fbc79c'};    
+export const containerStyle = {background: '#bcca87', padding: '0 2rem', margin: '0 6rem'};
+export const gridStyle = {background: '#ffd998', display: 'grid', gridTemplateColumns: 'repeat(12, [col-start] 1fr)', gap: '1.5rem'}
+export const gridRowStyle = {background: '#ffd998'};
+export const componentStyle = {border: '2px dashed #663bac', height: '4rem', background: '#7dadb9', color: '#fff', marginBottom: '1rem'};
+
+# Grid
+
+Most pages will consist of a header, a menu, the page content and a footer. Each of these sections consists of a container, grid and grid row.
+
+A page using the _with sidebar_ template might look like this on desktop:
+
+<Unstyled  style={{background: '#d7d7d7', border: '1px black solid'}}>
+        <div style={{...wrapperStyle, background: '#7dadb9'}}>
+            <div style={{...containerStyle, background: '#7dadb9'}}>
+                <div style={{...componentStyle}}>Header</div>
+            </div>
+        </div>
+        <div style={{...wrapperStyle, background: '#7dadb9'}}>
+        <div style={{...containerStyle, background: '#7dadb9'}}>
+            <div style={{...componentStyle, height: '2rem'}}>Menu</div>
+        </div>
+        </div>
+        <div style={{...wrapperStyle}}>
+        <div style={{...containerStyle}}>
+            <div style={{...gridStyle}}>
+                <div style={{...gridRowStyle, gridColumn: '1 / span 8'}}>
+                    <div style={{...componentStyle, height: '6rem'}}>
+                        First component
+                    </div>
+                    <div style={{...componentStyle, height: '6rem'}}>
+                        Second component
+                    </div>
+                </div>
+                   <div style={{...componentStyle, gridColumn: '9 / span 4', height: '6rem'}}>
+                    Sidebar
+                </div>
+            </div>
+        </div>
+        </div>
+        <div style={{...wrapperStyle, background: '#7dadb9'}}>
+        <div style={{...containerStyle, background: '#7dadb9'}}>
+            <div style={{...componentStyle}}>
+                        Footer
+            </div>
+        </div>
+        </div>
+</Unstyled>
+
+All of the page content is constrained to the maximum width of the page, however by working in rows we're able to keep the content width consistent while full width elements like the header and menu can have their background 'break out' of the maximum width.
+
+The page content is set on a 12 column grid with each component taking up 100% of the space available to it.
+
+## Mobile
+
+**Columns:** 4
+
+**Grid gap:** 1rem
+
+**Gutter:** 1rem
+
+**Maximum width:** 100%
+
+<Unstyled>
+    <div
+        class="container"
+        style={{ background: '#d7d7d7', width: '412px', padding: '0 1rem' }}
+    >
+        <div
+            class="grid"
+            style={{
+                gridTemplateColumns: 'repeat(4, [col-start] 1fr)',
+                gap: '1rem',
+            }}
+        >
+            {[...Array(4).keys()].map(() => {
+                return (
+                    <div
+                        class="grid-row"
+                        style={{
+                            width: '100%',
+                            height: '100px',
+                            background: '#5a5c92',
+                        }}
+                    ></div>
+                );
+            })}
+        </div>
+    </div>
+</Unstyled>
+
+## Desktop
+
+**Columns:** 12
+
+**Grid gap:** 1.5rem
+
+**Gutter:** 3rem
+
+**Maximum width:** 63.75rem
+
+<Unstyled>
+    <div class="container" style={{ background: '#d7d7d7' }}>
+        <div class="grid">
+            {[...Array(12).keys()].map(() => {
+                return (
+                    <div
+                        class="grid-row"
+                        style={{
+                            width: '100%',
+                            height: '100px',
+                            background: '#5a5c92',
+                        }}
+                    ></div>
+                );
+            })}
+        </div>
+    </div>
+</Unstyled>

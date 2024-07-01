@@ -10,7 +10,7 @@ const preview = {
         order: [
           'Documentation',
           'Development', ['Setup', 'Build a new component', 'Build a new layout', 'Connect a component to Wordpress'],
-          'Design', ['Typography', 'Colours', 'Icons'], 
+          'Design', ['Typography', 'Colours', 'Grid', 'Icons'], 
           'Quality assurance', ['Testing'], 
           'Components', 
           'Layouts', 

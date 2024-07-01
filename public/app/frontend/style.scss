@@ -44,7 +44,11 @@ $justice-md: 768px;
 $justice-lg: 1024px;
 
 // Grid settings
-$max-width: 1020px;
+$gap-mobile: 1rem;
+$gap: 1.5rem;
+$gutter-mobile: 1rem;
+$gutter: 3rem;
+$max-width: 63.75rem;
 
 // Spacing https://design-system.service.gov.uk/styles/spacing/
 $spacing-units-mobile: (
@@ -73,6 +77,35 @@ $spacing-units-desktop: (
     9: 3.75rem,
 );
 
+@mixin container() {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 $gutter-mobile;
+    max-width: calc(100% - (2 * $gutter-mobile));
+    @media screen and (min-width: $justice-lg) {
+        padding: 0 $gutter;
+        max-width: calc($max-width - (2 * $gutter));
+    }
+}
+
+@mixin grid() {
+    display: grid;
+    grid-template-columns: repeat(4, [col-start] 1fr);
+    gap: $gap-mobile;
+    width: 100%;
+    @media screen and (min-width: $justice-lg) {
+        grid-template-columns: repeat(12, [col-start] 1fr);
+        gap: $gap;
+    }
+}
+
+@mixin grid-row($start: 1, $end: 4) {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    grid-column: #{$start}/ span #{$end};
+}
+
 /// Calculates margin or padding according to the spacing scales above
 ///
 /// @param {string ('margin'|'padding')} $type
@@ -85,13 +118,13 @@ $spacing-units-desktop: (
 @mixin spacing($type: 'margin', $unit: 1, $direction: 'all') {
     @if ($direction != 'all') {
         #{$type}-#{$direction}: map-get($spacing-units-mobile, $unit);
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: $justice-lg) {
             #{$type}-#{$direction}: map-get($spacing-units-desktop, $unit);
         }
     }
     @else {
         #{$type}: map-get($spacing-units-mobile, $unit);
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: $justice-lg) {
             #{$type}: map-get($spacing-units-desktop, $unit);
         }
     }
@@ -109,7 +142,7 @@ $spacing-units-desktop: (
     .eyebrow {
         @include eyebrow('h1');
     }
-    @media screen and (min-width: $justice-md) {
+    @media screen and (min-width: $justice-lg) {
         font-size: 3rem;
         line-height: 3.125rem;
     }
@@ -124,7 +157,7 @@ $spacing-units-desktop: (
     .eyebrow {
         @include eyebrow('h2');
     }
-    @media screen and (min-width: $justice-md) {
+    @media screen and (min-width: $justice-lg) {
         font-size: 2.25rem;
         line-height: 2.5rem;
     }
@@ -139,7 +172,7 @@ $spacing-units-desktop: (
     .eyebrow {
         @include eyebrow('h3');
     }
-    @media screen and (min-width: $justice-md) {
+    @media screen and (min-width: $justice-lg) {
         font-size: 1.5rem;
         line-height: 1.875rem;
     }
@@ -178,14 +211,14 @@ $spacing-units-desktop: (
     @if ($tag == 'h1') {
         font-size: 1.125rem;
         line-height: 1.11;
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: $justice-lg) {
             font-size: 1.6875rem;
         }
     }
     @if ($tag == 'h2') {
         font-size: 1.125rem;
         line-height: 1.11;
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: $justice-lg) {
             font-size: 1.5rem;
             line-height: 1.25;
         }
@@ -193,7 +226,7 @@ $spacing-units-desktop: (
     @if ($tag == 'h3') {
         font-size: 1rem;
         line-height: 1.25;
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: $justice-lg) {
             font-size: 1.1875rem;
             line-height: 1.32;
         }
