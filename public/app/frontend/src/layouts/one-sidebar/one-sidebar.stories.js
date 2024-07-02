@@ -1,15 +1,15 @@
-import withSidebar from './with-sidebar.html.twig';
+import oneSidebar from './one-sidebar.html.twig';
 import './index.js';
 
 export default {
-    title: 'Layouts/With sidebar',
+    title: 'Layouts/One sidebar',
     parameters: {
         layout: 'fullscreen',
     },
 };
 
 const Template = (args) => {
-    return withSidebar(args);
+    return oneSidebar(args);
 };
 
 export const Right = Template.bind({});
