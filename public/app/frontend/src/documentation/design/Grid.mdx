@@ -66,14 +66,12 @@ A page using the _with sidebar_ template might look like this on desktop:
     </div>
     <div style={{ ...wrapperStyle, background: '#7dadb9' }}>
         <div style={{ ...containerStyle, background: '#7dadb9' }}>
-            <div style={{ ...componentStyle }}>Footer</div>
+            <div style={{ ...componentStyle, marginBottom: '0' }}>Footer</div>
         </div>
     </div>
 </Unstyled>
 
 All of the page content is constrained to the maximum width of the page, however by working in rows we're able to keep the content width consistent while full width elements like the header and menu can have their background 'break out' of the maximum width.
-
-The page content is set on a 12 column grid with each component taking up 100% of the space available to it.
 
 ## Mobile
 

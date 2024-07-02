@@ -8,19 +8,22 @@ In this guide we'll be building a new component for Justice UK. If you want to b
 
 ## Setup
 
-1. In `./public/app/frontend/src/components` copy the `.template` folder and replace _.template_ in the file names with your components name. 
+1. In `./public/app/frontend/src/components` copy the `.template` folder and replace _.template_ in the file names with your components name.
 2. Open `./public/app/frontend/index.js` and add an import for your component. This will allow webpack to build your `.js`, `.scss` and `.html.twig` files into the `dist` directory, ready to be used by Wordpress.
 3. In `[component-name].stories.js` update the file imports with your component's name and change the title in `default.exports` to _Components/[Component name]_
-4. In `index.js` update the file imports to use your component's name. If the component will need to run JavaScript then add `export default function() { // Code goes here }`. You will need to adapt the import in step 2 to import and run the JavaScript, e.g. 
+4. In `index.js` update the file imports to use your component's name. If the component will need to run JavaScript then add `export default function() { // Code goes here }`. You will need to adapt the import in step 2 to import and run the JavaScript, e.g.
+
 ```
 import component from './components/component;
 component();
 ```
+
 5. In your terminal `cd` into `./public/app/frontend` and run `npm run storybook` to build Storybook. It should open automatically in your browser at `localhost:6006`. Your component will be visible under **Components** in the sidebar.
 
 ## Build
 
 1. In `component-name.stories.js` define your templates and any args they might take. For example, a button component with a primary and secondary variant might look like this:
+
 ```
 export const Primary = Template.bind({});
 Primary.args = {
@@ -34,20 +37,21 @@ Secondary.args = {
     style: 'secondary'
 }
 ```
+
 2. Build the HTML template in `component-name.html.twig`, including your arguments using Twig syntax and class names in BEM (See [Templating with Twig](https://twig.symfony.com/doc/3.x/templates.html) and [BEM quick start](https://en.bem.info/methodology/quick-start) for more information).
-3. Style the component in `component-name.scss`. Ensure you've included `@import '../../../style';` at the top of the file to use global mixins and variables. 
-3. Add any JavaScript to `index.js` in a default export. See Setup step 4 above for an example.
+3. Style the component in `component-name.scss`. Ensure you've included `@import '../../../style';` at the top of the file to use global mixins and variables.
+4. Add any JavaScript to `index.js` in a default export. See Setup step 4 above for an example.
 
 ## Document
 
 All of our components should be well documented. Ideally each component should have:
 
-- At least one example in Storybook for each variant. For example if a button has a primary and secondary variant both should be available in the Storybook sidebar.
-- Each component should appear in at least one example page to show how it will look in context.
+-   At least one example in Storybook for each variant. For example if a button has a primary and secondary variant both should be available in the Storybook sidebar.
+-   Each component should appear in at least one example page to show how it will look in context.
 
 **JavaScript**: functions should be accompanied by JSDoc comments.
 
-**Sass**:  mixins and functions should be documented with SassDoc.
+**Sass**: mixins and functions should be documented with SassDoc.
 
 **Twig**: PHPDoc syntax can be used for Twig files and each component should have an example of how the component can be included, e.g.
 
@@ -65,15 +69,16 @@ This makes it easier for backend developers as they can just copy and paste them
 Full functional testing will take place once the component is integrated into the backend but we can test responsiveness and accessibility within the Storybook application.
 
 ### Browser testing
+
 // TODO: Agree browser testing software, link to Browserstack if we have an account
 
 In Storybook open your component and click on the **Viewport** button in the toolbar at top. Use this to view the component at different screensizes.
 
 ### Accessibility testing
+
 // TODO: Agree accessibility testing software, add link
 
 In Storybook open your component and press `⌥ + A` to open the addons panel. Click on the Accessibility tab to view any violations.
-
 
 ## Lint
 
