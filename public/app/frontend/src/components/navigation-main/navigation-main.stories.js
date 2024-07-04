@@ -21,11 +21,11 @@ Default.args = {
         },
         {
             url: '#',
-            label: 'Procedure rules'
+            label: 'Procedure rules',
         },
         {
             url: '#',
-            label: 'Offenders'
-        }
+            label: 'Offenders',
+        },
     ],
 };
