@@ -44,7 +44,7 @@ export const generateTypesetCanvas = (
                 const key = `${loop}-typeset`;
                 const sample =
                     type === 'heading-with-captions'
-                        ? `<${tag} style="font-size:${rem}"><span className="eyebrow">${sampleCaption}</span>${sampleText}</${tag}>`
+                        ? `<hgroup><${tag} style="font-size:${rem}"><p className="eyebrow">${sampleCaption}</p>${sampleText}</${tag}></hgroup>`
                         : `<${tag} style="font-size:${rem}">${sampleText}</${tag}>`;
                 return (
                     <div

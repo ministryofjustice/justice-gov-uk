@@ -36,10 +36,10 @@ p {
     margin: 0;
 }
 
-.container {
-    @include container;
+a, .link {
+    @include link;
 }
 
-.grid {
-    @include grid;
+.visually-hidden {
+    @include visually-hidden;
 }
