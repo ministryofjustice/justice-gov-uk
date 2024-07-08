@@ -13,6 +13,7 @@
         width: 100%;
         @media screen and (min-width: $justice-lg) {
             flex-direction: row;
+            margin-left: -0.625rem;
         }
     }
 
