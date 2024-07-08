@@ -1,0 +1,54 @@
+@import '../../../style';
+
+.header {
+    @include spacing('padding', 2, 'top');
+    @include spacing('padding', 2, 'bottom');
+
+    background-color: var(--justice-primary-black);
+
+    &__container {
+        @include container;
+
+        display: flex;
+        flex-direction: column;
+        @media screen and (min-width: $justice-lg) {
+            @include spacing('margin', 1, 'bottom');
+
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    &__home {
+        @include focus-outline;
+        @include spacing('margin', 3, 'bottom');
+    }
+
+    &__logo {
+        background-image: url('../../assets/moj-short-logo.png');
+        background-size: contain;
+        height: 3.875rem;
+        width: 15.125rem;
+    }
+
+    &__search {
+        @include spacing('margin', 1, 'bottom');
+        @media screen and (min-width: $justice-lg) {
+            margin-bottom: 0;
+        }
+
+        input[type='text'] {
+            width: 100%;
+            @media screen and (min-width: $justice-lg) {
+                width: 15rem;
+            }
+        }
+    }
+
+    &__nav {
+        @media screen and (min-width: $justice-lg) {
+            margin-left: -0.625rem;
+        }
+    }
+}

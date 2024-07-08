@@ -1,0 +1,46 @@
+{#
+@file
+A search bar
+
+Available variables:
+    - action: string The form action
+    - id: string The unique id of the form element
+    - input: object The variables for the input component
+    - button: object The variables for the button component
+example:
+    {% include '@components/search-bar/search-bar.html.twig' with {
+        action: '/',
+        id: 'search-top'
+        input: {
+            labelHidden: true,
+            label: 'Search',
+            id: 'search-top-input',
+        },
+        button: {
+            style: 'primary',
+            type: 'input',
+            inputType: 'submit',
+            buttonText: 'Submit'
+        }
+    }%}
+#}
+<form id="{{ id }}" class="search-bar" action="{{ action }}">
+    <div class="search-bar__wrapper">
+        <div class="search-bar__input">
+            {% include '@components/text-input/text-input.html.twig' with {
+                labelHidden: input.labelHidden,
+                label: input.label,
+                id: input.id,
+                button: button,
+            }%}
+        </div>
+        <div class="search-bar__button">
+            {% include '@components/button/button.html.twig' with {
+                style: 'primary',
+                type: 'input',
+                inputType: 'submit',
+                buttonText: button.text,
+            }%}
+        </div>
+    </div>
+</form>

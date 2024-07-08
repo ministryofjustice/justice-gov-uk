@@ -14,7 +14,7 @@ const preview = {
           'Quality assurance', ['Testing'], 
           'Components', 
           'Layouts', 
-          'Page examples'
+          'Example pages',
         ],
         locales: 'en-GB',
       }

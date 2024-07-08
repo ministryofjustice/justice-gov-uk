@@ -260,19 +260,13 @@ $iconSizes: (
     }
 }
 
-@mixin focus {
-    outline: 3px solid transparent;
-    background-color: var(--gds-yellow);
-    box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
-    color: var(--gds-black);
-    text-decoration: none;
-}
-
 @mixin link {
     @include body;
     color: var(--justice-link);
+    outline: none;
     &:hover {
         color: var(--justice-link-hover);
+        text-decoration-thickness: max(3px, .1875rem, .12em);
     }
     &:visited {
         color: var(--justice-link-visited);
@@ -280,8 +274,12 @@ $iconSizes: (
     &:active {
         color: var(--justice-link-active);
     }
-    &:focus {
-        @include focus;
+    &:focus:not(:active):not(:hover) {
+        outline: 3px solid transparent;
+        background-color: var(--gds-yellow);
+        box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
+        color: var(--gds-black);
+        text-decoration: none;
     }
 }
 
@@ -291,17 +289,23 @@ $iconSizes: (
     display: inline-block;
     background-color: var(--justice-secondary-dark-grey);
     color: var(--justice-primary-white);
-    border: unset;
+    border: 0;
     height: 100%;
     width: fit-content;
     cursor: pointer;
-    
+    text-align: center;
+    vertical-align: top;
+    outline: none;
     &:hover {
-        background-color: var(--justice-primary-white);
+        background-color: var(--justice-primary-grey);
         color: var(--justice-primary-black);
     }
-    &:focus {
-        @include focus;
+
+    &:focus:not(:active):not(:hover) {
+        color: var(--gds-black);
+        background-color: var(--gds-yellow);
+        border-bottom: 4px solid black;
+        padding-bottom: 0;
     }
     @if $type == 'secondary' {
         background-color: var(--justice-primary-white);
@@ -310,6 +314,16 @@ $iconSizes: (
             background-color: var(--justice-secondary-dark-grey);
             color: white;
         }
+    }
+}
+
+// Use to add a simple focus ring to link or button elements
+@mixin focus-outline {
+    &:focus:not(:active):not(:hover), &:focus-within {
+        outline: 3px solid var(--gds-yellow);
+        outline-offset: 0;
+        box-shadow: inset 0 0 0 2px;
+        background-color: transparent;
     }
 }
 

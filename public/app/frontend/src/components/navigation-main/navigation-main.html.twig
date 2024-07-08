@@ -7,7 +7,7 @@ Available variables:
         - url: string The url for the link
         - label: string The label for the link
 example:
-    {% include '@components/navigation-main/navigation-main.html.twig' with {
+    {% include '@components/navigation-main/search-bar.html.twig' with {
         links: [
             {
                 url: 'https://google.com',
@@ -23,22 +23,18 @@ example:
 #}
 <nav id="navigation-main" class="navigation-main">
     <div class="navigation-main__container">
-        <div class="navigation-main__grid">
-            <div class="navigation-main__row">
-                <ul class="navigation-main__list">
-                    {% for link in links %}
-                        <li class="navigation-main__link">
-                            {% include '@components/link/link.html.twig' with {
-                                newTab: link.newTab,
-                                link: {
-                                    url: link.url,
-                                    label: link.label
-                                }
-                            }%}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+        <ul class="navigation-main__list">
+            {% for link in links %}
+                <li class="navigation-main__link">
+                    {% include '@components/link/link.html.twig' with {
+                        newTab: link.newTab,
+                        link: {
+                            url: link.url,
+                            label: link.label
+                        }
+                    } %}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 </nav>
