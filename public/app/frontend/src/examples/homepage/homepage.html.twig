@@ -42,3 +42,42 @@
 {% block columnTwo %}
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nunc a varius aliquet. Sed consequat tempus elementum. Duis hendrerit arcu a nulla pulvinar, vitae elementum dui malesuada.
 {% endblock %}
+
+{% block footer %}
+    {% include '@components/footer/footer.html.twig' with {
+        links: [
+            {
+                url: '#',
+                label: 'Accessibility',
+            },
+            {
+                url: '#',
+                label: 'Cookies',
+            },
+            {
+                url: '#',
+                label: 'Contacts',
+            },
+            {
+                url: '#',
+                label: 'Copyright',
+            },
+            {
+                url: '#',
+                label: 'Help',
+            },
+            {
+                url: '#',
+                label: 'Privacy',
+            },
+            {
+                url: '#',
+                label: 'Webchats',
+            },
+            {
+                url: '#',
+                label: 'Website queries',
+            },
+        ],
+    } %}
+{% endblock %}
