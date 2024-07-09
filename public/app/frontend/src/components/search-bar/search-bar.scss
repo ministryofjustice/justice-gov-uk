@@ -29,7 +29,6 @@
 
         &:focus-within {
             input[type='submit']:not(:active, :hover) {
-                border: 2px solid var(--justice-border-input);
                 border-left: 0;
                 padding-top: 0;
                 padding-bottom: 0;
