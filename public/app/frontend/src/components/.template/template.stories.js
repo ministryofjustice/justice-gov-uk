@@ -12,4 +12,4 @@ const Template = (args) => {
 export const Default = Template.bind({});
 Default.args = {
     templateVariable: 'This is an example of a variable',
-}
+};

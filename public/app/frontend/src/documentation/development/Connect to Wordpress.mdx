@@ -13,9 +13,11 @@ Our component library is designed so that it can be worked on independently of t
 Run the commands to get the site running locally according to the README in `.github`
 
 ## Integration
+
 1. Go to `public/app/themes/justice` to work on the Justice UK Wordpress theme.
 2. Find the template that you want to edit, for example if we were replacing the existing header we would want to edit `header.php`.
 3. We're using [Timber](https://timber.github.io/docs/v2/) so that we can use Twig templates in Wordpress, with the goal of separating all of our templating (HTML) from the logic (PHP). Add `Timber::render()`. to the `.php` file to render the frontend component. It should look like this:
+
 ```
     Timber::render('@components/header/header.html.twig', [
         'showLogo' => true,
@@ -33,5 +35,5 @@ Run the commands to get the site running locally according to the README in `.gi
         ],
     ]);
 ```
-You should be able to find the required variables for each component in the matching `.twig.html` file in the frontend.
-4. Go to `justice.docker` and you should see your component. Any changes made in the frontend will be reflected but you will need to refresh the page.
+
+You should be able to find the required variables for each component in the matching `.twig.html` file in the frontend. 4. Go to `justice.docker` and you should see your component. Any changes made in the frontend will be reflected but you will need to refresh the page.

@@ -13,17 +13,17 @@ export const Primary = Template.bind({});
 Primary.args = {
     buttonText: 'Search',
     style: 'primary',
-}
+};
 
 export const Secondary = Template.bind({});
 Secondary.args = {
     ...Primary.args,
-    style: 'secondary'
-}
+    style: 'secondary',
+};
 
 export const Input = Template.bind({});
 Input.args = {
     ...Primary.args,
     type: 'input',
-    inputType: 'submit'
-}
+    inputType: 'submit',
+};
