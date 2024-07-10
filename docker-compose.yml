@@ -1,8 +1,6 @@
 volumes:
-  theme_node_modules: ~
-  theme_dist: ~
-  frontend_node_modules: ~
-  frontend_dist: ~
+  node_modules: ~
+  dist: ~
   php-socket:
   mariadb_data: ~
   minio_storage: ~
@@ -14,7 +12,7 @@ services:
       context: .
       target: dev
     volumes:
-      - theme_dist:/var/www/html/public/app/themes/justice/dist
+      - dist:/var/www/html/public/app/themes/justice/dist
       - .:/var/www/html
       - php-socket:/sock
     env_file:
@@ -29,7 +27,7 @@ services:
       dockerfile: Dockerfile
       target: nginx-dev
     volumes:
-      - theme_dist:/var/www/html/public/app/themes/justice/dist
+      - dist:/var/www/html/public/app/themes/justice/dist
       - php-socket:/sock
       ### Deploy scripts
       - ./deploy/config/local/php-fpm.conf:/etc/nginx/php-fpm.conf
@@ -52,27 +50,19 @@ services:
       - php-fpm
 
   node:
-    image: node:22
+    image: node:20
     working_dir: /node
-    entrypoint: make -j
-    command: node-theme-and-frontend
+    entrypoint: make
+    command: node-assets
     volumes:
+      - node_modules:/node/node_modules
+      - dist:/node/dist
       - ./Makefile:/node/Makefile
-      # Theme
-      - theme_node_modules:/node/theme/node_modules
-      - theme_dist:/node/theme/dist
-      - ./public/app/themes/justice/src:/node/theme/src
-      - ./public/app/themes/justice/jsconfig.json:/node/theme/jsconfig.json
-      - ./public/app/themes/justice/package.json:/node/theme/package.json
-      - ./public/app/themes/justice/package-lock.json:/node/theme/package-lock.json
-      - ./public/app/themes/justice/webpack.mix.js:/node/theme/webpack.mix.js
-      # Frontend
-      - ./public/app/frontend:/node/frontend
-    ports:
-      - "6006:6006"
-    environment:
-      VIRTUAL_HOST: storybook.${SERVER_NAME}
-      VIRTUAL_PORT: 6006
+      - ./public/app/themes/justice/src:/node/src
+      - ./public/app/themes/justice/jsconfig.json:/node/jsconfig.json
+      - ./public/app/themes/justice/package.json:/node/package.json
+      - ./public/app/themes/justice/package-lock.json:/node/package-lock.json
+      - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
 
   jekyll:
     build:

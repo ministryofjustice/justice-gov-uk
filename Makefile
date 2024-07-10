@@ -31,15 +31,9 @@ restart:
 	@docker compose down php-fpm
 	@make d-compose
 
-node-theme:
-	cd /node/theme && npm install
-	cd /node/theme && npm run watch
-	
-node-frontend:
-	cd /node/frontend && npm install
-	cd /node/frontend && npm run watch
-
-node-theme-and-frontend: node-theme node-frontend
+node-assets:
+	npm install
+	npm run watch
 
 jekyll-serve:
 	cd /home/pages && bundle install
