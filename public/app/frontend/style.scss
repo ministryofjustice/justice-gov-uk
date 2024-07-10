@@ -289,7 +289,7 @@ $iconSizes: (
     @include spacing('padding', 1);
     @include body;
     display: inline-block;
-    background-color: var(--justice-secondary-grey);
+    background-color: var(--justice-secondary-dark-grey);
     color: var(--justice-primary-white);
     border: unset;
     height: 100%;
@@ -297,7 +297,8 @@ $iconSizes: (
     cursor: pointer;
     
     &:hover {
-        background-color: var(--justice-secondary-dark-grey);
+        background-color: var(--justice-primary-white);
+        color: var(--justice-primary-black);
     }
     &:focus {
         @include focus;
@@ -306,7 +307,7 @@ $iconSizes: (
         background-color: var(--justice-primary-white);
         color: var(--justice-primary-black);
         &:hover {
-            background-color: var(--justice-secondary-grey);
+            background-color: var(--justice-secondary-dark-grey);
             color: white;
         }
     }
