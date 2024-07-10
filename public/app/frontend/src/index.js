@@ -4,4 +4,5 @@ import '../base.scss';
 import './components/button';
 
 // Layouts
-import './layouts/with-sidebar';
+import './layouts/one-sidebar';
+import './layouts/two-sidebars';
