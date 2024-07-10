@@ -31,12 +31,12 @@
 
     // Typography
     --body-font: 'Arial', sans-serif;
-    --body-font-normal: 400,
+    --body-font-normal: 400;
     --body-font-bold: 700;
 
     --heading-font: 'Georgia', serif;
-    --heading-font-normal: 400,
-    --heading-font-bold: 700,
+    --heading-font-normal: 400;
+    --heading-font-bold: 700;
 }
 
 // Minimum screen sizes
@@ -269,6 +269,7 @@ $iconSizes: (
 }
 
 @mixin link {
+    @include body;
     color: var(--justice-link);
     &:hover {
         color: var(--justice-link-hover);
@@ -309,4 +310,44 @@ $iconSizes: (
             color: white;
         }
     }
+}
+
+// From GDS https://design-system.service.gov.uk/styles/layout/
+@mixin visually-hidden($important: true) {
+    position: absolute if($important, !important, null);
+
+    // Absolute positioning has the unintended consequence of removing any
+    // whitespace surrounding visually hidden text from the accessibility tree.
+    // Insert a space character before and after visually hidden text to separate
+    // it from any visible text surrounding it.
+    &::before {
+        content: "\00a0";
+    }
+
+    &::after {
+        content: "\00a0";
+    }
+
+    width: 1px if($important, !important, null);
+    height: 1px if($important, !important, null);
+    // If margin is set to a negative value it can cause text to be announced in
+    // the wrong order in VoiceOver for OSX
+    margin: 0 if($important, !important, null);
+    padding: 0 if($important, !important, null);
+
+    overflow: hidden if($important, !important, null);
+    clip: rect(0 0 0 0) if($important, !important, null);
+    clip-path: inset(50%) if($important, !important, null);
+
+    border: 0 if($important, !important, null);
+
+    // For long content, line feeds are not interpreted as spaces and small width
+    // causes content to wrap 1 word per line:
+    // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+    white-space: nowrap if($important, !important, null);
+
+    // Prevent users from selecting or copying visually-hidden text. This prevents
+    // a user unintentionally copying more text than they intended and needing to
+    // manually trim it down again.
+    user-select: none;
 }
