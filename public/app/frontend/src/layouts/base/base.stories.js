@@ -7,7 +7,7 @@ export default {
     parameters: {
         layout: 'fullscreen',
     },
-    tags: ['!dev']
+    tags: ['!dev'],
 };
 
 const Template = (args) => {
@@ -16,4 +16,3 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {};
-
