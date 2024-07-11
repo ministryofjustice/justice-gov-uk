@@ -9,7 +9,7 @@ Available variables:
     - buttonText: string The text to be displayed
 example:
     {% include '@components/button/input.html.twig' with {
-        style: 'primary',
+        variant: 'primary',
         type: 'input',
         inputType: 'submit',
         buttonText: 'Submit'
@@ -17,9 +17,9 @@ example:
 #}
 
 {% if type == 'input' %}
-    <input class="button button--{{style}} button--input" type="{{inputType}}" value="{{buttonText}}">
+    <input class="button button--{{variant}} button--input" type="{{inputType}}" value="{{buttonText}}">
 {% else %}
-    <button class="button button--{{style}}">
+    <button class="button button--{{variant}}">
         {{buttonText}}
     </button>
 {% endif %}
