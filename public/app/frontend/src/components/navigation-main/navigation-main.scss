@@ -1,3 +1,4 @@
+@use 'sass:map';
 @import '../../../style';
 
 .navigation-main {
@@ -7,13 +8,16 @@
         @include container;
     }
 
+    /* prettier-ignore */
     &__list {
         display: flex;
         flex-direction: column;
         width: 100%;
         @media screen and (min-width: $justice-lg) {
             flex-direction: row;
-            margin-left: -0.625rem;
+
+            // Have a negative margin equal to the padding spacing so the text is visually inline with the container element but so the focus highlight still has padding
+            margin-left: calc(map.get($spacing-units-desktop, 2) * -1);
         }
     }
 

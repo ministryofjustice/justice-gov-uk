@@ -12,13 +12,13 @@ const Template = (args) => {
 export const Primary = Template.bind({});
 Primary.args = {
     buttonText: 'Search',
-    style: 'primary',
+    variant: 'primary',
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
     ...Primary.args,
-    style: 'secondary',
+    variant: 'secondary',
 };
 
 export const Input = Template.bind({});
