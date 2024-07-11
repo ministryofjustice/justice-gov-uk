@@ -22,44 +22,24 @@
     }
 
     &__link {
-        border-top: 1px var(--justice-primary-white) solid;
+        border-top: 1px var(--justice-border) solid;
         @media screen and (min-width: $justice-lg) {
             border-top: none;
-            border-left: 1px var(--justice-primary-white) solid;
+            border-left: 1px var(--justice-border) solid;
         }
 
         a {
+            @include link('light');
             @include spacing('padding', 2, 'top');
             @include spacing('padding', 2, 'bottom');
 
             display: block;
             font-family: var(--heading-font);
-            color: var(--justice-primary-white);
-            text-decoration: none;
-            width: 100%;
             @media screen and (min-width: $justice-lg) {
                 @include spacing('padding', 1, 'top');
                 @include spacing('padding', 1, 'bottom');
                 @include spacing('padding', 2, 'left');
                 @include spacing('padding', 2, 'right');
-
-                width: fit-content;
-            }
-
-            &:hover,
-            &:visited,
-            &:active {
-                color: var(--justice-primary-white);
-            }
-
-            &:hover {
-                text-decoration: underline;
-                outline: none;
-            }
-
-            &:focus:not(:active, :hover) {
-                outline: none;
-                box-shadow: none;
             }
         }
 

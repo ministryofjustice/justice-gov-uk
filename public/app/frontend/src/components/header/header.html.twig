@@ -1,25 +1,56 @@
 {#
 @file
-The main navigation for the site
+The site header
 
 Available variables:
-    - links: array An array of links to be displayed
+    - showLogo: boolean Should the logo be visible
+    - showSearch: boolean Should the search bar be visible
+    - links: array An array of links to be displayed in the nav component
         - url: string The url for the link
         - label: string The label for the link
+        - newTab: boolean Will this link open in a new tab?
+    - search: object Parameters to be passed to the search bar component, if it's to be displayed
+        - id: string A unique id
+        - action: string The form action,
+        - input: object Parameters to be passed to the text input component
+            - id: string A unique id
+            - labelHidden: boolean Should the label be displayed,
+            - label: string The label text,
+        },
+        button: object Parameters to be passed to the button component {
+            text: string The button text,
+        },
 example:
-    {% include '@components/navigation-main/search-bar.html.twig' with {
+        {% include '@components/header/header.html.twig' with {
+        showLogo: true,
+        showSearch: true,
         links: [
             {
-                url: 'https://google.com',
-                label: 'Click here'
-                newTab: true,
+                url: '#',
+                label: 'Courts',
             },
             {
                 url: '#',
-                label: 'Click here'
+                label: 'Procedure rules',
+            },
+            {
+                url: '#',
+                label: 'Offenders',
+            },
+        ],
+        search: {
+            id: 'search-bar-header',
+            action: '#',
+            input: {
+                labelHidden: true,
+                label: 'Search the Justice UK website',
+                id: 'search-bar-header-input',
+            },
+            button: {
+                text: 'Search',
             }
-        ]
-    }%}
+        }
+    } %}
 #}
 <header class="header">
     <div class="header__container">

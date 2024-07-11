@@ -279,7 +279,7 @@ $iconSizes: (
     }
 }
 
-@mixin link {
+@mixin link($type: 'dark') {
     @include body;
     color: var(--justice-link);
     outline: none;
@@ -299,6 +299,24 @@ $iconSizes: (
         box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
         color: var(--gds-black);
         text-decoration: none;
+    }
+    @if ($type == 'light') {
+        font-family: var(--body-font);
+        color: var(--justice-primary-white);
+        text-decoration: none;
+        &:hover,
+        &:visited,
+        &:active {
+            color: var(--justice-primary-white);
+        }
+        &:hover {
+            text-decoration: underline;
+            outline: none;
+        }
+        &:focus:not(:active):not(:hover) {
+            outline: none;
+            box-shadow: none;
+        }
     }
 }
 
