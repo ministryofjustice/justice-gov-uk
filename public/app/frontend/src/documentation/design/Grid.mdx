@@ -90,6 +90,7 @@ All of the page content is constrained to the maximum width of the page, however
         <div
             class="grid"
             style={{
+                display: 'grid',
                 gridTemplateColumns: 'repeat(4, [col-start] 1fr)',
                 gap: '1rem',
             }}
@@ -122,7 +123,11 @@ All of the page content is constrained to the maximum width of the page, however
 
 <Unstyled>
     <div class="container" style={{ background: '#d7d7d7' }}>
-        <div class="grid">
+        <div class="grid" style={{
+                                                display: 'grid',
+                                                gridTemplateColumns: 'repeat(12, [col-start] 1fr)',
+                                                gap: '1rem',
+                                            }}>
             {[...Array(12).keys()].map(() => {
                 return (
                     <div
