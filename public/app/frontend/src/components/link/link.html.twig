@@ -1,3 +1,22 @@
+{#
+@file
+A link element
+
+Available variables:
+    - newTab: boolean Whether the link will open in a new tab
+    - link:
+        - url: string The url for the link
+        - label: string The label for the link
+        - newTab: boolean Will this link open in a new tab?
+example:
+    {% include '@components/link/link.html.twig' with {
+        newTab: true,
+        link: {
+            url: 'https://google.com',
+            label: 'Click here'
+        }
+    }%}
+#}
 <a class="link{{ newTab ? " link--new-tab" : "" }}" href="{{ link.url }}" {{ newTab ? "target='_blank' rel='noreferrer noopener'" : "" }}>
     {{ link.label }}{{ newTab ? " (opens in new tab)" : "" }}
 </a>

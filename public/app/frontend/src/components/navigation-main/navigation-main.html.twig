@@ -1,0 +1,45 @@
+{#
+@file
+The main navigation for the site
+
+Available variables:
+    - links: array An array of links to be displayed
+        - url: string The url for the link
+        - label: string The label for the link
+        - newTab: boolean Will this link open in a new tab?
+example:
+    {% include '@components/navigation-main/navigation-main.html.twig' with {
+        links: [
+            {
+                url: 'https://google.com',
+                label: 'Click here'
+                newTab: true,
+            },
+            {
+                url: '#',
+                label: 'Click here'
+            }
+        ]
+    }%}
+#}
+<nav id="navigation-main" class="navigation-main">
+    <div class="navigation-main__container">
+        <div class="navigation-main__grid">
+            <div class="navigation-main__row">
+                <ul class="navigation-main__list">
+                    {% for link in links %}
+                        <li class="navigation-main__link">
+                            {% include '@components/link/link.html.twig' with {
+                                newTab: link.newTab,
+                                link: {
+                                    url: link.url,
+                                    label: link.label
+                                }
+                            }%}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

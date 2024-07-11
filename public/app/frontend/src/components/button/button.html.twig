@@ -1,3 +1,21 @@
+{#
+@file
+A button or an input element with button styling
+
+Available variables:
+    - style: 'primary'|'secondary' The button type
+    - type: 'input'|null Whether the button is an <input> or <button> element
+    - inputType: 'button'|'submit'|null Allows us to specify the input type
+    - buttonText: string The text to be displayed
+example:
+    {% include '@components/button/button.html.twig' with {
+        style: 'primary',
+        type: 'input',
+        inputType: 'submit',
+        buttonText: 'Submit'
+    }%}
+#}
+
 {% if type == 'input' %}
     <input class="button button--{{style}} button--input" type="{{inputType}}" value="{{buttonText}}">
 {% else %}
