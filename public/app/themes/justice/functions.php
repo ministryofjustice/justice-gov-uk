@@ -2,6 +2,7 @@
 
 use MOJ\Justice;
 use Roots\WPConfig\Config;
+use Timber\Timber;
 
 defined('ABSPATH') || exit;
 
@@ -40,6 +41,29 @@ require_once 'inc/taxonomies.php';
 require_once 'inc/theme-assets.php';
 require_once 'inc/theme.php';
 require_once 'inc/utils.php';
+
+// Initialise Timber (https://timber.github.io/docs/v2/)
+Timber::init();
+// Set up our template directory TODO: do we need this? Looks like we can render in place, but will review once we've built more components
+Timber::$dirname = [
+    [
+        'templates'
+    ],
+];
+// Create aliases for the frontend templates. These can be accessed with @components/component-name/component-name.html.twig
+add_filter('timber/locations', function ($paths) {
+    $paths['components'] = [WP_CONTENT_DIR . '/frontend/src/components'];
+    $paths['layouts'] = [WP_CONTENT_DIR . '/frontend/src/layouts'];
+    return $paths;
+});
+
+// Cache the twig templates (https://timber.github.io/docs/v2/guides/performance/)
+add_filter('timber/twig/environment/options', function ($options) {
+    $options['cache']       = true;
+    // Enable auto_reload in the development environment
+    $options['auto_reload'] = !!(getenv('WP_ENV') === 'development');
+    return $options;
+});
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();

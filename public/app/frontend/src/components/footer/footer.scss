@@ -1,0 +1,102 @@
+@import '../../../style';
+
+.footer {
+    @include spacing('margin', 8, 'top');
+    @include spacing('padding', 2, 'top');
+
+    background-color: var(--justice-primary-black);
+    color: var(--justice-primary-white);
+
+    &__container {
+        @include container;
+
+        display: flex;
+        flex-direction: column;
+        @media screen and (min-width: $justice-lg) {
+            justify-content: space-between;
+        }
+    }
+
+    &__links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        @include spacing('padding', 4, 'bottom');
+        @media screen and (min-width: $justice-lg) {
+            flex-direction: row;
+            margin-left: -0.625rem;
+        }
+    }
+
+    &__link {
+        a {
+            @include link('light');
+            @include spacing('padding', 2, 'top');
+            @include spacing('padding', 2, 'bottom');
+
+            display: block;
+            @media screen and (min-width: $justice-lg) {
+                @include spacing('padding', 1, 'top');
+                @include spacing('padding', 1, 'bottom');
+                @include spacing('padding', 2, 'left');
+                @include spacing('padding', 2, 'right');
+            }
+        }
+    }
+
+    &__details {
+        @include body;
+        @include spacing('padding', 2, 'top');
+        @include spacing('padding', 4, 'bottom');
+
+        border-top: 1px solid var(--justice-border);
+        color: var(--justice-primary-white);
+    }
+
+    &__heading {
+        @include h3;
+
+        font-weight: var(--heading-font-normal);
+        color: var(--justice-primary-white);
+    }
+
+    &__gov {
+        @include focus-outline;
+
+        display: block;
+        width: fit-content;
+    }
+
+    &__logo {
+        @include spacing('margin', 4, 'top');
+
+        background-image: url('../../assets/govuk-logo-2.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 1.875rem;
+        width: 9.25rem;
+    }
+
+    &__content {
+        @include spacing('margin', 4, 'top');
+
+        a {
+            @include link('light');
+
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+            }
+        }
+    }
+
+    &__copyright {
+        @include spacing('padding', 2, 'top');
+        @include spacing('padding', 4, 'bottom');
+
+        display: flex;
+        border-top: 1px solid var(--justice-border);
+        justify-content: end;
+    }
+}

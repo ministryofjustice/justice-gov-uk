@@ -1,0 +1,112 @@
+import { Meta, Unstyled, Markdown } from '@storybook/blocks';
+
+<Meta title="Design/Typography" />
+
+export const sampleText =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+export const sampleCaption = 'Lorem ipsum dolor sit amet';
+
+export const mobileSizes = {
+    h1: '2rem',
+    h2: '1.688rem',
+    h3: '1.313rem',
+    h4: '1.188rem',
+    h5: '1.188rem',
+    h6: '1.188rem',
+    p: '1rem',
+};
+
+export const desktopSizes = {
+    h1: '3rem',
+    h2: '2.25rem',
+    h3: '1.5rem',
+    h4: '1.188rem',
+    h5: '1.188rem',
+    h6: '1.188rem',
+    p: '1rem',
+};
+export const headingSizes = {
+    h1: '3rem',
+    h2: '2.25rem',
+    h3: '1.5rem',
+};
+
+export const generateTypesetCanvas = (
+    sizes,
+    sampleCaption,
+    sampleText,
+    mobile,
+    type = null
+) => {
+    return (
+        <Unstyled>
+            {Object.entries(sizes).map(([tag, rem], loop) => {
+                const key = `${loop}-typeset`;
+                const sample =
+                    type === 'heading-with-captions'
+                        ? `<hgroup><${tag} style="font-size:${rem}"><p className="eyebrow">${sampleCaption}</p>${sampleText}</${tag}></hgroup>`
+                        : `<${tag} style="font-size:${rem}">${sampleText}</${tag}>`;
+                return (
+                    <div
+                        key={key}
+                        style={{
+                            display: 'flex',
+                            wordBreak: 'break-word',
+                            gap: '5%',
+                        }}
+                    >
+                        <div
+                            style={{ flex: '0 0 10%', alignContent: 'center' }}
+                        >
+                            <div>
+                                <p>
+                                    <strong>{tag}</strong>
+                                </p>
+                                <p>{rem}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <Markdown>{sample}</Markdown>
+                        </div>
+                    </div>
+                );
+            })}
+        </Unstyled>
+    );
+};
+
+# Typography
+
+To add or change a font go to `public/app/frontend/style.scss` and update the appropriate mixin or add a new mixin.
+
+Update the typesets below to include the new mixin and rem value as required.
+
+---
+
+**Headings:** Georgia
+
+**Body:** Arial
+
+**Weights:** 400 (regular), 700 (bold)
+
+<br />
+## Mobile
+{generateTypesetCanvas(mobileSizes, sampleCaption, sampleText, true, 'typeset')}
+<br />
+## Desktop
+{generateTypesetCanvas(
+    desktopSizes,
+    sampleCaption,
+    sampleText,
+    false,
+    'typeset'
+)}
+<br />
+## Headings with captions
+{generateTypesetCanvas(
+    headingSizes,
+    sampleCaption,
+    sampleText,
+    false,
+    'heading-with-captions'
+)}

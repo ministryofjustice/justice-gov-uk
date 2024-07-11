@@ -58,6 +58,7 @@
         "stayallive/wp-sentry": "^7.11.0",
         "symfony/filesystem": "<7.0",
         "symfony/process": "<7.0",
+        "timber/timber": "2.2.0",
         "vlucas/phpdotenv": "^5.5",
         "wp-cli/wp-cli-bundle": "^2.10",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^3.2",

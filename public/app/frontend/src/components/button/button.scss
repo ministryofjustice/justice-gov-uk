@@ -1,0 +1,11 @@
+@import '../../../style';
+
+.button {
+    &--primary {
+        @include button('primary');
+    }
+
+    &--secondary {
+        @include button('secondary');
+    }
+}

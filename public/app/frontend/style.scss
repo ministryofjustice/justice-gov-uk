@@ -1,0 +1,505 @@
+@use "sass:map";
+
+:root {
+    // Primary colours
+    --justice-primary-black: #212121;
+    --justice-primary-white: #fff;
+    --justice-primary-grey: #d7d7d7;
+
+    // Secondary colours
+    --justice-secondary-grey: #7e7e74;
+    --justice-secondary-dark-grey: #5c5c54; 
+    --justice-secondary-blue: #4e6280;
+    --justice-secondary-grey-blue: #e1e5e8;
+
+    // Links
+    --justice-link: #1d70b8;
+    --justice-link-hover: #003078;
+    --justice-link-visited: #4c2c92;
+    --justice-link-active: #0b0c0c;
+
+    // Borders
+    --justice-border: #b1b4b6;
+    --justice-border-input: #0b0c0c    ;
+
+    //States
+    --justice-error: #d4351c;
+    --justice-success: #00703c;
+    // Accessible colours from the GDS https://design-system.service.gov.uk/styles/colour/
+    --gds-yellow: #fd0;
+    --gds-black: #000;
+
+    // Typography
+    --body-font: 'Arial', sans-serif;
+    --body-font-normal: 400;
+    --body-font-bold: 700;
+
+    --heading-font: 'Georgia', serif;
+    --heading-font-normal: 400;
+    --heading-font-bold: 700;
+}
+
+// Minimum screen sizes
+$justice-md: 768px;
+$justice-lg: 1024px;
+
+// Grid settings
+$gap-mobile: 1rem;
+$gap: 1.5rem;
+$gutter-mobile: 1rem;
+$gutter: 3rem;
+$max-width: 63.75rem;
+
+// Spacing https://design-system.service.gov.uk/styles/spacing/
+$spacing-units-mobile: (
+    0: 0,
+    1: 0.313rem,
+    2: 0.625rem,
+    3: 0.938rem,
+    4: 0.938rem,
+    5: 0.938rem,
+    6: 1.25rem,
+    7: 1.563rem,
+    8: 1.875rem,
+    9: 2.5rem,
+);
+
+$spacing-units-desktop: (
+    0: 0,
+    1: 0.313rem,
+    2: 0.625rem,
+    3: 0.938rem,
+    4: 1.25rem,
+    5: 1.563rem,
+    6: 1.875rem,
+    7: 2.5rem,
+    8: 3.125rem,
+    9: 3.75rem,
+);
+
+@mixin container() {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 $gutter-mobile;
+    max-width: calc(100% - (2 * $gutter-mobile));
+    @media screen and (min-width: $justice-lg) {
+        padding: 0 $gutter;
+        max-width: calc($max-width - (2 * $gutter));
+    }
+}
+
+@mixin grid() {
+    display: grid;
+    grid-template-columns: repeat(4, [col-start] 1fr);
+    gap: $gap-mobile;
+    width: 100%;
+    @media screen and (min-width: $justice-lg) {
+        grid-template-columns: repeat(12, [col-start] 1fr);
+        gap: $gap;
+    }
+}
+
+@mixin grid-row($start: 1, $end: 4) {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    grid-column: #{$start}/ span #{$end};
+}
+
+/// Calculates margin or padding according to the spacing scales above
+///
+/// @param {string ('margin'|'padding')} $type
+///   The type of spacing
+/// @param {integer (unitless)} $unit
+///   The spacing unit
+/// @param {string ('top'| 'bottom' | 'right' | 'left')} $direction
+///   The spacing direction
+
+@mixin spacing($type: 'margin', $unit: 1, $direction: 'all') {
+    @if ($direction != 'all') {
+        #{$type}-#{$direction}: map-get($spacing-units-mobile, $unit);
+        @media screen and (min-width: $justice-lg) {
+            #{$type}-#{$direction}: map-get($spacing-units-desktop, $unit);
+        }
+    }
+    @else {
+        #{$type}: map-get($spacing-units-mobile, $unit);
+        @media screen and (min-width: $justice-lg) {
+            #{$type}: map-get($spacing-units-desktop, $unit);
+        }
+    }
+
+}
+
+// Headings https://design-system.service.gov.uk/styles/type-scale/
+@mixin h1 {
+    @include spacing('margin', 8, 'top');
+    margin-bottom: 0;
+    font-size: 2rem;
+    line-height: 2.188rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary--black);
+    .eyebrow {
+        @include eyebrow('h1');
+    }
+    @media screen and (min-width: $justice-lg) {
+        font-size: 3rem;
+        line-height: 3.125rem;
+    }
+}
+
+@mixin h2 {
+    @include spacing('margin', 6, 'top');
+    margin-bottom: 0;
+    font-size: 1.688rem;
+    line-height: 1.875rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+    .eyebrow {
+        @include eyebrow('h2');
+    }
+    @media screen and (min-width: $justice-lg) {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+    }
+}
+
+@mixin h3 {
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
+    font-size: 1.313rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+    .eyebrow {
+        @include eyebrow('h3');
+    }
+    @media screen and (min-width: $justice-lg) {
+        font-size: 1.5rem;
+        line-height: 1.875rem;
+    }
+}
+
+@mixin h4 {
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
+    font-size: 1.188rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+}
+
+@mixin h5 {
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+
+}
+
+@mixin h6 {
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-primary-black);
+}
+
+@mixin body {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-family: var(--body-font);
+    font-weight: var(--body-font-normal);
+    color: var(--justice-primary-black);
+}
+// Heading caption https://design-system.service.gov.uk/styles/headings/#headings-with-captions
+@mixin eyebrow ($tag) {
+    display: block;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-secondary-grey);
+    @if ($tag == 'h1') {
+        font-size: 1.125rem;
+        line-height: 1.11;
+        @media screen and (min-width: $justice-lg) {
+            font-size: 1.6875rem;
+        }
+    }
+    @if ($tag == 'h2') {
+        font-size: 1.125rem;
+        line-height: 1.11;
+        @media screen and (min-width: $justice-lg) {
+            font-size: 1.5rem;
+            line-height: 1.25;
+        }
+    }
+    @if ($tag == 'h3') {
+        font-size: 1rem;
+        line-height: 1.25;
+        @media screen and (min-width: $justice-lg) {
+            font-size: 1.1875rem;
+            line-height: 1.32;
+        }
+    }
+}
+
+// Icons
+$iconTypes: (
+    'pdf': 'png',
+    'zip': 'gif',
+    'winzip': 'gif'
+);
+
+$iconSizes: (
+    'sm': 1.5rem, // The smallest icon must be at least 24px x 24px to meet WCAG 2.2 AA
+    'md': 3rem,
+    'lg': 6rem
+);
+
+.icon {
+    @each $size, $rem in $iconSizes {
+        @each $icon, $ext in $iconTypes {
+            &-#{$icon}--#{$size} {
+                background-image: url(/src/assets/icons/#{$icon}.#{$ext});
+                background-repeat: no-repeat;
+                height: $rem;
+                width: $rem;
+                background-size: $rem;
+            }
+        }
+    }
+}
+
+@mixin link($type: 'dark') {
+    @include body;
+    color: var(--justice-link);
+    outline: none;
+    &:hover {
+        color: var(--justice-link-hover);
+        text-decoration-thickness: max(3px, .1875rem, .12em);
+    }
+    &:visited {
+        color: var(--justice-link-visited);
+    }
+    &:active {
+        color: var(--justice-link-active);
+    }
+    &:focus:not(:active):not(:hover) {
+        outline: 3px solid transparent;
+        background-color: var(--gds-yellow);
+        box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
+        color: var(--gds-black);
+        text-decoration: none;
+    }
+    @if ($type == 'light') {
+        font-family: var(--body-font);
+        color: var(--justice-primary-white);
+        text-decoration: none;
+        &:hover,
+        &:visited,
+        &:active {
+            color: var(--justice-primary-white);
+        }
+        &:hover {
+            text-decoration: underline;
+            outline: none;
+        }
+        &:focus:not(:active):not(:hover) {
+            outline: none;
+            box-shadow: none;
+        }
+    }
+}
+
+@mixin button($type: 'primary') {
+    @include spacing('padding', 1);
+    @include body;
+    display: inline-block;
+    background-color: var(--justice-secondary-dark-grey);
+    color: var(--justice-primary-white);
+    border: 0;
+    height: 100%;
+    width: fit-content;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: top;
+    outline: none;
+    &:hover {
+        background-color: var(--justice-primary-grey);
+        color: var(--justice-primary-black);
+    }
+
+    &:focus:not(:active):not(:hover) {
+        color: var(--gds-black);
+        background-color: var(--gds-yellow);
+        border-bottom: 4px solid black;
+        padding-bottom: 0;
+    }
+    @if $type == 'secondary' {
+        background-color: var(--justice-primary-white);
+        color: var(--justice-primary-black);
+        &:hover {
+            background-color: var(--justice-secondary-dark-grey);
+            color: white;
+        }
+    }
+}
+
+// Use to add a simple focus ring to link or button elements
+@mixin focus-outline {
+    &:focus:not(:active):not(:hover), &:focus-within {
+        outline: 3px solid var(--gds-yellow);
+        outline-offset: 0;
+        box-shadow: inset 0 0 0 2px;
+        background-color: transparent;
+    }
+}
+
+@mixin ul-list {
+    @include spacing('margin', 4, 'top');
+    list-style: disc;
+    padding-left: 1.5rem;
+    li {
+        padding-left: 1.5rem;
+    }
+}
+
+@mixin ol-list {
+    @include spacing('margin', 4, 'top');
+    list-style: decimal;
+    padding: 0 0 0 1.5rem;
+    li {
+        padding-left: 1.5rem;
+    }
+}
+
+@mixin table {
+    @include spacing('margin', 4, 'top');
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    thead {
+        @include h4;
+        border-bottom: 3px solid var(--justice-primary-black);
+        tr, th {
+            border: 1px solid var(--justice-border);
+        }
+        th {
+            background: var(--justice-primary-grey);
+        }
+    }
+    tbody {
+        @include body;
+        tr, td {
+            border: 1px solid var(--justice-border);
+        }
+        td {
+            @include spacing('padding', 1);
+        }
+    }
+}
+// TODO: review default classes when implemented with Wordpress.
+//  For user created content. They can use:
+// Paragraphs - can be bold, italic or links and can be aligned. Can have footnotes, anchors, colour highlights + more
+// Definition lists
+// Headings (all)
+// Image
+// Lists
+// Inline menu - child pages
+// To the top
+// Search - child pages
+//
+@mixin rich-text {
+    @include body;
+    @include spacing('margin', 8, 'top');
+    ul {
+        @include ul-list;
+    }
+    ol {
+        @include ol-list;
+    }
+    table {
+        @include table;
+    }
+    figure {
+        margin: 0;
+        @include spacing('margin', 4, 'top');
+        > table {
+            margin-top: 0;
+        }
+    }
+    a {
+        @include link;
+    }
+    p {
+        @include spacing('margin', 4, 'top');
+    }
+
+    > p,
+    > h1,
+    > h2,
+    > h3,
+    > h4,
+    > h5,
+    > h6,
+    > ul,
+    > ol {
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+// From GDS https://design-system.service.gov.uk/styles/layout/
+@mixin visually-hidden($important: true) {
+    position: absolute if($important, !important, null);
+
+    // Absolute positioning has the unintended consequence of removing any
+    // whitespace surrounding visually hidden text from the accessibility tree.
+    // Insert a space character before and after visually hidden text to separate
+    // it from any visible text surrounding it.
+    &::before {
+        content: "\00a0";
+    }
+
+    &::after {
+        content: "\00a0";
+    }
+
+    width: 1px if($important, !important, null);
+    height: 1px if($important, !important, null);
+    // If margin is set to a negative value it can cause text to be announced in
+    // the wrong order in VoiceOver for OSX
+    margin: 0 if($important, !important, null);
+    padding: 0 if($important, !important, null);
+
+    overflow: hidden if($important, !important, null);
+    clip: rect(0 0 0 0) if($important, !important, null);
+    clip-path: inset(50%) if($important, !important, null);
+
+    border: 0 if($important, !important, null);
+
+    // For long content, line feeds are not interpreted as spaces and small width
+    // causes content to wrap 1 word per line:
+    // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+    white-space: nowrap if($important, !important, null);
+
+    // Prevent users from selecting or copying visually-hidden text. This prevents
+    // a user unintentionally copying more text than they intended and needing to
+    // manually trim it down again.
+    user-select: none;
+}
