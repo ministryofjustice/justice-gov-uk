@@ -8,8 +8,8 @@ Available variables:
     - inputType: 'button'|'submit'|null Allows us to specify the input type
     - buttonText: string The text to be displayed
 example:
-    {% include '@components/button/button.html.twig' with {
-        style: 'primary',
+    {% include '@components/button/input.html.twig' with {
+        variant: 'primary',
         type: 'input',
         inputType: 'submit',
         buttonText: 'Submit'
@@ -17,9 +17,9 @@ example:
 #}
 
 {% if type == 'input' %}
-    <input class="button button--{{style}} button--input" type="{{inputType}}" value="{{buttonText}}">
+    <input class="button button--{{variant}} button--input" type="{{inputType}}" value="{{buttonText}}">
 {% else %}
-    <button class="button button--{{style}}">
+    <button class="button button--{{variant}}">
         {{buttonText}}
     </button>
 {% endif %}

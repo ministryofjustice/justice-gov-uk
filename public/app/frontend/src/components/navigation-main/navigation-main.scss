@@ -1,74 +1,72 @@
+@use 'sass:map';
 @import '../../../style';
 
 .navigation-main {
     background: var(--justice-primary-black);
-    @include spacing('padding', 1, 'top');
-    @include spacing('padding', 1, 'bottom');
 
     &__container {
         @include container;
     }
 
-    &__grid {
-        @include grid;
-    }
-
-    &__row {
-        @include grid-row(1, 4);
-        @media screen and (min-width: $justice-lg) {
-            @include grid-row(1, 12);
-        }
-    }
-
+    /* prettier-ignore */
     &__list {
         display: flex;
         flex-direction: column;
         width: 100%;
         @media screen and (min-width: $justice-lg) {
             flex-direction: row;
+
+            // Have a negative margin equal to the padding spacing so the text is visually inline with the container element but so the focus highlight still has padding
+            margin-left: calc(map.get($spacing-units-desktop, 2) * -1);
         }
     }
 
     &__link {
+        border-top: 1px var(--justice-primary-white) solid;
+        @media screen and (min-width: $justice-lg) {
+            border-top: none;
+            border-left: 1px var(--justice-primary-white) solid;
+        }
+
         a {
             @include spacing('padding', 2, 'top');
             @include spacing('padding', 2, 'bottom');
 
             display: block;
-            border-bottom: 1px var(--justice-primary-white) solid;
             font-family: var(--heading-font);
             color: var(--justice-primary-white);
             text-decoration: none;
             width: 100%;
             @media screen and (min-width: $justice-lg) {
+                @include spacing('padding', 1, 'top');
+                @include spacing('padding', 1, 'bottom');
                 @include spacing('padding', 2, 'left');
                 @include spacing('padding', 2, 'right');
 
-                padding-top: 0;
-                padding-bottom: 0;
-                border-right: 1px var(--justice-primary-white) solid;
-                border-bottom: none;
                 width: fit-content;
             }
 
-            &:hover {
+            &:hover,
+            &:visited,
+            &:active {
                 color: var(--justice-primary-white);
-                text-decoration: underline;
             }
 
-            &:focus {
-                border-bottom: none;
-                @media screen and (min-width: $justice-lg) {
-                    border-right: none;
-                }
+            &:hover {
+                text-decoration: underline;
+                outline: none;
+            }
+
+            &:focus:not(:active, :hover) {
+                outline: none;
+                box-shadow: none;
             }
         }
 
-        &:last-child {
-            a {
-                border-bottom: none;
-                border-right: none;
-            }
+        &:first-child,
+        &:focus-within,
+        &:focus-within + li {
+            border: none;
         }
     }
 }

@@ -6,7 +6,7 @@ const config = {
     // Make sure introduction is always the first page
     "../src/documentation/*.mdx",
     "../src/documentation/**/*.mdx",
-    "../src/(components|layouts|example-pages|documentation)/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    "../src/(components|layouts|examples|documentation)/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
 
   addons: [
