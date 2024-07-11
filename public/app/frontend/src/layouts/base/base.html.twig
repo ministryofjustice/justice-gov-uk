@@ -1,0 +1,81 @@
+<div class="page-wrapper">
+    <header>
+        {% block headerContent %}
+            {% include '@components/header/header.html.twig' with {
+                showLogo: true,
+                showSearch: true,
+                links: [
+                    {
+                        url: '#',
+                        label: 'Courts',
+                    },
+                    {
+                        url: '#',
+                        label: 'Procedure rules',
+                    },
+                    {
+                        url: '#',
+                        label: 'Offenders',
+                    },
+                ],
+                search: {
+                    id: 'search-bar-header',
+                    action: '#',
+                    input: {
+                        labelHidden: true,
+                        label: 'Search the Justice UK website',
+                        id: 'search-bar-header-input',
+                    },
+                    button: {
+                        text: 'Search',
+                    }
+                }
+            } %}
+        {% endblock %}
+    </header>
+    <main>
+        {% block mainContent %}
+
+        {% endblock %}
+    </main>
+    <footer>
+        {% block footer %}
+            {% include '@components/footer/footer.html.twig' with {
+                links: [
+                    {
+                        url: '#',
+                        label: 'Accessibility',
+                    },
+                    {
+                        url: '#',
+                        label: 'Cookies',
+                    },
+                    {
+                        url: '#',
+                        label: 'Contacts',
+                    },
+                    {
+                        url: '#',
+                        label: 'Copyright',
+                    },
+                    {
+                        url: '#',
+                        label: 'Help',
+                    },
+                    {
+                        url: '#',
+                        label: 'Privacy',
+                    },
+                    {
+                        url: '#',
+                        label: 'Webchats',
+                    },
+                    {
+                        url: '#',
+                        label: 'Website queries',
+                    },
+                ],
+            } %}
+        {% endblock %}
+    </footer>
+</div>
