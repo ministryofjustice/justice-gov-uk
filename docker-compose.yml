@@ -30,6 +30,7 @@ services:
       target: nginx-dev
     volumes:
       - theme_dist:/var/www/html/public/app/themes/justice/dist
+      - frontend_dist:/var/www/html/public/app/frontend/dist
       - php-socket:/sock
       ### Deploy scripts
       - ./deploy/config/local/php-fpm.conf:/etc/nginx/php-fpm.conf
@@ -67,6 +68,8 @@ services:
       - ./public/app/themes/justice/package-lock.json:/node/theme/package-lock.json
       - ./public/app/themes/justice/webpack.mix.js:/node/theme/webpack.mix.js
       # Frontend
+      - frontend_node_modules:/node/frontend/node_modules
+      - frontend_dist:/node/frontend/dist
       - ./public/app/frontend:/node/frontend
     ports:
       - "6006:6006"
