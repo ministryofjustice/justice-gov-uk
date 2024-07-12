@@ -1,0 +1,33 @@
+@import '../../../style';
+
+.text-input {
+    $this: &;
+
+    display: flex;
+    align-items: center;
+
+    &__label {
+        @include body;
+        @include spacing('margin', 2, 'right');
+    }
+
+    &__input {
+        @include body;
+        @include spacing('padding', 1);
+        @include focus-outline;
+
+        border: 2px solid var(--justice-border-input);
+
+        &--error {
+            border-color: var(--justice-error);
+        }
+    }
+
+    &--disabled {
+        #{$this}__label,
+        #{$this}__input,
+        #{$this}__wrapper {
+            opacity: 0.5;
+        }
+    }
+}

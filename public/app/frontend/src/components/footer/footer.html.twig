@@ -1,0 +1,60 @@
+{#
+@file
+The footer navigation for the site
+
+Available variables:
+    - links: array An array of links to be displayed
+        - url: string The url for the link
+        - label: string The label for the link
+        - newTab: boolean Will this link open in a new tab?
+example:
+    {% include '@components/footer/footer.html.twig' with {
+        links: [
+            {
+                url: 'https://google.com',
+                label: 'Click here'
+                newTab: true,
+            },
+            {
+                url: '#',
+                label: 'Click here'
+            }
+        ]
+    }%}
+#}
+<footer class="footer">
+    <div class="footer__container">
+        <ul class="footer__links">
+            {% for link in links %}
+                <li class="footer__link">
+                    {% include '@components/link/link.html.twig' with {
+                        newTab: link.newTab,
+                        link: {
+                            url: link.url,
+                            label: link.label
+                        }
+                    } %}
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="footer__details">
+            <p class="footer__heading">Citizen and business advice</p>
+            <div class="footer__content-wrapper">
+                <a class="footer__gov" href="/">
+                <span class="footer__gov-label visually-hidden">
+                    Go to Gov UK (opens in a new tab)
+                </span>
+                        <div class="footer__logo"></div>
+                </a>
+                <div class="footer__content">
+                    <p>
+                        For citizen and business advice on justice, rights and more visit <a href="#">GOV.UK</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="footer__copyright">
+            <p>© Crown copyright</p>
+        </div>
+    </div>
+</footer>

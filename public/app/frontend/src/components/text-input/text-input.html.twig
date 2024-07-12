@@ -1,0 +1,26 @@
+{#
+@file
+A text input element for use in forms
+
+Available variables:
+    - labelHidden: boolean Visually display the label or not. The label will always be visible to screen reader users
+    - label: string A label describing the element
+    - id: string The unique id of the text-input element
+    - placeholder: string The placeholder text
+    - error: boolean True if there is an error
+    - disabled: boolean True if the element is disabled
+
+example:
+    {% include '@components/text-input/text-input.html.twig' with {
+        labelHidden: true,
+        label: 'Search',
+        id: 'main-search',
+        placeholder: 'Enter search term',
+    }%}
+#}
+
+<div class="text-input{{ disabled ? " text-input--disabled" : "" }}">
+    <label class="text-input__label{{ labelHidden ? " visually-hidden" : "" }}" for="{{ id }}">{{ label }}</label>
+    <input class="text-input__input{{ error ? " text-input__input--error" : "" }}"{{ disabled ? " disabled": "" }} id="{{ id }}" type="text">
+</div>
+

@@ -1,0 +1,82 @@
+{#
+@file
+The site header
+
+Available variables:
+    - showLogo: boolean Should the logo be visible
+    - showSearch: boolean Should the search bar be visible
+    - links: array An array of links to be displayed in the nav component
+        - url: string The url for the link
+        - label: string The label for the link
+        - newTab: boolean Will this link open in a new tab?
+    - search: object Parameters to be passed to the search bar component, if it's to be displayed
+        - id: string A unique id
+        - action: string The form action,
+        - input: object Parameters to be passed to the text input component
+            - id: string A unique id
+            - labelHidden: boolean Should the label be displayed,
+            - label: string The label text,
+        },
+        button: object Parameters to be passed to the button component {
+            text: string The button text,
+        },
+example:
+        {% include '@components/header/header.html.twig' with {
+        showLogo: true,
+        showSearch: true,
+        links: [
+            {
+                url: '#',
+                label: 'Courts',
+            },
+            {
+                url: '#',
+                label: 'Procedure rules',
+            },
+            {
+                url: '#',
+                label: 'Offenders',
+            },
+        ],
+        search: {
+            id: 'search-bar-header',
+            action: '#',
+            input: {
+                labelHidden: true,
+                label: 'Search the Justice UK website',
+                id: 'search-bar-header-input',
+            },
+            button: {
+                text: 'Search',
+            }
+        }
+    } %}
+#}
+<header class="header">
+    <div class="header__container">
+        <a class="header__home" href="/">
+            <span class="header__home-label visually-hidden">
+                Justice UK - Homepage
+            </span>
+            {% if showLogo %}
+                <div class="header__logo"></div>
+            {% endif %}
+        </a>
+        {% if showSearch %}
+            <div class="header__search">
+                {% include '@components/search-bar/search-bar.html.twig' with {
+                    id: search.id,
+                    action: search.action,
+                    input: search.input,
+                    button: search.button,
+
+                } %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="header__nav">
+        {% include '@components/navigation-main/navigation-main.html.twig' with {
+            links,
+        } %}
+    </div>
+</header>

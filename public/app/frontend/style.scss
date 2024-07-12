@@ -133,12 +133,13 @@ $spacing-units-desktop: (
 
 // Headings https://design-system.service.gov.uk/styles/type-scale/
 @mixin h1 {
+    @include spacing('margin', 8, 'top');
+    margin-bottom: 0;
     font-size: 2rem;
     line-height: 2.188rem;
     font-family: var(--heading-font);
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary--black);
-    @include spacing(8,'bottom');
     .eyebrow {
         @include eyebrow('h1');
     }
@@ -149,6 +150,8 @@ $spacing-units-desktop: (
 }
 
 @mixin h2 {
+    @include spacing('margin', 6, 'top');
+    margin-bottom: 0;
     font-size: 1.688rem;
     line-height: 1.875rem;
     font-family: var(--heading-font);
@@ -164,6 +167,8 @@ $spacing-units-desktop: (
 }
 
 @mixin h3 {
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
     font-size: 1.313rem;
     line-height: 1.563rem;
     font-family: var(--heading-font);
@@ -178,8 +183,9 @@ $spacing-units-desktop: (
     }
 }
 
-// TODO: GDS only uses four heading sizes for accessibility reasons - how do we handle this as Justice UK has existing h5/h6 headings?
 @mixin h4 {
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
     font-size: 1.188rem;
     line-height: 1.563rem;
     font-family: var(--heading-font);
@@ -188,15 +194,28 @@ $spacing-units-desktop: (
 }
 
 @mixin h5 {
-    @include h4;
-    font-weight: var(--heading-font-normal);
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+
 }
 
 @mixin h6 {
-    @include h5;
+    @include spacing('margin', 4, 'top');
+    margin-bottom: 0;
+    font-size: 1rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-primary-black);
 }
 
 @mixin body {
+    margin-bottom: 0;
     font-size: 1rem;
     font-family: var(--body-font);
     font-weight: var(--body-font-normal);
@@ -260,19 +279,13 @@ $iconSizes: (
     }
 }
 
-@mixin focus {
-    outline: 3px solid transparent;
-    background-color: var(--gds-yellow);
-    box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
-    color: var(--gds-black);
-    text-decoration: none;
-}
-
-@mixin link {
+@mixin link($type: 'dark') {
     @include body;
     color: var(--justice-link);
+    outline: none;
     &:hover {
         color: var(--justice-link-hover);
+        text-decoration-thickness: max(3px, .1875rem, .12em);
     }
     &:visited {
         color: var(--justice-link-visited);
@@ -280,8 +293,30 @@ $iconSizes: (
     &:active {
         color: var(--justice-link-active);
     }
-    &:focus {
-        @include focus;
+    &:focus:not(:active):not(:hover) {
+        outline: 3px solid transparent;
+        background-color: var(--gds-yellow);
+        box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
+        color: var(--gds-black);
+        text-decoration: none;
+    }
+    @if ($type == 'light') {
+        font-family: var(--body-font);
+        color: var(--justice-primary-white);
+        text-decoration: none;
+        &:hover,
+        &:visited,
+        &:active {
+            color: var(--justice-primary-white);
+        }
+        &:hover {
+            text-decoration: underline;
+            outline: none;
+        }
+        &:focus:not(:active):not(:hover) {
+            outline: none;
+            box-shadow: none;
+        }
     }
 }
 
@@ -291,17 +326,23 @@ $iconSizes: (
     display: inline-block;
     background-color: var(--justice-secondary-dark-grey);
     color: var(--justice-primary-white);
-    border: unset;
+    border: 0;
     height: 100%;
     width: fit-content;
     cursor: pointer;
-    
+    text-align: center;
+    vertical-align: top;
+    outline: none;
     &:hover {
-        background-color: var(--justice-primary-white);
+        background-color: var(--justice-primary-grey);
         color: var(--justice-primary-black);
     }
-    &:focus {
-        @include focus;
+
+    &:focus:not(:active):not(:hover) {
+        color: var(--gds-black);
+        background-color: var(--gds-yellow);
+        border-bottom: 4px solid black;
+        padding-bottom: 0;
     }
     @if $type == 'secondary' {
         background-color: var(--justice-primary-white);
@@ -309,6 +350,116 @@ $iconSizes: (
         &:hover {
             background-color: var(--justice-secondary-dark-grey);
             color: white;
+        }
+    }
+}
+
+// Use to add a simple focus ring to link or button elements
+@mixin focus-outline {
+    &:focus:not(:active):not(:hover), &:focus-within {
+        outline: 3px solid var(--gds-yellow);
+        outline-offset: 0;
+        box-shadow: inset 0 0 0 2px;
+        background-color: transparent;
+    }
+}
+
+@mixin ul-list {
+    @include spacing('margin', 4, 'top');
+    list-style: disc;
+    padding-left: 1.5rem;
+    li {
+        padding-left: 1.5rem;
+    }
+}
+
+@mixin ol-list {
+    @include spacing('margin', 4, 'top');
+    list-style: decimal;
+    padding: 0 0 0 1.5rem;
+    li {
+        padding-left: 1.5rem;
+    }
+}
+
+@mixin table {
+    @include spacing('margin', 4, 'top');
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    thead {
+        @include h4;
+        border-bottom: 3px solid var(--justice-primary-black);
+        tr, th {
+            border: 1px solid var(--justice-border);
+        }
+        th {
+            background: var(--justice-primary-grey);
+        }
+    }
+    tbody {
+        @include body;
+        tr, td {
+            border: 1px solid var(--justice-border);
+        }
+        td {
+            @include spacing('padding', 1);
+        }
+    }
+}
+// TODO: review default classes when implemented with Wordpress.
+//  For user created content. They can use:
+// Paragraphs - can be bold, italic or links and can be aligned. Can have footnotes, anchors, colour highlights + more
+// Definition lists
+// Headings (all)
+// Image
+// Lists
+// Inline menu - child pages
+// To the top
+// Search - child pages
+//
+@mixin rich-text {
+    @include body;
+    @include spacing('margin', 8, 'top');
+    ul {
+        @include ul-list;
+    }
+    ol {
+        @include ol-list;
+    }
+    table {
+        @include table;
+    }
+    figure {
+        margin: 0;
+        @include spacing('margin', 4, 'top');
+        > table {
+            margin-top: 0;
+        }
+    }
+    a {
+        @include link;
+    }
+    p {
+        @include spacing('margin', 4, 'top');
+    }
+
+    > p,
+    > h1,
+    > h2,
+    > h3,
+    > h4,
+    > h5,
+    > h6,
+    > ul,
+    > ol {
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            margin-bottom: 0;
         }
     }
 }

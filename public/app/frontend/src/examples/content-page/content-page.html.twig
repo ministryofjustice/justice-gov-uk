@@ -1,0 +1,141 @@
+{% extends '@layouts/two-sidebars/two-sidebars.html.twig' %}
+
+{% block header %}
+    {% include '@components/header/header.html.twig' with {
+        showLogo: true,
+        showSearch: true,
+        links: [
+            {
+                url: '#',
+                label: 'Courts',
+            },
+            {
+                url: '#',
+                label: 'Procedure rules',
+            },
+            {
+                url: '#',
+                label: 'Offenders',
+            },
+        ],
+        search: {
+            id: 'search-bar-header',
+            action: '#',
+            input: {
+                labelHidden: true,
+                label: 'Search the Justice UK website',
+                id: 'search-bar-header-input',
+            },
+            button: {
+                text: 'Search',
+            }
+        }
+    } %}
+{% endblock %}
+
+{% block columnOne %}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nunc a varius aliquet. Sed consequat tempus elementum. Duis hendrerit arcu a nulla pulvinar, vitae elementum dui malesuada. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum eget facilisis neque. Phasellus dictum, odio in porttitor maximus, leo ante volutpat neque, eget volutpat eros enim pretium est. Proin faucibus vitae nunc a pretium.
+{% endblock %}
+
+{% block columnTwo %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content: '
+        <h1>PRACTICE DIRECTION 57AB – SHORTER AND FLEXIBLE TRIALS SCHEMES</h1>
+        <p>This Practice Direction supplements CPR Part 57A</p>
+        <p>Contents of this Practice Direction</p>
+        <figure>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                        <a href="#">General</a>
+                        </td>
+                        <td>Para. 1</td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <a href="#"> The Shorter Trials Scheme </a>
+                        </td>
+                        <td>
+                        Para. 2
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#">The Flexible Trials Scheme</a>
+                            </td>
+                            <td>Para .3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </figure>
+        <h2>1. General</h2>
+        <p><strong>1.1</strong> This Practice Direction provides for two schemes, the Shorter Trials Scheme and the Flexible Trials Scheme.</p>
+        <p><strong>1.2</strong> The schemes will—</p>
+        <p>(a) operate from 1 October 2018;</p>
+        <p>(b) operate in all the Business and Property Courts including those in the Rolls Building and those situated outside London;</p>
+        <p>(c) apply to claims issued on or after 1 October 2015.</p>
+        <p><strong>1.3</strong> Where the provisions of this Practice Direction conflict with other provisions of the rules or other practice Directions, this Practice Direction shall take precedence.</p>
+        <p><strong>1.4</strong> In calculating the time provided by any order fixing, extending or abridging time under the Shorter Trials Scheme the period from 24 December to 2 January next following (both days inclusive) is excluded.</p>
+        <p><strong>1.5</strong> Where a case is agreed or ordered to be suitable for the Shorter Trials Scheme, the court expects the parties and their representatives to cooperate with, and assist, the court in ensuring the proceeding is conducted in accordance with the Scheme so that the real issues in dispute are identified as early as possible and are dealt with in the most efficient way possible.</p>
+        <h2>2. The Shorter Trials Scheme</h2>
+        <p><strong>Shorter Trials Scheme – general</strong></p>
+        <p><strong>2.1</strong> A claim in the Shorter Trials Scheme may be started in any of the Business and Property Courts.</p>
+        <p><strong>2.2</strong> The Shorter Trials Scheme will not normally be suitable for—</p>
+        <p>(a) cases including an allegation of fraud or dishonesty;</p>
+        <p>(b) cases which are likely to require extensive disclosure and/or reliance upon extensive witness or expert evidence;</p>
+        <p>(c) cases involving multiple issues and multiple parties, save for Part 20 counterclaims for revocation of an intellectual property right;</p>
+        <p>(d) cases in the Intellectual Property Enterprise Court;</p>
+        <p>(e) public procurement cases.</p>
+        '
+    } %}
+{% endblock %}
+
+{% block columnThree %}
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nunc a varius aliquet. Sed consequat tempus elementum. Duis hendrerit arcu a nulla pulvinar, vitae elementum dui malesuada.
+{% endblock %}
+
+{% block footer %}
+    {% include '@components/footer/footer.html.twig' with {
+        links: [
+            {
+                url: '#',
+                label: 'Accessibility',
+            },
+            {
+                url: '#',
+                label: 'Cookies',
+            },
+            {
+                url: '#',
+                label: 'Contacts',
+            },
+            {
+                url: '#',
+                label: 'Copyright',
+            },
+            {
+                url: '#',
+                label: 'Help',
+            },
+            {
+                url: '#',
+                label: 'Privacy',
+            },
+            {
+                url: '#',
+                label: 'Webchats',
+            },
+            {
+                url: '#',
+                label: 'Website queries',
+            },
+        ],
+    } %}
+{% endblock %}
