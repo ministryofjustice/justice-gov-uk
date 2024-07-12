@@ -63,3 +63,16 @@ Error500.args = {
           <p>If the problem persist please be patient, we are aware of the issue.</p>
     `,
 };
+
+export const Error503 = Template.bind({});
+Error503.args = {
+    title: 'Website temporarily unavailable',
+    errorCode: '503',
+    errorMessage: 'Service unavailable',
+    content: `
+        <p>Sorry – this website is temporarily unavailable while we perform essential maintenance.</p>
+        <p>We’ll be back soon.</p>
+        <p>For urgent inquiries contact,</p>
+        <a href="mailto:web.comments@justice.gov.uk">web.comments@justice.gov.uk</a>
+    `,
+};

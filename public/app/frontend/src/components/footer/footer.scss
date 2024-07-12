@@ -2,10 +2,9 @@
 
 .footer {
     @include spacing('margin', 8, 'top');
-    @include spacing('padding', 2, 'top');
+    @include spacing('padding', 4, 'top');
 
     background-color: var(--justice-primary-black);
-    color: var(--justice-primary-white);
 
     &__container {
         @include container;
@@ -80,6 +79,8 @@
     &__content {
         @include spacing('margin', 4, 'top');
 
+        color: var(--justice-primary-white);
+
         a {
             @include link('light');
 
@@ -95,6 +96,7 @@
         @include spacing('padding', 2, 'top');
         @include spacing('padding', 4, 'bottom');
 
+        color: var(--justice-primary-white);
         display: flex;
         border-top: 1px solid var(--justice-border);
         justify-content: end;

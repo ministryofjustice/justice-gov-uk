@@ -29,10 +29,8 @@ example:
                 <li class="footer__link">
                     {% include '@components/link/link.html.twig' with {
                         newTab: link.newTab,
-                        link: {
-                            url: link.url,
-                            label: link.label
-                        }
+                        url: link.url,
+                        label: link.label
                     } %}
                 </li>
             {% endfor %}
@@ -46,15 +44,13 @@ example:
                 </span>
                         <div class="footer__logo"></div>
                 </a>
-                <div class="footer__content">
-                    <p>
-                        For citizen and business advice on justice, rights and more visit <a href="#">GOV.UK</a>
-                    </p>
-                </div>
+                <p class="footer__content">
+                    For citizen and business advice on justice, rights and more visit <a href="#">GOV.UK</a>
+                </p>
             </div>
         </div>
-        <div class="footer__copyright">
-            <p>© Crown copyright</p>
-        </div>
+        <p class="footer__copyright">
+            © Crown copyright
+        </p>
     </div>
 </footer>

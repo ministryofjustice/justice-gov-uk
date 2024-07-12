@@ -215,7 +215,6 @@ $spacing-units-desktop: (
 }
 
 @mixin body {
-    margin-bottom: 0;
     font-size: 1rem;
     font-family: var(--body-font);
     font-weight: var(--body-font-normal);

@@ -43,3 +43,23 @@ Default.args = {
         },
     },
 };
+
+export const ActiveLink = Template.bind({});
+ActiveLink.args = {
+    ...Default.args,
+    links: [
+        {
+            url: '#',
+            label: 'Courts',
+        },
+        {
+            active: true,
+            url: '#',
+            label: 'Procedure rules',
+        },
+        {
+            url: '#',
+            label: 'Offenders',
+        },
+    ],
+};

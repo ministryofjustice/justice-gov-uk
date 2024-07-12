@@ -29,3 +29,22 @@ Default.args = {
         },
     ],
 };
+
+export const ActiveLink = Template.bind({});
+ActiveLink.args = {
+    links: [
+        {
+            url: '#',
+            label: 'Courts',
+        },
+        {
+            active: true,
+            url: '#',
+            label: 'Procedure rules',
+        },
+        {
+            url: '#',
+            label: 'Offenders',
+        },
+    ],
+};

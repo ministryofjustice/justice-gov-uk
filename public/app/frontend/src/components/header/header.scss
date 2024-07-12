@@ -2,7 +2,6 @@
 
 .header {
     @include spacing('padding', 2, 'top');
-    @include spacing('padding', 2, 'bottom');
 
     background-color: var(--justice-primary-black);
 
