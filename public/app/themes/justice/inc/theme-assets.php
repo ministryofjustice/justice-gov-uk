@@ -33,7 +33,10 @@ class ThemeAssets
 
     public function loadStyles(): void
     {
+        // Legacy
         wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css');
+        // Frontend
+        wp_enqueue_style('justice-frontend-styles', home_url('/app/frontend/dist/main.css'));
     }
 
     /**
@@ -47,7 +50,7 @@ class ThemeAssets
 
     public function loadScripts(): void
     {
-
+        // Legacy
         $script_asset_path = get_template_directory() . "/dist/php/app.min.asset.php";
 
         if (!file_exists($script_asset_path)) {
@@ -65,6 +68,9 @@ class ThemeAssets
         );
 
         wp_enqueue_script('moj-justice-app');
+        
+        // Frontend
+        wp_enqueue_script('justice-frontend-script', home_url('/app/frontend/dist/main.js'), [], null, true);
     }
 
     /**
