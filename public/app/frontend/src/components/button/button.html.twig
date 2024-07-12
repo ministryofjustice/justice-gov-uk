@@ -1,0 +1,7 @@
+{% if type == 'input' %}
+    <input class="button button--{{style}} button--input" type="{{inputType}}" value="{{buttonText}}">
+{% else %}
+    <button class="button button--{{style}}">
+        {{buttonText}}
+    </button>
+{% endif %}

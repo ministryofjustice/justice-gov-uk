@@ -1,0 +1,31 @@
+@import '../../../style';
+
+.two-sidebars {
+    $this: &;
+    @include container;
+
+    &__grid {
+        @include grid;
+    }
+
+    &__column-one {
+        @include grid-row(1, 4);
+        @media screen and (min-width: $justice-lg) {
+            @include grid-row(1, 2);
+        }
+    }
+
+    &__column-two {
+        @include grid-row(1, 4);
+        @media screen and (min-width: $justice-lg) {
+            @include grid-row(3, 8);
+        }
+    }
+
+    &__column-three {
+        @include grid-row(1, 4);
+        @media screen and (min-width: $justice-lg) {
+            @include grid-row(11, 2);
+        }
+    }
+}

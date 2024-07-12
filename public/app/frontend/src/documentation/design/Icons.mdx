@@ -1,0 +1,25 @@
+import { Meta, Title, IconGallery, IconItem } from '@storybook/blocks';
+
+<Meta title="Design/Icons" />
+
+# Icons
+
+To add or change an icon add the file to `public/app/frontend/src/assets/icons`, then go to `public/app/frontend/style.scss` and add the file name and extension to the `$iconTypes` object.
+
+Update the Icon Gallery component below to include the new icon and its class.
+
+To include an icon in your component use `<i class="icon-{name}--{sm|md|lg}">`
+
+## Gallery
+
+<IconGallery>
+    <IconItem name="icon-pdf--sm">
+        <i class="icon-pdf--sm" />
+    </IconItem>
+    <IconItem name="icon-zip--sm">
+        <i class="icon-zip--sm" />
+    </IconItem>
+    <IconItem name="icon-winzip--sm">
+        <i class="icon-winzip--sm" />
+    </IconItem>
+</IconGallery>
