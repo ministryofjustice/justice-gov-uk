@@ -1,11 +1,8 @@
 <?php
 /**
- * The template for displaying 404 pages (Not Found)
+ * The template for displaying 401 pages
  *
  */
-
-//body_class();
-//wp_body_open();
 
 get_header();
 
