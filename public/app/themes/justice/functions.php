@@ -44,10 +44,9 @@ require_once 'inc/utils.php';
 
 // Initialise Timber (https://timber.github.io/docs/v2/)
 Timber::init();
-// Set up our template directory TODO: do we need this? Looks like we can render in place, but will review once we've built more components
 Timber::$dirname = [
     [
-        'templates'
+        'views'
     ],
 ];
 // Create aliases for the frontend templates. These can be accessed with @components/component-name/component-name.html.twig
