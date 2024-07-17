@@ -1,0 +1,15 @@
+@import '../../../style';
+
+.file-download {
+    display: flex;
+    align-items: center;
+
+    &__icon {
+        @include spacing('margin', 1, 'right');
+    }
+
+    &__details {
+        @include spacing('margin', 1, 'left');
+        @include body;
+    }
+}

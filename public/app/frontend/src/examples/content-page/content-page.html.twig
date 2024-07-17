@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block columnTwo %}
-    {% include '@components/rich-text/rich-text.html.twig' with {
-        content: '
+    <article>
+        {% include '@components/rich-text/rich-text.html.twig' with {
+            content: '
         <h1>PRACTICE DIRECTION 57AB – SHORTER AND FLEXIBLE TRIALS SCHEMES</h1>
         <p>This Practice Direction supplements CPR Part 57A</p>
         <p>Contents of this Practice Direction</p>
@@ -61,7 +62,8 @@
         <p>(d) cases in the Intellectual Property Enterprise Court;</p>
         <p>(e) public procurement cases.</p>
         '
-    } %}
+        } %}
+    </article>
 {% endblock %}
 
 {% block columnThree %}

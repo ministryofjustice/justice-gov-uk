@@ -11,6 +11,7 @@ import './components/footer';
 import './components/header';
 import './components/image';
 import './components/image-with-text';
+import './components/file-download';
 
 // Layouts
 import './layouts/one-sidebar';
