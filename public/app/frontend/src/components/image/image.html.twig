@@ -1,0 +1,17 @@
+{#
+@file
+A component to display an image
+
+Available variables:
+      - url: string The url for the image
+      - alt: string The alt text for the image
+
+example:
+        {% include '@components/image/image.html.twig' with {
+            url: true,
+            alt: true,
+    } %}
+#}
+<div class="image">
+    <img src="{{ url }}" alt="{{ alt }}">
+</div>

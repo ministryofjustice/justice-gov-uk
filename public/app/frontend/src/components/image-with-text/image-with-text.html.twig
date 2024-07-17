@@ -1,0 +1,54 @@
+{#
+@file
+A component to display an image next to some text
+
+Available variables:
+    - direction: string(left|right) Which side should the image be on
+    - title:
+        text: string The title text
+        tag: string The html tag (defaults to h2)
+        url: string Make the title a link
+    - content: string Text content
+    - image:
+        - url: string The url for the image
+        - alt: string The alt text for the image
+
+example:
+        {% include '@components/image-with-text/image-with-text.html.twig' with {
+        direction: 'left',
+        title: {
+            text: 'Welcome',
+            tag: 'h1',
+            url: '#',
+        }
+        content: 'Lorem ipsum'
+        image: {
+            url: '#',
+            alt: 'A sunset'
+        },
+    } %}
+#}
+<div class="image-with-text image-with-text--{{ direction }}">
+    <div class="image-with-text__image">
+        {% include '@components/image/image.html.twig' with {
+            url: image.url,
+            alt: image.alt
+        } %}
+    </div>
+    <div class="image-with-text__content">
+        {% if title is not empty %}
+            <div class="image-with-text__title">
+                <{{ title.tag }}>
+                    {% if title.url %}
+                        <a href={{ title.url }}>{{ title.text }}</a>
+                    {% else %}
+                        {{ title.text }}
+                    {% endif %}
+                </{{ title.tag }}>
+            </div>
+        {% endif %}
+        {% include '@components/rich-text/rich-text.html.twig' with {
+            content,
+        } %}
+    </div>
+</div>
