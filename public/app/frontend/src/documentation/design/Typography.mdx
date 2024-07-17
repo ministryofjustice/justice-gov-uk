@@ -40,9 +40,9 @@ export const generateTypesetCanvas = (
 ) => {
     return (
         <Unstyled>
-            // Loop through array of tags and sizes and build a Typeset canvas.
-            // We're doing this instead of just inheriting the styles so that
-            the mobile sizes are visible without // changing screensize
+            {/* Loop through array of tags and sizes and build a Typeset canvas. */}
+            {/* We're doing this instead of just inheriting the styles so that */}
+            {/* the mobile sizes are visible without changing screensize */}
             {Object.entries(sizes).map(([tag, rem], loop) => {
                 const key = `${loop}-typeset`;
                 // Add margin to body as this isn't included in the body mixin
