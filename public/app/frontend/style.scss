@@ -240,6 +240,7 @@ $spacing-units-desktop: (
     font-family: var(--body-font);
     font-weight: var(--body-font-normal);
     color: var(--justice-primary-black);
+    line-height: 1.315;
 }
 
 // Heading caption https://design-system.service.gov.uk/styles/headings/#headings-with-captions
@@ -346,7 +347,7 @@ $iconSizes: (
 @mixin button($type: 'primary') {
     @include spacing('padding', 1);
     @include body;
-    display: inline-block;
+    display: flex;
     background-color: var(--justice-secondary-dark-grey);
     color: var(--justice-primary-white);
     border: 0;
@@ -575,14 +576,17 @@ $opposite-directions: (
 /// @param {integer (rem)} $size
 ///   The height and width of the triangle
 @mixin arrow-button($color: 'dark', $size: 0.45rem) {
-    @include button;
-    background-color: transparent;
     $baseColor: var(--justice-primary-white);
-    $hoverColor: var(--justice-primary-grey);
+    background-color: transparent;
+    justify-content: space-between;
+    align-items: center;
 
     @if $color == 'dark' {
+        @include button('light');
         $baseColor: var(--justice-primary-black);
-        $hoverColor: var(--justice-secondary-dark-grey);
+    }
+    @else {
+        @include button('dark');
     }
     &::after {
         display: block;
@@ -590,9 +594,6 @@ $opposite-directions: (
     }
     &:hover {
         background-color: transparent;
-        &:after {
-            @include triangle('bottom', $hoverColor, $size);
-        }
     }
     &:focus-visible:not(:active, :hover) {
         &:after {
@@ -605,9 +606,6 @@ $opposite-directions: (
         }
         &:hover {
             background-color: transparent;
-            &:after {
-                @include triangle('top', $hoverColor, $size);
-            }
         }
         &:focus-visible:not(:active, :hover) {
             &:after {

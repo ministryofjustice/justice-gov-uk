@@ -18,12 +18,14 @@ example:
 
 {% set titleId = "sidebar-block-title-" ~ title|replace({' ': '-'})|lower ~ (isMobile ? "-mobile" : "") %}
 {% set contentId = "sidebar-block-content-" ~ title|replace({' ': '-'})|lower ~ (isMobile ? "-mobile" : "") %}
-<aside class="sidebar-block sidebar-block--{{ variant }}" aria-labelledby={{ titleId }}>
+<section class="sidebar-block sidebar-block--{{ variant }}" aria-labelledby="{{ titleId }}" role="complementary">
     <div class="sidebar-block__heading-wrapper">
-        <p id={{ titleId  }} class="sidebar-block__heading{{ variant == "archive" ? " sidebar-block__heading--archive" : "" }}">{{ title }}</p>
-        <button class="sidebar-block__show-more"
-                aria-controls="{{ contentId }}" aria-label="Show more">
-        </button>
+        <h2 class="sidebar-block__heading" id="{{ titleId }}">
+            <span class="sidebar-block__heading-text{{ variant == "archive" ? " sidebar-block__heading-text--archive" : "" }}">{{ title }}</span>
+            <button class="sidebar-block__heading-button" aria-controls="{{ contentId }}">
+                {{ title }}
+            </button>
+        </h2>
     </div>
     <div id="{{ contentId}}" class="sidebar-block__content">
         {% if links is not empty %}
@@ -58,4 +60,4 @@ example:
             } %}
         {% endif %}
     </div>
-</aside>
+</section>
