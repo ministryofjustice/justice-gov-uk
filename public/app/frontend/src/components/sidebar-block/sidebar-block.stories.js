@@ -62,7 +62,7 @@ RelatedPages.args = {
             format: 'PDF',
             filesize: '100 KB',
             label: 'CPR email address list',
-            language: 'Welsh'
+            language: 'Welsh',
         },
     ],
 };

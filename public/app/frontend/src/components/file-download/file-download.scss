@@ -2,6 +2,7 @@
 
 .file-download {
     @include spacing('margin', 4, 'top');
+
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -24,6 +25,7 @@
 
     &__details {
         @include body;
+
         width: fit-content;
     }
 }
