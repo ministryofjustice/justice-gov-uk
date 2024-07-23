@@ -1,18 +1,47 @@
 {#
 @file
-A button or an input element with button styling
+A content block that can be used in the sidebar to list links, files or link to a prefiltered search page
 
 Available variables:
-    - style: 'primary'|'secondary' The button type
-    - type: 'input'|null Whether the button is an <input> or <button> element
-    - inputType: 'button'|'submit'|null Allows us to specify the input type
-    - buttonText: string The text to be displayed
+    - variant: 'list'|'archive'|'search' The button type
+    - title: 'string An h2 that appears at the top of the component
+    - links: array An array of links or file download links to be displayed in the nav component
+        - url: string The url for the link/file
+        - label: string The label for the link or filename
+        - newTab: boolean Will this link open in a new tab?
+        - format: 'PDF'|'ZIP'|'DOC' The file format
+        - filesize: string The size of the file
+        - language: string The language of the file if different to the language of the page
+    - search: object Parameters to be passed to the search bar component, if it's to be displayed
+        - id: string A unique id
+        - action: string The form action,
+        - input: object Parameters to be passed to the text input component
+            - id: string A unique id
+            - labelHidden: boolean Should the label be displayed,
+            - label: string The label text,
+        },
+        button: object Parameters to be passed to the button component {
+            text: string The button text,
+        },
 example:
-    {% include '@components/button/button.html.twig' with {
-        variant: 'primary',
-        type: 'input',
-        inputType: 'submit',
-        buttonText: 'Submit'
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with {
+    variant: 'list',
+    title: 'Related pages',
+    links: [
+        {
+            url: '#',
+            format: 'PDF',
+            filesize: '167 KB',
+            label: 'CPR email address list',
+        },
+        {
+            url: '#',
+            format: 'PDF',
+            filesize: '100 KB',
+            label: 'CPR email address list',
+            language: 'Welsh',
+        },
+        ],
     }%}
 #}
 
@@ -27,27 +56,27 @@ example:
             </button>
         </h2>
     </div>
-    <div id="{{ contentId}}" class="sidebar-block__content">
+    <div id="{{ contentId }}" class="sidebar-block__content">
         {% if links is not empty %}
             <ul class="sidebar-block__list">
                 {% for link in links %}
-                <li>
-                    {% if link.format %}
-                        {% include '@components/file-download/file-download.html.twig' with {
-                            format: link.format,
-                            link: link.url,
-                            filesize: link.filesize,
-                            filename: link.label,
-                            language: link.language,
-                        } %}
-                    {% else %}
-                        {% include '@components/link/link.html.twig' with {
-                            newTab: link.newTab,
-                            url: link.url,
-                            label: link.label,
-                        }%}
-                    {% endif %}
-                </li>
+                    <li>
+                        {% if link.format %}
+                            {% include '@components/file-download/file-download.html.twig' with {
+                                format: link.format,
+                                link: link.url,
+                                filesize: link.filesize,
+                                filename: link.label,
+                                language: link.language,
+                            } %}
+                        {% else %}
+                            {% include '@components/link/link.html.twig' with {
+                                newTab: link.newTab,
+                                url: link.url,
+                                label: link.label,
+                            } %}
+                        {% endif %}
+                    </li>
                 {% endfor %}
             </ul>
         {% elseif variant == 'search' %}

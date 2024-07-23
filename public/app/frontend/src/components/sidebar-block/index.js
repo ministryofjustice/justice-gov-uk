@@ -4,9 +4,6 @@ import './sidebar-block.scss';
 export default function () {
     const els = document.querySelectorAll('.sidebar-block');
 
-    // If active, open child sublist by default - use atr to pass info on
-    // Add arrow similar to in main nav to indicate?
-
     if (!els) {
         return;
     }
