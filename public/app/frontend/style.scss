@@ -594,7 +594,7 @@ $opposite-directions: (
             @include triangle('bottom', $hoverColor, $size);
         }
     }
-    &:focus:not(:active, :hover) {
+    &:focus-visible:not(:active, :hover) {
         &:after {
             @include triangle('bottom', var(--gds-black), $size);
         }
@@ -609,14 +609,9 @@ $opposite-directions: (
                 @include triangle('top', $hoverColor, $size);
             }
         }
-        &:focus:not(:active, :hover) {
+        &:focus-visible:not(:active, :hover) {
             &:after {
                 @include triangle('top', var(--gds-black), $size);
-            }
-        }
-        &:focus:not(:focus-visible) {
-            &:after {
-                @include triangle('top', $baseColor, $size);
             }
         }
     }
