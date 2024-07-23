@@ -5,7 +5,11 @@
         @include button('primary');
     }
 
-    &--secondary {
-        @include button('secondary');
+    &--dark {
+        @include button('dark');
+    }
+
+    &--light {
+        @include button('light');
     }
 }

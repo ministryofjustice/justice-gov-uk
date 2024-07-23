@@ -1,0 +1,61 @@
+{#
+@file
+A button or an input element with button styling
+
+Available variables:
+    - style: 'primary'|'secondary' The button type
+    - type: 'input'|null Whether the button is an <input> or <button> element
+    - inputType: 'button'|'submit'|null Allows us to specify the input type
+    - buttonText: string The text to be displayed
+example:
+    {% include '@components/button/button.html.twig' with {
+        variant: 'primary',
+        type: 'input',
+        inputType: 'submit',
+        buttonText: 'Submit'
+    }%}
+#}
+
+{% set titleId = "sidebar-block-title-" ~ title|replace({' ': '-'})|lower ~ (isMobile ? "-mobile" : "") %}
+{% set contentId = "sidebar-block-content-" ~ title|replace({' ': '-'})|lower ~ (isMobile ? "-mobile" : "") %}
+<aside class="sidebar-block sidebar-block--{{ variant }}" aria-labelledby={{ titleId }}>
+    <div class="sidebar-block__heading-wrapper">
+        <p id={{ titleId  }} class="sidebar-block__heading{{ variant == "archive" ? " sidebar-block__heading--archive" : "" }}">{{ title }}</p>
+        <button class="sidebar-block__show-more"
+                aria-controls="{{ contentId }}" aria-label="Show more">
+        </button>
+    </div>
+    <div id="{{ contentId}}" class="sidebar-block__content">
+        {% if links is not empty %}
+            <ul class="sidebar-block__list">
+                {% for link in links %}
+                <li>
+                    {% if link.format %}
+                        {% include '@components/file-download/file-download.html.twig' with {
+                            format: link.format,
+                            link: link.url,
+                            filesize: link.filesize,
+                            filename: link.label,
+                            language: link.language,
+                        } %}
+                    {% else %}
+                        {% include '@components/link/link.html.twig' with {
+                            newTab: link.newTab,
+                            url: link.url,
+                            label: link.label,
+                        }%}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        {% elseif variant == 'search' %}
+            <p>{{ description }}</p>
+            {% include '@components/search-bar/search-bar.html.twig' with {
+                id: search.id,
+                action: search.action,
+                input: search.input,
+                button: search.button,
+            } %}
+        {% endif %}
+    </div>
+</aside>

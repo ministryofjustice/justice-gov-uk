@@ -1,5 +1,4 @@
 import template from './template.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/Template',

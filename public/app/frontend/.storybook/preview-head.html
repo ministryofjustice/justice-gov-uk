@@ -1,0 +1,9 @@
+<!--Storybook and the browser initiate a DOMContentLoaded event each. This will suppress the browser-initiated event when run in Storybook-->
+<!--See https://github.com/storybookjs/storybook/issues/15753-->
+<script>
+    document.addEventListener('DOMContentLoaded', (e) => {
+        if (e.isTrusted) {
+            e.stopImmediatePropagation();
+        }
+    });
+</script>

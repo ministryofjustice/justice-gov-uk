@@ -1,5 +1,4 @@
 import fileDownload from './file-download.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/File download',

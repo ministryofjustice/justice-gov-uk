@@ -1,10 +1,15 @@
 import button from './button.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/Button',
     parameters: {
         layout: 'centered',
+    },
+    argTypes: {
+        variant: {
+            options: ['primary', 'dark', 'light'],
+            control: { type: 'radio' },
+        },
     },
 };
 
@@ -18,10 +23,16 @@ Primary.args = {
     variant: 'primary',
 };
 
-export const Secondary = Template.bind({});
-Secondary.args = {
+export const Dark = Template.bind({});
+Dark.args = {
     ...Primary.args,
-    variant: 'secondary',
+    variant: 'dark',
+};
+
+export const Light = Template.bind({});
+Light.args = {
+    ...Primary.args,
+    variant: 'light',
 };
 
 export const Input = Template.bind({});
