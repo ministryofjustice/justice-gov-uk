@@ -274,9 +274,15 @@ $spacing-units-desktop: (
 
 // Icons
 $iconTypes: (
+    'doc': 'png',
+    'doc-alt': 'png',
     'pdf': 'png',
+    'ppt': 'png',
+    'winzip': 'gif',
+    'xls': 'png',
+    'xls-alt': 'png',
     'zip': 'gif',
-    'winzip': 'gif'
+
 );
 
 $iconSizes: (

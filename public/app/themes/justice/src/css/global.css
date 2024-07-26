@@ -2833,46 +2833,6 @@ background: url('img/select-btn.png') no-repeat right -31px;
 }
 
 /* Icons  for documents */
-a[href$=".pdf"] {
-    display: inline;
-    *display: inline-block;
-    padding-left: 18px;
-    line-height: 18px;
-    background: transparent url(../img/icon/pdf.png) center left no-repeat;
-}
-
-a[href$='.xls'], a[href$='.xlsx'], a[href$='.csv'], a[href$='.xlt'], a[href$='.xlw'] {
-    display: inline;
-    *display: block;
-    padding-left: 18px;
-    line-height: 18px;
-    background: transparent url(../img/icon/xls.png) center left no-repeat;
-}
-
-a[href$='.ppt'], a[href$='.pptx'], a[href$='.pps'] {
-    display: inline;
-    *display: block;
-    padding-left: 18px;
-    line-height: 18px;
-    background: transparent url(../img/icon/ppt.png) center left no-repeat;
-}
-
-a[href$='.doc'], a[href$='.docx'], a[href$='.rtf'], a[href$='.txt'], a[href$='.wps'] {
-    display: inline;
-    *display: block;
-    padding-left: 18px;
-    line-height: 18px;
-    background: transparent url(../img/icon/doc.png) center left no-repeat;
-}
-
-a[href$='.zip'], a[href$='.gzip'], a[href$='.rar'] {
-    display: inline;
-    *display: block;
-    padding-left: 18px;
-    line-height: 18px;
-    background: transparent url(../img/icon/zip.gif) center left no-repeat;
-}
-
 .search .results a[href$=".pdf"] {
     display: block;
     float: left;
