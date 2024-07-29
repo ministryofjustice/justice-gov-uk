@@ -23,6 +23,7 @@ class Templates
     public array $allowedMimeTypes = [];
 
     public array $blocks = [
+        'core/paragraph',
         'core/table',
         'core/image',
         'core/list',
@@ -37,7 +38,7 @@ class Templates
 
     public function addHooks(): void
     {
-        add_action('render_block', [$this, 'replace_wp_blocks'], 10, 2);
+        add_action('render_block', [$this, 'replaceWordpressBlocks'], 10, 2);
     }
 
     /**
@@ -49,7 +50,7 @@ class Templates
      *@see https://developer.wordpress.org/reference/classes/wp_block_parser_block/
      *
      */
-    public function replace_wp_blocks(string $block_content, array $block): string
+    public function replaceWordpressBlocks(string $block_content, array $block): string
     {
         // Only target certain blocks
         if (in_array($block['blockName'], $this->blocks)) {
@@ -60,7 +61,7 @@ class Templates
             switch ($block['blockName']) {
                 case 'core/paragraph':
                 case 'core/table':
-                    $this->render_links($doc);
+                    $this->renderLinks($doc);
                     break;
                 default:
             }
@@ -80,7 +81,7 @@ class Templates
      *
      * @return DOMNode|bool The Twig template as a DOMNode or false if the conversion failed
      */
-    public function convert_twig_template_to_dom_element(DOMDocument $doc, array $templates, string $tagName = 'div', array $params = []): DOMNode|bool
+    public function convertTwigTemplateToDomElement(DOMDocument $doc, array $templates, string $tagName = 'div', array $params = []): DOMNode|bool
     {
         $htmlDoc = new DOMDocument();
         $context = Timber::context($params);
@@ -103,7 +104,7 @@ class Templates
      * @param DOMDocument $doc The DOMDocument that the html will be added to
      *
      */
-    public function render_links(DOMDocument $doc): void
+    public function renderLinks(DOMDocument $doc): void
     {
         $fileTemplate = ['partials/file-download.html.twig'];
         $linkTemplate = ['partials/link.html.twig'];
@@ -111,11 +112,11 @@ class Templates
         foreach ($links as $link) {
             // If the link is a file use the file download template, otherwise use the link template
             if (wp_check_filetype($link->getAttribute('href'), $this->allowedMimeTypes)['ext']) {
-                $params = $this->get_file_download_params($link);
-                $htmlDoc = $this->convert_twig_template_to_dom_element($doc, $fileTemplate, 'div', $params);
+                $params = $this->getFileDownloadParams($link);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, 'div', $params);
             } else {
-                $params = $this->get_link_params($link);
-                $htmlDoc = $this->convert_twig_template_to_dom_element($doc, $linkTemplate, 'a', $params);
+                $params = $this->getLinkParams($link);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);
             }
             $link->parentNode->replaceChild($htmlDoc, $link);
         }
@@ -128,7 +129,7 @@ class Templates
      *
      * @return array An array of parameters to pass to the link template
      */
-    public function get_link_params(DOMNode $node): array
+    public function getLinkParams(DOMNode $node): array
     {
         $label = null;
         $url = null;
@@ -154,7 +155,7 @@ class Templates
      *
      * @return array An array of parameters to pass to the link template
      */
-    public function get_file_download_params(DOMNode $node): array
+    public function getFileDownloadParams(DOMNode $node): array
     {
         $href = null;
         $filesize = null;
