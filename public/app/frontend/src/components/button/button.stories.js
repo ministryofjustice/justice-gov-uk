@@ -3,6 +3,9 @@ import './index.js';
 
 export default {
     title: 'Components/Button',
+    parameters: {
+        layout: 'centered',
+    },
 };
 
 const Template = (args) => {

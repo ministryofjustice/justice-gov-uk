@@ -9,6 +9,8 @@ import './components/search-bar';
 import './components/rich-text';
 import './components/footer';
 import './components/header';
+import './components/image';
+import './components/image-with-text';
 
 // Layouts
 import './layouts/one-sidebar';
