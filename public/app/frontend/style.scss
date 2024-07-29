@@ -132,8 +132,9 @@ $spacing-units-desktop: (
 }
 
 // Headings https://design-system.service.gov.uk/styles/type-scale/
+// Use map-get instead of the spacing function here otherwise it's harder to override per component due to css specificity
 @mixin h1 {
-    @include spacing('margin', 8, 'top');
+    margin-top: map-get($spacing-units-mobile, 8);
     margin-bottom: 0;
     font-size: 2rem;
     line-height: 2.188rem;
@@ -144,13 +145,14 @@ $spacing-units-desktop: (
         @include eyebrow('h1');
     }
     @media screen and (min-width: $justice-lg) {
+        margin-top: map-get($spacing-units-desktop, 8);
         font-size: 3rem;
         line-height: 3.125rem;
     }
 }
 
 @mixin h2 {
-    @include spacing('margin', 6, 'top');
+    margin-top: map-get($spacing-units-mobile, 6);
     margin-bottom: 0;
     font-size: 1.688rem;
     line-height: 1.875rem;
@@ -161,13 +163,14 @@ $spacing-units-desktop: (
         @include eyebrow('h2');
     }
     @media screen and (min-width: $justice-lg) {
+        margin-top: map-get($spacing-units-desktop, 6);
         font-size: 2.25rem;
         line-height: 2.5rem;
     }
 }
 
 @mixin h3 {
-    @include spacing('margin', 4, 'top');
+    margin-top: map-get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1.313rem;
     line-height: 1.563rem;
@@ -178,49 +181,66 @@ $spacing-units-desktop: (
         @include eyebrow('h3');
     }
     @media screen and (min-width: $justice-lg) {
+        margin-top: map-get($spacing-units-desktop, 4);
         font-size: 1.5rem;
         line-height: 1.875rem;
     }
 }
 
 @mixin h4 {
-    @include spacing('margin', 4, 'top');
+    margin-top: map-get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1.188rem;
     line-height: 1.563rem;
     font-family: var(--heading-font);
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map-get($spacing-units-desktop, 4);
+        font-size: 1.5rem;
+        line-height: 1.875rem;
+    }
 }
 
 @mixin h5 {
-    @include spacing('margin', 4, 'top');
+    margin-top: map-get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1rem;
     line-height: 1.563rem;
     font-family: var(--heading-font);
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map-get($spacing-units-desktop, 4);
+        font-size: 1.5rem;
+        line-height: 1.875rem;
+    }
 
 }
 
 @mixin h6 {
-    @include spacing('margin', 4, 'top');
+    margin-top: map-get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1rem;
     line-height: 1.563rem;
     font-family: var(--heading-font);
     font-weight: var(--heading-font-normal);
     color: var(--justice-primary-black);
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map-get($spacing-units-desktop, 4);
+        font-size: 1.5rem;
+        line-height: 1.875rem;
+    }
 }
 
 @mixin body {
-    margin-bottom: 0;
+    // Don't set margins on body as it's so often used in components it's easier to do case by case
     font-size: 1rem;
     font-family: var(--body-font);
     font-weight: var(--body-font-normal);
     color: var(--justice-primary-black);
 }
+
 // Heading caption https://design-system.service.gov.uk/styles/headings/#headings-with-captions
 @mixin eyebrow ($tag) {
     display: block;
@@ -444,6 +464,7 @@ $iconSizes: (
     }
     p {
         @include spacing('margin', 4, 'top');
+        line-height: 1.315;
     }
 
     > p,

@@ -1,0 +1,34 @@
+{% include '@components/header/header.html.twig' with {
+    showLogo: true,
+    showSearch: true,
+    links: [
+        {
+            label:'Courts',
+            url: 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
+            onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' ~ homeUrl ~ '/courts' ~'" });'
+        },
+        {
+            label: 'Procedure rules',
+            url: homeUrl ~ '/courts/procedure-rules',
+            active: homeUrl ~ '/courts/procedure-rules' starts with permalink,
+            onclick : null
+        },
+        {
+            label: 'Offenders',
+            url: 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
+            onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' ~ homeUrl ~ '/offenders' ~'" });'
+        }
+    ],
+    search: {
+        id: 'search-bar-header',
+        action: '/',
+        input: {
+            labelHidden: true,
+            label: 'Search',
+            id: 'searchbox-top',
+        },
+        button: {
+            text: 'Search',
+        }
+    }
+} %}

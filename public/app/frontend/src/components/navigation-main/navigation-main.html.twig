@@ -4,15 +4,20 @@ The main navigation for the site
 
 Available variables:
     - links: array An array of links to be displayed
+        - newTab: boolean Whether the link will open in a new tab
+        - onClick: string A js function to run on click
+        - active: boolean Whether the user is currently on the linked page
         - url: string The url for the link
         - label: string The label for the link
 example:
     {% include '@components/navigation-main/search-bar.html.twig' with {
         links: [
             {
+                newTab: true,
+                onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "/offenders" });'
+                active: true,
                 url: 'https://google.com',
                 label: 'Click here'
-                newTab: true,
             },
             {
                 url: '#',
@@ -25,13 +30,12 @@ example:
     <div class="navigation-main__container">
         <ul class="navigation-main__list">
             {% for link in links %}
-                <li class="navigation-main__link">
+                <li class="navigation-main__link{{ link.active ? " navigation-main__link--active" : "" }}">
                     {% include '@components/link/link.html.twig' with {
                         newTab: link.newTab,
-                        link: {
-                            url: link.url,
-                            label: link.label
-                        }
+                        onClick: link.onClick,
+                        url: link.url,
+                        label: link.label,
                     } %}
                 </li>
             {% endfor %}

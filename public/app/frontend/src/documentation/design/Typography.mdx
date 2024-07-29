@@ -40,12 +40,17 @@ export const generateTypesetCanvas = (
 ) => {
     return (
         <Unstyled>
+            {/* Loop through array of tags and sizes and build a Typeset canvas. */}
+            {/* We're doing this instead of just inheriting the styles so that */}
+            {/* the mobile sizes are visible without changing screensize */}
             {Object.entries(sizes).map(([tag, rem], loop) => {
                 const key = `${loop}-typeset`;
+                // Add margin to body as this isn't included in the body mixin
+                const bodyMarginTop = `margin-top:${mobile ? '1.25rem' : '0.938rem'}`;
                 const sample =
                     type === 'heading-with-captions'
                         ? `<hgroup><${tag} style="font-size:${rem}"><p className="eyebrow">${sampleCaption}</p>${sampleText}</${tag}></hgroup>`
-                        : `<${tag} style="font-size:${rem}">${sampleText}</${tag}>`;
+                        : `<${tag} style="font-size:${rem};${tag === 'p' ? bodyMarginTop : ''}">${sampleText}</${tag}>`;
                 return (
                     <div
                         key={key}

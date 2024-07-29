@@ -11,10 +11,8 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-    link: {
-        label: 'Find out more',
-        url: '#',
-    },
+    label: 'Find out more',
+    url: '#',
 };
 
 export const NewTab = Template.bind({});

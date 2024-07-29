@@ -1,38 +1,5 @@
 {% extends '@layouts/two-sidebars/two-sidebars.html.twig' %}
 
-{% block header %}
-    {% include '@components/header/header.html.twig' with {
-        showLogo: true,
-        showSearch: true,
-        links: [
-            {
-                url: '#',
-                label: 'Courts',
-            },
-            {
-                url: '#',
-                label: 'Procedure rules',
-            },
-            {
-                url: '#',
-                label: 'Offenders',
-            },
-        ],
-        search: {
-            id: 'search-bar-header',
-            action: '#',
-            input: {
-                labelHidden: true,
-                label: 'Search the Justice UK website',
-                id: 'search-bar-header-input',
-            },
-            button: {
-                text: 'Search',
-            }
-        }
-    } %}
-{% endblock %}
-
 {% block columnOne %}
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nunc a varius aliquet. Sed consequat tempus elementum. Duis hendrerit arcu a nulla pulvinar, vitae elementum dui malesuada. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum eget facilisis neque. Phasellus dictum, odio in porttitor maximus, leo ante volutpat neque, eget volutpat eros enim pretium est. Proin faucibus vitae nunc a pretium.
 {% endblock %}
@@ -99,43 +66,4 @@
 
 {% block columnThree %}
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nunc a varius aliquet. Sed consequat tempus elementum. Duis hendrerit arcu a nulla pulvinar, vitae elementum dui malesuada.
-{% endblock %}
-
-{% block footer %}
-    {% include '@components/footer/footer.html.twig' with {
-        links: [
-            {
-                url: '#',
-                label: 'Accessibility',
-            },
-            {
-                url: '#',
-                label: 'Cookies',
-            },
-            {
-                url: '#',
-                label: 'Contacts',
-            },
-            {
-                url: '#',
-                label: 'Copyright',
-            },
-            {
-                url: '#',
-                label: 'Help',
-            },
-            {
-                url: '#',
-                label: 'Privacy',
-            },
-            {
-                url: '#',
-                label: 'Webchats',
-            },
-            {
-                url: '#',
-                label: 'Website queries',
-            },
-        ],
-    } %}
 {% endblock %}

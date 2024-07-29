@@ -1,0 +1,27 @@
+{% extends '@layouts/one-sidebar/one-sidebar.html.twig' %}
+
+{% set direction = 'right' %}
+
+{% set errorContent %}
+    <h1>{{ title }}</h1>
+    <p>{{ errorMessage }} - {{ errorCode }}</p>
+    {{ content }}
+{% endset %}
+
+{% block headerContent %}
+    {% include 'views/partials/header.html.twig' %}
+{% endblock %}
+
+{% block columnOne %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content: errorContent,
+    } %}
+{% endblock %}
+
+{% block columnTwo %}
+    {#    No content    #}
+{% endblock %}
+
+{% block footerContent %}
+    {% include 'views/partials/footer.html.twig' %}
+{% endblock %}

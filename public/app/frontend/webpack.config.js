@@ -12,7 +12,6 @@ module.exports = {
         },
     },
     output: {
-        publicPath: './dist',
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
     },

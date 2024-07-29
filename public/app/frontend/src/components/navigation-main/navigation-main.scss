@@ -21,6 +21,7 @@
     }
 
     &__link {
+        position: relative;
         border-top: 1px var(--justice-border) solid;
         @media screen and (min-width: $justice-lg) {
             border-top: none;
@@ -46,6 +47,29 @@
         &:focus-within,
         &:focus-within + li {
             border: none;
+        }
+
+        // Add triangle indicator to active links
+        &--active {
+            &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                width: 0;
+                height: 0;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-top: 6px solid var(--justice-primary-black);
+            }
+
+            &:focus-within {
+                &::after {
+                    border-top: 6px solid var(--gds-yellow);
+                }
+            }
         }
     }
 }
