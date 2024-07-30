@@ -1,5 +1,4 @@
 import richText from './rich-text.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/Rich text',

@@ -1,5 +1,4 @@
 import searchBar from './search-bar.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/Search bar',

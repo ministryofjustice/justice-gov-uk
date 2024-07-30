@@ -13,6 +13,12 @@ import './components/image';
 import './components/image-with-text';
 import './components/file-download';
 
+import sidebarBlock from '@components/sidebar-block';
+
 // Layouts
 import './layouts/one-sidebar';
 import './layouts/two-sidebars';
+
+addEventListener('DOMContentLoaded', () => {
+    sidebarBlock();
+});

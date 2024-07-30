@@ -10,7 +10,7 @@
     --justice-secondary-grey: #7e7e74;
     --justice-secondary-dark-grey: #5c5c54; 
     --justice-secondary-blue: #4e6280;
-    --justice-secondary-grey-blue: #e1e5e8;
+    --justice-secondary-grey-blue: #eff0f2;
 
     // Links
     --justice-link: #1d70b8;
@@ -91,16 +91,17 @@ $spacing-units-desktop: (
 @mixin grid() {
     display: grid;
     grid-template-columns: repeat(4, [col-start] 1fr);
-    gap: $gap-mobile;
+    column-gap: $gap-mobile;
     width: 100%;
     @media screen and (min-width: $justice-lg) {
         grid-template-columns: repeat(12, [col-start] 1fr);
-        gap: $gap;
+        column-gap: $gap;
     }
 }
 
 @mixin grid-row($start: 1, $end: 4) {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     width: 100%;
     grid-column: #{$start}/ span #{$end};
@@ -239,6 +240,7 @@ $spacing-units-desktop: (
     font-family: var(--body-font);
     font-weight: var(--body-font-normal);
     color: var(--justice-primary-black);
+    line-height: 1.315;
 }
 
 // Heading caption https://design-system.service.gov.uk/styles/headings/#headings-with-captions
@@ -286,7 +288,8 @@ $iconTypes: (
 );
 
 $iconSizes: (
-    'sm': 1.5rem, // The smallest icon must be at least 24px x 24px to meet WCAG 2.2 AA
+    'xs': 1rem, // For decorative icons only i.e. those with aria-hidden="true"
+    'sm': 1.5rem, // The smallest icon must be at least 24px x 24px to meet WCAG 2.2 AA when used in a link
     'md': 3rem,
     'lg': 6rem
 );
@@ -320,7 +323,7 @@ $iconSizes: (
     &:active {
         color: var(--justice-link-active);
     }
-    &:focus:not(:active):not(:hover) {
+    &:focus-visible:not(:active):not(:hover) {
         outline: 3px solid transparent;
         background-color: var(--gds-yellow);
         box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
@@ -350,7 +353,7 @@ $iconSizes: (
 @mixin button($type: 'primary') {
     @include spacing('padding', 1);
     @include body;
-    display: inline-block;
+    display: flex;
     background-color: var(--justice-secondary-dark-grey);
     color: var(--justice-primary-white);
     border: 0;
@@ -365,25 +368,33 @@ $iconSizes: (
         color: var(--justice-primary-black);
     }
 
-    &:focus:not(:active):not(:hover) {
-        color: var(--gds-black);
-        background-color: var(--gds-yellow);
-        border-bottom: 4px solid black;
-        padding-bottom: 0;
+    &:focus-visible:not(:active):not(:hover) {
+            color: var(--gds-black);
+            background-color: var(--gds-yellow);
+            box-shadow: inset 0 -4px 0 var(--gds-black);
     }
-    @if $type == 'secondary' {
+
+    @if $type == 'dark' {
+        background-color: var(--justice-primary-black);
+        color: var(--justice-primary-white);
+        &:hover {
+            background-color: var(--justice-primary-black);
+            color: var(--justice-primary-white);
+            text-decoration: underline;
+        }
+    }
+    @if $type == 'light' {
         background-color: var(--justice-primary-white);
         color: var(--justice-primary-black);
         &:hover {
-            background-color: var(--justice-secondary-dark-grey);
-            color: white;
+            background-color: var(--justice-primary-grey);
         }
     }
 }
 
 // Use to add a simple focus ring to link or button elements
 @mixin focus-outline {
-    &:focus:not(:active):not(:hover), &:focus-within {
+    &:focus-visible:not(:active):not(:hover), &:focus-within {
         outline: 3px solid var(--gds-yellow);
         outline-offset: 0;
         box-shadow: inset 0 0 0 2px;
@@ -530,4 +541,82 @@ $iconSizes: (
     // a user unintentionally copying more text than they intended and needing to
     // manually trim it down again.
     user-select: none;
+}
+
+$opposite-directions: (
+    'top': 'bottom',
+    'right': 'left',
+    'bottom': 'top',
+    'left': 'right'
+);
+
+/// Creates a triangle (see https://css-tricks.com/snippets/sass/css-triangle-mixin)
+///
+/// @param {string ('top'|'right'|'bottom'|'left')} $direction
+///   The direction that the triangle should point
+/// @param {string} $color
+///   The color of the triangle
+/// @param {integer (rem)} $size
+///   The height and width of the triangle
+@mixin triangle($direction, $color: inherit, $size: 1rem) {
+    content: '';
+    width: 0;
+    height: 0;
+    border-#{map.get($opposite-directions, $direction)}: ($size * 2) solid $color;
+    @if $direction == top or $direction == bottom {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;
+        border-#{$direction}: unset;
+    }
+    @else if $direction == right or $direction == bottom {
+        border-bottom: $size solid transparent;
+        border-top:  $size solid transparent;
+        border-#{$direction}: unset;
+    }
+}
+
+/// Creates an arrow button when applied to an element that can have a pseudo element
+///
+/// @param {string} $color
+///   The color of the triangle
+/// @param {integer (rem)} $size
+///   The height and width of the triangle
+@mixin arrow-button($color: 'dark', $size: 0.45rem) {
+    $baseColor: var(--justice-primary-white);
+    background-color: transparent;
+    justify-content: space-between;
+    align-items: center;
+
+    @if $color == 'dark' {
+        @include button('light');
+        $baseColor: var(--justice-primary-black);
+    }
+    @else {
+        @include button('dark');
+    }
+    &::after {
+        display: block;
+        @include triangle('bottom', $baseColor, $size);
+    }
+    &:hover {
+        background-color: transparent;
+    }
+    &:focus-visible:not(:active, :hover) {
+        &:after {
+            @include triangle('bottom', var(--gds-black), $size);
+        }
+    }
+    &[aria-expanded="true"] {
+        &::after {
+            @include triangle('top', $baseColor, $size);
+        }
+        &:hover {
+            background-color: transparent;
+        }
+        &:focus-visible:not(:active, :hover) {
+            &:after {
+                @include triangle('top', var(--gds-black), $size);
+            }
+        }
+    }
 }

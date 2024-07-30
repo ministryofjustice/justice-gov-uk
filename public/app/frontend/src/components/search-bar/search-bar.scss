@@ -15,7 +15,7 @@
             width: 4rem;
 
             &:focus:not(:active, :hover) {
-                border: 0;
+                box-shadow: none;
             }
         }
     }

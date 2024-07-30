@@ -1,5 +1,4 @@
 import textInput from './text-input.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/Text input',
