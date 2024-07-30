@@ -1,0 +1,31 @@
+@import '../../../style';
+
+.file-download {
+    @include spacing('margin', 4, 'top');
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    &__link-wrapper {
+        display: flex;
+        align-items: start;
+        @media screen and (min-width: $justice-lg) {
+            align-items: center;
+        }
+    }
+
+    &__link {
+        @include spacing('margin', 1, 'right');
+    }
+
+    &__icon {
+        @include spacing('margin', 1, 'right');
+    }
+
+    &__details {
+        @include body;
+
+        width: fit-content;
+    }
+}

@@ -1,0 +1,28 @@
+{#
+@file
+A file (pdf) for download
+
+Available variables:
+    - format: 'PDF'|'ZIP'|'DOC' The file format
+    - link: string The link to the file
+    - filename: string The name of the file
+    - filesize: string The size of the file
+    - language: string The language of the file if different to the language of the page
+example:
+    {% include '@components/file-download/file-download.html.twig' with {
+        format: 'PDF',
+        link: '#',
+        filename: 'User manual',
+        filesize: '120 KbB',
+        language: 'Welsh'
+    }%}
+#}
+
+<div class="file-download">
+    <i class="file-download__icon icon-{{ format|lower }}--sm" aria-hidden="true"></i>
+    <a class="file-download__link" href={{ link }}>
+        <span class="file-download__prefix visually-hidden">Download</span>
+        {{ filename }}
+    </a>
+    <span class="file-download__details">({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? " ," ~ filesize : "" }})</span>
+</div>

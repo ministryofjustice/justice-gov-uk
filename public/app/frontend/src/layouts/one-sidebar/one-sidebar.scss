@@ -11,6 +11,10 @@
     &__column-one,
     &__column-two {
         @include grid-row(1, 4);
+
+        > * {
+            @include spacing('margin', 8, 'top');
+        }
     }
 
     &--right {

@@ -1,6 +1,4 @@
 import imageWithText from './image-with-text.html.twig';
-import './index.js';
-
 export default {
     title: 'Components/Image with text',
 };

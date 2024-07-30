@@ -1,5 +1,4 @@
 import navigationMain from './navigation-main.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/Navigation - Main',

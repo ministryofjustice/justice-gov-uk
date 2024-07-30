@@ -1,6 +1,4 @@
 import footer from './footer.html.twig';
-import './index.js';
-
 export default {
     title: 'Components/Footer',
     parameters: {
