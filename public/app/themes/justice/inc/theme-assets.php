@@ -34,7 +34,7 @@ class ThemeAssets
     public function loadStyles(): void
     {
         // Legacy
-        wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css');
+        // wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css');
         // Frontend
         wp_enqueue_style('justice-frontend-styles', home_url('/app/frontend/dist/main.css'));
     }

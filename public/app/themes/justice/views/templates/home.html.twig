@@ -1,0 +1,24 @@
+{% extends '@layouts/one-sidebar/one-sidebar.html.twig' %}
+
+{% set direction = 'right' %}
+
+{% block headerContent %}
+    {% include 'views/partials/header.html.twig' %}
+{% endblock %}
+
+{% block columnOne %}
+    {% include '@components/image-with-text/image-with-text.html.twig' with {
+        direction: 'left',
+        title: pageTitle,
+        content,
+        image: mainImage,
+    } %}
+{% endblock %}
+
+{% block columnTwo %}
+    {#  Add list component once merged  #}
+{% endblock %}
+
+{% block footerContent %}
+    {% include 'views/partials/footer.html.twig' %}
+{% endblock %}

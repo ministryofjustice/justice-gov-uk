@@ -1,0 +1,19 @@
+{% extends '@layouts/two-sidebars/two-sidebars.html.twig' %}
+
+{% block columnOne %}
+    {% for panel in sidePanelsLeft %}
+        {# Nav block #}
+    {% endfor %}
+{% endblock %}
+
+{% block columnTwo %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content,
+    } %}
+{% endblock %}
+
+{% block columnThree %}
+    {% for panel in sidePanelsRight %}
+        {# List block#}
+    {% endfor %}
+{% endblock %}
