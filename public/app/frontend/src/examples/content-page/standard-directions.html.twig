@@ -1,13 +1,85 @@
 {% extends '@layouts/two-sidebars/two-sidebars.html.twig' %}
 
-{% block columnOne %}
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nunc a varius aliquet. Sed consequat tempus elementum. Duis hendrerit arcu a nulla pulvinar, vitae elementum dui malesuada. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum eget facilisis neque. Phasellus dictum, odio in porttitor maximus, leo ante volutpat neque, eget volutpat eros enim pretium est. Proin faucibus vitae nunc a pretium.
+{% block leftSidebar %}
+    {% include '@components/navigation-secondary/navigation-secondary.html.twig' with {
+        articleId: '#main-page-content',
+        title: 'Justice UK',
+        links: [
+            {
+                url: '#',
+                label: 'Courts',
+            },
+            {
+                url: '#',
+                label: 'Procedure rules',
+                children: [
+                {
+                    url: '#',
+                    label: 'Civil',
+                    children: [
+                    {
+                        url: '#',
+                        label: 'Rules & Practice Directions',
+                    },
+                    {
+                        url: '#',
+                        label: 'Standard directions',
+                    },
+                ]
+                },
+                {
+                    url: '#',
+                    label: 'Family',
+                    children: [
+                    {
+                        url: '#',
+                        label: 'Foreword and summary of the rules',
+                    },
+                    {
+                        url: '#',
+                        label: 'Rules and practice directions',
+                    },
+                ]
+                },
+                {
+                    url: '#',
+                    label: 'Other procedure rules for magistrates\' courts and the Crown Court',
+                },
+                {
+                    url: '#',
+                    label: 'Criminal',
+                },
+            ],
+            },
+            {
+                url: '#',
+                label: 'Offenders',
+            },
+        ],
+        search: {
+            id: 'search-bar-header',
+            action: '#',
+            input: {
+                labelHidden: true,
+                label: 'Search the Justice UK website',
+                id: 'search-bar-header-input',
+            },
+            button: {
+                text: 'Search',
+            },
+        },
+    } %}
 {% endblock %}
 
-{% block columnTwo %}
-    <article>
-        {% include '@components/rich-text/rich-text.html.twig' with {
-            content: '
+{% block articleHeader %}
+    // Breadcrumbs
+    // Title
+    // Right sidebar on mobile as accordions?
+{% endblock %}
+
+{% block articleContent %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content: '
         <h1>PRACTICE DIRECTION 57AB – SHORTER AND FLEXIBLE TRIALS SCHEMES</h1>
         <p>This Practice Direction supplements CPR Part 57A</p>
         <p>Contents of this Practice Direction</p>
@@ -62,10 +134,26 @@
         <p>(d) cases in the Intellectual Property Enterprise Court;</p>
         <p>(e) public procurement cases.</p>
         '
-        } %}
-    </article>
+    } %}
 {% endblock %}
 
-{% block columnThree %}
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat nunc a varius aliquet. Sed consequat tempus elementum. Duis hendrerit arcu a nulla pulvinar, vitae elementum dui malesuada.
+{% block rightSidebar %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with {
+        variant: 'search',
+        title: 'Search this collection',
+        description: 'Search standard directions',
+        search: {
+            id: 'search-bar-sidebar',
+            action: '#',
+            placeholder: 'e.g. Witness Statements',
+            input: {
+                labelHidden: true,
+                label: 'Search the standard directions content',
+                id: 'search-bar-sidebar-input',
+            },
+            button: {
+                text: 'Search',
+            },
+        }
+    } %}
 {% endblock %}

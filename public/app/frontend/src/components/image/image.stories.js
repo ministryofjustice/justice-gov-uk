@@ -1,5 +1,4 @@
 import image from './image.html.twig';
-import './index.js';
 
 export default {
     title: 'Components/Image',
