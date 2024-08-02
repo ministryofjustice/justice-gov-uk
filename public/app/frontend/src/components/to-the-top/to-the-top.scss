@@ -1,0 +1,35 @@
+@import '../../../style';
+
+.to-the-top {
+    @include link;
+
+    display: flex;
+    align-items: center;
+    width: fit-content;
+
+    &:visited {
+        color: var(--justice-link);
+    }
+
+    &::after {
+        @include triangle('top', var(--justice-link), 0.5rem);
+        @include spacing('margin', 1, 'left');
+    }
+
+    &:hover {
+        &::after {
+            @include triangle('top', var(--justice-link-hover), 0.5rem);
+            @include spacing('margin', 1, 'left');
+        }
+
+        &:visited {
+            color: var(--justice-link-hover);
+        }
+    }
+
+    &:focus-visible:not(:active, :hover) {
+        &::after {
+            @include triangle('top', var(--gds-black), 0.5rem);
+        }
+    }
+}
