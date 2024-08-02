@@ -1,0 +1,37 @@
+{#
+@file
+The main navigation for the site
+
+Available variables:
+    - links: array An array of links to be displayed
+        - newTab: boolean Whether the link will open in a new tab
+        - onClick: string A js function to run on click
+        - active: boolean Whether the user is currently on the linked page
+        - url: string The url for the link
+        - label: string The label for the link
+example:
+    {% include '@components/navigation-main/search-bar.html.twig' with {
+        links: [
+            {
+                newTab: true,
+                onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "/offenders" });'
+                active: true,
+                url: 'https://google.com',
+                label: 'Click here'
+            },
+            {
+                url: '#',
+                label: 'Click here'
+            }
+        ]
+    }%}
+#}
+<nav id="navigation-sections" class="navigation-sections" aria-label="Page sections">
+    <ul class="navigation-sections__list">
+        {% for link in links %}
+            <li class="navigation-sections__list-item">
+                <a href="{{ link.url }}"><span class="visually-hidden">Scroll to section: </span>{{ link.label }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
