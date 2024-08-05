@@ -1,0 +1,35 @@
+{#
+@file
+A file (pdf) for download
+
+Available variables:
+    - format: 'PDF'|'ZIP'|'DOC' The file format
+    - link: string The link to the file
+    - filename: string The name of the file
+    - filesize: string The size of the file
+    - language: string The language of the file if different to the language of the page
+example:
+    {% include '@components/file-download/file-download.html.twig' with {
+        format: 'PDF',
+        link: '#',
+        filename: 'User manual',
+        filesize: '120 KbB',
+        language: 'Welsh'
+    }%}
+#}
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ul class="breadcrumbs__list">
+        {% for link in links %}
+            {% if loop.last %}
+                <li class="breadcrumbs__item">
+                    <a class="breadcrumbs__link disabled" role="link" aria-disabled="true" aria-current="page">{{ link.label }}</a>
+                </li>
+            {% else %}
+                <li class="breadcrumbs__item">
+                    <a class="breadcrumbs__link" href="{{ link.url }}">{{ link.label }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>

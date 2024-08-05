@@ -1,0 +1,19 @@
+@import '../../../style';
+
+.breadcrumbs {
+  &__list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  &__item {
+    &:not(&:last-child) {
+      &:after {
+        @include spacing('margin', 1, 'left');
+        @include spacing('margin', 1, 'right');
+        content: '»';
+        color: var(--justice-primary-grey);
+      }
+    }
+  }
+}

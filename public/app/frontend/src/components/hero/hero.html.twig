@@ -1,0 +1,35 @@
+{#
+@file
+A file (pdf) for download
+
+Available variables:
+    - format: 'PDF'|'ZIP'|'DOC' The file format
+    - link: string The link to the file
+    - filename: string The name of the file
+    - filesize: string The size of the file
+    - language: string The language of the file if different to the language of the page
+example:
+    {% include '@components/file-download/file-download.html.twig' with {
+        format: 'PDF',
+        link: '#',
+        filename: 'User manual',
+        filesize: '120 KbB',
+        language: 'Welsh'
+    }%}
+#}
+
+<div class="hero">
+    {% if breadcrumbs %}
+        <div class="hero__breadcrumbs">
+            {% include '@components/breadcrumbs/breadcrumbs.html.twig' with {
+                links: breadcrumbs,
+            }%}
+        </div>
+    {% endif %}
+    {% if eyebrowText %}
+        <hgroup>
+            <h1 class="hero__title"><p class="hero__eyebrow eyebrow">{{ eyebrowText }}</p>{{ title }}</h1></hgroup>
+    {% else %}
+        <h1 class="hero__title">{{ title }}</h1>
+    {% endif %}
+</div>
