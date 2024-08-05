@@ -1,0 +1,42 @@
+{#
+@file
+A component to display breadcrumbs
+
+Available variables:
+    - links: array An array of links to be displayed
+        - url: string The url for the link
+        - label: string The label for the link
+example:
+    {% include '@components/breadcrumbs/breadcrumbs.html.twig' with {
+        links: [
+            {
+                url: '#',
+                label: 'Home'
+            },
+            {
+                url: '#',
+                label: 'Procedure rules'
+            },
+            {
+                url: '#',
+                label: 'Family'
+            },
+        ]
+    }%}
+#}
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ul class="breadcrumbs__list">
+        {% for link in links %}
+            {% if loop.last %}
+                <li class="breadcrumbs__item">
+                    <a class="breadcrumbs__link disabled" role="link" aria-disabled="true" aria-current="page">{{ link.label }}</a>
+                </li>
+            {% else %}
+                <li class="breadcrumbs__item">
+                    <a class="breadcrumbs__link" href="{{ link.url }}">{{ link.label }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>

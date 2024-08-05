@@ -12,7 +12,8 @@ import './components/header';
 import './components/image';
 import './components/image-with-text';
 import './components/file-download';
-
+import './components/breadcrumbs';
+import './components/hero';
 import sidebarBlock from '@components/sidebar-block';
 
 // Layouts
