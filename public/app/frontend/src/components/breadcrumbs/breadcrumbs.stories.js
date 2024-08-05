@@ -30,6 +30,6 @@ Default.args = {
         {
             url: '#',
             label: 'Updates and zips',
-        }
-    ]
+        },
+    ],
 };

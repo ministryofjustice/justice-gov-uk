@@ -1,20 +1,27 @@
 {#
 @file
-A file (pdf) for download
+A component to display breadcrumbs
 
 Available variables:
-    - format: 'PDF'|'ZIP'|'DOC' The file format
-    - link: string The link to the file
-    - filename: string The name of the file
-    - filesize: string The size of the file
-    - language: string The language of the file if different to the language of the page
+    - links: array An array of links to be displayed
+        - url: string The url for the link
+        - label: string The label for the link
 example:
-    {% include '@components/file-download/file-download.html.twig' with {
-        format: 'PDF',
-        link: '#',
-        filename: 'User manual',
-        filesize: '120 KbB',
-        language: 'Welsh'
+    {% include '@components/breadcrumbs/breadcrumbs.html.twig' with {
+        links: [
+            {
+                url: '#',
+                label: 'Home'
+            },
+            {
+                url: '#',
+                label: 'Procedure rules'
+            },
+            {
+                url: '#',
+                label: 'Family'
+            },
+        ]
     }%}
 #}
 
