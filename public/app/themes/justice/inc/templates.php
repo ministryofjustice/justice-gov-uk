@@ -126,11 +126,17 @@ class Templates
         }
     }
 
+    /**
+     * Adds the correct scopes to table headers
+     *
+     * @param DOMDocument $doc The DOMDocument that the html will be added to
+     *
+     */
     public function addTableScopes(DOMDocument $doc): void
     {
-        $xpath = new DOMXPath( $doc );
-        $head = $xpath->query( '//thead/tr/th' );
-        $body = $xpath->query( '//tbody/tr/th' );
+        $xpath = new DOMXPath($doc);
+        $head = $xpath->query('//thead/tr/th');
+        $body = $xpath->query('//tbody/tr/th');
         foreach ($head as $node) {
             $node->setAttribute('scope', 'col');
         }
