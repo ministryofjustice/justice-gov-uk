@@ -8,24 +8,42 @@
         @include grid;
     }
 
-    &__column-one {
+    &__article {
         @include grid-row(1, 4);
+
+        > * {
+            @include spacing('margin', 8, 'top');
+        }
         @media screen and (min-width: $justice-lg) {
-            @include grid-row(1, 2);
+            @include grid-row(4, 6);
         }
     }
 
-    &__column-two {
+    &__sidebar {
         @include grid-row(1, 4);
-        @media screen and (min-width: $justice-lg) {
-            @include grid-row(3, 8);
-        }
-    }
 
-    &__column-three {
-        @include grid-row(1, 4);
-        @media screen and (min-width: $justice-lg) {
-            @include grid-row(11, 2);
+        &--left {
+            @media screen and (min-width: $justice-lg) {
+                @include grid-row(1, 3);
+            }
+        }
+
+        &--right {
+            display: none;
+            @media screen and (min-width: $justice-lg) {
+                @include grid-row(10, 3);
+            }
+        }
+
+        &--mobile {
+            display: flex;
+            @media screen and (min-width: $justice-lg) {
+                display: none;
+            }
+        }
+
+        > *:not(.navigation-secondary) {
+            @include spacing('margin', 8, 'top');
         }
     }
 }

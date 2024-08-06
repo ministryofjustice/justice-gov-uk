@@ -1,0 +1,91 @@
+{#
+@file
+The sidebar navigation for the site
+
+Available variables:
+    - links: array An array of links to be displayed
+        - newTab: boolean Whether the link will open in a new tab
+        - onClick: string A js function to run on click
+        - active: boolean Whether the user is currently on the linked page
+        - url: string The url for the link
+        - label: string The label for the link
+example:
+    {% include '@components/navigation-secondary/navigation-secondary.html.twig' with {
+        links: [
+            {
+                newTab: true,
+                onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "/offenders" });'
+                active: true,
+                url: 'https://google.com',
+                label: 'Click here'
+            },
+            {
+                url: '#',
+                label: 'Click here'
+            }
+        ]
+    }%}
+#}
+
+{% import _self as menus %}
+
+{# Generate menus from a list of links. Called recursively to generate child links #}
+{% macro menu_links(items, menu_level, menu_id, articleId) %}
+    {% import _self as menus %}
+    {% if items %}
+        {% if menu_level == 0 %}
+<ul class="navigation-secondary__list">
+    <li class="navigation-secondary__skip-to-article navigation-secondary__list-item navigation-secondary__list-item--level-{{ menu_level }}">
+        <div class="navigation-secondary__list-item-wrapper">
+            <a class="navigation-secondary__link" href="{{ articleId }}">Skip to main content</a>
+        </div>
+    </li>
+    {% else %}
+    <ul id="{{ menu_id }}" class="navigation-secondary__sublist navigation-secondary__list--level-{{ menu_level }} {{ item.active ? " navigation-secondary__sublist--open" : "" }}">
+        {% if item.children %}
+            <li class="navigation-secondary__list-item navigation-secondary__list-item--level-{{ menu_level }}{{ item.active ? " navigation-secondary__list-item--active" : "" }}">
+                <div class="navigation-secondary__list-item-wrapper navigation-secondary__show-all">
+                    <a class="navigation-secondary__link" {{ item.active ? "" : "href='" ~ item.link ~ "'" }}
+                       role="link" {{ item.active ? "aria-disabled='true'" : "" }}>
+                        All {{ item.label }} content
+                    </a>
+                </div>
+            </li>
+        {% endif %}
+        {% endif %}
+        {% for item in items %}
+            <li class="navigation-secondary__list-item navigation-secondary__list-item--level-{{ menu_level }}{{ item.active ? " navigation-secondary__list-item--active" : "" }}">
+                {% if item.children %}
+                    <button class="navigation-secondary__button"
+                            aria-controls="{{ item.label|replace({' ': '-'})|lower }}" {{ item.active ? "aria-expanded='true' aria-label='Show less'" : "aria-label='Show more'"}} >
+                        <span class="navigation-secondary__button-text">{{ item.label }}</span>
+                    </button>
+                {% else %}
+                    <div class="navigation-secondary__list-item-wrapper">
+                        <a class="navigation-secondary__link" {{ item.active ? "" : "href='" ~ item.link ~ "'" }}
+                           role="link" {{ item.active ? "aria-disabled='true'" : "" }}>
+                            {{ item.label }}
+                        </a>
+                    </div>
+                {% endif %}
+                {% if item.children %}
+                    {{ menus.menu_links(item.children, menu_level + 1, item.label|replace({' ': '-'})|lower) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endmacro %}
+
+    <div class="navigation-secondary">
+        <div class="navigation-secondary__button-wrapper">
+            <button class="navigation-secondary__button navigation-secondary__button--nav" aria-expanded="false"
+                    aria-controls="navigation-secondary">
+                <span class="visually-hidden">Open secondary</span>menu
+            </button>
+        </div>
+        <div class="navigation-secondary__heading" aria-hidden="true">{{ title }}</div>
+        <nav id="navigation-secondary" class="navigation-secondary__nav" aria-label="Secondary">
+            {{ menus.menu_links(links, 0, 0, articleId) }}
+        </nav>
+    </div>

@@ -26,8 +26,8 @@
         display: none;
         @media screen and (min-width: $justice-lg) {
             @include spacing('padding', 2);
-            @include spacing('padding', 4, 'top');
-            @include spacing('padding', 4, 'bottom');
+            @include spacing('padding', 3, 'top');
+            @include spacing('padding', 3, 'bottom');
 
             display: flex;
             justify-content: space-between;
@@ -61,8 +61,8 @@
 
     &__content {
         @include spacing('padding', 2);
-        @include spacing('padding', 4, 'top');
-        @include spacing('padding', 4, 'bottom');
+        @include spacing('padding', 3, 'top');
+        @include spacing('padding', 3, 'bottom');
 
         background-color: var(--justice-secondary-grey-blue);
         display: none;
@@ -77,8 +77,8 @@
 
     &__list {
         > li {
-            @include spacing('padding', 2, 'top');
-            @include spacing('padding', 2, 'bottom');
+            @include spacing('padding', 1, 'top');
+            @include spacing('padding', 1, 'bottom');
 
             &:first-child {
                 padding-top: 0;

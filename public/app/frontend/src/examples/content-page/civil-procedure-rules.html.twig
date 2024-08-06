@@ -1,0 +1,159 @@
+{% extends '@layouts/two-sidebars/two-sidebars.html.twig' %}
+
+{% block leftSidebar %}
+    {% include '@components/navigation-secondary/navigation-secondary.html.twig' with {
+        articleId: '#main-page-content',
+        title: 'Justice UK',
+        links: [
+            {
+                url: '#',
+                label: 'Courts',
+            },
+            {
+                url: '#',
+                label: 'Procedure rules',
+                children: [
+                {
+                    url: '#',
+                    label: 'Civil',
+                    children: [
+                    {
+                        url: '#',
+                        label: 'Rules & Practice Directions',
+                    },
+                    {
+                        url: '#',
+                        label: 'Standard directions',
+                    },
+                ]
+                },
+                {
+                    url: '#',
+                    label: 'Family',
+                    children: [
+                    {
+                        url: '#',
+                        label: 'Foreword and summary of the rules',
+                    },
+                    {
+                        url: '#',
+                        label: 'Rules and practice directions',
+                    },
+                ]
+                },
+                {
+                    url: '#',
+                    label: 'Other procedure rules for magistrates\' courts and the Crown Court',
+                },
+                {
+                    url: '#',
+                    label: 'Criminal',
+                },
+            ],
+            },
+            {
+                url: '#',
+                label: 'Offenders',
+            },
+        ],
+        search: {
+            id: 'search-bar-header',
+            action: '#',
+            input: {
+                labelHidden: true,
+                label: 'Search the Justice UK website',
+                id: 'search-bar-header-input',
+            },
+            button: {
+                text: 'Search',
+            },
+        },
+    } %}
+{% endblock %}
+
+{% block articleHeader %}
+    // Breadcrumbs
+    // Title
+    // Right sidebar on mobile as accordions?
+{% endblock %}
+
+{% block articleContent %}
+        {% include '@components/rich-text/rich-text.html.twig' with {
+            content: '
+        <h1>Civil Procedure Rules</h1>
+        <a href="#">Problems accessing court forms?</a>
+        <h2>The 170th Practice Direction Update</h2>
+        <p>
+The Master of the Rolls and the Parliamentary Under-Secretary of State for Justice have signed the 170th Practice Direction Update, which comes into force at 11am on 18th July 2024.
+        </p>
+        <p>
+The 170th PD Update amends both PD 51R (Online Civil Money Claims Pilot) and PD 51ZB (The Damages Claims Pilot) to:
+        </p>
+        <ul>
+            <li>extend each pilot scheme by one year, to 1st October 2025, to allow for further testing and development.</li>
+            <li>allow for the national rollout of the “case progression” and “application” features to all related claims at the remaining county courts in England and Wales where both parties are legally represented (save for the County Court at Birmingham, where these features will be deployed at a later date);</li>
+            <li>consequential amendments, two clarificatory amendments and other modest tidying up.</li>
+        </ul>
+        '
+        } %}
+        {% include '@components/file-download/file-download.html.twig' with {
+            format: 'PDF',
+            link: '#',
+            filesize: '167 KB',
+            filename: 'PD making document',
+        } %}
+        {% include '@components/rich-text/rich-text.html.twig' with {
+            content: '
+        <h2>The 170th Practice Direction Update</h2>
+        <p>
+            <a href="#">The Statutory Instrument (SI)</a> is published via the legislation website and the online rules will be updated in due course.
+        </p>
+        <p>
+            The Civil Procedure (Amendment No. 2) Rules 2024 will enter into force on the date on which the Convention on the Recognition and Enforcement of Foreign Judgments in Civil or Commercial Matters (concluded on 2nd July 2019 at The Hague) enters into force in respect of the United Kingdom.
+        </p>
+        '
+        } %}
+{% endblock %}
+
+{% set relatedPages = {
+    title: 'Related pages',
+    variant: 'list',
+    links: [
+        {
+            url: '#',
+            format: 'PDF',
+            filesize: '167 KB',
+            label: 'CPR email address list',
+        },
+        {
+            url: '#',
+            format: 'PDF',
+            filesize: '100 KB',
+            label: 'CPR email address list',
+            language: 'Welsh',
+        },
+    ],
+} %}
+
+{% set archivedPages = {
+    title: 'Archived pages',
+    variant: 'archive',
+    links: [
+        {
+            url: '#',
+            label: 'Courts',
+            newTab: true
+        },
+    ],
+} %}
+
+{% block rightSidebar %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with relatedPages %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with archivedPages %}
+{% endblock %}
+{% block rightSidebarMobile %}
+    {% set updatedRelatedPages = relatedPages|merge({ isMobile }) %}
+    {% set updatedArchivedPages = archivedPages|merge({ isMobile }) %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedRelatedPages %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedArchivedPages %}
+{% endblock %}
