@@ -5,6 +5,7 @@ namespace MOJ\Justice;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
+use DOMXPath;
 use WP_Document_Revisions;
 use Timber\Timber;
 use Exception;
@@ -60,8 +61,11 @@ class Templates
 
             switch ($block['blockName']) {
                 case 'core/paragraph':
+                    $this->renderLinks($doc);
+                    break;
                 case 'core/table':
                     $this->renderLinks($doc);
+                    $this->addTableScopes($doc);
                     break;
                 default:
             }
@@ -119,6 +123,25 @@ class Templates
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);
             }
             $link->parentNode->replaceChild($htmlDoc, $link);
+        }
+    }
+
+    /**
+     * Adds the correct scopes to table headers
+     *
+     * @param DOMDocument $doc The DOMDocument that the html will be added to
+     *
+     */
+    public function addTableScopes(DOMDocument $doc): void
+    {
+        $xpath = new DOMXPath($doc);
+        $head = $xpath->query('//thead/tr/th');
+        $body = $xpath->query('//tbody/tr/th');
+        foreach ($head as $node) {
+            $node->setAttribute('scope', 'col');
+        }
+        foreach ($body as $node) {
+            $node->setAttribute('scope', 'row');
         }
     }
 
