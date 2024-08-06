@@ -4,11 +4,6 @@ import './navigation-secondary.scss';
 export default function () {
     const el = document.querySelector('.navigation-secondary');
 
-    // If active, open child sublist by default - use atr to pass info on
-    // Add arrow similar to in main nav to indicate?
-
-    // Layout columns. Add 8 margin top to all children except first. Remove this from individual components? Otherwise image won't work in second sidebar.
-
     if (!el) {
         return;
     }

@@ -29,6 +29,7 @@ example:
 
 {% import _self as menus %}
 
+{# Generate menus from a list of links. Called recursively to generate child links #}
 {% macro menu_links(items, menu_level, menu_id, articleId) %}
     {% import _self as menus %}
     {% if items %}

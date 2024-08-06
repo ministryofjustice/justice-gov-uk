@@ -26,7 +26,7 @@ $allowedRightPanels = [
 if ($post_meta->sideHasPanels('right')) {
     if ($post_meta->hasPanel('menu')) {
         foreach ($allowedRightPanels as $panel) {
-
+            // TODO: Add list block elements when merged
         }
     }
 }
@@ -42,7 +42,7 @@ if ($post_meta->sideHasPanels('left')) {
                     'link' => $link['url'],
                     'active' => isset($link['selected']),
                 ];
-             }, $links)
+            }, $links)
         ];
     }
 }
