@@ -19,7 +19,6 @@
     &:hover {
         &::after {
             @include triangle('top', var(--justice-link-hover), 0.5rem);
-            @include spacing('margin', 1, 'left');
         }
 
         &:visited {
