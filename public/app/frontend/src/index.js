@@ -13,6 +13,7 @@ import './components/image';
 import './components/image-with-text';
 import './components/file-download';
 import './components/to-the-top';
+import './components/navigation-sections';
 
 import sidebarBlock from '@components/sidebar-block';
 

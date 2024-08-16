@@ -1,0 +1,35 @@
+{#
+@file
+A list of links to navigate the page content using anchor links provided
+
+Available variables:
+    - links: array An array of links to be displayed
+        - url: string The url for the link
+        - label: string The label for the link
+example:
+    {% include '@components/navigation-sections/navigation-sections.html.twig' with {
+        links: [
+            {
+                label: '1-10',
+                url: '#',
+            },
+            {
+                label: '11-20',
+                url: '#',
+            },
+            {
+                label: '21-30',
+                url: '#',
+            },
+        ]
+    }%}
+#}
+<nav id="navigation-sections" class="navigation-sections" aria-label="Page sections">
+    <ul class="navigation-sections__list">
+        {% for link in links %}
+            <li class="navigation-sections__list-item">
+                <a href="{{ link.url }}"><span class="visually-hidden">Scroll to section: </span>{{ link.label }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
