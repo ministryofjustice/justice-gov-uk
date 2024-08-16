@@ -7,7 +7,7 @@
 get_header();
 get_footer();
 
-$templates = array( 'templates/home.html.twig');
+$templates = ['templates/home.html.twig'];
 $context = Timber::context([
     'pageTitle' => [
         'text' => get_the_title(),

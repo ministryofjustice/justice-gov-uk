@@ -47,7 +47,7 @@ if ($post_meta->sideHasPanels('left')) {
     }
 }
 
-$templates = array( 'templates/basic.html.twig');
+$templates = ['templates/basic.html.twig'];
 $context = Timber::context([
     'title' => get_the_title(),
     'content' => get_the_content(),
