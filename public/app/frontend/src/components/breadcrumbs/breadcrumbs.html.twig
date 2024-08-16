@@ -28,15 +28,14 @@ example:
 <nav class="breadcrumbs" aria-label="Breadcrumb">
     <ul class="breadcrumbs__list">
         {% for link in links %}
-            {% if loop.last %}
-                <li class="breadcrumbs__item">
-                    <a class="breadcrumbs__link disabled" role="link" aria-disabled="true" aria-current="page">{{ link.label }}</a>
-                </li>
-            {% else %}
-                <li class="breadcrumbs__item">
+            <li class="breadcrumbs__item">
+                {% if loop.last %}
+                    <a class="breadcrumbs__link disabled" role="link" aria-disabled="true"
+                       aria-current="page">{{ link.label }}</a>
+                {% else %}
                     <a class="breadcrumbs__link" href="{{ link.url }}">{{ link.label }}</a>
-                </li>
-            {% endif %}
+                {% endif %}
+            </li>
         {% endfor %}
     </ul>
 </nav>
