@@ -28,6 +28,7 @@ class Templates
         'core/table',
         'core/image',
         'core/list',
+        'moj/to-the-top'
     ];
 
     public function __construct()
@@ -64,6 +65,7 @@ class Templates
                     $this->renderLinks($doc);
                     break;
                 case 'core/table':
+                case 'moj/to-the-top':
                     $this->renderLinks($doc);
                     $this->addTableScopes($doc);
                     break;
@@ -112,12 +114,16 @@ class Templates
     {
         $fileTemplate = ['partials/file-download.html.twig'];
         $linkTemplate = ['partials/link.html.twig'];
+        $toTheTopTemplate = ['partials/to-the-top.html.twig'];
         $links = $doc->getElementsByTagName('a');
         foreach ($links as $link) {
             // If the link is a file use the file download template, otherwise use the link template
             if (wp_check_filetype($link->getAttribute('href'), $this->allowedMimeTypes)['ext']) {
                 $params = $this->getFileDownloadParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, 'div', $params);
+            } else if ($link->getAttribute('class') === 'to-the-top') {
+                $params = $this->getLinkParams($link);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, 'a', $params);
             } else {
                 $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);

@@ -1,0 +1,14 @@
+{#
+@file
+A link that takes the user to the top of the page when clicked
+
+Available variables:
+    - string: label The link text
+    - string: url The link url or element ID
+example:
+    {% include '@components/to-the-top/to-the-top.html.twig' with {
+        label: 'To the top',
+        link: '#'
+    }%}
+#}
+<a class="to-the-top" href="{{ url }}">{{ label }}</a>
