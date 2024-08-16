@@ -53,7 +53,7 @@
     "watch-dev": "webpack --watch --mode development",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "watch": "concurrently \"npm:watch-dev\" \"npm:storybook\"",
+    "watch": "concurrently \"npm:watch-dev\" \"storybook dev -p 6006 --no-open\"",
     "lint": "eslint ./src && stylelint ./src && prettier --check ./src",
     "lint-fix": "eslint --fix ./src && stylelint --fix ./src && prettier --write ./src"
   },

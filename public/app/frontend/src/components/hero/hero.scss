@@ -1,0 +1,11 @@
+@import '../../../style';
+
+.hero {
+    &__breadcrumbs {
+        @include spacing('margin', 4, 'bottom');
+    }
+
+    &__title {
+        @include spacing('margin', 0, 'top');
+    }
+}
