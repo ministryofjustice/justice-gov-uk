@@ -5,7 +5,7 @@ metadata:
   namespace: justice-gov-uk-production
   annotations:
     external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-production-ingress-justice-gov-uk-production-green
-    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/aws-weight: "0"
     nginx.ingress.kubernetes.io/proxy-body-size: "200m"
     # Squiz uses ThousandEyes for monitoring. Since migrating we no long need this so can block the requests here.
     nginx.ingress.kubernetes.io/server-snippet: |
@@ -25,6 +25,60 @@ metadata:
       }
 spec:
   ingressClassName: default
+  tls:
+  - hosts:
+    - www.justice.gov.uk
+    secretName: justice-gov-uk-production-cert-secret
+  rules:
+  - host: www.justice.gov.uk
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: justice-gov-uk-production-ingress-modsec
+  namespace: justice-gov-uk-production
+  annotations:
+    external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-production-ingress-modsec-justice-gov-uk-production-green
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      SecRuleEngine On
+      SecDefaultAction "phase:2,pass,log,tag:github_team=central-digital-product-team"
+      SecDefaultAction "phase:4,pass,log,tag:github_team=central-digital-product-team"
+      # HTTP header is restricted by policy (/accept-charset/)
+      SecRuleRemoveById 920450
+      # Request content type is not allowed by policy
+      SecRuleRemoveById 920420
+      # Illegal Accept header: charset parameter
+      SecRuleRemoveById 920600
+    nginx.ingress.kubernetes.io/proxy-body-size: "200m"
+    # Squiz uses ThousandEyes for monitoring. Since migrating we no long need this so can block the requests here.
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location = /health {
+        auth_basic off;
+        access_log off;
+        default_type text/plain;
+        add_header Content-Type text/plain;
+        return 200 "OK";
+      }
+      location = /.well-known/security.txt {
+        auth_basic off;
+        return 301 https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt;
+      }
+      if ($http_x_thousandeyes_agent) {
+        return 403;
+      }
+spec:
+  ingressClassName: modsec
   tls:
   - hosts:
     - www.justice.gov.uk
