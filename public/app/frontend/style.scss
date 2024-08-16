@@ -586,9 +586,6 @@ $opposite-directions: (
 ///   The height and width of the triangle
 @mixin arrow-button($color: 'dark', $size: 0.45rem) {
     $baseColor: var(--justice-primary-white);
-    background-color: transparent;
-    justify-content: space-between;
-    align-items: center;
 
     @if $color == 'dark' {
         @include button('light');
@@ -597,6 +594,10 @@ $opposite-directions: (
     @else {
         @include button('dark');
     }
+    background-color: transparent;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
     &::after {
         display: block;
         @include triangle('bottom', $baseColor, $size);
@@ -612,9 +613,6 @@ $opposite-directions: (
     &[aria-expanded="true"] {
         &::after {
             @include triangle('top', $baseColor, $size);
-        }
-        &:hover {
-            background-color: transparent;
         }
         &:focus-visible:not(:active, :hover) {
             &:after {

@@ -1,0 +1,28 @@
+{% extends '@layouts/two-sidebars/two-sidebars.html.twig' %}
+
+{% block leftSidebar %}
+    {% for name, panel in sidePanelsLeft %}
+        {% if name == 'menu'%}
+            {% include '@components/navigation-secondary/navigation-secondary.html.twig' with {
+                title: panel.title,
+                articleId: panel.id,
+                links: panel.links,
+            } %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block articleHeader %}
+    {# Breadcrumbs #}
+    <h1>{{ title }}</h1>
+{% endblock %}
+
+{% block articleContent %}
+    {{ content }}
+{% endblock %}
+
+{% block rightSidebar %}
+    {% for panel in sidePanelsRight %}
+        {# List block #}
+    {% endfor %}
+{% endblock %}

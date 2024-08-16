@@ -17,12 +17,14 @@ import './components/navigation-sections';
 import './components/breadcrumbs';
 import './components/hero';
 
-import sidebarBlock from '@components/sidebar-block';
+import navigationSecondary from './components/navigation-secondary';
+import sidebarBlock from './components/sidebar-block';
 
 // Layouts
 import './layouts/one-sidebar';
 import './layouts/two-sidebars';
 
 addEventListener('DOMContentLoaded', () => {
+    navigationSecondary();
     sidebarBlock();
 });
