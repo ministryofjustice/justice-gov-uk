@@ -47,8 +47,8 @@ Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. Donec 
         <table>
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Number</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Number</th>
                 </tr>
             </thead>
             <tbody>

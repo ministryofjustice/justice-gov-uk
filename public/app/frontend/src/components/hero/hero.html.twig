@@ -1,0 +1,46 @@
+{#
+@file
+A hero component that can also display breadcrumbs and an eyebrow heading, optionally
+
+Available variables:
+    - title: string The page title (h1)
+    - eyebrowText: string An eyebrow heading (optional)
+    - links: array An array of links to be displayed in the breadcrumb component (optional)
+        - url: string The url for the link
+        - label: string The label for the link
+example:
+    {% include '@components/hero/hero.html.twig' with {
+        eyebrowText: 'Procedure rules',
+        title: 'Family procedure rules,
+        links: [
+            {
+                url: '#',
+                label: 'Home'
+            },
+            {
+                url: '#',
+                label: 'Procedure rules'
+            },
+            {
+                url: '#',
+                label: 'Family'
+            },
+        ]
+    }%}
+#}
+
+<div class="hero">
+    {% if breadcrumbs %}
+        <div class="hero__breadcrumbs">
+            {% include '@components/breadcrumbs/breadcrumbs.html.twig' with {
+                links: breadcrumbs,
+            }%}
+        </div>
+    {% endif %}
+    {% if eyebrowText %}
+        <hgroup>
+            <h1 class="hero__title"><p class="hero__eyebrow eyebrow">{{ eyebrowText }}</p>{{ title }}</h1></hgroup>
+    {% else %}
+        <h1 class="hero__title">{{ title }}</h1>
+    {% endif %}
+</div>

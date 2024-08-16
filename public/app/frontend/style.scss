@@ -311,41 +311,44 @@ $iconSizes: (
 
 @mixin link($type: 'dark') {
     @include body;
-    color: var(--justice-link);
     outline: none;
-    &:hover {
-        color: var(--justice-link-hover);
-        text-decoration-thickness: max(3px, .1875rem, .12em);
-    }
-    &:visited {
-        color: var(--justice-link-visited);
-    }
-    &:active {
-        color: var(--justice-link-active);
-    }
-    &:focus-visible:not(:active):not(:hover) {
-        outline: 3px solid transparent;
-        background-color: var(--gds-yellow);
-        box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
-        color: var(--gds-black);
-        text-decoration: none;
-    }
-    @if ($type == 'light') {
-        font-family: var(--body-font);
-        color: var(--justice-primary-white);
-        text-decoration: none;
-        &:hover,
-        &:visited,
-        &:active {
-            color: var(--justice-primary-white);
-        }
+    color: var(--justice-primary-black);
+    &:not(.disabled) {
+        color: var(--justice-link);
         &:hover {
-            text-decoration: underline;
-            outline: none;
+            color: var(--justice-link-hover);
+            text-decoration-thickness: max(3px, .1875rem, .12em);
         }
-        &:focus:not(:active):not(:hover) {
-            outline: none;
-            box-shadow: none;
+        &:visited {
+            color: var(--justice-link-visited);
+        }
+        &:active {
+            color: var(--justice-link-active);
+        }
+        &:focus-visible:not(:active):not(:hover) {
+            outline: 3px solid transparent;
+            background-color: var(--gds-yellow);
+            box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
+            color: var(--gds-black);
+            text-decoration: none;
+        }
+        @if ($type == 'light') {
+            font-family: var(--body-font);
+            color: var(--justice-primary-white);
+            text-decoration: none;
+            &:hover,
+            &:visited,
+            &:active {
+                color: var(--justice-primary-white);
+            }
+            &:hover {
+                text-decoration: underline;
+                outline: none;
+            }
+            &:focus:not(:active):not(:hover) {
+                outline: none;
+                box-shadow: none;
+            }
         }
     }
 }
