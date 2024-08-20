@@ -44,3 +44,4 @@ jobs:
                 echo "$MODSEC_DEV"
                 echo EOF
             }  >> $GITHUB_OUTPUT
+
