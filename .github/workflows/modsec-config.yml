@@ -1,0 +1,46 @@
+name: "Get Modsec config."
+
+on:
+  workflow_call:
+    outputs:
+      modsec_dev:
+        description: "Modsec Config. for Development"
+        value: ${{ jobs.get_modsec_config.outputs.modsec_dev }}
+      modsec_demo:
+        description: "Modsec Config. for Demo"
+        value: ${{ jobs.get_modsec_config.outputs.modsec_demo }}
+      modsec_staging:
+        description: "Modsec Config. for Staging"
+        value: ${{ jobs.get_modsec_config.outputs.modsec_staging }}
+      modsec_production:
+        description: "Modsec Config. for Production"
+        value: ${{ jobs.get_modsec_config.outputs.modsec_production }}
+
+jobs:
+  get_modsec_config:
+    name: "Build"
+    runs-on: ubuntu-latest
+    outputs:
+      modsec_formatted: ${{ steps.get-config.outputs.modsec_formatted }}
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          repository: 'ministryofjustice/moj-modsec-rules'
+          ref: 'f7d3afb68f74623cbadbcd5951dfc4369a4d3546'
+          # This is a fine-grained PAT, it's scoped to the moj-modsec private repository
+          # with the 2 permissions: 
+          # Content: Read-only.
+          # Metadata: Read-only.
+          # The token is pending approval: https://github.com/settings/personal-access-tokens/3844059
+          token: ${{ secrets.MOJ_MODSEC_RO_PAT }}
+      - name: "Get & format Modsec config."
+        id: get-config
+        uses: mikefarah/yq@master
+        with:
+          cmd: |
+            {
+                echo 'modsec_dev<<EOF'
+                echo "$MODSEC_DEV"
+                echo EOF
+            }  >> $GITHUB_OUTPUT
