@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'modsec-config-trial'
+      - 'main'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,8 +19,7 @@ jobs:
 
   modsec:
     name: "Modsec"
-    if: github.event.ref == 'refs/heads/modsec-config-trial'
-    # if: github.event.ref == 'refs/heads/main'
+    if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/modsec-config.yml
     secrets: inherit
 
