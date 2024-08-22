@@ -21,7 +21,7 @@ WORKDIR /var/www/html
 
 ###
 
-FROM nginx:1.26.1-alpine AS nginx-module-builder
+FROM nginx:1.26.2-alpine AS nginx-module-builder
 
 SHELL ["/bin/ash", "-exo", "pipefail", "-c"]
 
