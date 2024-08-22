@@ -18,13 +18,6 @@ example:
     }%}
 #}
 <a class="link{{ newTab ? " link--new-tab" : "" }}"
-   href="{{ url }}" {{ newTab ? " target='_blank' rel='noreferrer noopener'" : "" }} {{ onClick ? " onclick='" ~ onClick ~ "'" : "" }}>
-    {{ label }}
-    {% if newTab and newTabVisuallyHidden %}
-        <span class="visually-hidden">
-        (opens in a new tab)
-    </span>
-    {% elseif newTab %}
-        (opens in a new tab)
-    {% endif %}
+   href="{{ url }}" {{ newTab ? " target='_blank' rel='noreferrer noopener'" : "" }} {{ onClick ? " onclick='" ~ onClick ~ "'" : "" }}>{{ label }}{% if newTab and newTabVisuallyHidden %}
+        <span class="visually-hidden"> (opens in a new tab)</span>{% elseif newTab %} (opens in a new tab){% endif %}
 </a>

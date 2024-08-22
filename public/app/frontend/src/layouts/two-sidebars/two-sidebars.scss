@@ -11,9 +11,6 @@
     &__article {
         @include grid-row(1, 4);
 
-        > * {
-            @include spacing('margin', 8, 'top');
-        }
         @media screen and (min-width: $justice-lg) {
             @include grid-row(4, 6);
         }
@@ -21,12 +18,17 @@
 
     &__article-header {
         width: 100%;
-        @include spacing('margin', 8, 'top');
+        > * {
+            @include spacing('margin', 4, 'top');
+        }
+
+        > :first-child {
+            @include spacing('margin', 8, 'top');
+        }
     }
 
     &__article-content {
         width: 100%;
-
         > * {
             @include spacing('margin', 8, 'top');
         }
@@ -61,9 +63,10 @@
 
         > *:not(.navigation-secondary) {
             @include spacing('margin', 6, 'top');
-
-            &:first-child {
-                @include spacing('margin', 8, 'top');
+            @media screen and (min-width: $justice-lg) {
+                &:first-child {
+                    @include spacing('margin', 8, 'top');
+                }
             }
         }
     }

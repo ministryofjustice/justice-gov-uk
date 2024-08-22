@@ -48,7 +48,7 @@ $gap-mobile: 1rem;
 $gap: 1.5rem;
 $gutter-mobile: 1rem;
 $gutter: 3rem;
-$max-width: 63.75rem;
+$max-width: 75rem;
 
 // Spacing https://design-system.service.gov.uk/styles/spacing/
 $spacing-units-mobile: (
@@ -78,7 +78,6 @@ $spacing-units-desktop: (
 );
 
 @mixin container() {
-    width: 100%;
     margin: 0 auto;
     padding: 0 $gutter-mobile;
     max-width: calc(100% - (2 * $gutter-mobile));
@@ -430,18 +429,18 @@ $iconSizes: (
     border-collapse: collapse;
     border-spacing: 0;
     margin: 0;
+    @include body;
     thead {
-        @include h4;
         border-bottom: 3px solid var(--justice-primary-black);
         tr, th {
             border: 1px solid var(--justice-border);
         }
         th {
             background: var(--justice-primary-grey);
+            font-weight: var(--body-font-bold);
         }
     }
     tbody {
-        @include body;
         tr, td {
             border: 1px solid var(--justice-border);
         }
@@ -463,7 +462,6 @@ $iconSizes: (
 //
 @mixin rich-text {
     @include body;
-    @include spacing('margin', 8, 'top');
     ul {
         @include ul-list;
     }
@@ -476,11 +474,12 @@ $iconSizes: (
     figure {
         margin: 0;
         @include spacing('margin', 4, 'top');
+        position: relative;
         > table {
             margin-top: 0;
         }
     }
-    a {
+    a, .link {
         @include link;
     }
     p {

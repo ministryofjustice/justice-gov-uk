@@ -34,10 +34,6 @@ h6, .h6 {
     @include h6;
 }
 
-a, .link {
-    @include link;
-}
-
 ul {
     list-style: none;
     margin: 0;

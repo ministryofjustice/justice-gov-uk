@@ -1,6 +1,6 @@
 <?php
 /**
- * The template for displaying basic page
+ * The template for displaying a basic page
  *
  */
 
@@ -100,7 +100,7 @@ $allowedRightPanels = [
                 'newTab' => true,
             ],
             [
-                'url' => 'href="https://webarchive.nationalarchives.gov.uk/ukgwa/timeline/https:/www.justice.gov.uk/courts/procedure-rules',
+                'url' => 'https://webarchive.nationalarchives.gov.uk/ukgwa/timeline/https:/www.justice.gov.uk/courts/procedure-rules',
                 'label' => 'Ministry of Justice archived websites (2012 to present day)',
                 'newTab' => true,
             ],
@@ -108,8 +108,7 @@ $allowedRightPanels = [
     ],
 ];
 
-
-
+// Check if there are any right side panels if there are get the content for the variant
 if ($postMeta->sideHasPanels('right')) {
     foreach ($allowedRightPanels as $panel => $variant) {
         if ($postMeta->hasPanel($panel)) {
@@ -117,6 +116,8 @@ if ($postMeta->sideHasPanels('right')) {
         }
     }
 }
+
+// Check if there are any left side panels (currently only the menu)
 if ($postMeta->sideHasPanels('left')) {
     if ($postMeta->hasPanel('menu')) {
         $links = (new DynamicMenu)->getTheNavigation();
