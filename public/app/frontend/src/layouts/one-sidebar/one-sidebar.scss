@@ -15,6 +15,7 @@
 
     &__article-header {
         width: 100%;
+
         > * {
             @include spacing('margin', 4, 'top');
         }
@@ -26,6 +27,7 @@
 
     &__article-content {
         width: 100%;
+
         > * {
             @include spacing('margin', 8, 'top');
         }
