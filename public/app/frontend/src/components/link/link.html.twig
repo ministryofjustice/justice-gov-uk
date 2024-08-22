@@ -4,6 +4,8 @@ A link element
 
 Available variables:
     - newTab: boolean Whether the link will open in a new tab
+    - newTabVisuallyHidden: string Whether the 'open in a new tab' text should only be shown to screen readers.
+                            Generally should be false, but can be used in special cases like menus.
     - onClick: string A js function to run on click
     - url: string The url for the link
     - label: string The label for the link
@@ -15,6 +17,14 @@ example:
         label: 'Click here'
     }%}
 #}
-<a class="link{{ newTab ? " link--new-tab" : "" }}" href="{{ url }}" {{ newTab ? " target='_blank' rel='noreferrer noopener'" : "" }} {{ onClick ? " onclick='" ~ onClick ~ "'" : "" }}>
-    {{ label }}{{ newTab ? " (opens in new tab)" : "" }}
+<a class="link{{ newTab ? " link--new-tab" : "" }}"
+   href="{{ url }}" {{ newTab ? " target='_blank' rel='noreferrer noopener'" : "" }} {{ onClick ? " onclick='" ~ onClick ~ "'" : "" }}>
+    {{ label }}
+    {% if newTab and newTabVisuallyHidden %}
+        <span class="visually-hidden">
+        (opens in a new tab)
+    </span>
+    {% elseif newTab %}
+        (opens in a new tab)
+    {% endif %}
 </a>
