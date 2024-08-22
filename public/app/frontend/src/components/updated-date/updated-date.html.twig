@@ -10,6 +10,8 @@ example:
     }%}
 #}
 
-<div class="updated-date">
-    <p class="updated-date__content">Updated: {{ date }}</p>
-</div>
+{% if date %}
+    <div class="updated-date">
+        <p class="updated-date__content">Updated: {{ date }}</p>
+    </div>
+{% endif %}
