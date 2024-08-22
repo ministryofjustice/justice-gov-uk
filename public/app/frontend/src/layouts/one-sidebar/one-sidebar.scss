@@ -8,32 +8,68 @@
         @include grid;
     }
 
-    &__column-one,
-    &__column-two {
+    &__article,
+    &__sidebar {
         @include grid-row(1, 4);
+    }
 
+    &__article-header {
+        > * {
+            @include spacing('margin', 4, 'top');
+        }
+
+        > :first-child {
+            @include spacing('margin', 8, 'top');
+        }
+    }
+
+    &__article-content {
         > * {
             @include spacing('margin', 8, 'top');
+        }
+
+        > .file-download {
+            @include spacing('margin', 4, 'top');
+        }
+    }
+
+    &__sidebar {
+        display: none;
+        @media screen and (min-width: $justice-lg) {
+            > * {
+                @include spacing('margin', 6, 'top');
+            }
+
+            > :first-child {
+                @include spacing('margin', 8, 'top');
+            }
+        }
+
+        &--mobile {
+            display: flex;
+            @media screen and (min-width: $justice-lg) {
+                display: none;
+            }
         }
     }
 
     &--right {
         @media screen and (min-width: $justice-lg) {
-            #{$this}__column-one {
-                @include grid-row(1, 9);
-            }
-            #{$this}__column-two {
+            #{$this}__sidebar:not(#{$this}__sidebar--mobile) {
                 @include grid-row(10, 3);
+            }
+            #{$this}__article {
+                @include grid-row(1, 9);
             }
         }
     }
 
     &--left {
         @media screen and (min-width: $justice-lg) {
-            #{$this}__column-one {
+            #{$this}__sidebar {
                 @include grid-row(1, 3);
             }
-            #{$this}__column-two {
+            #{$this}__article {
                 @include grid-row(4, 9);
             }
         }

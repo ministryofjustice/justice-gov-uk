@@ -19,6 +19,23 @@
         }
     }
 
+    &__article-header {
+        width: 100%;
+        @include spacing('margin', 8, 'top');
+    }
+
+    &__article-content {
+        width: 100%;
+
+        > * {
+            @include spacing('margin', 8, 'top');
+        }
+
+        > .file-download {
+            @include spacing('margin', 4, 'top');
+        }
+    }
+
     &__sidebar {
         @include grid-row(1, 4);
 
@@ -43,7 +60,11 @@
         }
 
         > *:not(.navigation-secondary) {
-            @include spacing('margin', 8, 'top');
+            @include spacing('margin', 6, 'top');
+
+            &:first-child {
+                @include spacing('margin', 8, 'top');
+            }
         }
     }
 }
