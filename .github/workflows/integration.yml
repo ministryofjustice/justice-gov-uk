@@ -31,6 +31,7 @@ jobs:
     with:
       environment: development
       registry: ${{ needs.image.outputs.registry }}
+      modsec_config: ${{ needs.get_modsec_config.outputs.development }}
     secrets: inherit
 
   deploy_demo:
@@ -41,6 +42,7 @@ jobs:
     with:
       environment: demo
       registry: ${{ needs.image.outputs.registry }}
+      modsec_config: ${{ needs.get_modsec_config.outputs.demo }}
     secrets: inherit
 
   deploy_staging:
@@ -51,6 +53,7 @@ jobs:
     with:
       environment: staging
       registry: ${{ needs.image.outputs.registry }}
+      modsec_config: ${{ needs.get_modsec_config.outputs.staging }}
     secrets: inherit
 
   deploy_production:
@@ -61,5 +64,6 @@ jobs:
     with:
       environment: production
       registry: ${{ needs.image.outputs.registry }}
+      modsec_config: ${{ needs.get_modsec_config.outputs.production }}
     secrets: inherit
 
