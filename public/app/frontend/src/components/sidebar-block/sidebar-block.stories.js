@@ -1,4 +1,5 @@
 import sidebarBlock from './sidebar-block.html.twig';
+import sidebarDecorator from '../../decorators/sidebar';
 
 export default {
     title: 'Components/Sidebar block',
@@ -8,6 +9,7 @@ export default {
             control: { type: 'radio' },
         },
     },
+    decorators: [(story) => sidebarDecorator(story)],
 };
 
 const Template = (args) => {
