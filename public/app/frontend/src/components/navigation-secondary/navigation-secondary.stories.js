@@ -1,7 +1,9 @@
 import navigationSecondary from './navigation-secondary.html.twig';
+import sidebarDecorator from '../../decorators/sidebar';
 
 export default {
     title: 'Components/Navigation - Secondary',
+    decorators: [(story) => sidebarDecorator(story)],
 };
 
 const Template = (args) => {
