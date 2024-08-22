@@ -16,6 +16,7 @@ import './components/to-the-top';
 import './components/navigation-sections';
 import './components/breadcrumbs';
 import './components/hero';
+import './components/updated-date';
 
 import navigationSecondary from './components/navigation-secondary';
 import sidebarBlock from './components/sidebar-block';

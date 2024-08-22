@@ -1,0 +1,17 @@
+{#
+@file
+A component to display the date that the page was last updated
+
+Available variables:
+    - date: string The date of the last update
+example:
+    {% include '@components/updated-date/updated-date.html.twig' with {
+        date: 'Monday 12th July, 2024',
+    }%}
+#}
+
+{% if date %}
+    <div class="updated-date">
+        <p class="updated-date__content">Updated: {{ date }}</p>
+    </div>
+{% endif %}
