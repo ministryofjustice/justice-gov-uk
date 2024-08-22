@@ -7,6 +7,7 @@ Available variables:
         - url: string The url for the link
         - label: string The label for the link
         - newTab: boolean Will this link open in a new tab?
+        - newTabVisuallyHidden: boolean Will the (open in a new tab) text be shown to all users or screen readers only?
 example:
     {% include '@components/footer/footer.html.twig' with {
         links: [
@@ -29,6 +30,7 @@ example:
                 <li class="footer__link">
                     {% include '@components/link/link.html.twig' with {
                         newTab: link.newTab,
+                        newTabVisuallyHidden: link.newTabVisuallyHidden,
                         url: link.url,
                         label: link.label
                     } %}
@@ -38,14 +40,12 @@ example:
         <div class="footer__details">
             <p class="footer__heading">Citizen and business advice</p>
             <div class="footer__content-wrapper">
-                <a class="footer__gov" href="/">
-                <span class="footer__gov-label visually-hidden">
-                    Go to Gov UK (opens in a new tab)
-                </span>
+            {# Hide logo link from screen readers as it's repeated in the text link #}
+                <a class="footer__gov" href="https://www.gov.uk/" aria-hidden="true">
                         <div class="footer__logo"></div>
                 </a>
                 <p class="footer__content">
-                    For citizen and business advice on justice, rights and more visit <a href="#">GOV.UK</a>
+                    For citizen and business advice on justice, rights and more visit <a href="https://www.gov.uk/">GOV.UK <span class="visually-hidden">(opens in a new tab)</span></a>
                 </p>
             </div>
         </div>
