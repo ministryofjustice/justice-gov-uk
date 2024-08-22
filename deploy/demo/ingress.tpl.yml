@@ -6,6 +6,9 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-demo-ingress-justice-gov-uk-demo-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      ${MODSEC_CONFIG}
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
     nginx.ingress.kubernetes.io/auth-realm: 'Demo User | Authentication Required'
@@ -23,7 +26,7 @@ metadata:
         return 301 https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt;
       }
 spec:
-  ingressClassName: default
+  ingressClassName: modsec
   tls:
   - hosts:
     - demo.justice.gov.uk

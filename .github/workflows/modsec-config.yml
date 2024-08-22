@@ -3,45 +3,67 @@ name: "Get Modsec config."
 on:
   workflow_call:
     outputs:
-      modsec_dev:
+      development:
         description: "Modsec Config. for Development"
-        value: ${{ jobs.get_modsec_config.outputs.modsec_dev }}
-      modsec_demo:
-        description: "Modsec Config. for Demo"
-        value: ${{ jobs.get_modsec_config.outputs.modsec_demo }}
-      modsec_staging:
-        description: "Modsec Config. for Staging"
-        value: ${{ jobs.get_modsec_config.outputs.modsec_staging }}
-      modsec_production:
+        value: ${{ jobs.get_modsec_config.outputs.development }}
+      demo:
+        description: "Modsec Config. for Development"
+        value: ${{ jobs.get_modsec_config.outputs.demo }}
+      staging:
+        description: "Modsec Config. for Development"
+        value: ${{ jobs.get_modsec_config.outputs.staging }}
+      production:
         description: "Modsec Config. for Production"
-        value: ${{ jobs.get_modsec_config.outputs.modsec_production }}
+        value: ${{ jobs.get_modsec_config.outputs.production }}
 
 jobs:
   get_modsec_config:
     name: "Build"
     runs-on: ubuntu-latest
     outputs:
-      modsec_formatted: ${{ steps.get-config.outputs.modsec_formatted }}
+      development: ${{ steps.get-config.outputs.development }}
+      production: ${{ steps.get-config.outputs.production }}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
         with:
           repository: 'ministryofjustice/moj-modsec-rules'
-          ref: 'f7d3afb68f74623cbadbcd5951dfc4369a4d3546'
+          ref: 'justice-gov-uk-initial-rules'
           # This is a fine-grained PAT, it's scoped to the moj-modsec private repository
           # with the 2 permissions: 
           # Content: Read-only.
           # Metadata: Read-only.
-          # The token is pending approval: https://github.com/settings/personal-access-tokens/3844059
           token: ${{ secrets.MOJ_MODSEC_RO_PAT }}
       - name: "Get & format Modsec config."
         id: get-config
         uses: mikefarah/yq@master
         with:
           cmd: |
-            {
-                echo 'modsec_dev<<EOF'
-                echo "$MODSEC_DEV"
-                echo EOF
-            }  >> $GITHUB_OUTPUT
+            DEVELOPMENT=$(./bin/get-data.sh -b justice-gov-uk -e development -i 6 -f "data/php-wordpress.yml")
+            DEMO=$(       ./bin/get-data.sh -b justice-gov-uk -e demo        -i 6 -f "data/php-wordpress.yml")
+            STAGING=$(    ./bin/get-data.sh -b justice-gov-uk -e staging     -i 6 -f "data/php-wordpress.yml")
+            PRODUCTION=$( ./bin/get-data.sh -b justice-gov-uk -e production  -i 6 -f "data/php-wordpress.yml")
 
+            {
+                echo 'development<<EOF'
+                echo "$DEVELOPMENT"
+                echo EOF
+            } >> $GITHUB_OUTPUT
+
+            {
+                echo 'demo<<EOF'
+                echo "$DEMO"
+                echo EOF
+            } >> $GITHUB_OUTPUT
+
+            {
+                echo 'staging<<EOF'
+                echo "$STAGING"
+                echo EOF
+            } >> $GITHUB_OUTPUT
+
+            {
+                echo 'production<<EOF'
+                echo "$PRODUCTION"
+                echo EOF
+            } >> $GITHUB_OUTPUT
