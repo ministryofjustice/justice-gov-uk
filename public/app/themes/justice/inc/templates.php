@@ -9,6 +9,7 @@ use DOMXPath;
 use WP_Document_Revisions;
 use Timber\Timber;
 use Exception;
+use MOJ\Justice\Content;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -161,7 +162,7 @@ class Templates
      */
     public function getLinkParams(DOMNode $node): array
     {
-        $content = new Content();
+        $contentHelper = new Content();
         $label = null;
         $url = null;
         $newTab = false;
@@ -169,7 +170,7 @@ class Templates
         if ($node instanceof DOMElement) {
             $label = $node->nodeValue;
             $url = $node->getAttribute('href');
-            $newTab = $content->isExternal($url);
+            $newTab = $contentHelper->isExternal($url);
         }
 
         return [
