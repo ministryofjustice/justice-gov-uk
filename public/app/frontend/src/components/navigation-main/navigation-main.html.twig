@@ -33,6 +33,7 @@ example:
                 <li class="navigation-main__link{{ link.active ? " navigation-main__link--active" : "" }}">
                     {% include '@components/link/link.html.twig' with {
                         newTab: link.newTab,
+                        newTabVisuallyHidden: link.newTabVisuallyHidden,
                         onClick: link.onClick,
                         url: link.url,
                         label: link.label,

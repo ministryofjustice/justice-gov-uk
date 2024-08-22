@@ -5,7 +5,9 @@
         {
             label:'Courts',
             url: 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
-            onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' ~ homeUrl ~ '/courts' ~'" });'
+            onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' ~ homeUrl ~ '/courts' ~'" });',
+            newTab: true,
+            newTabVisuallyHidden: true
         },
         {
             label: 'Procedure rules',
@@ -16,7 +18,9 @@
         {
             label: 'Offenders',
             url: 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
-            onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' ~ homeUrl ~ '/offenders' ~'" });'
+            onClick: 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' ~ homeUrl ~ '/offenders' ~'" });',
+            newTab: true,
+            newTabVisuallyHidden: true
         }
     ],
     search: {

@@ -1,35 +1,37 @@
 {% include '@components/footer/footer.html.twig' with {
     links: [
         {
-            url: '#',
+            url: site.url ~ '/help/accessibility',
             label: 'Accessibility',
         },
         {
-            url: '#',
+            url: site.url ~ '/privacy/cookies',
             label: 'Cookies',
         },
         {
-            url: '#',
+            url: 'https://www.gov.uk/government/organisations/ministry-of-justice',
             label: 'Contacts',
+            newTab: true,
+            newTabVisuallyHidden: true,
         },
         {
-            url: '#',
+            url: site.url ~ '/copyright',
             label: 'Copyright',
         },
         {
-            url: '#',
+            url: site.url ~ '/help',
             label: 'Help',
         },
         {
-            url: '#',
+            url: site.url ~ '/privacy',
             label: 'Privacy',
         },
         {
-            url: '#',
+            url: site.url ~ '/ministry-of-justice-webchats',
             label: 'Webchats',
         },
         {
-            url: '#',
+            url: site.url ~ '/website-queries',
             label: 'Website queries',
         },
     ],
