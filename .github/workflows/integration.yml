@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
 
-  get_modsec_config:
+  modsec_config:
     name: "Modsec"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/modsec-config.yml
@@ -27,43 +27,43 @@ jobs:
     name: "Development"
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
-    needs: [image, get_modsec_config]
+    needs: [image, modsec_config]
     with:
       environment: development
       registry: ${{ needs.image.outputs.registry }}
-      modsec_config: ${{ needs.get_modsec_config.outputs.development }}
+      modsec_config: ${{ needs.modsec_config.outputs.development }}
     secrets: inherit
 
   deploy_demo:
     name: "Demo"
-    needs: [image, get_modsec_config, deploy_dev]
+    needs: [image, modsec_config, deploy_dev]
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
       registry: ${{ needs.image.outputs.registry }}
-      modsec_config: ${{ needs.get_modsec_config.outputs.demo }}
+      modsec_config: ${{ needs.modsec_config.outputs.demo }}
     secrets: inherit
 
   deploy_staging:
     name: "Staging"
-    needs: [image, get_modsec_config, deploy_dev]
+    needs: [image, modsec_config, deploy_dev]
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
       registry: ${{ needs.image.outputs.registry }}
-      modsec_config: ${{ needs.get_modsec_config.outputs.staging }}
+      modsec_config: ${{ needs.modsec_config.outputs.staging }}
     secrets: inherit
 
   deploy_production:
     name: "Production"
-    needs: [image, get_modsec_config, deploy_staging]
+    needs: [image, modsec_config, deploy_staging]
     if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: production
       registry: ${{ needs.image.outputs.registry }}
-      modsec_config: ${{ needs.get_modsec_config.outputs.production }}
+      modsec_config: ${{ needs.modsec_config.outputs.production }}
     secrets: inherit
 
