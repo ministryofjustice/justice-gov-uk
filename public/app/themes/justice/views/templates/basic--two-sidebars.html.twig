@@ -1,0 +1,53 @@
+{% extends '@layouts/two-sidebars/two-sidebars.html.twig' %}
+
+{% block leftSidebar %}
+    {% for name, panel in sidePanelsLeft %}
+        {% if name == 'menu'%}
+            {% include '@components/navigation-secondary/navigation-secondary.html.twig' with {
+                title: panel.title,
+                articleId: panel.id,
+                links: panel.links,
+            } %}
+        {% else %}
+            {% include '@components/sidebar-block/sidebar-block.html.twig' with panel %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+{% block headerContent %}
+    {% include 'views/partials/header.html.twig' %}
+{% endblock %}
+
+{% block articleHeader %}
+     {% include '@components/hero/hero.html.twig' with {
+         title,
+         breadcrumbs,
+     } %}
+{% endblock %}
+
+{% block articleContent %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content: post.content,
+    } %}
+    {% if updatedDate %}
+        {% include '@components/updated-date/updated-date.html.twig' with {
+            date: updatedDate,
+        } %}
+    {% endif %}
+{% endblock %}
+
+{% block footerContent %}
+    {% include 'views/partials/footer.html.twig' %}
+{% endblock %}
+
+{% block rightSidebar %}
+    {% for panel in sidePanelsRight %}
+        {% include '@components/sidebar-block/sidebar-block.html.twig' with panel %}
+    {% endfor %}
+{% endblock %}
+{% block rightSidebarMobile %}
+    {% for panel in sidePanelsRight %}
+        {% set updatedPanel = panel|merge({ isMobile }) %}
+        {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedPanel %}
+    {% endfor %}
+{% endblock %}

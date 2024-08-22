@@ -72,15 +72,40 @@
 {% endblock %}
 
 {% block articleHeader %}
-    // Breadcrumbs
-    // Title
-    // Right sidebar on mobile as accordions?
+    {% include '@components/hero/hero.html.twig' with {
+        title: 'PRACTICE DIRECTION 57AB – SHORTER AND FLEXIBLE TRIALS SCHEMES',
+        breadcrumbs: [
+            {
+                url: '#',
+                label: 'Home',
+            },
+            {
+                url: '#',
+                label: 'Courts',
+            },
+            {
+                url: '#',
+                label: 'Procedure rules',
+            },
+            {
+                url: '#',
+                label: 'Civil',
+            },
+            {
+                url: '#',
+                label: 'Rules & Practice Directions',
+            },
+            {
+                url: '#',
+                label: 'PRACTICE DIRECTION 57AB – SHORTER AND FLEXIBLE TRIALS SCHEMES',
+            },
+        ],
+    }%}
 {% endblock %}
 
 {% block articleContent %}
     {% include '@components/rich-text/rich-text.html.twig' with {
         content: '
-        <h1>PRACTICE DIRECTION 57AB – SHORTER AND FLEXIBLE TRIALS SCHEMES</h1>
         <p>This Practice Direction supplements CPR Part 57A</p>
         <p>Contents of this Practice Direction</p>
         <figure>
@@ -137,23 +162,29 @@
     } %}
 {% endblock %}
 
+{% set searchSidebar = {
+    variant: 'form',
+    title: 'Search this collection',
+    description: 'Search standard directions',
+    form: {
+        id: 'search-bar-sidebar',
+        action: '#',
+        placeholder: 'e.g. Witness Statements',
+        input: {
+            labelHidden: true,
+            label: 'Search the standard directions content',
+            id: 'search-bar-sidebar-input',
+        },
+        button: {
+            text: 'Search',
+        },
+    }
+} %}
+
 {% block rightSidebar %}
-    {% include '@components/sidebar-block/sidebar-block.html.twig' with {
-        variant: 'search',
-        title: 'Search this collection',
-        description: 'Search standard directions',
-        search: {
-            id: 'search-bar-sidebar',
-            action: '#',
-            placeholder: 'e.g. Witness Statements',
-            input: {
-                labelHidden: true,
-                label: 'Search the standard directions content',
-                id: 'search-bar-sidebar-input',
-            },
-            button: {
-                text: 'Search',
-            },
-        }
-    } %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with searchSidebar %}
+{% endblock %}
+{% block rightSidebarMobile %}
+    {% set updatedSearchSidebar = searchSidebar|merge({ isMobile }) %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedSearchSidebar %}
 {% endblock %}

@@ -26,8 +26,7 @@ class Templates
     public array $blocks = [
         'core/paragraph',
         'core/table',
-        'core/image',
-        'core/list',
+        'core/list-item',
         'moj/to-the-top'
     ];
 
@@ -58,10 +57,12 @@ class Templates
         if (in_array($block['blockName'], $this->blocks)) {
             $html = $block['innerHTML'];
             $doc = new DOMDocument();
-            $doc->loadHTML($html);
+            // Fix odd loading of special characters (see https://php.watch/versions/8.2/mbstring-qprint-base64-uuencode-html-entities-deprecated#html)
+            $doc->loadHTML(htmlspecialchars_decode(htmlentities($html)));
 
             switch ($block['blockName']) {
                 case 'core/paragraph':
+                case 'core/list-item':
                     $this->renderLinks($doc);
                     break;
                 case 'core/table':
@@ -160,6 +161,7 @@ class Templates
      */
     public function getLinkParams(DOMNode $node): array
     {
+        $content = new Content();
         $label = null;
         $url = null;
         $newTab = false;
@@ -167,7 +169,7 @@ class Templates
         if ($node instanceof DOMElement) {
             $label = $node->nodeValue;
             $url = $node->getAttribute('href');
-            $newTab = $this->isExternal($url);
+            $newTab = $content->isExternal($url);
         }
 
         return [
@@ -237,18 +239,5 @@ class Templates
             'link' => $href,
             'language' => $language,
         ];
-    }
-
-    /**
-     * Determine if a link is external or internal so that we can add (opens in new tab)
-     *
-     * @param string $url The link
-     *
-     * @return bool True or false depending on whether the link is external or internal
-     */
-    public function isExternal(string $url): bool
-    {
-        $components = parse_url($url);
-        return !empty($components['host']) && strcasecmp($components['host'], $_SERVER['HTTP_HOST']);
     }
 }

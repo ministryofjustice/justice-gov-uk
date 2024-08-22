@@ -2,7 +2,11 @@
 
 {% set direction = 'right' %}
 
-{% block columnOne %}
+{% block articleHeader %}
+    {# Empty as the page title is in the image/text component #}
+{% endblock %}
+
+{% block articleContent %}
     {% include '@components/image-with-text/image-with-text.html.twig' with {
         direction: 'left',
         title: {
@@ -18,34 +22,41 @@
     } %}
 {% endblock %}
 
-{% block columnTwo %}
-    {% include '@components/sidebar-block/sidebar-block.html.twig' with {
-        variant: 'list',
-        title: 'Most popular',
-        links: [
-            {
-                url: '#',
-                label: 'Procedure rules',
-            },
-            {
-                url: '#',
-                label: 'Daily court lists',
-            },
-            {
-                url: '#',
-                label: 'Prison finder',
-            },
-            {
-                url: '#',
-                label: 'XHIBIT daily court status',
-            },
-            {
-                url: '#',
-                label: 'Prison service instructions (PSIs)',
-            },
-            {
-                url: '#',
-                label: 'Probation instructions',
-            },
-        ],    } %}
+{% set mostPopular = {
+    title: ' Most popular',
+    variant: 'list',
+    links: [
+        {
+            url: '#',
+            label: 'Procedure rules',
+        },
+        {
+            url: '#',
+            label: 'Daily court lists',
+        },
+        {
+            url: '#',
+            label: 'Prison finder',
+        },
+        {
+            url: '#',
+            label: 'XHIBIT daily court status',
+        },
+        {
+            url: '#',
+            label: 'Prison service instructions (PSIs)',
+        },
+        {
+            url: '#',
+            label: 'Probation instructions',
+        },
+    ],
+} %}
+
+{% block sidebar %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with mostPopular %}
+{% endblock %}
+{% block sidebarMobile %}
+    {% set updatedMostPopular = mostPopular|merge({ isMobile }) %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedMostPopular %}
 {% endblock %}

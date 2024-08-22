@@ -2,18 +2,23 @@
 
 {% set direction = 'right' %}
 
-{% set errorContent %}
-    <h1>{{ title }}</h1>
-    <p>{{ errorMessage }} - {{ errorCode }}</p>
-    {{ content }}
-{% endset %}
 
-{% block columnOne %}
-    {% include '@components/rich-text/rich-text.html.twig' with {
-        content: errorContent,
-    } %}
+{% block articleHeader %}
+    {% include '@components/hero/hero.html.twig' with {
+        title: title,
+        eyebrowText: errorMessage ~ ' - ' ~ errorCode,
+    }%}
 {% endblock %}
 
-{% block columnTwo %}
-{#    No content    #}
+{% block articleContent %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content,
+    }%}
+{% endblock %}
+
+{% block sidebar %}
+    {# No content #}
+{% endblock %}
+{% block sidebarMobile %}
+    {# No content #}
 {% endblock %}

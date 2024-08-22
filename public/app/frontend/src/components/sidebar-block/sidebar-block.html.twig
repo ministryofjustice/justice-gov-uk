@@ -47,6 +47,11 @@ example:
 
 {% set titleId = "sidebar-block-title-" ~ title|replace({' ': '-'})|lower ~ (isMobile ? "-mobile" : "") %}
 {% set contentId = "sidebar-block-content-" ~ title|replace({' ': '-'})|lower ~ (isMobile ? "-mobile" : "") %}
+{% if variant == 'brand' %}
+    {# Use a background image as this is decorative and shouldn't appear to screen readers #}
+    <div class="sidebar-block sidebar-block--{{ variant }}">
+    </div>
+{% else %}
 <section class="sidebar-block sidebar-block--{{ variant }}" aria-labelledby="{{ titleId }}" role="complementary">
     <div class="sidebar-block__heading-wrapper">
         <h2 class="sidebar-block__heading" id="{{ titleId }}">
@@ -79,14 +84,19 @@ example:
                     </li>
                 {% endfor %}
             </ul>
-        {% elseif variant == 'search' %}
-            <p>{{ description }}</p>
-            {% include '@components/search-bar/search-bar.html.twig' with {
-                id: search.id,
-                action: search.action,
-                input: search.input,
-                button: search.button,
+        {% elseif variant == 'form' %}
+            {% if description %}
+                <p class="sidebar-block__description">{{ description }}</p>
+            {% endif %}
+            {% include '@components/text-input-form/text-input-form.html.twig' with {
+                id: form.id,
+                action: form.action,
+                name: form.name,
+                input: form.input,
+                button: form.button,
+                hiddenInputs: form.hiddenInputs,
             } %}
         {% endif %}
     </div>
 </section>
+{% endif %}
