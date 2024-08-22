@@ -1,0 +1,67 @@
+{% extends '@layouts/one-sidebar/one-sidebar.html.twig' %}
+
+{% set direction = 'right' %}
+
+{% block articleHeader %}
+    {% include '@components/hero/hero.html.twig' with {
+        title: 'Justice UK Help',
+        breadcrumbs: [
+            {
+                url: '#',
+                label: 'Home',
+            },
+            {
+                url: '#',
+                label: 'Help',
+            }
+        ],
+    }%}
+{% endblock %}
+
+{% block articleContent %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content: '
+        <p>In this section you will find guidance on finding your way around the website, help with portable document files and RSS feeds.</p>
+        <ul>
+        <li>
+            <a href="#">Access keys</a>
+        </li>
+        <li>
+            <a href="#">Accessibility policy</a>
+        </li>
+        <li>
+            <a href="#">Email alerts: add or cancel</a>
+        </li>
+        <li>
+            <a href="#">Fraud and scams</a>
+        </li>
+        <li>
+            <a href="#">PDF documents</a>
+        </li>
+        </ul>',
+    }%}
+{% endblock %}
+
+{% set relatedPages = {
+    title: ' Related pages',
+    variant: 'list',
+    links: [
+        {
+            url: '#',
+            label: 'Privacy',
+        },
+        {
+            url: '#',
+            label: 'Website queries',
+        },
+    ],
+} %}
+
+{% block sidebar %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with {variant: 'brand'} %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with relatedPages %}
+{% endblock %}
+{% block sidebarMobile %}
+    {% set updatedRelatedPages = relatedPages|merge({ isMobile }) %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedRelatedPages %}
+{% endblock %}
