@@ -5,7 +5,7 @@ export default {
     title: 'Components/Sidebar block',
     argTypes: {
         variant: {
-            options: ['list', 'archive', 'search'],
+            options: ['brand', 'list', 'archive', 'search', 'search-filters', 'form'],
             control: { type: 'radio' },
         },
     },
@@ -105,6 +105,112 @@ Search.args = {
             text: 'Search',
         },
     },
+};
+
+export const SearchFilters = Template.bind({});
+SearchFilters.args = {
+    variant: 'search-filter',
+    title: 'Filter',
+    subtitle: 'Filter results by',
+    submitText: 'Apply filter',
+    fields: [
+    {
+        title: 'Section',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        options: [
+            {
+                label: 'All',
+                value: 'all',
+            },
+            {
+                label: 'Courts',
+                value: 'courts',
+            },
+            {
+                label: 'News',
+                value: 'news',
+            },
+            {
+                label: 'Publications',
+                value: 'publications',
+            },
+        ],
+    },
+    {
+        title: 'Organisation',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        options: [
+            {
+                label: 'All',
+                value: 'all',
+            }
+        ],
+    },
+    {
+        title: 'Audience',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        options: [
+            {
+                label: 'All',
+                value: 'all',
+            },
+            {
+                label: 'Academic researcher',
+                value: 'academic-researcher',
+            },
+            {
+                label: 'Legal profession',
+                value: 'legal-profession',
+            },
+            {
+                label: 'Mediator/advice worker',
+                value: 'mediator-advice-worker',
+            },
+            {
+                label: 'Public/citizen',
+                value: 'public-citizen',
+            },
+            {
+                label: 'Representing myself at court',
+                value: 'self-representation',
+            }
+        ],
+    },
+    {
+        title: 'Type',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        options: [
+            {
+                label: 'All',
+                value: 'all',
+            },
+            {
+                label: 'Guidance',
+                value: 'guidance',
+            },
+            {
+                label: 'Report',
+                value: 'report',
+            }
+        ],
+    },
+    {
+        type: 'checkbox',
+        options: [
+            {
+                label: 'Limit your search to web pages only',
+                value: 'web-pages-only',
+                },
+            ]}
+],
 };
 
 export const EmailAlerts = Template.bind({});

@@ -1,0 +1,29 @@
+@import '../../../style';
+
+.pagination {
+    @include spacing('margin', 8, 'top');
+    &__list {
+        @include spacing('margin', 9, 'left');
+        @include spacing('margin', 9, 'right');
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        max-width: 100%;
+    }
+    &__link {
+        @include spacing('padding', 1, 'left');
+        @include spacing('padding', 1, 'right');
+    }
+    &__link.disabled {
+        @include disabled;
+        color: var(--justice-primary-black);
+        &:hover {
+            color: var(--justice-primary-black);
+        }
+    }
+    &__link-text {
+        @media screen and (max-width: calc($justice-lg - 1px)) {
+            @include visually-hidden();
+        }
+    }
+}

@@ -1,0 +1,51 @@
+@import '../../../style';
+
+.selection-input {
+  $this: &;
+  position: relative;
+
+  &__legend {
+    @include h3;
+  }
+  &__fieldset {
+    margin: 0;
+    border: none;
+    padding: 0;
+  }
+  &__options {
+    @include spacing('margin', 2, 'top');
+    display: flex;
+    flex-direction: column;
+    @media screen and (min-width: $justice-lg) {
+      flex-direction: row;
+      &--vertical {
+        flex-direction: column;
+      }
+    }
+  }
+  &__option-wrapper {
+    display: flex;
+    align-items: baseline;
+  }
+  &__option {
+    cursor: pointer;
+  }
+  &__hint {
+    @include small;
+    @include spacing('margin', 1, 'top');
+  }
+  &__error-text {
+    @include spacing('margin', 1, 'bottom' );
+    color: var(--justice-error);
+    font-weight: var(--body-font-bold);
+  }
+  &--disabled {
+    #{$this}__option {
+      @include disabled;
+    }
+  }
+  &--error {
+    @include error-highlight;
+
+  }
+}

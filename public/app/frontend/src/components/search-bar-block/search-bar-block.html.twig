@@ -1,0 +1,58 @@
+{#
+@file
+A search bar
+
+Available variables:
+    - action: string The form action
+    - id: string The unique id of the form element
+    - input: object The variables for the input component
+    - button: object The variables for the button component
+example:
+    {% include '@components/search-bar/search-bar.html.twig' with {
+        action: '/',
+        id: 'search-top'
+        input: {
+            labelHidden: true,
+            label: 'Search',
+            id: 'search-top-input',
+        },
+        button: {
+            variant: 'primary',
+            type: 'input',
+            inputType: 'submit',
+            buttonText: 'Submit'
+        }
+    }%}
+#}
+<div class="search-bar-block">
+    <div class="search-bar-block__wrapper">
+        <div class="search-bar-block__search">
+            {% include '@components/text-input-form/text-input-form.html.twig' with {
+                action: search.action,
+                id: search.id,
+                input: search.input,
+                button: search.button,
+            } %}
+        </div>
+        {% if results %}
+            <div class="search-bar-block__results">
+                <p class="search-bar-block__results-text">{{ results }} result{{ results > 1 ? "s" : "" }}</p>
+            </div>
+        {% endif %}
+    </div>
+    {% if filters %}
+        <div class="search-bar-block__filters-wrapper">
+            <p class="search-bar-block__filters-text">Sort by:</p>
+            <div class="search-bar-block__filters">
+                {% for filter in filters %}
+                    {% if filter.active %}
+                        <a class="search-bar-block__filter disabled" role="link" aria-current="page"
+                           aria-disabled="true">{{ filter.label }}</a>
+                    {% else %}
+                        <a class="search-bar-block__filter" href="{{ filter.url }}">{{ filter.label }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>

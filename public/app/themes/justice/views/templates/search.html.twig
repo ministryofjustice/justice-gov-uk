@@ -1,0 +1,55 @@
+{% extends '@layouts/one-sidebar/one-sidebar.html.twig' %}
+
+{% set direction = 'left' %}
+
+{# Hide the search on the search page #}
+{% block headerContent %}
+    {% include '@components/header/header.html.twig' with {
+        showLogo: true,
+        showSearch: false,
+        links: [
+            {
+                url: '#',
+                label: 'Courts',
+            },
+            {
+                url: '#',
+                label: 'Procedure rules',
+            },
+            {
+                url: '#',
+                label: 'Offenders',
+            },
+        ],
+    } %}
+{% endblock %}
+
+{% block articleHeader %}
+    {% include '@components/hero/hero.html.twig' with {
+        content,
+        breadcrumbs,
+    } %}
+{% endblock %}
+
+{% block articleContent %}
+    {% include '@components/search-bar-block/search-bar-block.html.twig' with searchBlock %}
+    {% include '@components/search-result-list/search-result-list.html.twig' with {
+        cards: results,
+    } %}
+    {#    {% include '@components/pagination/pagination.html.twig' with {#}
+    {#        totalPages: 2,#}
+    {#        currentPage: 1,#}
+    {#    } %}#}
+{% endblock %}
+
+{% block sidebar %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with filter %}
+{% endblock %}
+{% block sidebarMobile %}
+    {% set updatedFilter = filter|merge({ isMobile }) %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedFilter %}
+{% endblock %}
+
+{% block footerContent %}
+    {% include 'views/partials/footer.html.twig' %}
+{% endblock %}

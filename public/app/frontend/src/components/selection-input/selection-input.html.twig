@@ -1,0 +1,63 @@
+{#
+@file
+A selection input element for use in forms
+
+Available variables:
+    - direction: 'horizontal'|'vertical' Should the elements be vertical or inline
+    - title: string A label describing the element
+    - checked: string The default selection
+    - options: array A list of options
+        - label: string The label to be displayed
+        - value: string The option value, used in form submission
+    - hint: string A hint to add extra context to the field
+    - error: boolean True if there's an error state
+    - errorText: string The text to be displayed if there's an error
+
+example:
+    {% include '@components/selection-input/selection-input.html.twig' with {
+    direction: 'vertical',
+    title: 'Section',
+    checked: 'all',
+    options: [
+        {
+            label: 'All',
+            value: 'all',
+        },
+        {
+            label: 'Courts',
+            value: 'courts',
+        },
+    ],
+    }%}
+#}
+
+
+{% set hintId = "hint-" ~ title|lower %}
+<div class="selection-input{{ disabled ? " selection-input--disabled" : "" }}{{ error ? " selection-input--error" : "" }}">
+    <fieldset class="selection-input__fieldset" {{ disabled ? "disabled" : "" }} aria-describedby="{{ hint ? hintId : "" }}">
+        <legend class="selection-input__legend">
+            {{ title }}
+        </legend>
+        {% if error %}
+            <p class="selection-input__error-text">{{ errorText }}</p>
+        {% endif %}
+        <div class="selection-input__options{{ direction == "vertical" ? " selection-input__options--vertical" : "" }}">
+            {% for option in options %}
+                {% set selectionId = "selection-" ~ group ~ "-" ~ option.value|lower %}
+                    {% if type == 'checkbox' %}
+                        {% set checked = option.value in defaults|keys %}
+                    {% else %}
+                        {% set checked = option.value == defaults %}
+                    {% endif %}
+                <div class="selection-input__option-wrapper">
+                    <input class="selection-input__option" type="{{ type == "checkbox" ? "checkbox" : "radio" }}" name="{{ group }}" value="{{ option.value }}" id="{{ selectionId }}" {{ checked ? "checked" : "" }}>
+                    <label class="selection-input__label" for="{{ selectionId }}">{{ option.label }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        {% if hint %}
+            <p class="selection-input__hint" id="{{ hintId }}">{{ hint }}</p>
+        {% endif %}
+    </fieldset>
+</div>
+

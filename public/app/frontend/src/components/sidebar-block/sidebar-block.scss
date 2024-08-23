@@ -94,6 +94,10 @@
             @include spacing('padding', 1, 'top');
             @include spacing('padding', 1, 'bottom');
 
+            a {
+                @include link;
+            }
+
             &:first-child {
                 padding-top: 0;
             }
@@ -102,6 +106,17 @@
                 padding-bottom: 0;
             }
         }
+    }
+    &__search-filter-field {
+        @include spacing('margin', 4, 'top');
+        &:first-child {
+          @include spacing('margin', 2, 'top');
+        }
+    }
+    &__search-filter-submit {
+        @include spacing('margin', 4, 'top');
+        display: flex;
+        justify-content: end;
     }
 
     .file-download {

@@ -141,8 +141,8 @@ $spacing-units-desktop: (
     font-family: var(--heading-font);
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary--black);
-    .eyebrow {
-        @include eyebrow('h1');
+    .caption {
+        @include caption('h1');
     }
     @media screen and (min-width: $justice-lg) {
         margin-top: map-get($spacing-units-desktop, 8);
@@ -159,8 +159,8 @@ $spacing-units-desktop: (
     font-family: var(--heading-font);
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
-    .eyebrow {
-        @include eyebrow('h2');
+    .caption {
+        @include caption('h2');
     }
     @media screen and (min-width: $justice-lg) {
         margin-top: map-get($spacing-units-desktop, 6);
@@ -177,8 +177,8 @@ $spacing-units-desktop: (
     font-family: var(--heading-font);
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
-    .eyebrow {
-        @include eyebrow('h3');
+    .caption {
+        @include caption('h3');
     }
     @media screen and (min-width: $justice-lg) {
         margin-top: map-get($spacing-units-desktop, 4);
@@ -242,12 +242,19 @@ $spacing-units-desktop: (
     line-height: 1.315;
 }
 
+@mixin small {
+    @include body;
+    font-weight: var(--body-font-bold);
+    color: var(--justice-secondary-blue);
+    font-size: 0.8rem;
+}
+
 // Heading caption https://design-system.service.gov.uk/styles/headings/#headings-with-captions
-@mixin eyebrow ($tag) {
+@mixin caption ($tag) {
     display: block;
     font-family: var(--heading-font);
     font-weight: var(--heading-font-normal);
-    color: var(--justice-secondary-grey);
+    color: var(--justice-secondary-dark-grey);
     @if ($tag == 'h1') {
         font-size: 1.125rem;
         line-height: 1.11;
@@ -402,6 +409,24 @@ $iconSizes: (
         box-shadow: inset 0 0 0 2px;
         background-color: transparent;
     }
+}
+
+@mixin error-highlight {
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        border-left: 4px solid var(--justice-error);
+        left: -1rem;
+        height: 100%;
+    }
+}
+
+// Add to all disabled elements, e.g. in a text input this would include the label, input field and description
+// Although this doesn't meet contrast requirements this is allowed provided that the element is semantically labelled as disabled.
+@mixin disabled {
+   opacity: 0.5;
+   cursor: default;
 }
 
 @mixin ul-list {

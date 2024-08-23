@@ -1,0 +1,23 @@
+@import '../../../style';
+
+.search-result-card {
+     &__title {
+        @include h3;
+        .caption {
+            display: block;
+        }
+        a {
+            font-size: inherit;
+            font-family: inherit;
+        }
+    }
+
+    &__description {
+        @include spacing('margin', 1, 'top');
+    }
+
+    &__url {
+        @include spacing('margin', 1, 'top');
+        @include small;
+    }
+}

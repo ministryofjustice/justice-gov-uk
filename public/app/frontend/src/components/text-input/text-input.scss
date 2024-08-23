@@ -28,7 +28,7 @@
         #{$this}__label,
         #{$this}__input,
         #{$this}__wrapper {
-            opacity: 0.5;
+            @include disabled;
         }
     }
 }
