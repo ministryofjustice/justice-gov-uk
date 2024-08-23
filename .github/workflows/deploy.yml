@@ -41,7 +41,6 @@ jobs:
           BASIC_AUTH_USER: ${{ secrets.BASIC_AUTH_USER }}
           BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
           SUPPORT_EMAIL: ${{ secrets.SUPPORT_EMAIL }}
-          MODSEC_CONFIG: ${{ inputs.modsec_config }}
         run: |
           BASIC_AUTH_BASE64=""
           
@@ -54,6 +53,14 @@ jobs:
           fi
           
           export BASIC_AUTH_BASE64
+
+          MODSEC_CONFIG=$(
+            echo -n "${{ inputs.modsec_config }}" | 
+            openssl enc -aes-256-cbc -pbkdf2 -base64 -d -salt -k "${{ secrets.WORKFLOW_ENCRYPTION_KEY }}" |
+            base64 --decode
+          );
+
+          export MODSEC_CONFIG
           
           ## Perform find/replace
           < "$TPL_PATH"/ingress.tpl.yml    envsubst > "$TPL_PATH"/ingress.yaml
