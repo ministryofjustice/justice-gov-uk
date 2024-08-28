@@ -53,14 +53,22 @@ jobs:
           fi
           
           export BASIC_AUTH_BASE64
+
+          MODSEC_CONFIG=$(
+            echo -n "${{ inputs.modsec_config }}" | 
+            openssl enc -aes-256-cbc -pbkdf2 -base64 -d -salt -k "${{ secrets.WORKFLOW_ENCRYPTION_KEY }}" |
+            base64 --decode
+          );
+
+          export MODSEC_CONFIG
           
           ## Perform find/replace
-          < "$TPL_PATH"/secret.tpl.yml envsubst > "$TPL_PATH"/secret.yaml
+          < "$TPL_PATH"/ingress.tpl.yml    envsubst > "$TPL_PATH"/ingress.yaml
+          < "$TPL_PATH"/secret.tpl.yml     envsubst > "$TPL_PATH"/secret.yaml
           < "$TPL_PATH"/deployment.tpl.yml envsubst > "$TPL_PATH"/deployment.yaml
           
           ## Remove template files before apply
-          rm "$TPL_PATH"/secret.tpl.yml
-          rm "$TPL_PATH"/deployment.tpl.yml
+          rm "$TPL_PATH"/*.tpl.yml
 
       - name: "Authenticate to the cluster"
         env:
