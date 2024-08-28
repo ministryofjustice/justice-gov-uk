@@ -40,6 +40,13 @@ jobs:
         id: config
         shell: bash
         run: |
+          # Ensure we have an encryption key.
+          if [ -z "${{ secrets.WORKFLOW_ENCRYPTION_KEY }}" ];then
+            echo "WORKFLOW_ENCRYPTION_KEY is not set."
+            exit 1
+          fi
+
+
           # Install yq package from snap.
           sudo snap install yq
 
