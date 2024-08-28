@@ -30,7 +30,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'ministryofjustice/moj-modsec-rules'
-          ref: 'justice-gov-uk-initial-rules'
           # This is a fine-grained PAT, it's scoped to the moj-modsec private repository with 2 permissions: 
           # Content: Read-only.
           # Metadata: Read-only.
