@@ -30,7 +30,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'ministryofjustice/moj-modsec-rules'
-          ref: 'justice-gov-uk-initial-rules'
           # This is a fine-grained PAT, it's scoped to the moj-modsec private repository with 2 permissions: 
           # Content: Read-only.
           # Metadata: Read-only.
@@ -56,33 +55,51 @@ jobs:
           # - Encode it with `WORKFLOW_ENCRYPTION_KEY` (e.g. generate with `openssl rand -base64 4096`).
 
           DEVELOPMENT=$(
-            ./bin/get-data.sh -b justice-gov-uk -e development -i 6 -f "data/php-wordpress.yml" | 
+            ./scripts/get-modsec-config.sh --namespace=justice-gov-uk --env=development --indent=6 --file=data/php-wordpress.yml | 
             base64 -w 0 | 
             openssl enc -aes-256-cbc -pbkdf2 -salt -k "${{ secrets.WORKFLOW_ENCRYPTION_KEY }}" -e -base64
           );
 
           DEMO=$(
-            ./bin/get-data.sh -b justice-gov-uk -e demo -i 6 -f "data/php-wordpress.yml" | 
+            ./scripts/get-modsec-config.sh --namespace=justice-gov-uk --env=demo --indent=6 --file=data/php-wordpress.yml | 
             base64 -w 0 | 
             openssl enc -aes-256-cbc -pbkdf2 -salt -k "${{ secrets.WORKFLOW_ENCRYPTION_KEY }}" -e -base64
           );
 
           STAGING=$(
-            ./bin/get-data.sh -b justice-gov-uk -e staging -i 6 -f "data/php-wordpress.yml" | 
+            ./scripts/get-modsec-config.sh --namespace=justice-gov-uk --env=staging --indent=6 --file=data/php-wordpress.yml | 
             base64 -w 0 | 
             openssl enc -aes-256-cbc -pbkdf2 -salt -k "${{ secrets.WORKFLOW_ENCRYPTION_KEY }}" -e -base64
           );
 
           PRODUCTION=$(
-            ./bin/get-data.sh -b justice-gov-uk -e production -i 6 -f "data/php-wordpress.yml" | 
+            ./scripts/get-modsec-config.sh --namespace=justice-gov-uk --env=production --indent=6 --file=data/php-wordpress.yml | 
             base64 -w 0 | 
             openssl enc -aes-256-cbc -pbkdf2 -salt -k "${{ secrets.WORKFLOW_ENCRYPTION_KEY }}" -e -base64
           );
 
 
           # Set the multi line variables as an outputs.
+          {
+              echo "development<<EOF"
+              echo "$DEVELOPMENT"
+              echo EOF
+          } >> "$GITHUB_OUTPUT"
 
-          echo "development<<EOF"$'\n'"$DEVELOPMENT"$'\n'EOF >> "$GITHUB_OUTPUT"
-          echo "demo<<EOF"$'\n'"$DEMO"$'\n'EOF >> "$GITHUB_OUTPUT"
-          echo "staging<<EOF"$'\n'"$STAGING"$'\n'EOF >> "$GITHUB_OUTPUT"
-          echo "production<<EOF"$'\n'"$PRODUCTION"$'\n'EOF >> "$GITHUB_OUTPUT"
+          {
+              echo "demo<<EOF"
+              echo "$DEMO"
+              echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+          {
+              echo "staging<<EOF"
+              echo "$STAGING"
+              echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+          {
+              echo "production<<EOF"
+              echo "$PRODUCTION"
+              echo EOF
+          } >> "$GITHUB_OUTPUT"
