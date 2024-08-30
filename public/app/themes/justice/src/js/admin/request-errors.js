@@ -15,9 +15,6 @@ Sentry.addIntegration(
   }),
 );
 
-// Assign window.fetch - It's important to do this *after* HttpClientIntegration has been added to Sentry.
-const { fetch: originalFetch } = window;
-
 /**
  * Add an event processor to Sentry.
  *
@@ -81,6 +78,9 @@ const getModsecLogUrl = (requestUri) => {
 
   return logUrlString;
 };
+
+// Assign window.fetch - It's important to do this *after* HttpClientIntegration has been added to Sentry.
+const { fetch: originalFetch } = window;
 
 /**
  * Intercept fetch requests and handle errors.
