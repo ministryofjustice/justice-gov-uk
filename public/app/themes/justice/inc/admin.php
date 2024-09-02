@@ -25,11 +25,13 @@ class Admin
     public function addHooks()
     {
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
+        add_action('admin_enqueue_scripts', array($this, 'loadScripts'));
         add_action('admin_menu', [$this, 'removeCustomizer'], 999);
         add_filter('rest_page_query', [$this, 'increaseDropdownLimit'], 9, 2);
         add_action('admin_head', [$this, 'hideNagsForNonAdmins'], 1);
         add_action('wp_before_admin_bar_render', [$this, 'filterAdminBar']);
         add_filter('admin_body_class', [$this, 'addRoleToAdminBody']);
+        add_filter('wp_sentry_public_options', [$this, 'filterSentryJsOptions']);
     }
 
 
@@ -37,6 +39,34 @@ class Admin
     {
         wp_enqueue_style('justice-admin-style', get_template_directory_uri() . '/dist/css/admin.min.css');
         wp_enqueue_style('justice-editor-style', get_template_directory_uri() . '/dist/css/editor.min.css');
+    }
+
+    /**
+     * Load the admin app script.
+     *
+     * @return void
+     */
+
+    public function loadScripts(): void
+    {
+
+        $script_asset_path = get_template_directory() . "/dist/php/admin.min.asset.php";
+
+        if (!file_exists($script_asset_path)) {
+            throw new \Error(
+                'You need to run `npm start` or `npm run build` for "app" first.'
+            );
+        }
+
+        $script_asset = require($script_asset_path);
+        wp_register_script(
+            'moj-justice-admin',
+            get_template_directory_uri() . '/dist/admin.min.js',
+            $script_asset['dependencies'],
+            $script_asset['version']
+        );
+
+        wp_enqueue_script('moj-justice-admin');
     }
 
     public static function removeCustomizer(): void
@@ -158,8 +188,31 @@ class Admin
 
     public function addRoleToAdminBody($classes)
     {
-        $new_classes = array_map(fn ($class) => 'admin-role-' . $class, wp_get_current_user()->roles);
+        $new_classes = array_map(fn($class) => 'admin-role-' . $class, wp_get_current_user()->roles);
 
         return $classes . ' ' . implode(' ', $new_classes);
+    }
+
+    /**
+     * Filter the options used by sentry-javascript for `Sentry.init()`
+     */
+
+    public function filterSentryJsOptions(array $options)
+    {
+
+        // If we're not on an admin page then return early.
+        if (!is_admin()) {
+            return $options;
+        }
+
+        // Add custom settings for admin screens.
+        return array_merge($options, array(
+            'sendDefaultPii' => true,
+            'wpSessionReplayOptions' => [
+                // To capture additional information such as request and response headers or bodies,
+                // you'll need to opt-in via networkDetailAllowUrls
+                'networkDetailAllowUrls' => [get_home_url()],
+            ]
+        ));
     }
 }
