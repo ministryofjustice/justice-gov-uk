@@ -63,7 +63,11 @@ class Admin
             'moj-justice-admin',
             get_template_directory_uri() . '/dist/admin.min.js',
             $script_asset['dependencies'],
-            $script_asset['version']
+            $script_asset['version'],
+            [
+                // Defer the script to avoid render blocking.
+                'defer' => true,
+            ]
         );
 
         wp_enqueue_script('moj-justice-admin');
