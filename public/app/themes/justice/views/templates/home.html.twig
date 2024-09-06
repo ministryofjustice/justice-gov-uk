@@ -6,17 +6,30 @@
     {% include 'views/partials/header.html.twig' %}
 {% endblock %}
 
-{% block columnOne %}
+{% block articleHeader %}
+    {# No title #}
+{% endblock %}
+
+{% block articleContent %}
     {% include '@components/image-with-text/image-with-text.html.twig' with {
         direction: 'left',
         title: pageTitle,
-        content,
+        content: post.content,
         image: mainImage,
     } %}
 {% endblock %}
 
-{% block columnTwo %}
-    {#  Add list component once merged  #}
+{% block sidebar %}
+    {% for block in blocks %}
+        {% include '@components/sidebar-block/sidebar-block.html.twig' with block %}
+    {% endfor %}
+{% endblock %}
+
+{% block sidebarMobile %}
+    {% for block in blocks %}
+        {% set updatedBlock = block|merge({ isMobile }) %}
+        {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedBlock %}
+    {% endfor %}
 {% endblock %}
 
 {% block footerContent %}

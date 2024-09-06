@@ -1,6 +1,6 @@
 @import '../../../style';
 
-.search-bar {
+.text-input-form {
     display: flex;
     width: 100%;
 
@@ -12,7 +12,7 @@
         border-left: 2px solid (var(--justice-border-input));
 
         input[type='submit'] {
-            width: 4rem;
+            width: fit-content;
 
             &:focus:not(:active, :hover) {
                 box-shadow: none;

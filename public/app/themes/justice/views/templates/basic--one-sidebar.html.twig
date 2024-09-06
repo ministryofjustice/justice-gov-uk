@@ -1,0 +1,42 @@
+{% extends '@layouts/one-sidebar/one-sidebar.html.twig' %}
+
+{% set direction = 'right' %}
+
+{% block headerContent %}
+    {% include 'views/partials/header.html.twig' %}
+{% endblock %}
+
+{% block articleHeader %}
+    {% include '@components/hero/hero.html.twig' with {
+        content,
+        links: breadcrumbs,
+    } %}
+{% endblock %}
+
+{% block articleContent %}
+        {% include '@components/rich-text/rich-text.html.twig' with {
+            content: post.content,
+        } %}
+        {% if updatedDate %}
+            {% include '@components/updated-date/updated-date.html.twig' with {
+                date: updatedDate,
+            } %}
+        {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+    {% for panel in sidePanelsRight %}
+        {% include '@components/sidebar-block/sidebar-block.html.twig' with panel %}
+    {% endfor %}
+{% endblock %}
+
+{% block sidebarMobile %}
+    {% for panel in sidePanelsRight %}
+        {% set updatedPanel = panel|merge({ isMobile }) %}
+        {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedPanel %}
+    {% endfor %}
+{% endblock %}
+
+{% block footerContent %}
+    {% include 'views/partials/footer.html.twig' %}
+{% endblock %}

@@ -49,4 +49,17 @@ class Content
 
         return $content;
     }
+
+    /**
+     * Determine if a link is external or internal so that we can add (opens in new tab)
+     *
+     * @param string $url The link
+     *
+     * @return bool True or false depending on whether the link is external or internal
+     */
+    public function isExternal(string $url): bool
+    {
+        $components = parse_url($url);
+        return !empty($components['host']) && strcasecmp($components['host'], $_SERVER['HTTP_HOST']);
+    }
 }

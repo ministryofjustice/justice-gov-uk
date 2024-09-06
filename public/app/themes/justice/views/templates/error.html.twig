@@ -12,14 +12,21 @@
     {% include 'views/partials/header.html.twig' %}
 {% endblock %}
 
-{% block columnOne %}
-    {% include '@components/rich-text/rich-text.html.twig' with {
-        content: errorContent,
-    } %}
+{% block articleHeader %}
+    {% include '@components/hero/hero.html.twig' with {
+        title: title,
+        eyebrowText: errorMessage ~ ' - ' ~ errorCode,
+    }%}
 {% endblock %}
 
-{% block columnTwo %}
-    {#    No content    #}
+{% block articleContent %}
+    {% include '@components/rich-text/rich-text.html.twig' with {
+        content,
+    }%}
+{% endblock %}
+
+{% block sidebar %}
+    {# No content #}
 {% endblock %}
 
 {% block footerContent %}

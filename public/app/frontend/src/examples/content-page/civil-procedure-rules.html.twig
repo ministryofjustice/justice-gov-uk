@@ -72,15 +72,32 @@
 {% endblock %}
 
 {% block articleHeader %}
-    // Breadcrumbs
-    // Title
-    // Right sidebar on mobile as accordions?
+    {% include '@components/hero/hero.html.twig' with {
+        title: 'Civil Procedure Rules',
+        breadcrumbs: [
+            {
+                url: '#',
+                label: 'Home',
+            },
+            {
+                url: '#',
+                label: 'Courts',
+            },
+            {
+                url: '#',
+                label: 'Procedure rules',
+            },
+            {
+                url: '#',
+                label: 'Civil',
+            },
+        ],
+    }%}
 {% endblock %}
 
 {% block articleContent %}
         {% include '@components/rich-text/rich-text.html.twig' with {
             content: '
-        <h1>Civil Procedure Rules</h1>
         <a href="#">Problems accessing court forms?</a>
         <h2>The 170th Practice Direction Update</h2>
         <p>

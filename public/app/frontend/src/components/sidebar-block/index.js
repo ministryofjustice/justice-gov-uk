@@ -2,7 +2,10 @@ import './sidebar-block.html.twig';
 import './sidebar-block.scss';
 
 export default function () {
-    const els = document.querySelectorAll('.sidebar-block');
+    // Exclude the brand variant as it doesn't open/close
+    const els = document.querySelectorAll(
+        '.sidebar-block:not(.sidebar-block--brand)'
+    );
 
     if (!els) {
         return;

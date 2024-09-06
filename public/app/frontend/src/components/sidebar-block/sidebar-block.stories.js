@@ -16,6 +16,11 @@ const Template = (args) => {
     return sidebarBlock(args);
 };
 
+export const Brand = Template.bind({});
+Brand.args = {
+    variant: 'brand',
+};
+
 export const List = Template.bind({});
 List.args = {
     variant: 'list',
@@ -84,10 +89,10 @@ ArchivedPages.args = {
 
 export const Search = Template.bind({});
 Search.args = {
-    variant: 'search',
+    variant: 'form',
     title: 'Search this collection',
     description: 'Search standard directions',
-    search: {
+    form: {
         id: 'search-bar-sidebar',
         action: '#',
         placeholder: 'e.g. Witness Statements',
@@ -98,6 +103,25 @@ Search.args = {
         },
         button: {
             text: 'Search',
+        },
+    },
+};
+
+export const EmailAlerts = Template.bind({});
+EmailAlerts.args = {
+    variant: 'form',
+    title: 'Get email alerts',
+    description: 'Enter your email address',
+    form: {
+        id: 'email-alerts-sidebar',
+        action: '#',
+        input: {
+            labelHidden: true,
+            label: 'Enter your email address',
+            id: 'email-alerts-sidebar-input',
+        },
+        button: {
+            text: 'Subscribe',
         },
     },
 };

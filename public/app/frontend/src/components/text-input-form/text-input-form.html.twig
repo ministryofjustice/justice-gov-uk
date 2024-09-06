@@ -8,7 +8,7 @@ Available variables:
     - input: object The variables for the input component
     - button: object The variables for the button component
 example:
-    {% include '@components/search-bar/search-bar.html.twig' with {
+    {% include '@components/text-input-form/text-input-form.html.twig' with {
         action: '/',
         id: 'search-top'
         input: {
@@ -24,17 +24,17 @@ example:
         }
     }%}
 #}
-<form id="{{ id }}" class="search-bar" action="{{ action }}">
-    <div class="search-bar__wrapper">
-        <div class="search-bar__input">
+<form id="{{ id }}" class="text-input-form" action="{{ action }}">
+    <div class="text-input-form__wrapper">
+        <div class="text-input-form__input">
             {% include '@components/text-input/text-input.html.twig' with {
                 labelHidden: input.labelHidden,
                 label: input.label,
                 id: input.id,
-                button: button,
+                name: input.name,
             }%}
         </div>
-        <div class="search-bar__button">
+        <div class="text-input-form__button">
             {% include '@components/button/button.html.twig' with {
                 variant: 'primary',
                 type: 'input',
@@ -42,5 +42,8 @@ example:
                 buttonText: button.text,
             }%}
         </div>
+        {% for input in hiddenInputs %}
+            <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
+        {% endfor %}
     </div>
 </form>
