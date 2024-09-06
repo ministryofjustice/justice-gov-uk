@@ -19,3 +19,10 @@ NewTab.args = {
     ...Default.args,
     newTab: true,
 };
+
+export const NewTabVisuallyHidden = Template.bind({});
+NewTabVisuallyHidden.args = {
+    ...Default.args,
+    newTab: true,
+    newTabVisuallyHidden: true,
+};
