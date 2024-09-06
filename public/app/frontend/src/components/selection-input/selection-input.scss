@@ -162,7 +162,19 @@
 
     &--disabled {
         #{$this}__option {
-            @include disabled;
+            cursor: default;
+
+            + label {
+                opacity: 0.5;
+            }
+
+            &:hover {
+                + label {
+                    &::before {
+                        outline: 0;
+                    }
+                }
+            }
         }
     }
 

@@ -1,6 +1,8 @@
 @import '../../../style';
 
 .pagination {
+    $this: &;
+
     @include spacing('margin', 8, 'top');
 
     display: flex;
@@ -19,6 +21,23 @@
         @include link;
         @include spacing('padding', 1, 'left');
         @include spacing('padding', 1, 'right');
+
+        display: flex;
+        justify-content: center;
+        min-width: 1.5rem;
+        min-height: 1.5rem;
+
+        &--previous {
+            #{$this}__link-text {
+                @include spacing('padding', 1, 'left');
+            }
+        }
+
+        &--next {
+            #{$this}__link-text {
+                @include spacing('padding', 1, 'right');
+            }
+        }
     }
 
     &__link.disabled {

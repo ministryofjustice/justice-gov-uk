@@ -30,6 +30,7 @@ import './components/text-input';
 import './components/selection-input';
 
 // Layouts
+import './layouts/base';
 import './layouts/one-sidebar';
 import './layouts/two-sidebars';
 

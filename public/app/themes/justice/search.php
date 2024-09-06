@@ -79,6 +79,9 @@ foreach ($results as $result) {
         if (file_exists($document_url)) {
             $filesize = size_format(wp_filesize($document_url));
         }
+        if ($format) {
+            $format = strtoupper(ltrim($format, '.'));
+        }
     }
     $formattedResults[] = [
         'title' => $result->post_title,
@@ -87,7 +90,7 @@ foreach ($results as $result) {
         'description' => $result->post_excerpt,
         'isDocument' => $result->post_type === 'document',
         'filesize' => $filesize ?: null,
-        'format' => strtoupper(ltrim($format, '.')) ?: null,
+        'format' => $format,
     ];
 }
 

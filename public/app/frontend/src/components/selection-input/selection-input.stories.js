@@ -16,6 +16,7 @@ Default.args = {
     direction: 'vertical',
     title: 'Section',
     checked: 'all',
+    group: 'section',
     options: [
         {
             label: 'All',

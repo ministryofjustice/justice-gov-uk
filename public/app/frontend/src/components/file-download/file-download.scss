@@ -27,6 +27,8 @@
     &__details {
         @include body;
 
+        display: flex;
+        flex-wrap: nowrap;
         width: fit-content;
     }
 }
