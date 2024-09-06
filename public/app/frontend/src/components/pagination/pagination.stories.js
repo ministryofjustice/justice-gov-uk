@@ -93,3 +93,33 @@ End.args = {
         },
     ],
 };
+
+export const LotsOfResults = Template.bind({});
+LotsOfResults.args = {
+    next: '#',
+    pages: [
+        {
+            title: 1,
+            link: '#',
+        },
+        {
+            title: 2,
+            link: '#',
+        },
+        {
+            title: 3,
+            link: '#',
+        },
+        {
+            title: 4,
+            link: '#',
+        },
+        {
+            title: '...',
+        },
+        {
+            title: 12,
+            link: '#',
+        },
+    ],
+};

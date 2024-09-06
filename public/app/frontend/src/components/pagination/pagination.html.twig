@@ -1,21 +1,41 @@
 {#
 @file
-A file (pdf) for download
+A pager for lists of results, e.g. search
 
 Available variables:
-    - format: 'PDF'|'ZIP'|'DOC' The file format
-    - link: string The link to the file
-    - filename: string The name of the file
-    - filesize: string The size of the file
-    - language: string The language of the file if different to the language of the page
+    - previous: string The url to go back a page
+    - next: string The url to go forwards
+    - pages: array An array of page links to be displayed
+        - title: string The title of the page (usually a number)
+        - link: string The link to go to that page
+        - current: boolean Whether this is the current page
 example:
-    {% include '@components/file-download/file-download.html.twig' with {
-        format: 'PDF',
-        link: '#',
-        filename: 'User manual',
-        filesize: '120 KbB',
-        language: 'Welsh'
-    }%}
+    {% include '@components/pagination/pagination.html.twig' with {
+        previous: '#',
+        next: '#',
+        pages: [
+            {
+                title: '1',
+                link: '#',
+                current: true,
+            },
+            {
+                title: '2',
+                link: '#',
+            },
+            {
+                title: '3',
+                link: '#',
+            },
+            {
+                title: '...',
+            },
+            {
+                title: '12',
+                link: '#',
+            }
+        ]
+    }}%}
 #}
 
 <nav id="pagination" class="pagination" aria-label="pagination">

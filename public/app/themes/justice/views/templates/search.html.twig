@@ -48,6 +48,7 @@
 {% block sidebar %}
     {% include '@components/sidebar-block/sidebar-block.html.twig' with filter %}
 {% endblock %}
+
 {% block sidebarMobile %}
     {% set updatedFilter = filter|merge({ isMobile }) %}
     {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedFilter %}

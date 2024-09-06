@@ -27,6 +27,7 @@ $breadcrumbs = [
 get_header();
 get_footer();
 
+// Get the sort filters
 $filters = array_map(function ($taxonomy) {
     $options = [];
     $default = null;
@@ -47,6 +48,7 @@ $filters = array_map(function ($taxonomy) {
     ];
 }, $taxonomies);
 
+// Add a checkbox to exclude documents
 $filters[] = [
     'type' => 'checkbox',
     'defaults' => [get_query_var('post_types') === 'page' ? 'page' : null],
@@ -64,13 +66,14 @@ $results = Timber::get_posts($wp_query);
 
 $formattedResults = [];
 
+// Format the results into a structure the frontend understands
 foreach ($results as $result) {
     $postId = $result->id;
     $filesize = null;
     $format = null;
     $url = $search->formattedUrl(get_the_permalink($postId));
 
-
+    // If the post type is document get the format and filesize
     if ($document->verify_post_type($postId)) {
         $upload_dir = $document->document_upload_dir();
         $year_month = str_replace('-', '/', substr($result->post_date, 0, 7));

@@ -1,26 +1,33 @@
 {#
 @file
-A search bar
+A search bar block for a search page. Includes the number of results, filters and a 'did you mean?' suggestion
 
 Available variables:
-    - action: string The form action
-    - id: string The unique id of the form element
-    - input: object The variables for the input component
-    - button: object The variables for the button component
+    - results: int The number of results
+    - filters: array An array of sort filters
+        - selected: boolean Whether the filter is currently selected
+        - label: string The label for the filter
+        - url: string The link to apply the filter
+    - didYouMean: array A suggested alternative search term
+        - term: string The alternative term
+        - url: string The url to search again with the new term
+    - search: array The variables for the text-input component
 example:
-    {% include '@components/search-bar/search-bar.html.twig' with {
-        action: '/',
-        id: 'search-top'
-        input: {
-            labelHidden: true,
-            label: 'Search',
-            id: 'search-top-input',
-        },
-        button: {
-            variant: 'primary',
-            type: 'input',
-            inputType: 'submit',
-            buttonText: 'Submit'
+    {% include '@components/search-bar-block/search-bar-block.html.twig' with {
+            search: {
+            action: '/',
+            id: 'search-main'
+            input: {
+                labelHidden: true,
+                label: 'Search',
+                id: 'search-main-input',
+            },
+            button: {
+                variant: 'primary',
+                type: 'input',
+                inputType: 'submit',
+                buttonText: 'Search'
+            }
         }
     }%}
 #}
