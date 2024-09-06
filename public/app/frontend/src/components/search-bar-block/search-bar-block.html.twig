@@ -39,11 +39,6 @@ example:
                 <p class="search-bar-block__results-text">{{ results }} result{{ results > 1 ? "s" : "" }}</p>
             </div>
         {% endif %}
-        {% if didYouMean %}
-            <div class="search-bar-block__did-you-mean">
-                <p>Did you mean: <a href="#">example</a>?</p>
-            </div>
-        {% endif %}
     </div>
     {% if filters and results > 1 %}
         <div class="search-bar-block__filters-wrapper">
@@ -58,6 +53,11 @@ example:
                     {% endif %}
                 {% endfor %}
             </div>
+        </div>
+    {% endif %}
+    {% if didYouMean %}
+        <div class="search-bar-block__did-you-mean">
+            <p>Did you mean: <a href="{{ didYouMean.url }}">{{ didYouMean.term }}</a>?</p>
         </div>
     {% endif %}
 </div>

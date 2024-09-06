@@ -10,9 +10,8 @@ const Template = (args) => {
 
 export const Start = Template.bind({});
 Start.args = {
-    previous: '#',
-    next: '#',
     total: '5',
+    next: '#',
     pages: [
         {
             title: 1,
@@ -41,6 +40,7 @@ Start.args = {
 export const Middle = Template.bind({});
 Middle.args = {
     ...Start.args,
+    previous: '#',
     pages: [
         {
             title: 1,
@@ -68,7 +68,7 @@ Middle.args = {
 
 export const End = Template.bind({});
 End.args = {
-    ...Start.args,
+    previous: '#',
     pages: [
         {
             title: 1,

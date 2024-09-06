@@ -34,7 +34,7 @@
     }
 
     &__did-you-mean {
-        @include spacing('margin', 1, 'top');
+        @include spacing('margin', 4, 'top');
 
         display: block;
         width: 100%;

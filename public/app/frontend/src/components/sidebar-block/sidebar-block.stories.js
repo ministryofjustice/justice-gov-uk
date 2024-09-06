@@ -126,6 +126,7 @@ SearchFilters.args = {
             type: 'radio',
             default: 'all',
             direction: 'vertical',
+            group: 'section',
             options: [
                 {
                     label: 'All',
@@ -150,6 +151,7 @@ SearchFilters.args = {
             type: 'radio',
             default: 'all',
             direction: 'vertical',
+            group: 'organisation',
             options: [
                 {
                     label: 'All',
@@ -162,6 +164,7 @@ SearchFilters.args = {
             type: 'radio',
             default: 'all',
             direction: 'vertical',
+            group: 'audience',
             options: [
                 {
                     label: 'All',
@@ -194,6 +197,7 @@ SearchFilters.args = {
             type: 'radio',
             default: 'all',
             direction: 'vertical',
+            group: 'type',
             options: [
                 {
                     label: 'All',

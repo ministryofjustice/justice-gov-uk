@@ -95,7 +95,11 @@ foreach ($results as $result) {
 }
 
 $pagination = $results->pagination();
-$didYouMean = relevanssi_premium_generate_suggestion($query);
+$suggestedTerm = relevanssi_premium_generate_suggestion($query);
+$didYouMean = [
+    'term' => $suggestedTerm,
+    'url' => `search/${suggestedTerm}`
+];
 
 $searchBarBlock = [
     'variant' => 'main',

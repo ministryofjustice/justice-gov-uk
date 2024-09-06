@@ -46,10 +46,6 @@
         margin-top: -0.65rem;
         flex-shrink: 0;
 
-        + label {
-            cursor: pointer;
-        }
-
         &[type='radio'] {
             + label {
                 &::before,

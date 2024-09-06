@@ -43,13 +43,20 @@ export const NoResultsDidYouMean = Template.bind({});
 NoResultsDidYouMean.args = {
     ...Default.args,
     query: 'civil formes',
-    didYouMean: 'civil forms',
+    didYouMean: {
+        term: 'civil forms',
+        url: '#',
+    },
     results: 0,
 };
 
 export const WithFilters = Template.bind({});
 WithFilters.args = {
     ...Default.args,
+    didYouMean: {
+        term: 'civil forms',
+        url: '#',
+    },
     filters: [
         {
             url: '#',
