@@ -239,3 +239,22 @@ EmailAlerts.args = {
         },
     },
 };
+
+export const EmailAlerts = Template.bind({});
+EmailAlerts.args = {
+    variant: 'form',
+    title: 'Get email alerts',
+    description: 'Enter your email address',
+    form: {
+        id: 'email-alerts-sidebar',
+        action: '#',
+        input: {
+            labelHidden: true,
+            label: 'Enter your email address',
+            id: 'email-alerts-sidebar-input',
+        },
+        button: {
+            text: 'Subscribe',
+        },
+    },
+};
