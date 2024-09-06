@@ -32,8 +32,10 @@
             width: 30%;
         }
     }
+
     &__did-you-mean {
         @include spacing('margin', 1, 'top');
+
         display: block;
         width: 100%;
     }
