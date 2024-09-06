@@ -36,7 +36,7 @@
 
     --heading-font: 'Georgia', serif;
     --heading-font-normal: 400;
-    --heading-font-bold: 700;
+    --heading-font-bold: 500; // Use a medium bold as 700 doesn't work well with the heading font.
 }
 
 // Minimum screen sizes

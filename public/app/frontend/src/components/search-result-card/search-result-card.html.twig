@@ -18,10 +18,20 @@ example:
 <article class="search-result-card">
     <hgroup class="search-result-card__title-with-date">
         <h1 class="search-result-card__title">
-            {% include '@components/link/link.html.twig' with {
-                label: title,
-                url: url,
-            } %}
+            {% if isDocument %}
+                {% include '@components/file-download/file-download.html.twig' with {
+                    filename: title,
+                    language: language,
+                    format: format,
+                    link: url,
+                    filesize: filesize,
+                } %}
+            {% else %}
+                {% include '@components/link/link.html.twig' with {
+                    label: title,
+                    url: url,
+                } %}
+            {% endif %}
             <span class="search-result-card__date caption">{{ date }}</span>
         </h1>
     </hgroup>

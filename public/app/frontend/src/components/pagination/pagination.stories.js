@@ -10,18 +10,86 @@ const Template = (args) => {
 
 export const Start = Template.bind({});
 Start.args = {
-    totalPages: 5,
-    currentPage: 1,
+    previous: '#',
+    next: '#',
+    total: '5',
+    pages: [
+        {
+            title: 1,
+            current: true,
+            link: '#',
+        },
+        {
+            title: 2,
+            link: '#',
+        },
+        {
+            title: 3,
+            link: '#',
+        },
+        {
+            title: 4,
+            link: '#',
+        },
+        {
+            title: 5,
+            link: '#',
+        },
+    ],
 };
 
 export const Middle = Template.bind({});
 Middle.args = {
-    totalPages: 5,
-    currentPage: 3,
+    ...Start.args,
+    pages: [
+        {
+            title: 1,
+            link: '#',
+        },
+        {
+            title: 2,
+            link: '#',
+        },
+        {
+            title: 3,
+            current: true,
+            link: '#',
+        },
+        {
+            title: 4,
+            link: '#',
+        },
+        {
+            title: 5,
+            link: '#',
+        },
+    ],
 };
 
 export const End = Template.bind({});
 End.args = {
-    totalPages: 5,
-    currentPage: 5,
+    ...Start.args,
+    pages: [
+        {
+            title: 1,
+            link: '#',
+        },
+        {
+            title: 2,
+            link: '#',
+        },
+        {
+            title: 3,
+            link: '#',
+        },
+        {
+            title: 4,
+            link: '#',
+        },
+        {
+            title: 5,
+            link: '#',
+            current: true,
+        },
+    ],
 };

@@ -1,14 +1,28 @@
 @import '../../../style';
 
 .search-result-card {
-     &__title {
+    margin-top: 0;
+
+    &__title {
         @include h3;
+
+        margin-top: 0;
+
         .caption {
             display: block;
         }
+
+        .file-download {
+            margin-top: 0;
+        }
+
         a {
             font-size: inherit;
             font-family: inherit;
+            word-break: break-word;
+        }
+        @media screen and (min-width: $justice-lg) {
+            margin-top: 0;
         }
     }
 

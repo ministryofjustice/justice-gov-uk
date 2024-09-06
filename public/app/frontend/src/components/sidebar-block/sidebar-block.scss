@@ -107,16 +107,21 @@
             }
         }
     }
+
     &__search-filter-field {
         @include spacing('margin', 4, 'top');
+
         &:first-child {
-          @include spacing('margin', 2, 'top');
+            @include spacing('margin', 2, 'top');
         }
     }
-    &__search-filter-submit {
-        @include spacing('margin', 4, 'top');
+
+    &__search-filter-buttons {
+        @include spacing('margin', 6, 'top');
+
         display: flex;
         justify-content: end;
+        gap: 1rem;
     }
 
     .file-download {

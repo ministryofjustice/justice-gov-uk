@@ -46,6 +46,8 @@
         }
 
         a {
+            @include link;
+
             font-family: inherit;
             font-size: inherit;
         }

@@ -35,11 +35,14 @@
     {% include '@components/search-bar-block/search-bar-block.html.twig' with searchBlock %}
     {% include '@components/search-result-list/search-result-list.html.twig' with {
         cards: results,
+        query: searchQuery,
     } %}
-    {#    {% include '@components/pagination/pagination.html.twig' with {#}
-    {#        totalPages: 2,#}
-    {#        currentPage: 1,#}
-    {#    } %}#}
+    {% include '@components/pagination/pagination.html.twig' with {
+        totalPages: pagination.total,
+        previous: pagination.prev.link,
+        next: pagination.next.link,
+        pages: pagination.pages,
+    } %}
 {% endblock %}
 
 {% block sidebar %}

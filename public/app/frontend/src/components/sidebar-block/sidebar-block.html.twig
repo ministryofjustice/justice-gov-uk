@@ -115,13 +115,23 @@ example:
                         </div>
                     {% endfor %}
                 </div>
-                <div class="sidebar-block__search-filter-submit">
-                    {% include '@components/button/button.html.twig' with {
-                        variant: 'primary',
-                        type: 'input',
-                        inputType: 'submit',
-                        buttonText: 'Apply filters'
-                    } %}
+                <div class="sidebar-block__search-filter-buttons">
+                    <div class="sidebar-block__search-filter-reset">
+                        {% include '@components/button/button.html.twig' with {
+                            variant: 'light',
+                            type: 'input',
+                            inputType: 'reset',
+                            buttonText: 'Clear filters'
+                        } %}
+                    </div>
+                    <div class="sidebar-block__search-filter-submit">
+                        {% include '@components/button/button.html.twig' with {
+                            variant: 'primary',
+                            type: 'input',
+                            inputType: 'submit',
+                            buttonText: 'Apply filters'
+                        } %}
+                    </div>
                 </div>
             </form>
         {% endif %}

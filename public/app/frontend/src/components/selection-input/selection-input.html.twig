@@ -45,7 +45,7 @@ example:
             {% for option in options %}
                 {% set selectionId = "selection-" ~ group ~ "-" ~ option.value|lower %}
                     {% if type == 'checkbox' %}
-                        {% set checked = option.value in defaults|keys %}
+                        {% set checked = option.value in defaults %}
                     {% else %}
                         {% set checked = option.value == defaults %}
                     {% endif %}
@@ -60,4 +60,3 @@ example:
         {% endif %}
     </fieldset>
 </div>
-

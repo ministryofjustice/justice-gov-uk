@@ -21,5 +21,21 @@ export default function () {
                 !(button.getAttribute('aria-expanded') === 'true')
             );
         });
+
+        const searchForm = el.querySelector('.sidebar-block__search-filter');
+
+        // Clear all inputs when the reset button is clicked
+        if (searchForm) {
+            const resetButton = searchForm.querySelector('input[type="reset"]');
+            resetButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const inputs = searchForm.querySelectorAll(
+                    'input[type="radio"], input[type="checkbox"]'
+                );
+                inputs.forEach((input) => {
+                    input.checked = false;
+                });
+            });
+        }
     });
 }

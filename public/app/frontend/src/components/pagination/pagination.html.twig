@@ -18,40 +18,43 @@ example:
     }%}
 #}
 
-{% set range = range(startRange, endRange) %}
-
 <nav id="pagination" class="pagination" aria-label="pagination">
     <ul class="pagination__list">
         <li class="pagination__link-wrapper pagination__link-wrapper--previous">
-            {% if currentPage == 1 %}
-                <a class="pagination__link disabled" role="link" aria-disabled="true">«<span class="pagination__link-text"> Previous</span></a>
-            {% else %}
+            {% if previous %}
                 <a class="pagination__link" href="{{ previous }}">«<span class="pagination__link-text"> Previous</span></a>
+            {% else %}
+                <a class="pagination__link disabled" role="link" aria-disabled="true">«<span
+                            class="pagination__link-text"> Previous</span></a>
             {% endif %}
         </li>
         <li class="pagination__link-wrapper">
             <ul class="pagination__list pagination__sublist">
-                {% for page in range %}
-                    {% if page == (range.length // 2)|round(1, 'floor') %}
-                        Middle
-                    {% else %}
+                {% if pages|length < 1 %}
+                    <li class="pagination__link-wrapper">
+                        <a class="pagination__link disabled" role="link" aria-disabled="true"
+                           aria-current="page">1</a>
+                    </li>
+                {% else %}
+                    {% for page in pages %}
                         <li class="pagination__link-wrapper">
-                            {% if page == currentPage %}
+                            {% if page.current %}
                                 <a class="pagination__link disabled" role="link" aria-disabled="true"
-                                   aria-current="page">{{ page }}</a>
+                                   aria-current="page">{{ page.title }}</a>
                             {% else %}
-                                <a class="pagination__link" href="{{ page }}">{{ page }}</a>
+                                <a class="pagination__link" href="{{ page.link }}">{{ page.title }}</a>
                             {% endif %}
                         </li>
-                    {% endif %}
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             </ul>
         </li>
         <li class="pagination__link-wrapper pagination__link-wrapper--next">
-            {% if current_page == pages|length %}
-                <a class="pagination__link disabled" role="link" aria-disabled="true"><span class="pagination__link-text">Next </span>»</a>
-            {% else %}
+            {% if next %}
                 <a class="pagination__link" href="{{ next }}"><span class="pagination__link-text">Next </span>»</a>
+            {% else %}
+                <a class="pagination__link disabled" role="link" aria-disabled="true"><span
+                            class="pagination__link-text">Next </span>»</a>
             {% endif %}
         </li>
     </ul>

@@ -21,17 +21,32 @@ example:
     }%}
 #}
 <div class="search-result-list">
-    <ol class="search-result-list__list">
-        {% for card in cards %}
-            <li class="search-result-list__element">
-                {% include '@components/search-result-card/search-result-card.html.twig' with {
-                    title: card.title,
-                    url: card.url,
-                    description: card.description,
-                    date: card.date,
-                } %}
-            </li>
-        {% endfor %}
-    </ol>
-
+    {% if cards %}
+        <ol class="search-result-list__list">
+            {% for card in cards %}
+                <li class="search-result-list__element">
+                    {% include '@components/search-result-card/search-result-card.html.twig' with {
+                        title: card.title,
+                        url: card.url,
+                        description: card.description,
+                        date: card.date,
+                        isDocument: card.isDocument,
+                        language: card.isDocument ? card.language : null,
+                        format: card.isDocument ? card.format : null,
+                        filesize: card.isDocument ? card.filesize: null,
+                    } %}
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <div class="search-result-list__no-results">
+            {% include '@components/rich-text/rich-text.html.twig' with {
+                content: "
+                <h2>No results</h2>
+                <p>Your search " ~ (query ? "for <span class='search-result-list__no-results-query'>" ~ query ~ "</span> " : "") ~ "did not return any results.<p>
+                <p>Please try again with some different keywords.</p>
+            ",
+            } %}
+        </div>
+    {% endif %}
 </div>

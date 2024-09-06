@@ -24,6 +24,8 @@
         border: 1px solid var(--justice-border);
 
         a {
+            @include link;
+
             &::after {
                 content: '';
                 position: absolute;

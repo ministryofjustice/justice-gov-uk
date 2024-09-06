@@ -12,6 +12,7 @@
         a {
             @include link;
         }
+
         &:not(&:last-child) {
             &::after {
                 @include spacing('margin', 1, 'left');
