@@ -1,0 +1,260 @@
+{% extends '@layouts/one-sidebar/one-sidebar.html.twig' %}
+
+{% set direction = 'left' %}
+{# Keep content here to make this file easier to read #}
+{% set fields =  [
+    {
+        title: 'Section',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        group: 'section',
+        options: [
+        {
+            label: 'All',
+            value: 'all',
+        },
+        {
+            label: 'Courts',
+            value: 'courts',
+        },
+        {
+            label: 'News',
+            value: 'news',
+        },
+        {
+            label: 'Publications',
+            value: 'publications',
+        },
+    ],
+    },
+    {
+        title: 'Organisation',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        group: 'organisation',
+        options: [
+        {
+            label: 'All',
+            value: 'all',
+        }
+    ],
+    },
+    {
+        title: 'Audience',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        group: 'audience',
+        options: [
+        {
+            label: 'All',
+            value: 'all',
+        },
+        {
+            label: 'Academic researcher',
+            value: 'academic-researcher',
+        },
+        {
+            label: 'Legal profession',
+            value: 'legal-profession',
+        },
+        {
+            label: 'Mediator/advice worker',
+            value: 'mediator-advice-worker',
+        },
+        {
+            label: 'Public/citizen',
+            value: 'public-citizen',
+        },
+        {
+            label: 'Representing myself at court',
+            value: 'self-representation',
+        }
+    ],
+    },
+    {
+        title: 'Type',
+        type: 'radio',
+        default: 'all',
+        direction: 'vertical',
+        group: 'type',
+        options: [
+        {
+            label: 'All',
+            value: 'all',
+        },
+        {
+            label: 'Guidance',
+            value: 'guidance',
+        },
+        {
+            label: 'Report',
+            value: 'report',
+        }
+    ],
+    },
+    {
+        type: 'checkbox',
+        options: [
+        {
+            label: 'Limit your search to web pages only',
+            value: 'web-pages-only',
+        },
+    ]}
+] %}
+{% set results = [
+    {
+        title: 'Civil - Civil Procedure Rules',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/civil',
+        date: '26 February 2019',
+        description: '…testing a new bill of costs, Precedent AA, to reflect the costs management and costs budgeting procedures is introduced. Practice Direction 51L New Bill of Costs Pilot Excel version of…',
+    },
+    {
+        title: 'Family Procedure Rules',
+        url: 'https://www.justice.gov.uk/?p=7983',
+        date: '24 May 2024',
+        description: '…is being tested across five regions, at eight Family Court locations. The amendment extends the testing sites to Central London, Liverpool and Reading Family Courts in order to increase the…',
+    },
+    {
+        title: 'Family Procedure Rules',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/family',
+        date: '5 February 2018',
+        description: '…is being tested across five regions, at eight Family Court locations. The amendment extends the testing sites to Central London, Liverpool and Reading Family Courts in order to increase the…',
+    },
+    {
+        title: 'Civil - Civil Procedure Rules',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/civil',
+        date: '26 February 2019',
+        description: '…testing a new bill of costs, Precedent AA, to reflect the costs management and costs budgeting procedures is introduced. Practice Direction 51L New Bill of Costs Pilot Excel version of…',
+    },
+    {
+        title: 'Family Procedure Rules',
+        url: 'https://www.justice.gov.uk/?p=7983',
+        date: '24 May 2024',
+        description: '…is being tested across five regions, at eight Family Court locations. The amendment extends the testing sites to Central London, Liverpool and Reading Family Courts in order to increase the…',
+    },
+    {
+        title: 'Family Procedure Rules',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/family',
+        date: '5 February 2018',
+        description: '…is being tested across five regions, at eight Family Court locations. The amendment extends the testing sites to Central London, Liverpool and Reading Family Courts in order to increase the…',
+    },
+    {
+        title: 'Civil - Civil Procedure Rules',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/civil',
+        date: '26 February 2019',
+        description: '…testing a new bill of costs, Precedent AA, to reflect the costs management and costs budgeting procedures is introduced. Practice Direction 51L New Bill of Costs Pilot Excel version of…',
+    },
+    {
+        title: 'Family Procedure Rules',
+        url: 'https://www.justice.gov.uk/?p=7983',
+        date: '24 May 2024',
+        description: '…is being tested across five regions, at eight Family Court locations. The amendment extends the testing sites to Central London, Liverpool and Reading Family Courts in order to increase the…',
+    },
+    {
+        title: 'Family Procedure Rules',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/family',
+        date: '5 February 2018',
+        description: '…is being tested across five regions, at eight Family Court locations. The amendment extends the testing sites to Central London, Liverpool and Reading Family Courts in order to increase the…',
+    },
+    {
+        title: 'Civil - Civil Procedure Rules',
+        url: 'https://www.justice.gov.uk/courts/procedure-rules/civil',
+        date: '26 February 2019',
+        description: '…testing a new bill of costs, Precedent AA, to reflect the costs management and costs budgeting procedures is introduced. Practice Direction 51L New Bill of Costs Pilot Excel version of…',
+    },
+] %}
+
+{# Hide the search on the search page #}
+{% block headerContent %}
+  {% include '@components/header/header.html.twig' with {
+      showLogo: true,
+      showSearch: false,
+      links: [
+          {
+              url: '#',
+              label: 'Courts',
+          },
+          {
+              url: '#',
+              label: 'Procedure rules',
+          },
+          {
+              url: '#',
+              label: 'Offenders',
+          },
+      ],
+  } %}
+{% endblock %}
+
+{% block articleHeader %}
+    {% include '@components/hero/hero.html.twig' with {
+        title: 'Search',
+        breadcrumbs: [
+            {
+                url: '#',
+                label: 'Home',
+            },
+            {
+                url: '#',
+                label: 'Search',
+            },
+        ],
+    } %}
+{% endblock %}
+
+{% block articleContent %}
+    {% include '@components/search-bar-block/search-bar-block.html.twig' with {
+        id: 'search-bar-main',
+        variant: 'main',
+        action: '#',
+        search: {
+            input: {
+                labelHidden: true,
+                label: 'Search the Justice UK website',
+                id: 'search-bar-main-input',
+            },
+            button: {
+                text: 'Search',
+            },
+        },
+        results: 12,
+        filters: [
+            {
+                url: '#',
+                label: 'Relevance',
+                active: true,
+            },
+            {
+                url: '#',
+                label: 'Most recent',
+            },
+        ]
+    } %}
+    {% include '@components/search-result-list/search-result-list.html.twig' with {
+        cards: results,
+    } %}
+{#    {% include '@components/pagination/pagination.html.twig' with {#}
+{#        totalPages: 2,#}
+{#        currentPage: 1,#}
+{#    } %}#}
+{% endblock %}
+
+{% set sidebarContent = {
+    title: 'Filters',
+    variant: 'search-filter',
+    title: 'Filter',
+    subtitle: 'Filter results by',
+    submitText: 'Apply filter',
+    fields,
+} %}
+
+{% block sidebar %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with sidebarContent %}
+{% endblock %}
+{% block sidebarMobile %}
+    {% set updatedSidebarContent = sidebarContent|merge({ isMobile }) %}
+    {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedSidebarContent %}
+{% endblock %}

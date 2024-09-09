@@ -49,7 +49,7 @@ export const generateTypesetCanvas = (
                 const bodyMarginTop = `margin-top:${mobile ? '1.25rem' : '0.938rem'}`;
                 const sample =
                     type === 'heading-with-captions'
-                        ? `<hgroup><${tag} style="font-size:${rem}"><p className="eyebrow">${sampleCaption}</p>${sampleText}</${tag}></hgroup>`
+                        ? `<hgroup><${tag} style="font-size:${rem}"><p className="caption">${sampleCaption}</p>${sampleText}</${tag}></hgroup>`
                         : `<${tag} style="font-size:${rem};${tag === 'p' ? bodyMarginTop : ''}">${sampleText}</${tag}>`;
                 return (
                     <div

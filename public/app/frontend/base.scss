@@ -4,6 +4,9 @@
 html {
     font-size: 16px;
 }
+html, body {
+    height: 100%;
+}
 
 body, p {
     @include body;
@@ -34,7 +37,7 @@ h6, .h6 {
     @include h6;
 }
 
-ul {
+ul, ol {
     list-style: none;
     margin: 0;
     padding: 0;

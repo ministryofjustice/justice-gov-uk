@@ -12,6 +12,10 @@ import './components/header';
 import './components/image';
 import './components/image-with-text';
 import './components/file-download';
+import './components/search-bar-block';
+import './components/search-result-list';
+import './components/search-result-card';
+import './components/pagination';
 import './components/to-the-top';
 import './components/navigation-sections';
 import './components/breadcrumbs';
@@ -21,7 +25,12 @@ import './components/updated-date';
 import navigationSecondary from './components/navigation-secondary';
 import sidebarBlock from './components/sidebar-block';
 
+// Form elements
+import './components/text-input';
+import './components/selection-input';
+
 // Layouts
+import './layouts/base';
 import './layouts/one-sidebar';
 import './layouts/two-sidebars';
 

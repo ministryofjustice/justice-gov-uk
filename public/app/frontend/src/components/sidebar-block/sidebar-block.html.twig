@@ -96,6 +96,44 @@ example:
                 button: form.button,
                 hiddenInputs: form.hiddenInputs,
             } %}
+        {% elseif variant == 'search-filter' %}
+            <form class="sidebar-block__search-filter">
+                <p class="sidebar_block__search-filter-subtitle">{{ subtitle }}</p>
+                <div class="sidebar-block__search-filter-fields">
+                    {% for field in fields %}
+                        <div class="sidebar-block__search-filter-field">
+                            {% include '@components/selection-input/selection-input.html.twig' with {
+                                type: field.type,
+                                direction: field.direction,
+                                title: field.title,
+                                group: field.group,
+                                defaults: field.defaults,
+                                options: field.options,
+                                disabled: field.disabled,
+                                error: field.error,
+                            } %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="sidebar-block__search-filter-buttons">
+                    <div class="sidebar-block__search-filter-reset">
+                        {% include '@components/button/button.html.twig' with {
+                            variant: 'light',
+                            type: 'input',
+                            inputType: 'reset',
+                            buttonText: 'Clear filters'
+                        } %}
+                    </div>
+                    <div class="sidebar-block__search-filter-submit">
+                        {% include '@components/button/button.html.twig' with {
+                            variant: 'primary',
+                            type: 'input',
+                            inputType: 'submit',
+                            buttonText: 'Apply filters'
+                        } %}
+                    </div>
+                </div>
+            </form>
         {% endif %}
     </div>
 </section>

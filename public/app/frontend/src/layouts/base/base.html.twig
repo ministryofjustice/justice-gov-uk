@@ -1,9 +1,11 @@
+{% set showSearch = hasSearch ?? true %}
+
 <div class="page-wrapper">
     <div class="header-wrapper">
         {% block headerContent %}
             {% include '@components/header/header.html.twig' with {
                 showLogo: true,
-                showSearch: true,
+                showSearch: showSearch,
                 links: [
                     {
                             url: '#',

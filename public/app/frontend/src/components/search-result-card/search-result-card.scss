@@ -1,0 +1,37 @@
+@import '../../../style';
+
+.search-result-card {
+    margin-top: 0;
+
+    &__title {
+        @include h3;
+
+        margin-top: 0;
+
+        .caption {
+            display: block;
+        }
+
+        .file-download {
+            margin-top: 0;
+        }
+
+        a {
+            font-size: inherit;
+            font-family: inherit;
+            word-break: break-word;
+        }
+        @media screen and (min-width: $justice-lg) {
+            margin-top: 0;
+        }
+    }
+
+    &__description {
+        @include spacing('margin', 1, 'top');
+    }
+
+    &__url {
+        @include spacing('margin', 1, 'top');
+        @include small;
+    }
+}
