@@ -16,7 +16,7 @@ spec:
       app: ${KUBE_NAMESPACE}
     spec:
       containers:
-        - name: design-system
+        - name: node
           image: ${REGISTRY}/${REPOSITORY}:${IMAGE_TAG}
           ports:
             - containerPort: 6006
