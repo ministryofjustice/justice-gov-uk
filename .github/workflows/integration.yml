@@ -11,6 +11,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Identify if any changes have been made to the theme or frontend folders
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: dorny/paths-filter@v3 #https://github.com/dorny/paths-filter
+        id: filter
+        with:
+          filters: |
+            theme:
+              - 'public/app/backend/justice/**'
+            frontend:
+              - 'public/app/frontend/**'
+
   image:
     name: "Image"
     if: github.event.ref == 'refs/heads/main'
@@ -27,10 +45,20 @@ jobs:
       registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
+  deploy_design_system:
+    name: "Design system"
+    if: ${{ needs.changes.outputs.frontend == 'true' }} # only run if there's been a change to the frontend files
+    uses: ./.github/workflows/deploy.yml
+    needs: [changes, image]
+    with:
+      environment: design-system
+      registry: ${{ needs.image.outputs.registry }}
+    secrets: inherit
+
   deploy_demo:
     name: "Demo"
-    needs: [image, deploy_dev]
-    if: github.event.ref == 'refs/heads/main'
+    needs: image
+    if: github.event.ref == 'refs/heads/frontend-rework'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
