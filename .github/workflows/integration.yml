@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'frontend-rework'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -45,24 +46,30 @@ jobs:
       registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
+  build_design_system_image:
+    name: "FE rework image"
+    if: github.event.ref == 'refs/heads/frontend-rework'
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
   deploy_design_system:
     name: "Design system"
+    needs: [changes, build_design_system_image]
     if: ${{ needs.changes.outputs.frontend == 'true' }} # only run if there's been a change to the frontend files
     uses: ./.github/workflows/deploy.yml
-    needs: [changes, image]
     with:
       environment: design-system
-      registry: ${{ needs.image.outputs.registry }}
+      registry: ${{ needs.build_design_system_image.outputs.registry }}
     secrets: inherit
 
   deploy_demo:
     name: "Demo"
-    needs: image
+    needs: build_design_system_image
     if: github.event.ref == 'refs/heads/frontend-rework'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
-      registry: ${{ needs.image.outputs.registry }}
+      registry: ${{ needs.build_design_system_image.outputs.registry }}
     secrets: inherit
 
   deploy_staging:
