@@ -93,6 +93,13 @@ $is_test_request = (isset($_SERVER['HTTP_X_TEST_REQUEST']) && $_SERVER['HTTP_X_T
 // Set the table prefix based on the request origin.
 $table_prefix =  $is_test_request ? 'test_' : (env('DB_PREFIX') ?: 'wp_');
 
+Config::define('WP_REDIS_HOST', env('WP_REDIS_HOST') ?: 'redis');
+Config::define('WP_REDIS_CLIENT', env('WP_REDIS_CLIENT') ?: 'relay');
+
+// consume less memory
+define( 'WP_REDIS_IGBINARY', true );
+
+
 
 /**
  * Authentication Unique Keys and Salts

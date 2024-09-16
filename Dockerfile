@@ -69,6 +69,14 @@ RUN apk add --update nano nodejs npm inotify-tools
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+#         && pecl install redis \
+#         && docker-php-ext-enable redis.so
+
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions relay
+
+
 VOLUME ["/sock"]
 # nginx
 USER 101
