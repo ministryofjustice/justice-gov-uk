@@ -92,6 +92,8 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
 
   minio:
     image: minio/minio
@@ -166,3 +168,7 @@ services:
     profiles:
       - local-ssh
 
+  memcached:
+    image: 'bitnami/memcached:latest'
+    environment:
+      MEMCACHED_LISTEN_ADDRESS: "0.0.0.0"

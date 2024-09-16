@@ -14,6 +14,12 @@ require 'env.php';
 use Roots\WPConfig\Config;
 use function MOJ\Justice\env;
 
+$memcached_servers = array(
+	'default' => array(
+		'memcached:11211'
+	)
+);
+
 /**
  * Directory containing all the site's files
  */
