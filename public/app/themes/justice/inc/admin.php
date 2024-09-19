@@ -212,6 +212,10 @@ class Admin
         // Add custom settings for admin screens.
         return array_merge($options, array(
             'sendDefaultPii' => true,
+            'sampleRate' => 1,
+            'tracesSampleRate' => 1,
+            'replaysSessionSampleRate' => 1,
+            'replaysOnErrorSampleRate' => 1,
             'wpSessionReplayOptions' => [
                 // To capture additional information such as request and response headers or bodies,
                 // you'll need to opt-in via networkDetailAllowUrls
