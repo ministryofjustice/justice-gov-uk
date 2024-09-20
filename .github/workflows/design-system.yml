@@ -12,6 +12,7 @@ on:
 jobs:
   storybook-deploy:
     runs-on: ubuntu-latest
+    environment: design-system
     permissions:
       id-token: write
       contents: read
@@ -40,6 +41,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.S3_ROLE_TO_ASSUME }}
+          role-session-name: "justice-gov-uk-design-system-${{ github.run_number }}"
           aws-region: "eu-west-2"
 
       - name: Deploy to S3
