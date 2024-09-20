@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'frontend-rework'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,14 +28,23 @@ jobs:
       registry: ${{ needs.image.outputs.registry }}
     secrets: inherit
 
+  # TODO: Temporary job whilst we deploy the fe rework to demo for testing; remove when fully merged
+  build_design_system_image:
+    name: "FE rework image"
+    if: github.event.ref == 'refs/heads/frontend-rework'
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
   deploy_demo:
     name: "Demo"
-    needs: [image, deploy_dev]
-    if: github.event.ref == 'refs/heads/main'
+    # revert needs to [image, deploy_dev] and if to " "/heads/main once fe rework is merged to main
+    # TODO: remember to update demo environment allowed branches on GitHub too
+    needs: build_design_system_image
+    if: github.event.ref == 'refs/heads/frontend-rework'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
-      registry: ${{ needs.image.outputs.registry }}
+      registry: ${{ needs.build_design_system_image.outputs.registry }}
     secrets: inherit
 
   deploy_staging:
