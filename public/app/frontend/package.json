@@ -50,6 +50,7 @@
   ],
   "scripts": {
     "build-dev": "webpack --mode development",
+    "build-prod": "webpack --mode production",
     "watch-dev": "webpack --watch --mode development",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",

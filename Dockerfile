@@ -147,6 +147,13 @@ RUN npm ci
 RUN npm run production
 RUN rm -rf node_modules
 
+COPY ./public/app/frontend                         ./frontend
+
+WORKDIR /node/frontend
+
+RUN npm ci
+RUN npm run build-prod
+RUN rm -rf node_modules
 
 ###
 
@@ -215,3 +222,5 @@ COPY --from=build-fpm-composer --chown=nginx:nginx /var/www/html/vendor-assets  
 # Grab assets for Nginx
 COPY --from=assets-build /node/dist        public/app/themes/justice/dist/
 COPY --from=assets-build /node/style.css   public/app/themes/justice/
+
+COPY --from=assets-build /node/frontend/dist  public/app/frontend/dist
