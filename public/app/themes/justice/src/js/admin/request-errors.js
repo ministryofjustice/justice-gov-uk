@@ -54,7 +54,7 @@ Sentry.addIntegration(
 
 /**
  * A function to generate an OpenSearch url for reviewing the logs related to a request.
- * 
+ *
  * @param {string} requestUri
  * @returns {string}
  */
@@ -116,12 +116,18 @@ window.fetch = async (...args) => {
   const requestHash = stringToHash(JSON.stringify(config.body) + requestUri);
 
   // Compose a message for the Sentry issue.
-  const sentryMessage = `Failed client-side fetch request. Request hash ${requestHash}.`;
+  let sentryMessage = `Failed client-side fetch request. Status code: ${response.status}`;
 
-  // Set the url as context for the Sentry event.
-  Sentry.setContext("cloud_platform_log", {
-    url: getModsecLogUrl(requestUri),
-  });
+  // We have a 403 that is likely from a Modsec false positive.
+  if (response.status === 403) {
+    // Append a unique hash to the log message to prevent issue merging.
+    // This will help with debugging.
+    sentryMessage += ` Request hash ${requestHash}.`;
+    // Set the url as context for the Sentry event.
+    Sentry.setContext("cloud_platform_log", {
+      url: getModsecLogUrl(requestUri),
+    });
+  }
 
   Sentry.captureEvent({
     message: sentryMessage,
