@@ -153,17 +153,17 @@ ini_set('display_errors', '0');
 
 /**
  * WP Redis config.
- * 
+ *
  * In object-cache.php, specific variables are read via $_SERVER
  * CACHE_HOST, CACHE_PORT, CACHE_PASSWORD, CACHE_DB, CACHE_TIMEOUT
  * They can be set via ENV VARS or here.
- * 
+ *
  * Other config entries use constants and can be defined as usual.
- * 
+ *
  * @see https://github.com/pantheon-systems/wp-redis
  */
 
- if (!isset($_SERVER['CACHE_TIMEOUT'])) {
+if (!isset($_SERVER['CACHE_TIMEOUT'])) {
     // Set a timeout over 1s to allow for tls.
     $_SERVER['CACHE_TIMEOUT'] = 2500;
 }
