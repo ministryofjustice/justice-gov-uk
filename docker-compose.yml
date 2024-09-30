@@ -88,11 +88,10 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
-    ports:
-      - "3306:3306"
 
   minio:
     image: minio/minio

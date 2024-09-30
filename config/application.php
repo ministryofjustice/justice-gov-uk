@@ -93,6 +93,7 @@ $is_test_request = (isset($_SERVER['HTTP_X_TEST_REQUEST']) && $_SERVER['HTTP_X_T
 // Set the table prefix based on the request origin.
 $table_prefix =  $is_test_request ? 'test_' : (env('DB_PREFIX') ?: 'wp_');
 
+
 /**
  * Authentication Unique Keys and Salts
  */
