@@ -137,13 +137,13 @@
             "bin/composer-post-install.sh"
         ],
         "test": [
-            "phpcs --ignore=public/app/languages/* --report=summary"
+            "phpcs --ignore=public/app/languages/*,public/app/object-cache.php --report=summary"
         ],
         "test:full": [
-            "phpcs --ignore=public/app/languages/*"
+            "phpcs --ignore=public/app/languages/*,public/app/object-cache.php"
         ],
         "test:fix": [
-            "phpcbf --ignore=public/app/languages/*"
+            "phpcbf --ignore=public/app/languages/*,public/app/object-cache.php"
         ],
         "test:unit": [
             "vendor/bin/codecept run -c spec/codeception.yml Unit"

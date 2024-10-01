@@ -150,6 +150,39 @@ Config::define('WP_DEBUG_LOG', '/dev/stderr');
 Config::define('SCRIPT_DEBUG', false);
 ini_set('display_errors', '0');
 
+
+/**
+ * WP Redis config.
+ *
+ * In object-cache.php, specific variables are read via $_SERVER
+ * CACHE_HOST, CACHE_PORT, CACHE_PASSWORD, CACHE_DB, CACHE_TIMEOUT
+ * They can be set via ENV VARS or here.
+ *
+ * Other config entries use constants and can be defined as usual.
+ *
+ * @see https://github.com/pantheon-systems/wp-redis
+ */
+
+if (!isset($_SERVER['CACHE_TIMEOUT'])) {
+    // Set a timeout over 1s to allow for tls.
+    $_SERVER['CACHE_TIMEOUT'] = 2500;
+}
+
+if (!empty($_SERVER['CACHE_HOST'])) {
+    // Prefix scheme to the host, default to tls.
+    $_SERVER['CACHE_HOST'] = (env('CACHE_SCHEME') ?: 'tls') . '://' . $_SERVER['CACHE_HOST'];
+}
+
+// Disable the caching if CACHE_HOST is empty, or via WP_REDIS_DISABLED - in case of emergency.
+Config::define('WP_REDIS_DISABLED', empty($_SERVER['CACHE_HOST']) || env('WP_REDIS_DISABLED'));
+// Use Relay redis client, over predis.
+Config::define('WP_REDIS_USE_RELAY', true);
+// Set default expiry to 1hour.
+Config::define('WP_REDIS_DEFAULT_EXPIRE_SECONDS', 3600);
+// This salt prefixes the cache keys.
+Config::define('WP_CACHE_KEY_SALT', env('WP_CACHE_KEY_SALT') ?: WP_ENV);
+
+
 /**
  * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer
  * See https://codex.wordpress.org/Function_Reference/is_ssl#Notes
