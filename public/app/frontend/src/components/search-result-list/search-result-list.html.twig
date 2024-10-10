@@ -20,6 +20,17 @@ example:
         ]
     }%}
 #}
+
+{% set noResultsText %}
+    {% if query %}
+        <p>Your search for <span class='search-result-list__no-results-query'>{{ query }}</span> did not return any
+            results.</p>
+        <p>Please try again with different keywords or filters.</p>
+    {% else %}
+        <p>Please enter a search query to begin.</p>
+    {% endif %}
+{% endset %}
+
 <div class="search-result-list">
     {% if cards %}
         <ol class="search-result-list__list">
@@ -42,10 +53,9 @@ example:
         <div class="search-result-list__no-results">
             {% include '@components/rich-text/rich-text.html.twig' with {
                 content: "
-                <h2>No results</h2>
-                <p>Your search " ~ (query ? "for <span class='search-result-list__no-results-query'>" ~ query ~ "</span> " : "") ~ "did not return any results.<p>
-                <p>Please try again with some different keywords.</p>
-            ",
+                    <h2>No results</h2>
+                    " ~ noResultsText ~ "
+                ",
             } %}
         </div>
     {% endif %}

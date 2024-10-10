@@ -54,6 +54,7 @@ Timber::$dirname = [
 add_filter('timber/locations', function ($paths) {
     $paths['components'] = [WP_CONTENT_DIR . '/frontend/src/components'];
     $paths['layouts'] = [WP_CONTENT_DIR . '/frontend/src/layouts'];
+    $paths['partials'] = [get_template_directory() . '/views/partials'];
     return $paths;
 });
 
@@ -80,7 +81,6 @@ new Justice\Documents();
 new Justice\Layout();
 new Justice\Posts();
 new Justice\Redirects();
-new Justice\Search();
 new Justice\Security();
 new Justice\SimpleGutenFields();
 new Justice\SimpleDefinitionsListBlocks();
@@ -99,6 +99,9 @@ $taxonomies->addHooks();
 
 $templates = new Justice\Templates();
 $templates->addHooks();
+
+$search = new Justice\Search();
+$search->addHooks();
 
 add_action('init', fn() => register_nav_menus([
     'header-menu' => __('Header Menu'),

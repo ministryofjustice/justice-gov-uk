@@ -8,6 +8,7 @@ module.exports = {
         "plugin/selector-bem-pattern": {
             preset: "bem"
         },
-        "custom-property-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$"
+        "custom-property-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
+        "selector-class-pattern": null
     }
 };

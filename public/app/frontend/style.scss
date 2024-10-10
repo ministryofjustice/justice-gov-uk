@@ -233,6 +233,14 @@ $spacing-units-desktop: (
     }
 }
 
+@mixin panel-title {
+    font-size: 1.2rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-white);
+    line-height: 1.2rem;
+}
+
 @mixin body {
     // Don't set margins on body as it's so often used in components it's easier to do case by case
     font-size: 1rem;
@@ -372,21 +380,25 @@ $iconSizes: (
     text-align: center;
     vertical-align: top;
     outline: none;
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: var(--justice-primary-grey);
         color: var(--justice-primary-black);
     }
 
-    &:focus-visible:not(:active):not(:hover) {
+    &:focus-visible:not(:active):not(:hover):not(:disabled) {
             color: var(--gds-black);
             background-color: var(--gds-yellow);
             box-shadow: inset 0 -4px 0 var(--gds-black);
     }
 
+    &:disabled {
+        @include disabled;
+    }
+
     @if $type == 'dark' {
         background-color: var(--justice-primary-black);
         color: var(--justice-primary-white);
-        &:hover {
+        &:hover:not(:disabled) {
             background-color: var(--justice-primary-black);
             color: var(--justice-primary-white);
             text-decoration: underline;
@@ -395,7 +407,7 @@ $iconSizes: (
     @if $type == 'light' {
         background-color: var(--justice-primary-white);
         color: var(--justice-primary-black);
-        &:hover {
+        &:hover(:not(:disabled)) {
             background-color: var(--justice-primary-grey);
         }
     }

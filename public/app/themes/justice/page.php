@@ -49,7 +49,7 @@ $allowedRightPanels = [
                 'labelHidden' => true,
                 'label' => 'Search the standard directions content',
                 'id' => 'search-bar-sidebar-input',
-                'name' => 'query',
+                'name' => 's',
             ],
             'button' => [
                 'text' => 'Search',
