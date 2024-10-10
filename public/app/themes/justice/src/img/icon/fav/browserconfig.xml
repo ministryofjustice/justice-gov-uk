@@ -2,7 +2,7 @@
 <browserconfig>
     <msapplication>
         <tile>
-            <square150x150logo src="/app/themes/justice/src/img/icon/fav/mstile-150x150.png"/>
+            <square150x150logo src="/app/themes/justice/dist/img/icon/fav/mstile-150x150.png"/>
             <TileColor>#da532c</TileColor>
         </tile>
     </msapplication>
