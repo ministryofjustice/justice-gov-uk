@@ -71,14 +71,14 @@ foreach ($results as $result) {
     $postId = $result->id;
     $filesize = null;
     $format = null;
-    $url = $search->formattedUrl(get_the_permalink($postId));
+    $url = get_the_permalink($postId);
 
     // If the post type is document get the format and filesize
     if ($document->verify_post_type($postId)) {
         $upload_dir = $document->document_upload_dir();
         $year_month = str_replace('-', '/', substr($result->post_date, 0, 7));
         $format = $document->get_file_type($postId);
-        $document_url = "{$upload_dir}/{$year_month}/{$result->post_title}{$format}";
+        $document_url = "{$upload_dir}/{$year_month}/{$result->slug}{$format}";
         if (file_exists($document_url)) {
             $filesize = size_format(wp_filesize($document_url));
         }
@@ -98,11 +98,29 @@ foreach ($results as $result) {
 }
 
 $pagination = $results->pagination();
+$didYouMean = [];
 $suggestedTerm = relevanssi_premium_generate_suggestion($query);
-$didYouMean = [
-    'term' => $suggestedTerm,
-    'url' => `search/${suggestedTerm}`
-];
+// If the term used is valid relevanssi_premium_generate_suggestion returns true
+// We don't need to display anything if this is the case
+if ($suggestedTerm && $suggestedTerm !== true) {
+    $didYouMean = [
+        'term' => $suggestedTerm,
+        'url' => $search->getSearchUrl($suggestedTerm),
+    ];
+}
+
+$allowedParams = ['parent', 'post_types', 'orderby', 'section', 'organisation', 'type', 'audience'];
+// Get current query params to persist across searches
+$hiddenInputs = array_filter(array_map(function ($input) {
+    $value = get_query_var($input);
+    if ($value) {
+        return [
+            'name' => $input,
+            'value' => $value,
+        ];
+    }
+    return null;
+}, $allowedParams));
 
 $searchBarBlock = [
     'variant' => 'main',
@@ -116,8 +134,9 @@ $searchBarBlock = [
             'labelHidden'=> true,
             'label' => 'Search',
             'id' => 'searchbox-top',
-            'name' => 'query',
+            'name' => 's',
             'value' => $query,
+            'hiddenInputs' => $hiddenInputs,
         ],
         'button' => [
             'text' => 'Search',
@@ -125,11 +144,24 @@ $searchBarBlock = [
     ]
 ];
 
+$parentId = get_query_var('parent');
+
 $filterBlock = [
     'variant' => 'search-filter',
     'title' => 'Filters',
     'subtitle' => 'Filter results by',
     'submitText' => 'Apply filters',
+    'noQuery' => !$query,
+    'hiddenInputs' => [
+        [
+            'name' => 's',
+            'value' => $query,
+        ],
+        ...($parentId ? [[
+            'name' => 'parent',
+            'value' => $parentId,
+        ]] : []),
+    ],
     'fields' => $filters,
 ];
 

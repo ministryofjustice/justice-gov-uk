@@ -1,6 +1,6 @@
 {% include '@components/header/header.html.twig' with {
     showLogo: true,
-    showSearch: true,
+    showSearch: hideSearch ? false : true,
     links: [
         {
             label:'Courts',
@@ -30,7 +30,7 @@
             labelHidden: true,
             label: 'Search',
             id: 'searchbox-top',
-            name: 'query',
+            name: 's',
         },
         button: {
             text: 'Search',

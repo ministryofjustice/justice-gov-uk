@@ -52,89 +52,100 @@ example:
     <div class="sidebar-block sidebar-block--{{ variant }}">
     </div>
 {% else %}
-<section class="sidebar-block sidebar-block--{{ variant }}" aria-labelledby="{{ titleId }}" role="complementary">
-    <div class="sidebar-block__heading-wrapper">
-        <h2 class="sidebar-block__heading" id="{{ titleId }}">
-            <span class="sidebar-block__heading-text{{ variant == "archive" ? " sidebar-block__heading-text--archive" : "" }}">{{ title }}</span>
-            <button class="sidebar-block__heading-button" aria-controls="{{ contentId }}">
-                {{ title }}
-            </button>
-        </h2>
-    </div>
-    <div id="{{ contentId }}" class="sidebar-block__content">
-        {% if links is not empty %}
-            <ul class="sidebar-block__list">
-                {% for link in links %}
-                    <li>
-                        {% if link.format %}
-                            {% include '@components/file-download/file-download.html.twig' with {
-                                format: link.format,
-                                link: link.url,
-                                filesize: link.filesize,
-                                filename: link.label,
-                                language: link.language,
-                            } %}
-                        {% else %}
-                            {% include '@components/link/link.html.twig' with {
-                                newTab: link.newTab,
-                                url: link.url,
-                                label: link.label,
-                            } %}
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% elseif variant == 'form' %}
-            {% if description %}
-                <p class="sidebar-block__description">{{ description }}</p>
-            {% endif %}
-            {% include '@components/text-input-form/text-input-form.html.twig' with {
-                id: form.id,
-                action: form.action,
-                name: form.name,
-                input: form.input,
-                button: form.button,
-                hiddenInputs: form.hiddenInputs,
-            } %}
-        {% elseif variant == 'search-filter' %}
-            <form class="sidebar-block__search-filter">
-                <p class="sidebar_block__search-filter-subtitle">{{ subtitle }}</p>
-                <div class="sidebar-block__search-filter-fields">
-                    {% for field in fields %}
-                        <div class="sidebar-block__search-filter-field">
-                            {% include '@components/selection-input/selection-input.html.twig' with {
-                                type: field.type,
-                                direction: field.direction,
-                                title: field.title,
-                                group: field.group,
-                                defaults: field.defaults,
-                                options: field.options,
-                                disabled: field.disabled,
-                                error: field.error,
+    <section class="sidebar-block sidebar-block--{{ variant }}" aria-labelledby="{{ titleId }}" role="complementary">
+        <div class="sidebar-block__heading-wrapper">
+            <h2 class="sidebar-block__heading" id="{{ titleId }}">
+                <span class="sidebar-block__heading-text{{ variant == "archive" ? " sidebar-block__heading-text--archive" : "" }}">{{ title }}</span>
+                <button class="sidebar-block__heading-button" aria-controls="{{ contentId }}">
+                    {{ title }}
+                </button>
+            </h2>
+        </div>
+        <div id="{{ contentId }}" class="sidebar-block__content">
+            {% if links is not empty %}
+                <ul class="sidebar-block__list">
+                    {% for link in links %}
+                        <li>
+                            {% if link.format %}
+                                {% include '@components/file-download/file-download.html.twig' with {
+                                    format: link.format,
+                                    link: link.url,
+                                    filesize: link.filesize,
+                                    filename: link.label,
+                                    language: link.language,
+                                } %}
+                            {% else %}
+                                {% include '@components/link/link.html.twig' with {
+                                    newTab: link.newTab,
+                                    url: link.url,
+                                    label: link.label,
+                                } %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% elseif variant == 'form' %}
+                {% if description %}
+                    <p class="sidebar-block__description">{{ description }}</p>
+                {% endif %}
+                {% include '@components/text-input-form/text-input-form.html.twig' with {
+                    id: form.id,
+                    action: form.action,
+                    name: form.name,
+                    input: form.input,
+                    button: form.button,
+                    hiddenInputs: form.hiddenInputs,
+                } %}
+            {% elseif variant == 'search-filter' %}
+                <form
+                    class="sidebar-block__search-filter {{ noQuery ? " sidebar-block__search-filter--disabled" : "" }}"
+                    {{ noQuery ? " aria-describedby='no-query-hint'" : "" }}>
+                    <p class="sidebar_block__search-filter-subtitle" {{ noQuery ? " id='no-query-hint'" : "" }}>
+                        {{ noQuery ? 'Please enter a search query to use filters' : subtitle }}
+                    </p>
+                    <div class="sidebar-block__search-filter-fields">
+                        {% for field in fields %}
+                            {% if field.options %}
+                                <div class="sidebar-block__search-filter-field">
+                                    {% include '@components/selection-input/selection-input.html.twig' with {
+                                        type: field.type,
+                                        direction: field.direction,
+                                        title: field.title,
+                                        group: field.group,
+                                        defaults: field.defaults,
+                                        options: field.options,
+                                        disabled: noQuery ? true : field.disabled,
+                                        error: field.error,
+                                    } %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% for input in hiddenInputs %}
+                            <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
+                        {% endfor %}
+                    </div>
+                    <div class="sidebar-block__search-filter-buttons">
+                        <div class="sidebar-block__search-filter-reset">
+                            {% include '@components/button/button.html.twig' with {
+                                variant: 'light',
+                                type: 'input',
+                                inputType: 'reset',
+                                buttonText: 'Clear filters',
+                                disabled: noQuery,
                             } %}
                         </div>
-                    {% endfor %}
-                </div>
-                <div class="sidebar-block__search-filter-buttons">
-                    <div class="sidebar-block__search-filter-reset">
-                        {% include '@components/button/button.html.twig' with {
-                            variant: 'light',
-                            type: 'input',
-                            inputType: 'reset',
-                            buttonText: 'Clear filters'
-                        } %}
+                        <div class="sidebar-block__search-filter-submit">
+                            {% include '@components/button/button.html.twig' with {
+                                variant: 'primary',
+                                type: 'input',
+                                inputType: 'submit',
+                                buttonText: 'Apply filters',
+                                disabled: noQuery,
+                            } %}
+                        </div>
                     </div>
-                    <div class="sidebar-block__search-filter-submit">
-                        {% include '@components/button/button.html.twig' with {
-                            variant: 'primary',
-                            type: 'input',
-                            inputType: 'submit',
-                            buttonText: 'Apply filters'
-                        } %}
-                    </div>
-                </div>
-            </form>
-        {% endif %}
-    </div>
-</section>
+                </form>
+            {% endif %}
+        </div>
+    </section>
 {% endif %}

@@ -28,10 +28,14 @@
 
     &__description {
         @include spacing('margin', 1, 'top');
+
+        overflow-wrap: break-word;
     }
 
     &__url {
         @include spacing('margin', 1, 'top');
         @include small;
+
+        overflow-wrap: break-word;
     }
 }

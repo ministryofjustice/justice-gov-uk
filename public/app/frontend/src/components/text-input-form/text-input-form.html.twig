@@ -43,7 +43,7 @@ example:
                 buttonText: button.text,
             }%}
         </div>
-        {% for input in hiddenInputs %}
+        {% for input in input.hiddenInputs %}
             <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
         {% endfor %}
     </div>
