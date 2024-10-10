@@ -25,3 +25,5 @@ data:
   SECURE_AUTH_SALT: 'strong-64-character-random-string'
   LOGGED_IN_SALT: 'strong-64-character-random-string'
   NONCE_SALT: 'strong-64-character-random-string'
+  SUPPORT_EMAIL: "email@example.com"
+

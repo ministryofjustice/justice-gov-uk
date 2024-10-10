@@ -90,8 +90,8 @@ class Documents
         add_filter('document_permalink', [$this, 'addParentPagesToPermalink'], 20, 2);
         add_filter('document_rewrite_rules', [$this, 'addRewriteRules'], null, 2);
         // Prevent posts using document(s) slug. * Affects documents & non-documents.
-        add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [$this, 'isValidSlug'], 10, 2);
-        add_filter('wp_unique_post_slug_is_bad_flat_slug', [$this, 'isValidSlug'], 10, 2);
+        add_filter('wp_unique_post_slug_is_bad_hierarchical_slug', [$this, 'isInvalidSlug'], 10, 2);
+        add_filter('wp_unique_post_slug_is_bad_flat_slug', [$this, 'isInvalidSlug'], 10, 2);
         // Media Library hint regarding unsupported file types. * Affects non-documents.
         add_filter('post-upload-ui', [$this, 'mediaLibraryHint'], 10);
         // Remove support for document file types from the Media Library. * Affects non-documents.
@@ -440,7 +440,7 @@ class Documents
 
     /*
      * Functions related to documents, also having an effect on non-documents.
-     * - isValidSlug
+     * - isInvalidSlug
      * - mediaLibraryHint
      * - removeFileSupport
      * - setUploadSizeLimit
@@ -453,11 +453,11 @@ class Documents
      * This prevents a conflict, where nested pages may make a URL like /documents/my-document
      *
      * @param bool $is_invalid_slug
-     * @param string $slug
+     * @param string $slug Should always be a string, but a default is set just in-case.
      * @return bool
      */
 
-    public function isValidSlug(bool $is_invalid_slug, string $slug): bool
+    public function isInvalidSlug(bool $is_invalid_slug, string $slug = ''): bool
     {
         if (in_array($slug, [$this->slug, $this->document_slug])) {
             return true;

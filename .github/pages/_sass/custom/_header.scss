@@ -1,0 +1,365 @@
+/**
+ * This is a compiled file - don't edit it directly.
+ * It's an excerpt of all.css from a release.
+ * https://github.com/ministryofjustice/moj-frontend/releases/tag/v2.1.3 
+ */
+
+.moj-header {
+    background-color: #0b0c0c;
+    padding-top: 15px;
+    border-bottom: 10px solid #1d70b8
+}
+
+.moj-header__container {
+    max-width: 1220px;
+    margin: 0 15px;
+    position: relative
+}
+
+@media(min-width: 40.0625em) {
+    .moj-header__container {
+        margin:0 30px
+    }
+}
+
+@media(min-width: 1280px) {
+    .moj-header__container {
+        margin:0 auto
+    }
+}
+
+.moj-header__container::after {
+    content: "";
+    display: block;
+    clear: both
+}
+
+.moj-header__logo {
+    padding-bottom: 5px
+}
+
+@media(min-width: 48.0625em) {
+    .moj-header__logo {
+        float:left
+    }
+}
+
+.moj-header__logotype-crown {
+    position: relative;
+    top: -4px;
+    margin-right: 5px;
+    vertical-align: top
+}
+
+.moj-header__logotype-crest {
+    position: relative;
+    top: -6px;
+    margin-right: 5px;
+    vertical-align: top
+}
+
+.moj-header__content {
+    padding-bottom: 10px
+}
+
+@media(min-width: 48.0625em) {
+    .moj-header__content {
+        float:right
+    }
+}
+
+.moj-header__link,.moj-header__link>a {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-decoration: underline;
+    text-decoration-thickness: max(1px, .0625rem);
+    text-underline-offset: .1578em;
+    border-bottom: 1px solid rgba(0,0,0,0);
+    color: #fff;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 25px;
+    margin-bottom: -1px;
+    overflow: hidden;
+    vertical-align: middle
+}
+
+@media print {
+    .moj-header__link,.moj-header__link>a {
+        font-family: sans-serif
+    }
+}
+
+.moj-header__link:hover,.moj-header__link>a:hover {
+    text-decoration-thickness: max(3px, .1875rem, .12em);
+    -webkit-text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
+    -webkit-text-decoration-skip: none;
+    text-decoration-skip: none
+}
+
+.moj-header__link:focus,.moj-header__link>a:focus {
+    outline: 3px solid rgba(0,0,0,0);
+    color: #0b0c0c;
+    background-color: #fd0;
+    box-shadow: 0 -2px #fd0,0 4px #0b0c0c;
+    text-decoration: none;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone
+}
+
+.moj-header__link:link,.moj-header__link>a:link {
+    color: #1d70b8
+}
+
+.moj-header__link:visited,.moj-header__link>a:visited {
+    color: #4c2c92
+}
+
+.moj-header__link:hover,.moj-header__link>a:hover {
+    color: #003078
+}
+
+.moj-header__link:active,.moj-header__link>a:active {
+    color: #0b0c0c
+}
+
+.moj-header__link:focus,.moj-header__link>a:focus {
+    color: #0b0c0c
+}
+
+.moj-header__link:link,.moj-header__link:visited,.moj-header__link:hover,.moj-header__link:active,.moj-header__link>a:link,.moj-header__link>a:visited,.moj-header__link>a:hover,.moj-header__link>a:active {
+    color: #fff
+}
+
+.moj-header__link:hover,.moj-header__link>a:hover {
+    border-color: #fff
+}
+
+.moj-header__link:focus,.moj-header__link>a:focus {
+    border-color: rgba(0,0,0,0);
+    color: #0b0c0c
+}
+
+.moj-header__link--organisation-name,.moj-header__link>a--organisation-name {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.1111111111;
+    vertical-align: middle
+}
+
+@media print {
+    .moj-header__link--organisation-name,.moj-header__link>a--organisation-name {
+        font-family: sans-serif
+    }
+}
+
+@media(min-width: 40.0625em) {
+    .moj-header__link--organisation-name,.moj-header__link>a--organisation-name {
+        font-size:1.5rem;
+        line-height: 1.25
+    }
+}
+
+@media print {
+    .moj-header__link--organisation-name,.moj-header__link>a--organisation-name {
+        font-size: 18pt;
+        line-height: 1.15
+    }
+}
+
+.moj-header__link--organisation-name:hover,.moj-header__link>a--organisation-name:hover {
+    border-color: rgba(0,0,0,0)
+}
+
+.moj-header__link--service-name,.moj-header__link>a--service-name {
+    vertical-align: middle;
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 1.125rem;
+    line-height: 1.1111111111
+}
+
+@media print {
+    .moj-header__link--service-name,.moj-header__link>a--service-name {
+        font-family: sans-serif
+    }
+}
+
+@media(min-width: 40.0625em) {
+    .moj-header__link--service-name,.moj-header__link>a--service-name {
+        font-size:1.5rem;
+        line-height: 1.25
+    }
+}
+
+@media print {
+    .moj-header__link--service-name,.moj-header__link>a--service-name {
+        font-size: 18pt;
+        line-height: 1.15
+    }
+}
+
+@media(max-width: 48.0525em) {
+    .moj-header__link--service-name,.moj-header__link>a--service-name {
+        display:block
+    }
+}
+
+@media(min-width: 48.0625em) {
+    .moj-header__link--service-name,.moj-header__link>a--service-name {
+        margin-left:5px
+    }
+}
+
+.moj-header__link--service-name:hover,.moj-header__link>a--service-name:hover {
+    border-color: rgba(0,0,0,0)
+}
+
+.moj-header__link a {
+    vertical-align: text-bottom;
+    margin-bottom: 1px
+}
+
+.moj-header__link a:hover {
+    border-color: #fff
+}
+
+@media(max-width: 48.0525em) {
+    .moj-header__link a {
+        vertical-align:middle;
+        margin-bottom: -1px
+    }
+}
+
+span.moj-header__link:hover {
+    border-color: rgba(0,0,0,0)
+}
+
+.moj-header__navigation {
+    color: #fff;
+    margin-top: 3px
+}
+
+.moj-header__navigation-list {
+    font-size: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+
+.moj-header__navigation-item {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.25;
+    display: inline-block;
+    margin-right: 20px
+}
+
+@media print {
+    .moj-header__navigation-item {
+        font-family: sans-serif
+    }
+}
+
+@media(min-width: 40.0625em) {
+    .moj-header__navigation-item {
+        font-size:1.1875rem;
+        line-height: 1.3157894737
+    }
+}
+
+@media print {
+    .moj-header__navigation-item {
+        font-size: 14pt;
+        line-height: 1.15
+    }
+}
+
+.moj-header__navigation-item:last-child {
+    margin-right: 0
+}
+
+.moj-header__navigation-link {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-decoration: underline;
+    text-decoration-thickness: max(1px, .0625rem);
+    text-underline-offset: .1578em
+}
+
+@media print {
+    .moj-header__navigation-link {
+        font-family: sans-serif
+    }
+}
+
+.moj-header__navigation-link:hover {
+    text-decoration-thickness: max(3px, .1875rem, .12em);
+    -webkit-text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none;
+    -webkit-text-decoration-skip: none;
+    text-decoration-skip: none
+}
+
+.moj-header__navigation-link:focus {
+    outline: 3px solid rgba(0,0,0,0);
+    color: #0b0c0c;
+    background-color: #fd0;
+    box-shadow: 0 -2px #fd0,0 4px #0b0c0c;
+    text-decoration: none;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone
+}
+
+.moj-header__navigation-link:link {
+    color: #1d70b8
+}
+
+.moj-header__navigation-link:visited {
+    color: #4c2c92
+}
+
+.moj-header__navigation-link:hover {
+    color: #003078
+}
+
+.moj-header__navigation-link:active {
+    color: #0b0c0c
+}
+
+.moj-header__navigation-link:focus {
+    color: #0b0c0c
+}
+
+.moj-header__navigation-link:link,.moj-header__navigation-link:visited,.moj-header__navigation-link:active {
+    color: inherit;
+    text-decoration: none
+}
+
+.moj-header__navigation-link:hover {
+    text-decoration: underline !important
+}
+
+.moj-header__navigation-link:focus {
+    color: #0b0c0c
+}
+
+.moj-header__navigation-link[aria-current=page] {
+    text-decoration: none
+}
+
+.moj-header--docs {
+    background-color: #220051;
+    padding-top: 15px;
+    border-bottom: 10px solid #d53880
+}
