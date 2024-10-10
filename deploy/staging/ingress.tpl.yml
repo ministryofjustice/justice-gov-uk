@@ -1,13 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: justice-gov-uk-production-ingress
-  namespace: justice-gov-uk-production
+  name: justice-gov-uk-staging-ingress
+  namespace: justice-gov-uk-staging
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-production-ingress-justice-gov-uk-production-green
+    external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-staging-ingress-justice-gov-uk-staging-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      ${MODSEC_CONFIG}
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
+    nginx.ingress.kubernetes.io/auth-realm: 'Staging User | Authentication Required'
     nginx.ingress.kubernetes.io/proxy-body-size: "200m"
-    # Squiz uses ThousandEyes for monitoring. Since migrating we no long need this so can block the requests here.
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /health {
         auth_basic off;
@@ -20,17 +25,15 @@ metadata:
         auth_basic off;
         return 301 https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt;
       }
-      if ($http_x_thousandeyes_agent) {
-        return 403;
-      }
 spec:
-  ingressClassName: default
+  ingressClassName: modsec
+  # Note. `stage` not the typical `staging` subdomain, because that was unavailable.
   tls:
   - hosts:
-    - www.justice.gov.uk
-    secretName: justice-gov-uk-production-cert-secret
+    - stage.justice.gov.uk
+    secretName: justice-gov-uk-staging-cert-secret
   rules:
-  - host: www.justice.gov.uk
+  - host: stage.justice.gov.uk
     http:
       paths:
       - path: /

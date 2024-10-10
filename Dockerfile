@@ -1,4 +1,4 @@
-FROM ministryofjustice/wordpress-base-fpm:0.0.5 AS base-fpm
+FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 
 # Make the Nginx user available in this container
 RUN addgroup -g 101 -S nginx; adduser -u 101 -S -D -G nginx nginx
@@ -17,11 +17,23 @@ RUN rm zz-docker.conf && \
 ## Set our pool configuration
 COPY deploy/config/php-pool.conf pool.conf
 
+# Temporarily add relay & phpredis (alternative redis modules that are faster than predis), for object caching.
+# https://relay.so/
+
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions relay
+
+# https://github.com/phpredis/phpredis
+
+RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
+        && pecl install redis \
+        && docker-php-ext-enable redis.so
+
 WORKDIR /var/www/html
 
 ###
 
-FROM nginx:1.26-alpine as nginx-module-builder
+FROM nginx:1.26.2-alpine AS nginx-module-builder
 
 SHELL ["/bin/ash", "-exo", "pipefail", "-c"]
 

@@ -6,6 +6,7 @@ mix.setPublicPath('./dist/')
 mix
     .block("src/js/block-editor.js", "dist")
     .js('src/js/app.js', 'dist/app.min.js')
+    .js('src/js/admin/index.js', 'dist/admin.min.js')
     .js('src/js/login.js', 'dist/js/login.min.js')
     /** patch code for CCFW **/
     .js('src/patch/js/ccfw-cookie-manage.js', 'dist/patch/js/ccfw-cookie-manage.js')

@@ -89,7 +89,7 @@ services:
       - "4000:4000"
       - "35729:35729"
     environment:
-      VIRTUAL_HOST: docs.${SERVER_NAME}
+      VIRTUAL_HOST: pages.${SERVER_NAME}
       VIRTUAL_PORT: 4000
 
 
@@ -179,3 +179,7 @@ services:
     profiles:
       - local-ssh
 
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

@@ -9,6 +9,21 @@ nav_order: 1
 1. TOC
 {:toc}
 
+## Overview
+
+<figure class="mb-5">
+  <div class="annotated-screenshot">
+   <img alt="Screenshot of the Page Tree View screen" src="../assets/page-edit.png" />
+   <ol>
+      <li id="annotation-publish" class="label" style="top: 4%; right: 5%;" >Publish</li>
+      <li id="annotation-page" class="label" style="top: 6%; right: 23%;" >Page</li>
+      <li id="annotation-immediately" class="label" style="top: 18.5%; right: 23%;" >Publish immediately</li>
+      <li id="annotation-settings" class="label" style="top: 47%; right: 23%;" >Settings</li>
+   </ol>
+  </div>
+  <figcaption>Screenshot of the Page edit screen</figcaption>
+</figure>
+
 ## Creating a new page
 
 The justice website makes extensive use of page hierarchies to organise content. 
@@ -16,6 +31,19 @@ When creating a new page, you will need to correctly set the parent page:
 it will determine the URL of the page, and where it will appear in the site's navigation.
 
 To set the parent page at the same time as creating a new page:
+
+<figure class="mb-4">
+  <div class="annotated-screenshot">
+   <img alt="Screenshot of the Page Tree View screen" src="../assets/page-tree-view.png" />
+   <ol>
+      <li id="annotation-tree-view" class="label" style="top: 48%; left: 9%;" >Tree View</li>
+      <li id="annotation-add-new-page" class="label" style="top: 48%; left: 48%;" >Add New page</li>
+      <li id="annotation-title" class="label" style="top: 56%; left: 51%;" >Title</li>
+      <li id="annotation-add" class="label" style="bottom: 15%; right: 62%;" >Add</li>
+   </ol>
+  </div>
+  <figcaption>Screenshot of the Page Tree View screen</figcaption>
+</figure>
 
 1. From the Sidebar, click Pages > Tree View.
 1. Navigate the page tree to find the parent page.
@@ -26,7 +54,7 @@ To set the parent page at the same time as creating a new page:
 
 ### Editing page content
 
-For details on how to edit page content, see the Block Editor (TODO add link) documentation.
+For details on how to edit page content, see the [Block editor](./block-editor.md) documentation.
 
 ### Additional page settings
 
@@ -51,9 +79,20 @@ The most used settings are:
 1. Page Attributes
    1. Parent
 
-## Scheduling a new page for publication
+{: .highlight }
+See the screenshot for the location of the [Page](#annotation-page) tab and
+[Settings](#annotation-settings) fields.
 
-A new page can be scheduled for publication, by setting a published date in the future.
+### Publishing a new page immediately
+
+To publish a page immediately, click the Publish button in the top right corner of the page editor.
+
+{: .highlight }
+See the screenshot for the location of the [Publish](#annotation-publish) button.
+
+### Scheduling a new page for publication
+
+A **new** page can be scheduled for publication, by setting a published date in the future.
 
 1. Navigate to to Page > Publish in the top right corner and click the Immediately button.
 1. Set the date and time you want the page to be published.
@@ -61,12 +100,26 @@ A new page can be scheduled for publication, by setting a published date in the 
 1. Click Schedule.
 1. Verify the details and click Schedule again.
 
-## Updating a page
+{: .highlight }
+See the screenshot for the location of the [Publish Immediately](#annotation-immediately) link.
+
+### Gotchas
+
+Setting a published date in the future is OK when creating a new page, 
+but be aware that it is not useful for scheduling a revision, because it will 
+take the page offline until the scheduled date.
+
+## Updating or editing an existing a page
 
 Pages can be edited one of 2 ways, either directly or by creating a new revision. 
 Direct editing will update the page immediately, and my be appropriate to fix a broken link or a typo.
 Scheduling a revision will allow you to make changes to a page that will go live at a later date, 
 and is appropriate for updating pages as legislation is updated.
+
+![Screenshot of the Admin bar](../assets/page-admin-bar.png)
+
+{: .highlight }
+The above screenshot shows the 'Edit Page' and 'New Revision' links.
 
 ### Direct editing of a page
 
@@ -88,6 +141,11 @@ and is appropriate for updating pages as legislation is updated.
 1. Update the Publish field to the date/time that you want the revision to go live.
 1. Click Submit, then Preview this Revision. If you’re happy with the preview click on the Approve button in the top bar.
 
+![Screenshot of the Revisions buttons](../assets/page-revision-buttons.png)
+
+{: .highlight }
+The above screenshot shows a preview of a revision, with the 'Approve' button.
+
 ### Verifying a scheduled revision 
 
 It's important to approve revisions, otherwise it will not be published. You can verify that the revision has been published successfully by checking the following:
@@ -96,9 +154,19 @@ It's important to approve revisions, otherwise it will not be published. You can
 1. Any revisions with a status of Scheduled will go live at the time specified in the Schedule column.
 1. Any revisions with a status of Submitted will not go live until they are approved.
 
+![Screenshot of the Revision Queue](../assets/page-revision-queue.png)
+
+{: .highlight }
+The above screenshot shows the Revision Queue, note the Status column.
+
 After the schedule time has passed, the revision will be live and will not be shown in the revision queue.
 
-To see revisions that have gone live, click Revisions > Revision Archive from the Sidebar.
+To see revisions that have gone live (and direct edits), click Revisions > Revision Archive from the Sidebar.
+
+![Screenshot of the Revision Archive](../assets/page-revision-archive.png)
+
+{: .highlight }
+The above screenshot shows the Revision Archive.
 
 ### Gotchas
 
