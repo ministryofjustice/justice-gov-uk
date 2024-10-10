@@ -35,7 +35,7 @@ $post_meta = new PostMeta();
                 </div>
 
                 <div class="print-only">
-                    <img src="<?php echo get_template_directory_uri() ?>/dist/img/logo-inv.png" alt="" title="">
+                    <img src="<?php echo get_template_directory_uri() ?>/dist/img/logo-inv-2.png" alt="" title="">
                 </div>
 
                 <article>
