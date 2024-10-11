@@ -1496,12 +1496,6 @@ span.view-all {
     font-size: 1.3em;
 }
 
-#content-left select {
-    /* Match the width and height to nselect */
-    width: 162px;
-    height: 2.3em;
-}
-
 #content-left .filter-btns {
     float: left;
     width: 162px;
@@ -2309,89 +2303,37 @@ body.inner-cr .search-wrapper .search {
     height: 54px;
 }
 
-/*nselect(js)*/
-.nselect {
+.filter form > div:has(select) {
     position: relative;
-    cursor: default;
-    float: left;
-    width: 220px;
-    border-left: 1px solid #b3b2b2;
-    border-right: 1px solid #b3b2b2;
-    text-align: left;
-    background: url(../img/select-btn.png) no-repeat right 0;
-    -moz-box-shadow: 0 1px 3px 0 #dddddd;
-    -webkit-box-shadow: 0 1px 3px 0 #dddddd;
-    box-shadow: 0 1px 3px 0 #dddddd;
-}
-
-#content-right .nselect, .filter .nselect {
-    width: 162px !important;
-}
-
-/*.nselect:hover{
-background: url('img/select-btn.png') no-repeat right -31px;
-}*/
-.nselect .current {
-    float: left;
-    width: 175px !important;
-    height: 19px !important;
-    padding: 7px 1px 4px 10px;
-    overflow: hidden;
-    color: #9b9b9b;
-    border-top: 1px solid #b3b2b2;
-    border-bottom: 1px solid #b3b2b2;
-    background: -moz-linear-gradient(top, #fefefe 0%, #dfdfdf 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefefe), color-stop(100%, #dfdfdf));
-    background: -webkit-linear-gradient(top, #fefefe 0%, #dfdfdf 100%);
-    background: -o-linear-gradient(top, #fefefe 0%, #dfdfdf 100%);
-    background: -ms-linear-gradient(top, #fefefe 0%, #dfdfdf 100%);
-    background: linear-gradient(#fefefe 0%, #dfdfdf 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#dfdfdf', GradientType=0);
-}
-.nselect .current.selected {
-    color: #4e6280;
-}
-
-#content-right .nselect .current, .filter .nselect .current {
-    width: 117px !important;
-}
-
-.nselect ul {
-    position: absolute;
-    left: -1px;
-    top: 31px;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0 !important;
-    margin: 0 !important;
-    background: #fefefe;
-    border-bottom: 1px solid #b3b2b2;
-    border-left: 1px solid #b3b2b2;
-    border-right: 1px solid #b3b2b2;
-    -moz-box-shadow: 0 1px 3px 0 #cccccc;
-    -webkit-box-shadow: 0 1px 3px 0 #cccccc;
-    box-shadow: 0 1px 3px 0 #cccccc;
-    z-index: 1;
-}
-
-.nselect li {
-    float: left;
-    width: 92% !important;
-    padding: 4% !important;
-    overflow: hidden;
-    color: #4e6280;
-    background: #ffffff;
-}
-
-.nselect li:hover, .nselect li.hover {
-    background: #f2f2f2;
-    text-decoration: underline;
-}
-
-.nselect li.option0 {
-    border-top: 1px solid #b3b2b2;
+    width: 162px;
+    &:after {
+        position: absolute;
+        content: "";
+        background: url(../img/select-btn.png) no-repeat right 0;
+        width: 34px;
+        height: 29px;
+        z-index: 1;
+        bottom: 1px;
+        right: 1px;
+        pointer-events: none;  /* Purely decorative - allow users to click through to the select */
+    }
+    select {
+        appearance: none;
+        background: linear-gradient(#fefefe, #dfdfdf);
+        border-left: 1px solid #b3b2b2;
+        border-right: 1px solid #b3b2b2;
+        box-shadow: 0 1px 3px 0 #ddd;
+        padding: 7px 45px 4px 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: default;
+        text-align: left;
+        z-index: 0;
+        color: #4e6280;
+        width: 100%;
+        height: 2.3em;
+    }
 }
 
 /*comments*/

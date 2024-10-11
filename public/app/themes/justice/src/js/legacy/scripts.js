@@ -1,14 +1,7 @@
 import jQuery from 'jquery';
-import nselect from "./nselect";
 
 // jQuery.noConflict();
 jQuery(document).ready(function () {
-
-  /**
-   * Custom selects are used on the search page.
-   */
-
-  nselect();
 
   /**
    * The following code is legacy and is not yet fully understood.
