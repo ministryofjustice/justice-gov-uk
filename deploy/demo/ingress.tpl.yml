@@ -1,14 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: justice-gov-uk-staging-ingress
-  namespace: justice-gov-uk-staging
+  name: justice-gov-uk-demo-ingress
+  namespace: justice-gov-uk-demo
   annotations:
-    external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-staging-ingress-justice-gov-uk-staging-green
+    external-dns.alpha.kubernetes.io/set-identifier: justice-gov-uk-demo-ingress-justice-gov-uk-demo-green
     external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/enable-modsecurity: "true"
+    nginx.ingress.kubernetes.io/modsecurity-snippet: |
+      ${MODSEC_CONFIG}
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth-secret
-    nginx.ingress.kubernetes.io/auth-realm: 'Staging User | Authentication Required'
+    nginx.ingress.kubernetes.io/auth-realm: 'Demo User | Authentication Required'
     nginx.ingress.kubernetes.io/proxy-body-size: "200m"
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /health {
@@ -23,14 +26,13 @@ metadata:
         return 301 https://raw.githubusercontent.com/ministryofjustice/security-guidance/main/contact/vulnerability-disclosure-security.txt;
       }
 spec:
-  ingressClassName: default
-  # Note. `stage` not the typical `staging` subdomain, because that was unavailable.
+  ingressClassName: modsec
   tls:
   - hosts:
-    - stage.justice.gov.uk
-    secretName: justice-gov-uk-staging-cert-secret
+    - demo.justice.gov.uk
+    secretName: justice-gov-uk-demo-cert-secret
   rules:
-  - host: stage.justice.gov.uk
+  - host: demo.justice.gov.uk
     http:
       paths:
       - path: /

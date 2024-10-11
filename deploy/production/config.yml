@@ -8,3 +8,4 @@ data:
   WP_HOME: 'https://www.justice.gov.uk'
   WP_SITEURL: 'https://www.justice.gov.uk/wp'
   WP_LOOPBACK: 'http://localhost:8080'
+  WP_REDIS_DISABLED: "true"

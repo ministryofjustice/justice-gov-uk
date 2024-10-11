@@ -197,3 +197,10 @@ This will open a dropdown menu where you can select the new block type.
 
 If you have a list block (bullets or numbers) you may need to click the block type icon twice.
 If your cursor is on a list item, the first click will select the list block, the second click will open the dropdown menu.
+
+### How do I copy the content of an existing page?
+
+1. Click on the three dots in the top right corner of the page editor.
+1. In the list that appears click on the **Copy all blocks** option, then use paste to copy the blocks over.
+1. If you just want to copy some of a page's blocks, click and drag to highlight the required blocks and copy and paste in the new location.
+1. Alternatively, if you are familiar with HTML you can copy and paste that directly if that's easier. Click on the three dots in the upper right corner and select **Code editor** from the menu.

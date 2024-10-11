@@ -7,6 +7,7 @@
 
 namespace MOJ\Justice;
 
+use Roots\WPConfig\Config;
 use WP_REST_Request;
 
 if (!defined('ABSPATH')) {
@@ -24,11 +25,13 @@ class Admin
     public function addHooks()
     {
         add_action('admin_enqueue_scripts', array($this, 'enqueueStyles'));
+        add_action('admin_enqueue_scripts', array($this, 'loadScripts'));
         add_action('admin_menu', [$this, 'removeCustomizer'], 999);
         add_filter('rest_page_query', [$this, 'increaseDropdownLimit'], 9, 2);
         add_action('admin_head', [$this, 'hideNagsForNonAdmins'], 1);
         add_action('wp_before_admin_bar_render', [$this, 'filterAdminBar']);
         add_filter('admin_body_class', [$this, 'addRoleToAdminBody']);
+        add_filter('wp_sentry_public_options', [$this, 'filterSentryJsOptions']);
     }
 
 
@@ -36,6 +39,38 @@ class Admin
     {
         wp_enqueue_style('justice-admin-style', get_template_directory_uri() . '/dist/css/admin.min.css');
         wp_enqueue_style('justice-editor-style', get_template_directory_uri() . '/dist/css/editor.min.css');
+    }
+
+    /**
+     * Load the admin app script.
+     *
+     * @return void
+     */
+
+    public function loadScripts(): void
+    {
+
+        $script_asset_path = get_template_directory() . "/dist/php/admin.min.asset.php";
+
+        if (!file_exists($script_asset_path)) {
+            throw new \Error(
+                'You need to run `npm start` or `npm run build` for "app" first.'
+            );
+        }
+
+        $script_asset = require($script_asset_path);
+        wp_register_script(
+            'moj-justice-admin',
+            get_template_directory_uri() . '/dist/admin.min.js',
+            $script_asset['dependencies'],
+            $script_asset['version'],
+            [
+                // Defer the script to avoid render blocking.
+                'defer' => true,
+            ]
+        );
+
+        wp_enqueue_script('moj-justice-admin');
     }
 
     public static function removeCustomizer(): void
@@ -90,11 +125,14 @@ class Admin
     {
         global $wp_admin_bar;
 
+        $support_email = Config::get('SUPPORT_EMAIL');
+
         $all_nodes = $wp_admin_bar->get_nodes();
 
         $remove_keys = [
             'about',
             'contribute',
+            'documentation',
             'feedback',
             'learn',
             'support-forums',
@@ -112,10 +150,34 @@ class Admin
         $logo_node->href = '/wp/wp-admin';
         $wp_admin_bar->add_node($logo_node);
 
-        // Update the link to the documentation.
-        $documentation_node = $wp_admin_bar->get_node('documentation');
-        $documentation_node->href = '/docs';
-        $wp_admin_bar->add_node($documentation_node);
+        // Add a link to the HowTo.
+        $wp_admin_bar->add_node(
+            array(
+                'parent' => 'wp-logo-external',
+                'id'     => 'howto-admin',
+                'title'  => 'HowTo Admin',
+                'href'   => 'https://howto-admin.www.justice.gov.uk'
+            )
+        );
+
+        // Add a link to the support email.
+        $wp_admin_bar->add_node(
+            array(
+                'parent' => 'wp-logo-external',
+                'id'     => 'support-link',
+                'title'  => 'Support',
+                'href'   => 'mailto:' . $support_email
+            )
+        );
+
+        // Add the support email (for copying to clipboard) to the admin bar.
+        $wp_admin_bar->add_node(
+            array(
+                'parent' => 'wp-logo-external',
+                'id'     => 'support-text',
+                'title'  => $support_email
+            )
+        );
     }
 
 
@@ -130,8 +192,35 @@ class Admin
 
     public function addRoleToAdminBody($classes)
     {
-        $new_classes = array_map(fn ($class) => 'admin-role-' . $class, wp_get_current_user()->roles);
+        $new_classes = array_map(fn($class) => 'admin-role-' . $class, wp_get_current_user()->roles);
 
         return $classes . ' ' . implode(' ', $new_classes);
+    }
+
+    /**
+     * Filter the options used by sentry-javascript for `Sentry.init()`
+     */
+
+    public function filterSentryJsOptions(array $options)
+    {
+
+        // If we're not on an admin page then return early.
+        if (!is_admin()) {
+            return $options;
+        }
+
+        // Add custom settings for admin screens.
+        return array_merge($options, array(
+            'sendDefaultPii' => true,
+            'sampleRate' => 1,
+            'tracesSampleRate' => 1,
+            'replaysSessionSampleRate' => 1,
+            'replaysOnErrorSampleRate' => 1,
+            'wpSessionReplayOptions' => [
+                // To capture additional information such as request and response headers or bodies,
+                // you'll need to opt-in via networkDetailAllowUrls
+                'networkDetailAllowUrls' => [get_home_url()],
+            ]
+        ));
     }
 }
