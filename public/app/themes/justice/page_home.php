@@ -5,7 +5,6 @@
  */
 
 get_header();
-get_footer();
 
 $templates = ['templates/home.html.twig'];
 $blockContent = [
@@ -52,3 +51,5 @@ $context = Timber::context([
     'content' => get_the_content(),
 ]);
 Timber::render($templates, $context);
+
+get_footer();

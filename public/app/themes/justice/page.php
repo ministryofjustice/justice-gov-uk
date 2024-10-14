@@ -9,7 +9,6 @@ use MOJ\Justice\DynamicMenu;
 use MOJ\Justice\Content;
 
 get_header();
-get_footer();
 
 $postMeta = new PostMeta(get_the_ID());
 
@@ -139,9 +138,13 @@ if ($postMeta->sideHasPanels('left')) {
 $templates = !$sidePanelsLeft ? ['templates/basic--one-sidebar.html.twig'] : ['templates/basic--two-sidebars.html.twig'];
 $context = Timber::context([
     'title' => get_the_title(),
+    'homeUrl' => home_url(),
+    'permalink' => get_the_permalink(),
     'breadcrumbs' => $breadcrumbs,
     'updatedDate' => $postMeta->getMeta('_show_updated_at') ? $postMeta->getModifiedAt() : null,
     'sidePanelsRight' => $sidePanelsRight,
     'sidePanelsLeft' => $sidePanelsLeft,
 ]);
 Timber::render($templates, $context);
+
+get_footer();
