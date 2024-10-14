@@ -23,9 +23,14 @@
     &__link {
         position: relative;
         border-top: 1px var(--justice-border) solid;
-        @media screen and (min-width: $justice-lg) {
+
+        &:first-child {
             border-top: none;
-            border-left: 1px var(--justice-border) solid;
+        }
+
+        &:has(:focus-visible):not(:first-child, :active, :hover),
+        &:has(:focus-visible):not(:active, :hover) + li {
+            border-top: 1px var(--gds-yellow) solid;
         }
 
         a {
@@ -43,31 +48,40 @@
             }
         }
 
-        &:first-child,
-        &:focus-within,
-        &:focus-within + li {
-            border: none;
-        }
+        @media screen and (min-width: $justice-lg) {
+            border-top: none;
+            border-left: 1px var(--justice-border) solid;
 
-        // Add triangle indicator to active links
-        &--active {
-            &::after {
-                content: '';
-                position: absolute;
-                left: 0;
-                right: 0;
-                margin-left: auto;
-                margin-right: auto;
-                width: 0;
-                height: 0;
-                border-left: 6px solid transparent;
-                border-right: 6px solid transparent;
-                border-top: 6px solid var(--justice-primary-black);
+            &:first-child {
+                border-left: none;
             }
 
-            &:focus-within {
+            &:has(:focus-visible):not(:first-child, :active, :hover),
+            &:has(:focus-visible):not(:active, :hover) + li {
+                border-top: 0;
+                border-left: 1px var(--gds-yellow) solid;
+            }
+
+            // Add triangle indicator to active links
+            &--active {
                 &::after {
-                    border-top: 6px solid var(--gds-yellow);
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 0;
+                    height: 0;
+                    border-left: 6px solid transparent;
+                    border-right: 6px solid transparent;
+                    border-top: 6px solid var(--justice-primary-black);
+                }
+
+                &:has(:focus-visible):not(:active, :hover) {
+                    &::after {
+                        border-top: 6px solid var(--gds-yellow);
+                    }
                 }
             }
         }

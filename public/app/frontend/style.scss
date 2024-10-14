@@ -339,7 +339,7 @@ $iconSizes: (
         &:active {
             color: var(--justice-link-active);
         }
-        &:focus-visible:not(:active):not(:hover) {
+        &:focus-visible:not(:active,:hover) {
             outline: 3px solid transparent;
             background-color: var(--gds-yellow);
             box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
@@ -385,7 +385,7 @@ $iconSizes: (
         color: var(--justice-primary-black);
     }
 
-    &:focus-visible:not(:active):not(:hover):not(:disabled) {
+    &:focus-visible:not(:active, :hover, :disabled) {
             color: var(--gds-black);
             background-color: var(--gds-yellow);
             box-shadow: inset 0 -4px 0 var(--gds-black);
@@ -420,6 +420,7 @@ $iconSizes: (
         outline-offset: 0;
         box-shadow: inset 0 0 0 2px;
         background-color: transparent;
+        color: transparent;
     }
 }
 
