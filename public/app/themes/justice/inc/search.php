@@ -6,16 +6,12 @@ defined('ABSPATH') || exit;
 
 class Search
 {
-
-    public function __construct()
-    {
-        $this->addHooks();
-    }
-
     public function addHooks()
     {
-        // Add a rewrite rule to handle an empty search.
-        add_action('init', fn () => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
+        add_action('init', function () {
+            // Add a rewrite rule to handle an empty search.
+            add_rewrite_rule('search/?$', 'index.php?s=', 'top');
+        });
         // Add a rewrite rule to handle the old search urls.
         add_action('template_redirect', [$this, 'redirectOldSearchUrls']);
         // Add a rewrite rule to handle the search string.

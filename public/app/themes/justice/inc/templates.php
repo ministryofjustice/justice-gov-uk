@@ -9,7 +9,6 @@ use DOMXPath;
 use WP_Document_Revisions;
 use Timber\Timber;
 use Exception;
-use MOJ\Justice\Content;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -21,7 +20,6 @@ if (!defined('ABSPATH')) {
 
 class Templates
 {
-
     public array $allowedMimeTypes = [];
 
     public array $blocks = [
@@ -54,9 +52,12 @@ class Templates
      */
     public function replaceWordpressBlocks(string $block_content, array $block): string
     {
-        // Only target certain blocks
-        if (in_array($block['blockName'], $this->blocks)) {
+        // Only target certain blocks and only run in the main loop on pages/posts
+        if ((in_array($block['blockName'], $this->blocks)) && ( is_single() || is_page() ) && in_the_loop() && is_main_query()) {
             $html = $block['innerHTML'];
+            if (!$html) {
+                return $block_content;
+            }
             $doc = new DOMDocument();
             // Fix odd loading of special characters (see https://php.watch/versions/8.2/mbstring-qprint-base64-uuencode-html-entities-deprecated#html)
             $doc->loadHTML(htmlspecialchars_decode(htmlentities($html)));
@@ -225,7 +226,8 @@ class Templates
                 }
             }
             if (file_exists($document_url)) {
-                $filesize = size_format(wp_filesize($document_url));
+                $postmeta = get_post_meta($postId, '_wp_attachment_metadata', true);
+                $filesize = $postmeta['filesize'] ?? null;
                 // Language is not currently available. We will have to add a new field to the document content type if this is required.
                 $language = '';
             }

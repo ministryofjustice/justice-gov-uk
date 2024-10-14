@@ -17,9 +17,13 @@ example:
 #}
 
 {% if type == 'input' %}
-    <input class="button button--{{variant}} button--input" type="{{inputType}}" value="{{buttonText}}">
+    <input
+        class="button button--{{variant}} button--input {{ disabled ? " button--disabled" : "" }}"
+        type="{{inputType}}"
+        value="{{buttonText}}"
+        {{ disabled ? "disabled" : "" }}>
 {% else %}
-    <button class="button button--{{variant}}">
+    <button class="button button--{{variant}}" {{ disabled ? "disabled" : "" }}>
         {{buttonText}}
     </button>
 {% endif %}

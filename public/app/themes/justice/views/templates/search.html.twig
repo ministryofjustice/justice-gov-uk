@@ -4,23 +4,8 @@
 
 {# Hide the search on the search page #}
 {% block headerContent %}
-    {% include '@components/header/header.html.twig' with {
-        showLogo: true,
-        showSearch: false,
-        links: [
-            {
-                url: '#',
-                label: 'Courts',
-            },
-            {
-                url: '#',
-                label: 'Procedure rules',
-            },
-            {
-                url: '#',
-                label: 'Offenders',
-            },
-        ],
+    {% include '@partials/header.html.twig' with {
+        hideSearch: true,
     } %}
 {% endblock %}
 

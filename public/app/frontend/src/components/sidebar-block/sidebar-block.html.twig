@@ -97,22 +97,25 @@ example:
                 hiddenInputs: form.hiddenInputs,
             } %}
         {% elseif variant == 'search-filter' %}
-            <form class="sidebar-block__search-filter">
-                <p class="sidebar_block__search-filter-subtitle">{{ subtitle }}</p>
+            <form
+                class="sidebar-block__search-filter {{ noQuery ? " sidebar-block__search-filter--disabled" : "" }}"
+                {{ noQuery ? " aria-describedby='no-query-hint'" : "" }}>
+                <p class="sidebar_block__search-filter-subtitle" {{ noQuery ? " id='no-query-hint'" : "" }}>
+                    {{ noQuery ? 'Please enter a search query to use filters' : subtitle }}
+                </p>
                 <div class="sidebar-block__search-filter-fields">
                     {% for field in fields %}
-                        <div class="sidebar-block__search-filter-field">
-                            {% include '@components/selection-input/selection-input.html.twig' with {
-                                type: field.type,
-                                direction: field.direction,
-                                title: field.title,
-                                group: field.group,
-                                defaults: field.defaults,
-                                options: field.options,
-                                disabled: field.disabled,
-                                error: field.error,
-                            } %}
-                        </div>
+                        {% if field.options is not empty %}
+                            <div class="sidebar-block__search-filter-field">
+                                {% include '@components/selection-input/selection-input.html.twig' with {
+                                    ...field,
+                                    disabled: noQuery ? true : field.disabled,
+                                } %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% for input in hiddenInputs %}
+                        <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
                     {% endfor %}
                 </div>
                 <div class="sidebar-block__search-filter-buttons">
@@ -121,7 +124,8 @@ example:
                             variant: 'light',
                             type: 'input',
                             inputType: 'reset',
-                            buttonText: 'Clear filters'
+                            buttonText: 'Clear filters',
+                            disabled: noQuery,
                         } %}
                     </div>
                     <div class="sidebar-block__search-filter-submit">
@@ -129,7 +133,8 @@ example:
                             variant: 'primary',
                             type: 'input',
                             inputType: 'submit',
-                            buttonText: 'Apply filters'
+                            buttonText: 'Apply filters',
+                            disabled: noQuery,
                         } %}
                     </div>
                 </div>

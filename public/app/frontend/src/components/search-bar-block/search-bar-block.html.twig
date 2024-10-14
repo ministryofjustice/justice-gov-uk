@@ -35,10 +35,7 @@ example:
     <div class="search-bar-block__wrapper">
         <div class="search-bar-block__search">
             {% include '@components/text-input-form/text-input-form.html.twig' with {
-                action: search.action,
-                id: search.id,
-                input: search.input,
-                button: search.button,
+                ...search,
             } %}
         </div>
         {% if results %}

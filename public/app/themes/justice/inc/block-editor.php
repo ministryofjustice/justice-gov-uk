@@ -2,6 +2,8 @@
 
 namespace MOJ\Justice;
 
+use Timber;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -79,15 +81,31 @@ class BlockEditor
 
     public function search(): string
     {
-        $args = [
-            'parent' => get_the_ID(),
-            'submit' => 'Search'
-        ];
+        $hiddenInputs =  [[
+            'name' => 'parent',
+            'value' => get_the_ID(),
+        ]];
 
-        return sprintf(
-            '<div class="search wp-block-moj-search">%s</div>',
-            $this->templatePartToVariable('template-parts/search/search-bar', null, $args)
-        );
+        $templates = ['partials/search-bar-block.html.twig'];
+
+        $context = Timber::context([
+            'variant' => 'main',
+            'search' => [
+                'id' => 'search-bar-embedded',
+                'action' => '/search',
+                'input'=> [
+                    'labelHidden'=> true,
+                    'label' => 'Search',
+                    'id' => 'searchbar-embedded-input',
+                    'name' => 's',
+                ],
+                'hiddenInputs' => $hiddenInputs,
+                'button' => [
+                    'text' => 'Search',
+                ]
+            ]
+        ]);
+        return Timber::compile($templates, $context);
     }
 
     /**
