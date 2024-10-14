@@ -128,6 +128,7 @@
 
     &__nav {
         @include spacing('padding', 1, 'bottom');
+
         display: none;
 
         &--open {
@@ -177,6 +178,7 @@
             > #{$this}__list-item-wrapper > #{$this}__link {
                 font-style: italic;
                 color: var(--justice-primary-grey);
+
                 &:hover {
                     cursor: default;
                     text-decoration: none;
