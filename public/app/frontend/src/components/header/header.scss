@@ -22,6 +22,7 @@
     &__home {
         @include focus-outline;
         @include spacing('margin', 3, 'bottom');
+
         color: transparent;
     }
 
