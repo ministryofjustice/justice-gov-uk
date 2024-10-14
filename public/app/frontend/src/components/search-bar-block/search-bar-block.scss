@@ -38,6 +38,9 @@
 
         display: block;
         width: 100%;
+        a {
+            @include link();
+        }
     }
 
     &__results-text {
