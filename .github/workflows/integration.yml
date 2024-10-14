@@ -44,7 +44,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
-      registry: ${{ needs.build_design_system_image.outputs.registry }}
+      registry: ${{ needs.image.outputs.registry }}
       modsec_config: ${{ needs.modsec_config.outputs.demo }}
     secrets: inherit
 
