@@ -14,7 +14,7 @@
         input[type='submit'] {
             width: fit-content;
 
-            &:has(:focus-visible):not(:active, :hover, :disabled) {
+            &:focus-visible:not(:active, :hover, :disabled) {
                 box-shadow: none;
             }
         }

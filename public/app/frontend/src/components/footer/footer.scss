@@ -61,6 +61,7 @@
 
     &__gov {
         @include focus-outline;
+        color: transparent;
 
         display: block;
         width: fit-content;
