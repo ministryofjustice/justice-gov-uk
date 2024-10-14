@@ -226,7 +226,8 @@ class Templates
                 }
             }
             if (file_exists($document_url)) {
-                $filesize = size_format(wp_filesize($document_url));
+                $postmeta = get_post_meta($postId, '_wp_attachment_metadata', true);
+                $filesize = $postmeta['filesize'] ?? null;
                 // Language is not currently available. We will have to add a new field to the document content type if this is required.
                 $language = '';
             }

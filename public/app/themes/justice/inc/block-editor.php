@@ -98,8 +98,8 @@ class BlockEditor
                     'label' => 'Search',
                     'id' => 'searchbar-embedded-input',
                     'name' => 's',
-                    'hiddenInputs' => $hiddenInputs,
                 ],
+                'hiddenInputs' => $hiddenInputs,
                 'button' => [
                     'text' => 'Search',
                 ]

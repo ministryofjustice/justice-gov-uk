@@ -105,17 +105,11 @@ example:
                 </p>
                 <div class="sidebar-block__search-filter-fields">
                     {% for field in fields %}
-                        {% if field.options %}
+                        {% if field.options is not empty %}
                             <div class="sidebar-block__search-filter-field">
                                 {% include '@components/selection-input/selection-input.html.twig' with {
-                                    type: field.type,
-                                    direction: field.direction,
-                                    title: field.title,
-                                    group: field.group,
-                                    defaults: field.defaults,
-                                    options: field.options,
+                                    ...field,
                                     disabled: noQuery ? true : field.disabled,
-                                    error: field.error,
                                 } %}
                             </div>
                         {% endif %}

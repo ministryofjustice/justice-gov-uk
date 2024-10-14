@@ -10,17 +10,7 @@ class Search
     {
         add_action('init', function () {
             // Add a rewrite rule to handle an empty search.
-            add_rewrite_rule('search/?$', 'index.php?s=', 'bottom');
-
-            // Use the search.php file on /search so that it doesn't 404
-            $requestUri =  ltrim($_SERVER['REQUEST_URI'], '/');
-            if ($requestUri === 'search' || $requestUri === 'search?s=') {
-                // Load the template if it exists
-                $load = locate_template('search.php', true);
-                if ($load) {
-                    exit(); // Exit if the template is found, otherwise 404 repeats
-                }
-            }
+            add_rewrite_rule('search/?$', 'index.php?s=', 'top');
         });
         // Add a rewrite rule to handle the old search urls.
         add_action('template_redirect', [$this, 'redirectOldSearchUrls']);

@@ -8,10 +8,14 @@ use MOJ\Justice\Search;
 use MOJ\Justice\Taxonomies;
 
 global $wp_query;
+$query = get_search_query();
 
 $search = new Search();
 $taxonomies = (new Taxonomies())->getTaxonomiesForFilter();
 $document = new WP_Document_Revisions;
+$formattedResults = [];
+$didYouMean = null;
+$pagination = null;
 
 $breadcrumbs = [
     [
@@ -25,7 +29,6 @@ $breadcrumbs = [
 ];
 
 get_header();
-get_footer();
 
 // Get the sort filters
 $filters = array_map(function ($taxonomy) {
@@ -61,52 +64,50 @@ $filters[] = [
     ],
 ];
 
-$query = get_search_query();
-$results = Timber::get_posts($wp_query);
+if ($query) {
+    $results = Timber::get_posts($wp_query);
 
-$formattedResults = [];
+    $formattedResults = [];
 
 // Format the results into a structure the frontend understands
-foreach ($results as $result) {
-    $postId = $result->id;
-    $filesize = null;
-    $format = null;
-    $url = get_the_permalink($postId);
+    foreach ($results as $result) {
+        $postId = $result->id;
+        $format = null;
+        $filesize = null;
+        $url = get_the_permalink($postId);
 
-    // If the post type is document get the format and filesize
-    if ($document->verify_post_type($postId)) {
-        $upload_dir = $document->document_upload_dir();
-        $year_month = str_replace('-', '/', substr($result->post_date, 0, 7));
-        $format = $document->get_file_type($postId);
-        $document_url = "{$upload_dir}/{$year_month}/{$result->slug}{$format}";
-        if (file_exists($document_url)) {
-            $filesize = size_format(wp_filesize($document_url));
+        // If the post type is document get the format and filesize
+        if ($document->verify_post_type($postId)) {
+            $upload_dir = $document->document_upload_dir();
+            $year_month = str_replace('-', '/', substr($result->post_date, 0, 7));
+            $format = $document->get_file_type($postId);
+            $postmeta = get_post_meta($postId, '_wp_attachment_metadata', true);
+            $filesize = $postmeta['filesize'] ?? null;
+            if ($format) {
+                $format = strtoupper(ltrim($format, '.'));
+            }
         }
-        if ($format) {
-            $format = strtoupper(ltrim($format, '.'));
-        }
+        $formattedResults[] = [
+            'title' => $result->post_title,
+            'url' => $url,
+            'date' => get_the_date('j F Y', $result),
+            'description' => $result->post_excerpt,
+            'isDocument' => $result->post_type === 'document',
+            'filesize' => $filesize ?: null,
+            'format' => $format,
+        ];
     }
-    $formattedResults[] = [
-        'title' => $result->post_title,
-        'url' => $url,
-        'date' => get_the_date('j F Y', $result),
-        'description' => $result->post_excerpt,
-        'isDocument' => $result->post_type === 'document',
-        'filesize' => $filesize ?: null,
-        'format' => $format,
-    ];
-}
-
-$pagination = $results->pagination();
-$didYouMean = [];
-$suggestedTerm = relevanssi_premium_generate_suggestion($query);
-// If the term used is valid relevanssi_premium_generate_suggestion returns true
-// We don't need to display anything if this is the case
-if ($suggestedTerm && $suggestedTerm !== true) {
-    $didYouMean = [
-        'term' => $suggestedTerm,
-        'url' => $search->getSearchUrl($suggestedTerm),
-    ];
+    $pagination = $results->pagination();
+    $didYouMean = [];
+    $suggestedTerm = relevanssi_premium_generate_suggestion($query);
+    // If the term used is valid relevanssi_premium_generate_suggestion returns true
+    // We don't need to display anything if this is the case
+    if ($suggestedTerm !== true) {
+        $didYouMean = [
+            'term' => $suggestedTerm,
+            'url' => $search->getSearchUrl($suggestedTerm),
+        ];
+    }
 }
 
 $allowedParams = ['parent', 'post_types', 'orderby', 'section', 'organisation', 'type', 'audience'];
@@ -136,8 +137,8 @@ $searchBarBlock = [
             'id' => 'searchbox-top',
             'name' => 's',
             'value' => $query,
-            'hiddenInputs' => $hiddenInputs,
         ],
+        'hiddenInputs' => $hiddenInputs,
         'button' => [
             'text' => 'Search',
         ]
@@ -145,6 +146,7 @@ $searchBarBlock = [
 ];
 
 $parentId = get_query_var('parent');
+$sortOrder = get_query_var('orderby');
 
 $filterBlock = [
     'variant' => 'search-filter',
@@ -157,6 +159,10 @@ $filterBlock = [
             'name' => 's',
             'value' => $query,
         ],
+        ...($sortOrder ? [[
+            'name' => 'orderby',
+            'value' => $sortOrder,
+        ]] : []),
         ...($parentId ? [[
             'name' => 'parent',
             'value' => $parentId,
@@ -178,3 +184,5 @@ $context = Timber::context([
 ]);
 
 Timber::render($templates, $context);
+
+get_footer();

@@ -16,6 +16,12 @@ example:
             label: 'Search',
             id: 'search-top-input',
         },
+        hiddenInputs: {
+            [
+                name: 's',
+                value: 'term',
+            ],
+        },
         button: {
             variant: 'primary',
             type: 'input',
@@ -28,11 +34,7 @@ example:
     <div class="text-input-form__wrapper">
         <div class="text-input-form__input">
             {% include '@components/text-input/text-input.html.twig' with {
-                labelHidden: input.labelHidden,
-                label: input.label,
-                id: input.id,
-                name: input.name,
-                value: input.value,
+                ...input,
             }%}
         </div>
         <div class="text-input-form__button">
@@ -43,7 +45,7 @@ example:
                 buttonText: button.text,
             }%}
         </div>
-        {% for input in input.hiddenInputs %}
+        {% for input in hiddenInputs %}
             <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
         {% endfor %}
     </div>
