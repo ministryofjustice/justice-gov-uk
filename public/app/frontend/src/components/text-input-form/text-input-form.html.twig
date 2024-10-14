@@ -34,7 +34,11 @@ example:
     <div class="text-input-form__wrapper">
         <div class="text-input-form__input">
             {% include '@components/text-input/text-input.html.twig' with {
-                ...input,
+                labelHidden: input.labelHidden,
+                label: input.label,
+                id: input.id,
+                name: input.name,
+                value: input.value,
             }%}
         </div>
         <div class="text-input-form__button">

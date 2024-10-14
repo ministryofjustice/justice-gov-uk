@@ -108,8 +108,14 @@ example:
                         {% if field.options is not empty %}
                             <div class="sidebar-block__search-filter-field">
                                 {% include '@components/selection-input/selection-input.html.twig' with {
-                                    ...field,
+                                    type: field.type,
+                                    direction: field.direction,
+                                    title: field.title,
+                                    group: field.group,
+                                    defaults: field.defaults,
+                                    options: field.options,
                                     disabled: noQuery ? true : field.disabled,
+                                    error: field.error,
                                 } %}
                             </div>
                         {% endif %}
