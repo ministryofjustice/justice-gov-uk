@@ -2303,39 +2303,6 @@ body.inner-cr .search-wrapper .search {
     height: 54px;
 }
 
-.filter form > div:has(select) {
-    position: relative;
-    width: 162px;
-    &:after {
-        position: absolute;
-        content: "";
-        background: url(../img/select-btn.png) no-repeat right 0;
-        width: 34px;
-        height: 29px;
-        z-index: 1;
-        bottom: 1px;
-        right: 1px;
-        pointer-events: none;  /* Purely decorative - allow users to click through to the select */
-    }
-    select {
-        appearance: none;
-        background: linear-gradient(#fefefe, #dfdfdf);
-        border-left: 1px solid #b3b2b2;
-        border-right: 1px solid #b3b2b2;
-        box-shadow: 0 1px 3px 0 #ddd;
-        padding: 7px 45px 4px 10px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        cursor: default;
-        text-align: left;
-        z-index: 0;
-        color: #4e6280;
-        width: 100%;
-        height: 2.3em;
-    }
-}
-
 /*comments*/
 #comment-box {
     float: left;
