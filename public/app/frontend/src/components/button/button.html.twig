@@ -18,7 +18,7 @@ example:
 
 {% if type == 'input' %}
     <input
-        class="button button--{{variant}} button--input {{ disabled ? " button--disabled" : "" }}"
+        class="button button--{{variant}} button--input{{ disabled ? " button--disabled" : "" }}"
         type="{{inputType}}"
         value="{{buttonText}}"
         {{ disabled ? "disabled" : "" }}>

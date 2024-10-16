@@ -22,6 +22,8 @@
     &__home {
         @include focus-outline;
         @include spacing('margin', 3, 'bottom');
+
+        color: transparent;
     }
 
     &__logo {
@@ -34,6 +36,7 @@
 
     &__search {
         @include spacing('margin', 1, 'bottom');
+
         @media screen and (min-width: $justice-lg) {
             margin-bottom: 0;
         }
