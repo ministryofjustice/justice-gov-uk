@@ -127,6 +127,8 @@
     }
 
     &__nav {
+        @include spacing('padding', 1, 'bottom');
+
         display: none;
 
         &--open {
@@ -173,6 +175,15 @@
         position: relative;
 
         &--active {
+            > #{$this}__list-item-wrapper > #{$this}__link {
+                font-style: italic;
+                color: var(--justice-primary-grey);
+
+                &:hover {
+                    cursor: default;
+                    text-decoration: none;
+                }
+            }
             @media screen and (min-width: $justice-lg) {
                 > #{$this}__list-item-wrapper {
                     background-color: var(--justice-primary-grey);
