@@ -44,6 +44,14 @@ spec:
             limits:
               cpu: 500m
               memory: 200Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
 
         - name: fpm
           image: "${ECR_URL}:${IMAGE_TAG_FPM}"
@@ -61,6 +69,26 @@ spec:
               memory: 500Mi
           securityContext:
             runAsUser: 101
+          # Check frequently during startup, so that scaling up can happen as fast as possible.
+          startupProbe:
+            exec:
+              command:
+              - /usr/local/bin/fpm-health/fpm-readiness.sh
+            failureThreshold: 20
+            periodSeconds: 5
+          # Don't route traffic to this pod if the container is not ready.
+          readinessProbe:
+            exec:
+              command:
+              - /usr/local/bin/fpm-health/fpm-readiness.sh
+            periodSeconds: 10
+            failureThreshold: 1
+          # Restart the container if it fails liveness script.
+          livenessProbe:
+            exec:
+              command:
+              - /usr/local/bin/fpm-health/fpm-liveness.sh
+            periodSeconds: 10
           env:
             - name: S3_BUCKET_NAME
               valueFrom:
