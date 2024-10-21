@@ -8,6 +8,7 @@ use DOMNode;
 use DOMXPath;
 use Timber\Timber;
 use Exception;
+use MOJ\Justice\Documents;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -35,10 +36,13 @@ class Templates
         'moj/to-the-top'
     ];
 
+    public $documents;
+
     public function __construct()
     {
         libxml_use_internal_errors(true);
         $this->addHooks();
+        $this->documents = new Documents();
     }
 
     public function addHooks(): void
@@ -213,8 +217,11 @@ class Templates
             $href = $node->getAttribute('href');
             $label = $node->nodeValue;
 
-            // Get the slug from the link
-            $slug = basename(untrailingslashit($href));
+            // // Get the slug from the link
+            // $slug = basename(untrailingslashit($href));
+
+            // $postId = url_to_postid('/documents/' . $slug);
+            $postId = $this->documents->getDocumentIdByUrl($href);
 
             $postId = url_to_postid('/documents/' . $slug);
 
