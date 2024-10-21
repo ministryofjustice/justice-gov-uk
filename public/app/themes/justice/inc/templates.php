@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 
 class Templates
 {
-    // Only use the mime types that we expect otherwise use the stanard link component
+    // Only use the mime types that we expect otherwise use the standard link component
     public array $allowedMimeTypes = [
         'doc',
         'pdf',
