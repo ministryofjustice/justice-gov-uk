@@ -282,9 +282,9 @@ class Documents
 
     /**
      * Get a document by the meta key _source_path.
-     * 
+     *
      * A helper function to lookup a document by the source path - a meta field set during migration.
-     * 
+     *
      * @param string $source_path - this should be the path of the old document, starting with a slash.
      * @return WP_Post|null
      */
@@ -308,32 +308,32 @@ class Documents
 
     /**
      * Get the document ID by the URL.
-     * 
+     *
      * This function is used to get the document ID by the URL.
      * It will first try to get the document by the source path - for legacy documents.
      * If that fails, it will try to get the document by the slug.
-     * 
+     *
      * @param string $url
      * @return int|null - Post ID, or 0 on failure.
      */
 
-    public function getDocumentIdByUrl (string $url): Int
+    public function getDocumentIdByUrl(string $url): Int
     {
-        if(!$url) {
+        if (!$url) {
             return null;
         }
 
         // Get the path from the URL.
         $path = parse_url($url, PHP_URL_PATH);
 
-        if(!$path) {
+        if (!$path) {
             return null;
         }
 
         // Get the document by the source path - for legacy documents.
         $document = $this->getDocumentBySourcePath($path);
 
-        if($document?->ID) {
+        if ($document?->ID) {
             return $document->ID;
         }
 

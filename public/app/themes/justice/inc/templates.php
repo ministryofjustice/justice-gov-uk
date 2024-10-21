@@ -221,9 +221,8 @@ class Templates
             // $slug = basename(untrailingslashit($href));
 
             // $postId = url_to_postid('/documents/' . $slug);
-            $postId = $this->documents->getDocumentIdByUrl($href);
 
-            $postId = url_to_postid('/documents/' . $slug);
+            $postId = $this->documents->getDocumentIdByUrl($href);
 
             $label = $label ?? get_the_title($postId);
             $filesize = $contentHelper->getFormattedFilesize($postId);
