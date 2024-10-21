@@ -6,6 +6,7 @@
 
 use MOJ\Justice\Search;
 use MOJ\Justice\Taxonomies;
+use \MOJ\Justice\Content;
 
 global $wp_query;
 $query = get_search_query();
@@ -13,6 +14,8 @@ $query = get_search_query();
 $search = new Search();
 $taxonomies = (new Taxonomies())->getTaxonomiesForFilter();
 $document = new WP_Document_Revisions;
+$contentHelper = new Content();
+
 $formattedResults = [];
 $didYouMean = null;
 $pagination = null;
@@ -72,21 +75,13 @@ if ($query) {
 // Format the results into a structure the frontend understands
     foreach ($results as $result) {
         $postId = $result->id;
-        $format = null;
         $filesize = null;
         $url = get_the_permalink($postId);
+        $format = pathinfo($url, PATHINFO_EXTENSION);
 
-        // If the post type is document get the format and filesize
-        if ($document->verify_post_type($postId)) {
-            $upload_dir = $document->document_upload_dir();
-            $year_month = str_replace('-', '/', substr($result->post_date, 0, 7));
-            $format = $document->get_file_type($postId);
-            $postmeta = get_post_meta($postId, '_wp_attachment_metadata', true);
-            $filesize = $postmeta['filesize'] ?? null;
-            if ($format) {
-                $format = strtoupper(ltrim($format, '.'));
-            }
-        }
+        $filesize = $contentHelper->getFormattedFilesize($postId);
+        $format = strtoupper(ltrim($format, '.'));
+
         $formattedResults[] = [
             'title' => $result->post_title,
             'url' => $url,

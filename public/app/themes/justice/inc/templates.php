@@ -6,7 +6,6 @@ use DOMDocument;
 use DOMElement;
 use DOMNode;
 use DOMXPath;
-use WP_Document_Revisions;
 use Timber\Timber;
 use Exception;
 
@@ -20,7 +19,14 @@ if (!defined('ABSPATH')) {
 
 class Templates
 {
-    public array $allowedMimeTypes = [];
+    // Only use the mime types that we expect otherwise use the stanard link component
+    public array $allowedMimeTypes = [
+        'doc',
+        'pdf',
+        'ppt',
+        'zip',
+        'xls',
+    ];
 
     public array $blocks = [
         'core/paragraph',
@@ -32,7 +38,6 @@ class Templates
     public function __construct()
     {
         libxml_use_internal_errors(true);
-        $this->allowedMimeTypes = wp_get_mime_types();
         $this->addHooks();
     }
 
@@ -115,14 +120,18 @@ class Templates
      */
     public function renderLinks(DOMDocument $doc): void
     {
+        $contentHelper = new Content();
         $fileTemplate = ['partials/file-download.html.twig'];
         $linkTemplate = ['partials/link.html.twig'];
         $toTheTopTemplate = ['partials/to-the-top.html.twig'];
         $links = $doc->getElementsByTagName('a');
         foreach ($links as $link) {
+            $url = $link->getAttribute('href');
+            $format = pathinfo($url, PATHINFO_EXTENSION);
+            $external = $contentHelper->isExternal($url);
             // If the link is a file use the file download template, otherwise use the link template
-            if (wp_check_filetype($link->getAttribute('href'), $this->allowedMimeTypes)['ext']) {
-                $params = $this->getFileDownloadParams($link);
+            if (in_array($format, $this->allowedMimeTypes) && !$external) {
+                $params = $this->getFileDownloadParams($link, $format);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, 'div', $params);
             } else if ($link->getAttribute('class') === 'to-the-top') {
                 $params = $this->getLinkParams($link);
@@ -167,17 +176,21 @@ class Templates
         $label = null;
         $url = null;
         $newTab = false;
+        $manualNewTabText = false;
 
         if ($node instanceof DOMElement) {
-            $label = $node->nodeValue;
             $url = $node->getAttribute('href');
+            $label = $node->nodeValue ?: pathinfo($url, PATHINFO_FILENAME);
             $newTab = $contentHelper->isExternal($url);
+            // If the label already has new tab/window then don't repeat it
+            $manualNewTabText = (str_contains($label, 'new tab') || str_contains($label, 'new window'));
         }
 
         return [
             'label' => $label,
             'url' => $url,
             'newTab' => $newTab,
+            'manualNewTabText' => $manualNewTabText,
         ];
     }
 
@@ -188,53 +201,28 @@ class Templates
      *
      * @return array An array of parameters to pass to the link template
      */
-    public function getFileDownloadParams(DOMNode $node): array
+    public function getFileDownloadParams(DOMNode $node, $format): array
     {
+        $contentHelper = new Content();
         $href = null;
         $filesize = null;
-        $format = null;
         $language = null;
         $label = null;
-        $document_url = null;
 
         if ($node instanceof DOMElement) {
             $href = $node->getAttribute('href');
+            $label = $node->nodeValue;
+
             // Get the slug from the link
             $slug = basename(untrailingslashit($href));
 
-            $label = $node->nodeValue;
-            // Init a WP_Document_Revisions class so that we can use document specific functions
-            $document = new WP_Document_Revisions;
-            $upload_dir = $document->document_upload_dir();
             $postId = url_to_postid('/documents/' . $slug);
 
-            // If the post has a post_type of document get the format and URL using the document_revisions class functions
-            if ($document->verify_post_type($postId)) {
-                $post = $document->get_document($postId);
-                $format = $document->get_file_type($postId);
-                $year_month = str_replace('-', '/', substr($post->post_date, 0, 7));
-                $document_url = "{$upload_dir}/{$year_month}/{$post->post_title}{$format}";
-            } else {
-                // Otherwise get the details using the WP base functions
-                $postId = url_to_postid($slug);
-                $post = get_post($postId);
-                // But check that the post exists first
-                if ($post) {
-                    $format = get_post_mime_type($postId);
-                    $year_month = str_replace('-', '/', substr($post->post_date, 0, 7));
-                    $document_url = "{$upload_dir}/{$year_month}/{$slug}";
-                }
-            }
-            if (file_exists($document_url)) {
-                $postmeta = get_post_meta($postId, '_wp_attachment_metadata', true);
-                $filesize = $postmeta['filesize'] ?? null;
-                // Language is not currently available. We will have to add a new field to the document content type if this is required.
-                $language = '';
-            }
-
-            $label = $label ?? get_the_title($post);
+            $label = $label ?? get_the_title($postId);
+            $filesize = $contentHelper->getFormattedFilesize($postId);
             $format = strtoupper(ltrim($format, '.'));
         }
+
         return [
             'format' => $format,
             'filesize' => $filesize,

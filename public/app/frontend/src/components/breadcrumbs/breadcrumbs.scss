@@ -18,7 +18,7 @@
                 @include spacing('margin', 1, 'left');
                 @include spacing('margin', 1, 'right');
 
-                content: '»';
+                content: '\00BB';
                 color: var(--justice-primary-grey);
             }
         }

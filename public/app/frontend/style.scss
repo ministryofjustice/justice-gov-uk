@@ -485,6 +485,9 @@ $iconSizes: (
             @include spacing('padding', 1);
         }
     }
+    .file-download {
+        margin-top: 0;
+    }
 }
 // TODO: review default classes when implemented with Wordpress.
 //  For user created content. They can use:
@@ -532,6 +535,7 @@ $iconSizes: (
     > h6 {
         > a, .link {
             font-size: inherit;
+            font-family: inherit;
         }
     }
 
