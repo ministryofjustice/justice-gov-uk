@@ -77,23 +77,24 @@ class Content
         // Init a WP_Document_Revisions class so that we can use document specific functions
         $document = new WP_Document_Revisions;
 
-        // If this is a document (from wp-document-revisions) get the filesize with filesize()
+        // If this is a document (from wp-document-revisions) get the attachment ID and set the $postId to that
         if ($document->verify_post_type($postId)) {
-            $post = $document->get_document($postId);
-            $file = get_attached_file($post->ID);
-            $filesize = filesize($file);
-        }
-        // Otherwise check the db for the saved filesize
-        if (!$filesize) {
-            $postMeta = get_post_meta($postId, '_wp_attachment_metadata', true);
-            // Prefer the original filesize
-            if (!empty($postMeta['filesize']) && is_int($postMeta['filesize'])) {
-                $filesize = $postMeta['filesize'];
-            // But if it's offloaded get the size saved by AS3CF
-            } else {
-                $offloadedFilesize = get_post_meta($postId, 'as3cf_filesize_total', true);
-                $filesize = !empty($offloadedFilesize) && is_int($offloadedFilesize) ? $offloadedFilesize : null;
+            $attachment = $document->get_document($postId);
+            if ($attachment?->ID) {
+                // Update the $postId variable to the document's attachment ID
+                $postId = $attachment->ID;
             }
+        }
+
+        // Otherwise check the db for the saved filesize
+        $postMeta = get_post_meta($postId, '_wp_attachment_metadata', true);
+        // Prefer the original filesize
+        if (!empty($postMeta['filesize']) && is_int($postMeta['filesize'])) {
+            $filesize = $postMeta['filesize'];
+        // But if it's offloaded get the size saved by AS3CF
+        } else {
+            $offloadedFilesize = get_post_meta($postId, 'as3cf_filesize_total', true);
+            $filesize = !empty($offloadedFilesize) && is_int($offloadedFilesize) ? $offloadedFilesize : null;
         }
         return size_format($filesize);
     }

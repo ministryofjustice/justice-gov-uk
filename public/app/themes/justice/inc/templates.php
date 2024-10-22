@@ -217,11 +217,7 @@ class Templates
             $href = $node->getAttribute('href');
             $label = $node->nodeValue;
 
-            // // Get the slug from the link
-            // $slug = basename(untrailingslashit($href));
-
-            // $postId = url_to_postid('/documents/' . $slug);
-
+            // Get the document ID from the link
             $postId = $this->documents->getDocumentIdByUrl($href);
 
             $label = $label ?? get_the_title($postId);

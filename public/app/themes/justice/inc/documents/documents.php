@@ -313,21 +313,21 @@ class Documents
      * It will first try to get the document by the source path - for legacy documents.
      * If that fails, it will try to get the document by the slug.
      *
-     * @param string $url
+     * @param ?string $url
      * @return int|null - Post ID, or 0 on failure.
      */
 
-    public function getDocumentIdByUrl(string $url): Int
+    public function getDocumentIdByUrl(?string $url): Int
     {
-        if (!$url) {
-            return null;
+        if (!$url || !is_string($url)) {
+            return 0;
         }
 
         // Get the path from the URL.
         $path = parse_url($url, PHP_URL_PATH);
 
         if (!$path) {
-            return null;
+            return 0;
         }
 
         // Get the document by the source path - for legacy documents.
@@ -337,10 +337,9 @@ class Documents
             return $document->ID;
         }
 
-        // Get the slug from the link
-        $slug = basename(untrailingslashit($url));
+        $post_id = url_to_postid($path);
 
-        return url_to_postid('/documents/' . $slug);
+        return $this->isDocument($post_id) ? $post_id : 0;
     }
 
     /**
