@@ -8,7 +8,6 @@ use DOMNode;
 use DOMXPath;
 use Timber\Timber;
 use Exception;
-use MOJ\Justice\Documents;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -36,13 +35,15 @@ class Templates
         'moj/to-the-top'
     ];
 
-    public $documents;
+    public Documents $documents;
+    public Content $content;
 
     public function __construct()
     {
         libxml_use_internal_errors(true);
         $this->addHooks();
         $this->documents = new Documents();
+        $this->content = new Content();
     }
 
     public function addHooks(): void
@@ -124,7 +125,6 @@ class Templates
      */
     public function renderLinks(DOMDocument $doc): void
     {
-        $contentHelper = new Content();
         $fileTemplate = ['partials/file-download.html.twig'];
         $linkTemplate = ['partials/link.html.twig'];
         $toTheTopTemplate = ['partials/to-the-top.html.twig'];
@@ -132,7 +132,7 @@ class Templates
         foreach ($links as $link) {
             $url = $link->getAttribute('href');
             $format = pathinfo($url, PATHINFO_EXTENSION);
-            $external = $contentHelper->isExternal($url);
+            $external = $this->content->isExternal($url);
             // If the link is a file use the file download template, otherwise use the link template
             if (in_array($format, $this->allowedMimeTypes) && !$external) {
                 $params = $this->getFileDownloadParams($link, $format);
@@ -176,7 +176,6 @@ class Templates
      */
     public function getLinkParams(DOMNode $node): array
     {
-        $contentHelper = new Content();
         $label = null;
         $url = null;
         $newTab = false;
@@ -185,7 +184,7 @@ class Templates
         if ($node instanceof DOMElement) {
             $url = $node->getAttribute('href');
             $label = $node->nodeValue ?: pathinfo($url, PATHINFO_FILENAME);
-            $newTab = $contentHelper->isExternal($url);
+            $newTab = $this->content->isExternal($url);
             // If the label already has new tab/window then don't repeat it
             $manualNewTabText = (str_contains($label, 'new tab') || str_contains($label, 'new window'));
         }
@@ -207,7 +206,6 @@ class Templates
      */
     public function getFileDownloadParams(DOMNode $node, $format): array
     {
-        $contentHelper = new Content();
         $href = null;
         $filesize = null;
         $language = null;
@@ -221,7 +219,7 @@ class Templates
             $postId = $this->documents->getDocumentIdByUrl($href);
 
             $label = $label ?? get_the_title($postId);
-            $filesize = $contentHelper->getFormattedFilesize($postId);
+            $filesize = $this->content->getFormattedFilesize($postId);
             $format = strtoupper(ltrim($format, '.'));
         }
 
