@@ -3,6 +3,7 @@
 namespace MOJ\Justice;
 
 use Roots\WPConfig\Config;
+use WP_Document_Revisions;
 
 defined('ABSPATH') || exit;
 
@@ -61,5 +62,40 @@ class Content
     {
         $components = parse_url($url);
         return !empty($components['host']) && strcasecmp($components['host'], $_SERVER['HTTP_HOST']);
+    }
+
+    /**
+     * Returns the formatted filesize from any post_id to display in the file-download component
+     *
+     * @param int $postId The ID of the attachment post
+     * @return string|null The formatted filesize (to the largest byte unit)
+     */
+
+    public function getFormattedFilesize(int $postId): string|null
+    {
+        $filesize = null;
+        // Init a WP_Document_Revisions class so that we can use document specific functions
+        $document = new WP_Document_Revisions;
+
+        // If this is a document (from wp-document-revisions) get the attachment ID and set the $postId to that
+        if ($document->verify_post_type($postId)) {
+            $attachment = $document->get_document($postId);
+            if ($attachment?->ID) {
+                // Update the $postId variable to the document's attachment ID
+                $postId = $attachment->ID;
+            }
+        }
+
+        // Otherwise check the db for the saved filesize
+        $postMeta = get_post_meta($postId, '_wp_attachment_metadata', true);
+        // Prefer the original filesize
+        if (!empty($postMeta['filesize']) && is_int($postMeta['filesize'])) {
+            $filesize = $postMeta['filesize'];
+        // But if it's offloaded get the size saved by AS3CF
+        } else {
+            $offloadedFilesize = get_post_meta($postId, 'as3cf_filesize_total', true);
+            $filesize = !empty($offloadedFilesize) && is_int($offloadedFilesize) ? $offloadedFilesize : null;
+        }
+        return size_format($filesize);
     }
 }

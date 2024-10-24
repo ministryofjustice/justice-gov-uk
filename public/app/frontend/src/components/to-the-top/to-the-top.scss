@@ -2,6 +2,7 @@
 
 .to-the-top {
     @include link;
+    @include spacing('margin', 4, 'top');
 
     display: flex;
     align-items: center;

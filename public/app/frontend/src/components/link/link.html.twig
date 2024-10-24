@@ -9,6 +9,8 @@ Available variables:
     - onClick: string A js function to run on click
     - url: string The url for the link
     - label: string The label for the link
+    - manualNewTabText: boolean If the link text already makes reference to it opening in a new window/tab (only
+                                required with a CMS and rich text components)
 example:
     {% include '@components/link/link.html.twig' with {
         newTab: true,
@@ -26,7 +28,7 @@ example:
     {{ label }}
     {% if newTab and newTabVisuallyHidden %}
         <span class="visually-hidden"> (opens in a new tab)</span>
-    {% elseif newTab %}
+    {% elseif newTab and not manualNewTabText %}
         (opens in a new tab)
     {% endif %}
 </a>

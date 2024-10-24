@@ -17,12 +17,13 @@ example:
         language: 'Welsh'
     }%}
 #}
-
 <div class="file-download">
     <i class="file-download__icon icon-{{ format|lower }}--sm" aria-hidden="true"></i>
     <a class="file-download__link" href={{ link }}>
         <span class="file-download__prefix visually-hidden">Download</span>
         {{ filename }}
     </a>
-    <span class="file-download__details">({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? " ," ~ filesize : "" }})</span>
+    {% if format %}
+        <span class="file-download__details">({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? ", " ~ filesize : "" }})</span>
+    {% endif %}
 </div>
