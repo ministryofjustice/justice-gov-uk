@@ -165,6 +165,7 @@ class Templates
      * Applies the navigation sections template to list elements with the "Horizontal & Border" style
      *
      * @param DOMDocument $doc The DOMDocument that the html will be added to
+     * @param array $innerBlocks An array of list items
      *
      */
     public function renderList(DOMDocument $doc, $innerBlocks): void
