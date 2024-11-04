@@ -502,7 +502,8 @@ $iconSizes: (
 //
 @mixin rich-text {
     @include body;
-    ul {
+
+    ul:not(.navigation-sections__list) {
         @include ul-list;
     }
     ol {

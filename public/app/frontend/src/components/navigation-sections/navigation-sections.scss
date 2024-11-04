@@ -2,6 +2,7 @@
 @import '../../../style';
 
 .navigation-sections {
+    @include spacing('margin', 4, 'top');
     display: block;
     max-width: 100%;
 
@@ -11,7 +12,7 @@
         align-items: baseline;
         gap: 0.5rem;
         @media screen and (min-width: $justice-md) {
-            grid-template-columns: repeat(auto-fit, minmax(5%, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(16%, 1fr));
         }
     }
 

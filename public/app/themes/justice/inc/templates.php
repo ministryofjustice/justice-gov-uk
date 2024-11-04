@@ -31,7 +31,7 @@ class Templates
     public array $blocks = [
         'core/paragraph',
         'core/table',
-        'core/list-item',
+        'core/list',
         'moj/to-the-top'
     ];
 
@@ -65,20 +65,24 @@ class Templates
         // Only target certain blocks and only run in the main loop on pages/posts
         if ((in_array($block['blockName'], $this->blocks)) && ( is_single() || is_page() ) && in_the_loop() && is_main_query()) {
             $html = $block['innerHTML'];
+
             if (!$html) {
                 return $block_content;
             }
+
             $doc = new DOMDocument();
             // Fix odd loading of special characters (see https://php.watch/versions/8.2/mbstring-qprint-base64-uuencode-html-entities-deprecated#html)
             $doc->loadHTML(htmlspecialchars_decode(htmlentities($html)));
 
             switch ($block['blockName']) {
                 case 'core/paragraph':
-                case 'core/list-item':
+                case 'moj/to-the-top':
                     $this->renderLinks($doc);
                     break;
+                case 'core/list':
+                    $this->renderList($doc, $block['innerBlocks']);
+                    break;
                 case 'core/table':
-                case 'moj/to-the-top':
                     $this->renderLinks($doc);
                     $this->addTableScopes($doc);
                     break;
@@ -133,18 +137,61 @@ class Templates
             $url = $link->getAttribute('href');
             $format = pathinfo($url, PATHINFO_EXTENSION);
             $external = $this->content->isExternal($url);
+
+            // If the href isn't set skip the loop and use the default node (needed for the anchor links in WP)
+            if (!$link->getAttribute('href')) {
+                continue;
             // If the link is a file use the file download template, otherwise use the link template
-            if (in_array($format, $this->allowedMimeTypes) && !$external) {
+            } else if (in_array($format, $this->allowedMimeTypes) && !$external) {
                 $params = $this->getFileDownloadParams($link, $format);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, 'div', $params);
+            // Check if it has the 'to-the-top' class and use that template
             } else if ($link->getAttribute('class') === 'to-the-top') {
                 $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, 'a', $params);
+            // Otherwise default to the standard link template
             } else {
                 $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);
             }
-            $link->parentNode->replaceChild($htmlDoc, $link);
+
+            if ($htmlDoc) {
+                $link->parentNode->replaceChild($htmlDoc, $link);
+            }
+        }
+    }
+
+    /**
+     * Applies the navigation sections template to list elements with the "Horizontal & Border" style
+     *
+     * @param DOMDocument $doc The DOMDocument that the html will be added to
+     *
+     */
+    public function renderList(DOMDocument $doc, $innerBlocks): void
+    {
+        $navigationTemplate = ['partials/navigation-sections.html.twig'];
+
+        $lists = $doc->getElementsByTagName('ul');
+        foreach ($lists as $list) {
+            // If the list has the horizontal styling class (typo in 'page' is intentional, see global.css)
+            if ($list->getAttribute('class') === 'is-style-pag-nav') {
+                $links = [];
+                foreach ($innerBlocks as $block) {
+                    $blockDoc = new DOMDocument();
+                    $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
+                    $node = $blockDoc->getElementsByTagName('a')[0];
+                    $links[] = $this->getLinkParams($node);
+                }
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $navigationTemplate, 'nav', ['links' => $links]);
+                $list->parentNode->replaceChild($htmlDoc, $list);
+            } else {
+                // Otherwise treat each block as a list element and render any links appropriately
+                foreach ($innerBlocks as $block) {
+                    $blockDoc = new DOMDocument();
+                    $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
+                    $this->renderLinks($blockDoc);
+                }
+            }
         }
     }
 
@@ -154,6 +201,7 @@ class Templates
      * @param DOMDocument $doc The DOMDocument that the html will be added to
      *
      */
+
     public function addTableScopes(DOMDocument $doc): void
     {
         $xpath = new DOMXPath($doc);
@@ -178,11 +226,13 @@ class Templates
     {
         $label = null;
         $url = null;
+        $id = null;
         $newTab = false;
         $manualNewTabText = false;
 
         if ($node instanceof DOMElement) {
             $url = $node->getAttribute('href');
+            $id = $node->getAttribute('id');
             $label = $node->nodeValue ?: pathinfo($url, PATHINFO_FILENAME);
             $newTab = $this->content->isExternal($url);
             // If the label already has new tab/window then don't repeat it
@@ -194,6 +244,7 @@ class Templates
             'url' => $url,
             'newTab' => $newTab,
             'manualNewTabText' => $manualNewTabText,
+            'id' => $id
         ];
     }
 
