@@ -1,6 +1,6 @@
 // Documentation on theming Storybook: https://storybook.js.org/docs/configurations/theming/
 import { create } from '@storybook/theming';
-import logo from '../src/assets/moj-full-logo.png';
+import logo from '../src/assets/moj-short-logo-black.png';
 
 export default create({
   base: 'light',
