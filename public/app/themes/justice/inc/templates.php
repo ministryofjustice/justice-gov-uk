@@ -154,7 +154,6 @@ class Templates
                 $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);
             }
-
             if ($htmlDoc) {
                 $link->parentNode->replaceChild($htmlDoc, $link);
             }
@@ -177,6 +176,7 @@ class Templates
             // If the list has the horizontal styling class (typo in 'page' is intentional, see global.css)
             if ($list->getAttribute('class') === 'is-style-pag-nav') {
                 $links = [];
+                // For each list element, get the label and href values
                 foreach ($innerBlocks as $block) {
                     $blockDoc = new DOMDocument();
                     $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
@@ -191,6 +191,9 @@ class Templates
                     $blockDoc = new DOMDocument();
                     $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
                     $this->renderLinks($blockDoc);
+                    $node = $blockDoc->documentElement;
+                    $imported = $doc->importNode($node, true);
+                    $list->appendChild($imported);
                 }
             }
         }
