@@ -15,20 +15,20 @@ $taxonomies = (new Taxonomies())->getTaxonomiesForHiddenInputs();
         <input name="s" id="query" type="text" value="<?= get_search_query() ?>" accesskey="q">
         <input class="go-btn" type="submit" value="<?= !empty($args['submit']) ? $args['submit'] : 'Go'; ?>">
 
-        <?php if (!empty(get_query_var('orderby'))) : ?>
+        <?php if (in_array(get_query_var('orderby'), ['date', 'relevance'])) : ?>
             <input type="hidden" name="orderby" value="<?= get_query_var('orderby') ?>">
         <?php endif; ?>
 
-        <?php if (!empty($args['parent'])) : ?>
-            <input type="hidden" name="parent" value="<?= $args['parent'] ?>">
+        <?php if (get_post((int) $args['parent'])) : ?>
+            <input type="hidden" name="parent" value="<?= (int) $args['parent'] ?>">
         <?php endif; ?>
 
-        <?php if (!empty(get_query_var('post_types'))) : ?>
+        <?php if (get_query_var('post_types') === 'page') : ?>
             <input type="hidden" name="post_types" value="<?= get_query_var('post_types') ?>">
         <?php endif; ?>
 
         <?php foreach ($taxonomies as $taxonomy) : ?>
-            <input type="hidden" name="<?= $taxonomy->name ?>" value="<?= $taxonomy->value ?>">
+            <input type="hidden" name="<?= $taxonomy->name ?>" value="<?= esc_html($taxonomy->value) ?>">
         <?php endforeach; ?>
 
     </form>
