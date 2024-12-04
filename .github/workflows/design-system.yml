@@ -60,4 +60,4 @@ jobs:
             AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
             SERVICE_POD: ${{ secrets.SERVICE_POD }}
         run: |
-          kubectl -n ${KUBE_NAMESPACE} exec -it pod/${SERVICE_POD} -- aws s3 sync /tmp/storybook-static s3://$AWS_S3_BUCKET --follow-symlinks --delete
+          kubectl -n ${KUBE_NAMESPACE} exec -it pod/${SERVICE_POD} -- aws s3 sync /tmp/storybook-static s3://{$AWS_S3_BUCKET} --follow-symlinks --delete
