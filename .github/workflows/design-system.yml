@@ -37,15 +37,27 @@ jobs:
         shell: bash
         run: npm run build-storybook
 
-      - name: "Configuring AWS credentials"
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.S3_ROLE_TO_ASSUME }}
-          role-session-name: "justice-gov-uk-design-system-${{ github.run_number }}"
-          aws-region: "eu-west-2"
-
-      - name: Deploy to S3
-        shell: bash
-        run: aws s3 sync ./public/app/frontend/storybook-static s3://$AWS_S3_BUCKET --follow-symlinks --delete
+      - name: "Authenticate to the cluster"
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          KUBE_CERT: ${{ secrets.KUBE_CERT }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+          KUBE_CLUSTER: ${{ secrets.KUBE_CLUSTER }}
+        run: |
+          echo "${KUBE_CERT}" > ca.crt
+          kubectl config set-cluster ${KUBE_CLUSTER} --certificate-authority=./ca.crt --server=https://${KUBE_CLUSTER}
+          kubectl config set-credentials deploy-user --token=${KUBE_TOKEN}
+          kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${KUBE_NAMESPACE}
+          kubectl config use-context ${KUBE_CLUSTER}
+
+      - name: "Copy files to service pod"
+        env:
+          SERVICE_POD: ${{ secrets.SERVICE_POD }}
+        run: |
+          kubectl -n ${KUBE_NAMESPACE} cp ./public/app/frontend/storybook-static ${SERVICE_POD}:/tmp/storybook-static
+
+      - name: "Sync to S3"
+        env:
+            AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+            SERVICE_POD: ${{ secrets.SERVICE_POD }}
+        run: |
+          kubectl -n ${KUBE_NAMESPACE} exec -it pod/${SERVICE_POD} -- aws s3 sync /tmp/storybook-static s3://${AWS_S3_BUCKET} --follow-symlinks --delete
