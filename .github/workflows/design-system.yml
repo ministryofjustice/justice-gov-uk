@@ -53,7 +53,7 @@ jobs:
         env:
           SERVICE_POD: ${{ secrets.SERVICE_POD }}
         run: |
-          kubectl cp storybook-static ${SERVICE_POD}:/tmp/storybook-static -n ${KUBE_NAMESPACE}
+          kubectl cp -n ${KUBE_NAMESPACE} storybook-static ${SERVICE_POD}:/tmp/storybook-static
 
       - name: "Sync to S3"
         env:
