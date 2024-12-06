@@ -13,6 +13,8 @@ jobs:
   storybook-deploy:
     runs-on: ubuntu-latest
     environment: design-system
+    env:
+      KUBE_NAMESPACE: ${{ secrets.KUBE_NAMESPACE }}
     permissions:
       id-token: write
       contents: read
