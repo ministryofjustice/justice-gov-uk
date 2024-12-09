@@ -36,7 +36,7 @@
 
     --heading-font: 'Georgia', serif;
     --heading-font-normal: 400;
-    --heading-font-bold: 500; // Use a medium bold as 700 doesn't work well with the heading font.
+    --heading-font-bold: 700; // Use a medium bold as 700 doesn't work well with the heading font.
 }
 
 // Minimum screen sizes
@@ -139,7 +139,7 @@ $spacing-units-desktop: (
     font-size: 2rem;
     line-height: 2.188rem;
     font-family: var(--heading-font);
-    font-weight: var(--heading-font-bold);
+    font-weight: var(--heading-font-normal);
     color: var(--justice-primary--black);
     .caption {
         @include caption('h1');
@@ -157,7 +157,7 @@ $spacing-units-desktop: (
     font-size: 1.688rem;
     line-height: 1.875rem;
     font-family: var(--heading-font);
-    font-weight: var(--heading-font-bold);
+    font-weight: var(--heading-font-normal);
     color: var(--justice-primary-black);
     .caption {
         @include caption('h2');
@@ -182,12 +182,27 @@ $spacing-units-desktop: (
     }
     @media screen and (min-width: $justice-lg) {
         margin-top: map-get($spacing-units-desktop, 4);
-        font-size: 1.5rem;
+        font-size: 1.625rem;
         line-height: 1.875rem;
     }
 }
 
 @mixin h4 {
+    margin-top: map-get($spacing-units-mobile, 4);
+    margin-bottom: 0;
+    font-size: 1.25rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map-get($spacing-units-desktop, 4);
+        font-size: 1.375rem;
+        line-height: 1.875rem;
+    }
+}
+
+@mixin h5 {
     margin-top: map-get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1.188rem;
@@ -197,22 +212,7 @@ $spacing-units-desktop: (
     color: var(--justice-primary-black);
     @media screen and (min-width: $justice-lg) {
         margin-top: map-get($spacing-units-desktop, 4);
-        font-size: 1.5rem;
-        line-height: 1.875rem;
-    }
-}
-
-@mixin h5 {
-    margin-top: map-get($spacing-units-mobile, 4);
-    margin-bottom: 0;
-    font-size: 1rem;
-    line-height: 1.563rem;
-    font-family: var(--heading-font);
-    font-weight: var(--heading-font-bold);
-    color: var(--justice-primary-black);
-    @media screen and (min-width: $justice-lg) {
-        margin-top: map-get($spacing-units-desktop, 4);
-        font-size: 1.5rem;
+        font-size: 1.188rem;
         line-height: 1.875rem;
     }
 
@@ -221,24 +221,24 @@ $spacing-units-desktop: (
 @mixin h6 {
     margin-top: map-get($spacing-units-mobile, 4);
     margin-bottom: 0;
-    font-size: 1rem;
+    font-size: 1.188rem;
     line-height: 1.563rem;
     font-family: var(--heading-font);
     font-weight: var(--heading-font-normal);
     color: var(--justice-primary-black);
     @media screen and (min-width: $justice-lg) {
         margin-top: map-get($spacing-units-desktop, 4);
-        font-size: 1.5rem;
+        font-size: 1.188rem;
         line-height: 1.875rem;
     }
 }
 
 @mixin panel-title {
-    font-size: 1.2rem;
+    font-size: 1.188rem;
     font-family: var(--heading-font);
-    font-weight: var(--heading-font-bold);
+    font-weight: var(--heading-font-normal);
     color: var(--justice-primary-white);
-    line-height: 1.2rem;
+    line-height: 1.875rem;
 }
 
 @mixin body {
@@ -254,7 +254,7 @@ $spacing-units-desktop: (
     @include body;
     font-weight: var(--body-font-bold);
     color: var(--justice-secondary-blue);
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 // Heading caption https://design-system.service.gov.uk/styles/headings/#headings-with-captions

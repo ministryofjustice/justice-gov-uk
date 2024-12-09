@@ -1,59 +1,47 @@
+import { Markdown } from '@storybook/blocks';
+import { getReviewBlock } from '../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
+
 # Justice UK
 
 Welcome! Whether you're a designer or a developer, this guide will help you get started and connect you to the essential resources you need.
 
 ## Development
 
-1. [Setup](/docs/development-setup--docs)
-2. [Build a new component](/docs/development-build-a-new-component--docs)
-3. [Connect a component to Wordpress](/docs/development-connect-a-component-to-wordpress--docs)
+- [Setup](/docs/development-setup--docs)
+- [Build a new component](/docs/development-build-a-new-component--docs)
+- [Build a new layout](/docs/development-build-a-new-layout--docs)
+- [Connect a component to WordPress](/docs/development-connect-a-component-to-wordpress--docs)
 
 ## Design
 
-1. [Typography](/docs/design-typography--docs)
-2. [Colours](/docs/design-colours--docs)
-3. [Icons](/docs/design-icons--docs)
+- [Typography](/docs/design-typography--docs)
+- [Colours](/docs/design-colours--docs)
+- [Grid](/docs/design-grid--docs)
+- [Icons](/docs/design-icons--docs)
+- [Mixins](/docs/design-mixins--docs)
+- [Spacing](/docs/design-spacing--docs)
 
 ## Quality assurance
 
-1. [Testing](/docs/quality-assurance-testing--docs)
+- [Overview](/docs/quality-assurance-overview--docs)
+- [General](/docs/quality-assurance-general--docs)
+- [Compatibility](/docs/quality-assurance-compatibility--docs)
+- [Accessibility](/docs/quality-assurance-accessibility--docs)
+- [Performance](/docs/quality-assurance-performance--docs)
 
-## Packages and coding standards
+## References and resources
 
-### Storybook
+- <a href="https://storybook.js.org/docs">Storybook</a> - A tool for developing UI components in isolation. It streamlines UI development, testing, and documentation.
+- <a href="https://twig.symfony.com/doc/">Twig</a> - A templating engine for PHP, used to create dynamic templates with a clean and readable syntax.
+- <a href="https://mdxjs.com/docs/">MDX</a> - Allows you to write JSX in Markdown documents, enabling the use of React components within Markdown files.
+- <a href="https://sass-lang.com/documentation/">SASS</a> - A CSS preprocessor that adds features like variables, nested rules, and mixins to CSS, making it more maintainable.
+- <a href="https://en.bem.info/methodology/">BEM</a> - A methodology for writing CSS that helps create reusable components and code sharing in front-end development.
+- <a href="https://eslint.org/docs/latest/">ESLint</a> - A tool for identifying and fixing problems in JavaScript code, ensuring code quality and consistency.
+- <a href="https://stylelint.io/">Stylelint</a> - A linter for CSS that helps enforce consistent conventions and avoid errors in stylesheets.
+- <a href="https://webpack.js.org/concepts/">Webpack</a> - A module bundler for JavaScript applications, bundling various modules with dependencies into static assets.
+- <a href="https://postcss.org/docs/">PostCSS</a> - A tool for transforming CSS with JavaScript plugins, enabling features like autoprefixing and future CSS syntax.
 
-<a href="https://storybook.js.org/docs">https://storybook.js.org/docs</a>
-
-### Twig
-
-<a href="https://twig.symfony.com/doc/">https://twig.symfony.com/doc/</a>
-
-### MDX
-
-<a href="https://mdxjs.com/docs/">https://mdxjs.com/docs/</a>
-
-### SASS
-
-<a href="https://sass-lang.com/documentation/">
-    https://sass-lang.com/documentation/
-</a>
-
-### BEM
-
-<a href="https://en.bem.info/methodology/">https://en.bem.info/methodology/</a>
-
-### ESLint
-
-<a href="https://eslint.org/docs/latest/">https://eslint.org/docs/latest/</a>
-
-### Stylelint
-
-<a href="https://stylelint.io/">https://stylelint.io/</a>
-
-### Webpack
-
-<a href="https://webpack.js.org/concepts/">https://webpack.js.org/concepts/</a>
-
-### PostCSS
-
-<a href="https://postcss.org/docs/">https://postcss.org/docs/</a>
+> {getReviewBlock(lastReview)}

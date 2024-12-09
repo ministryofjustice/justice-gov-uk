@@ -1,0 +1,49 @@
+import { Meta, Markdown } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-09-30';
+
+<Meta title="Quality assurance/Compatibility" />
+
+# Browser testing
+
+Our services should be universally accessible, so should be tested on every browser or device that users access it on.
+
+## Supported browsers
+
+The following browsers are supported for our services:
+
+<table>
+  <tr>
+    <th>Windows</th>
+    <th>MacOS</th>
+    <th>iOS</th>
+    <th>Android</th>
+  </tr>
+  <tr>
+    <td>Edge (latest versions)</td>
+    <td>Safari 15.6 and later</td>
+    <td>Safari for iOS 15.6 and later</td>
+    <td>Google Chrome (latest stable version)</td>
+  </tr>
+  <tr>
+    <td>Google Chrome (latest stable version)</td>
+    <td>Google Chrome (latest stable version)</td>
+    <td>Google Chrome (latest stable version)</td>
+    <td>Samsung Internet (latest stable version)</td>
+  </tr>
+  <tr>
+    <td>Mozilla Firefox (latest stable version)</td>
+    <td>Mozilla Firefox (latest stable version)</td>
+  </tr>
+</table>
+
+## Manual
+
+TODO: Add browser testing instructions and tools.
+
+## References and resources
+[BrowserStack](https://timber.github.io/docs/v2/) can be used to access the native browsers of different devices.
+
+> {getReviewBlock(lastReview)}

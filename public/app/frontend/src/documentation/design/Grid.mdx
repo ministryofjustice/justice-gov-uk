@@ -1,4 +1,8 @@
 import { Meta, Unstyled, Canvas } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
 
 <Meta title="Design/Grid" />
 
@@ -44,11 +48,11 @@ A page using the _with sidebar_ template might look like this on desktop:
         <div style={{ ...containerStyle }}>
             <div style={{ ...gridStyle }}>
                 <div style={{ ...gridRowStyle, gridColumn: '1 / span 8' }}>
-                    <div style={{ ...componentStyle, height: '6rem' }}>
-                        First component
+                    <div style={{ ...componentStyle, height: '6rem', color: 'white' }}>
+                        <p style={{ color: 'white' }}>First component</p>
                     </div>
                     <div style={{ ...componentStyle, height: '6rem' }}>
-                        Second component
+                        <p style={{ color: 'white' }}>Second component</p>
                     </div>
                 </div>
                 <div
@@ -58,7 +62,7 @@ A page using the _with sidebar_ template might look like this on desktop:
                         height: '6rem',
                     }}
                 >
-                    Sidebar
+                    <p style={{ color: 'white' }}>Sidebar</p>
                 </div>
             </div>
         </div>
@@ -146,3 +150,5 @@ All of the page content is constrained to the maximum width of the page, however
         </div>
     </div>
 </Unstyled>
+
+> {getReviewBlock(lastReview)}
