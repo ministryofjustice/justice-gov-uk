@@ -152,7 +152,7 @@ class Auth
         $this->storeTokens($this->sub, $oauth_access_token, 'refresh');
 
         // Ensure we're redirecting to a page on the same domain as our home_url.
-        if (empty($jwt->success_url) || !str_starts_with($jwt->success_url, home_url())) {
+        if (empty($jwt->success_url) || !str_starts_with($jwt->success_url, home_url('/'))) {
             $jwt->success_url = '/';
         }
 

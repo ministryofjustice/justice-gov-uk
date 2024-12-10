@@ -76,12 +76,11 @@ class Standalone401
 
         $this->log('Request URI: ' . $_SERVER['REQUEST_URI']);
 
+        // Always include the schema and domain here, to prevent an open redirect vulnerability.
         $jwt->success_url = $_ENV['WP_HOME'];
 
-        // Always add the schema and domain here, to prevent an open redirect vulnerability.
-        if (!str_starts_with($_SERVER['REQUEST_URI'], '/auth')) {
-            $jwt->success_url .= $_SERVER['REQUEST_URI'];
-        }
+        // If the request URI is /auth, then we want to redirect to the homepage, else we want to redirect to the current page.
+        $jwt->success_url .= str_starts_with($_SERVER['REQUEST_URI'], '/auth') ? '/' : $_SERVER['REQUEST_URI'];
 
         // Set the cookie expiry to 0 to create a session cookie.
         $jwt->cookie_expiry = 0;
