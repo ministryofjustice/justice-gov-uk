@@ -45,6 +45,8 @@ jobs:
           BASIC_AUTH_PASS: ${{ secrets.BASIC_AUTH_PASS }}
           SUPPORT_EMAIL: ${{ secrets.SUPPORT_EMAIL }}
           ALERTS_SLACK_WEBHOOK: ${{ secrets.ALERTS_SLACK_WEBHOOK }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          OAUTH_CLIENT_SECRET: "${{ secrets.OAUTH_CLIENT_SECRET }}"
         run: |
           BASIC_AUTH_BASE64=""
           
