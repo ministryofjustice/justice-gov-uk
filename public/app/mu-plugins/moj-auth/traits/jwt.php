@@ -4,7 +4,7 @@ namespace MOJ\Intranet;
 
 /**
  * Do not allow access outside WP, 401.php or verify.php
- * 
+ *
  * @used-by Auth
  * @used-by Standalone401
  * @used-by StandaloneVerify
@@ -49,7 +49,7 @@ trait AuthJwt
 
     /**
      * Get the JWT from the request.
-     * 
+     *
      * @return bool|object Returns false if the JWT is not found or an object if it is found.
      */
     public function getJwt(): false | object
@@ -86,7 +86,7 @@ trait AuthJwt
 
     /**
      * Set a JWT cookie.
-     * 
+     *
      * @return [object, string] Returns the JWT payload.
      */
     public function setJwt(object $args = new \stdClass()): array
@@ -129,7 +129,7 @@ trait AuthJwt
 
     /**
      * Verify the JWT roles.
-     * 
+     *
      * @param [string] $jwt_roles The roles from the JWT.
      * @return bool
      */

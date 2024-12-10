@@ -49,11 +49,10 @@ trait AuthOauth
         $this->oauth_scopes     = [
             'User.Read'
         ];
-        if (
-            isset($_SERVER['REQUEST_URI']) && str_starts_with ($_SERVER['REQUEST_URI'], '/auth/' )
+        if (isset($_SERVER['REQUEST_URI']) && str_starts_with($_SERVER['REQUEST_URI'], '/auth/')
         ) {
             $path = explode('?', $_SERVER['REQUEST_URI'])[0];
-            $this->oauth_action = explode('/', $path )[2];
+            $this->oauth_action = explode('/', $path)[2];
         }
 
         // Clear OAUTH_CLIENT_SECRET from $_ENV global. It's not required elsewhere in the app.
@@ -62,7 +61,7 @@ trait AuthOauth
 
     /**
      * Get OAuth client.
-     * 
+     *
      * @return GenericProvider
      */
 
@@ -84,7 +83,7 @@ trait AuthOauth
 
     /**
      * Handle the OAuth login.
-     * 
+     *
      * @return void
      */
 
@@ -115,10 +114,10 @@ trait AuthOauth
 
     /**
      * Handle the OAuth callback.
-     * 
+     *
      * This function will handle the OAuth callback and return the access token.
      * If the callback is invalid, it will return a 401 response.
-     * 
+     *
      * @return AccessTokenInterface
      */
 
@@ -177,7 +176,6 @@ trait AuthOauth
             // $resource_owner = $oauth_client->getResourceOwner($access_token);
 
             // $this->log('owner', $resource_owner->toArray());
-
         } catch (IdentityProviderException $e) {
             $this->log('Error: ' . $e->getMessage(), null, 'error');
             http_response_code(401) && exit();
@@ -188,7 +186,7 @@ trait AuthOauth
 
     /**
      * Store the access and refresh tokens.
-     * 
+     *
      * @param string $sub The subject of the tokens, i.e. a generated user ID.
      * @param AccessTokenInterface $access_token The access token object.
      * @param string|null $type The type of token to store. If not set, both access and refresh tokens will be stored.
@@ -209,7 +207,7 @@ trait AuthOauth
 
     /**
      * Get the stored tokens.
-     * 
+     *
      * @param string $sub The subject of the tokens, i.e. a generated user ID.
      * @param string|null $type The type of token to get. If not set, both access and refresh tokens will be returned.
      * @return array|string|null
@@ -235,7 +233,7 @@ trait AuthOauth
 
     /**
      * Refresh the OAuth access token.
-     * 
+     *
      * @param string $refresh_token The refresh token.
      * @return AccessTokenInterface
      */

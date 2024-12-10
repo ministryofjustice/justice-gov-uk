@@ -4,7 +4,7 @@ namespace MOJ\Intranet;
 
 /**
  * Do not allow access outside WP, 401.php or verify.php
- * 
+ *
  * @used-by Auth
  * @used-by Standalone401
  * @used-by StandaloneVerify
@@ -20,7 +20,7 @@ trait AuthUtils
 {
     /**
      * Log to the error log.
-     * 
+     *
      * @param string $message The message to log.
      * @param mixed $data optional Any data to log.
      * @return void
@@ -28,7 +28,7 @@ trait AuthUtils
 
     public function log(string $message, $data = null, $level = 'debug'): void
     {
-        // If this message is a debug level, and debug is turned off, then return. 
+        // If this message is a debug level, and debug is turned off, then return.
         if ($level === 'debug' && !$this->debug) {
             return;
         }
@@ -38,7 +38,7 @@ trait AuthUtils
 
     /**
      * Hash a value using SHA256 and a salt.
-     * 
+     *
      * @param string $value The value to hash.
      * @return string The hashed value.
      */
@@ -52,15 +52,15 @@ trait AuthUtils
 
     /**
      * A generic function to set a cookie.
-     * 
+     *
      * We use SameSite=Lax policy because:
      * - We need the oauth cookies to ent to the server when the oauth provider redirects us to the callback url.
      * - We need the JWT to be sent to the server if visitors click links from outside of the intranet domain.
-     * 
+     *
      * @param string $name The name of the cookie.
      * @param string $value The value of the cookie.
      * @param int $expiry The expiry time of the cookie. If not set, the cookie will expire at the end of the session.
-     * 
+     *
      * @return void
      */
 
@@ -84,7 +84,7 @@ trait AuthUtils
 
     /**
      * Delete a cookie by setting it to expire in the past.
-     * 
+     *
      * @param string $name The name of the cookie to delete.
      */
 
@@ -97,40 +97,42 @@ trait AuthUtils
 
     /**
      * Find an item in an array.
-     * 
+     *
      * When we upgrade to PHP 8.4, we can use array_any instead.
-     * 
+     *
      * @param array $array
      * @param callable $callback
-     * 
+     *
      * @return mixed
      */
 
     public function arrayAny($array, $callback)
     {
         foreach ($array as $entry) {
-            if (call_user_func($callback, $entry) === true)
+            if (call_user_func($callback, $entry) === true) {
                 return true;
+            }
         }
         return false;
     }
 
     /**
      * Ensure all items in an array satisfy the callback function.
-     * 
+     *
      * When we upgrade to PHP 8.4, we can use array_all instead.
-     * 
+     *
      * @param array $array
      * @param callable $callback
-     * 
+     *
      * @return mixed
      */
 
     public function arrayAll($array, $callback)
     {
         foreach ($array as $key => $value) {
-            if (call_user_func($callback, $key, $value) === false)
+            if (call_user_func($callback, $key, $value) === false) {
                 return false;
+            }
         }
         return true;
     }

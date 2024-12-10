@@ -2,7 +2,7 @@
 
 /**
  * A dynamic 401 page.
- * 
+ *
  * We can either redirect to the login endpoint.
  * Or, if mamximum attempts have been used, then do nothing.
  */
@@ -96,7 +96,6 @@ class Standalone401
 
         // The visitor has zero of a few failed callbacks.
         if ($jwt->failed_callbacks <= $this::MAX_FAILED_CALLBACKS) {
-
             // This template will redirect them to login.
             require_once $this::STATIC_401_REDIRECT;
 

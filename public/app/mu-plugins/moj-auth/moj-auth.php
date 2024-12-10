@@ -29,11 +29,11 @@ require_once 'traits/utils.php';
 
 /**
  * Class Auth
- * 
+ *
  * Handles authentication for the Intranet.
  * The class runs early in the page loading process.
  * As such, it should be lightweight, and not rely on WordPress functions.
- * 
+ *
  * @see https://github.com/firebase/php-jwt
  */
 
@@ -50,7 +50,7 @@ class Auth
 
     /**
      * Constructor
-     * 
+     *
      * @param array $args optional Arguments (debug) to pass to the class.
      * @return void
      */
@@ -165,7 +165,7 @@ class Auth
      *
      * There is currently no UI mechanism for logging out. This is here for completeness.
      * If it's used in the future it should used proceeded with revoking CloudFront cookies.
-     * 
+     *
      * @return void
      */
     public function logout(): void
