@@ -201,9 +201,11 @@ RUN echo "# This is a placeholder, because the file is included in `php-fpm.conf
 FROM base-nginx AS build-nginx
 
 # Grab server configurations
-COPY deploy/config/php-fpm.conf   /etc/nginx/php-fpm.conf
-COPY deploy/config/redirects.conf /etc/nginx/redirects.conf
-COPY deploy/config/server.conf    /etc/nginx/conf.d/default.conf
+COPY deploy/config/php-fpm.conf      /etc/nginx/php-fpm.conf
+COPY deploy/config/php-fpm-auth.conf /etc/nginx/php-fpm-auth.conf
+COPY deploy/config/auth-request.conf /etc/nginx/auth-request.conf
+COPY deploy/config/redirects.conf    /etc/nginx/redirects.conf
+COPY deploy/config/server.conf       /etc/nginx/conf.d/default.conf
 
 WORKDIR /var/www/html
 
