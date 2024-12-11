@@ -129,9 +129,13 @@ RUN composer install --no-dev
 
 RUN composer dump-autoload -o
 
-ARG regex_files='\(htm\|html\|js\|css\|png\|jpg\|jpeg\|gif\|ico\|svg\|webmanifest\)'
-ARG regex_path='\(app\/themes\/justice\/error\-pages\|app\/mu\-plugins\|app\/plugins\|wp\)'
+ARG regex_files='\(js\|css\|png\|jpg\|jpeg\|gif\|ico\|svg\|webmanifest\)'
+ARG regex_path='\(app\/mu\-plugins\|app\/plugins\|wp\)'
+
 RUN mkdir -p ./vendor-assets && \
+    # Copy the theme's error pages
+    find public/ -regex "public\/app\/themes\/justice\/error\-pages\.*\.html" -exec cp --parent "{}" vendor-assets/  \; && \
+    # Copy frontend assets from mu-plugins, plugins and wp.
     find public/ -regex "public\/${regex_path}.*\.${regex_files}" -exec cp --parent "{}" vendor-assets/  \;
 
 
@@ -193,7 +197,6 @@ USER 101
 
 FROM base-nginx AS nginx-dev
 
-RUN echo "# This is a placeholder, because the file is included in `php-fpm.conf`." > /etc/nginx/server_name.conf
 
 ###
 
