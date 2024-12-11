@@ -51,15 +51,20 @@ jobs:
           kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${KUBE_NAMESPACE}
           kubectl config use-context ${KUBE_CLUSTER}
 
+      - name: "Get service pod name"
+        run: |
+          echo "SERVICE_POD=$(kubectl -n ${KUBE_NAMESPACE} get pod -l name=central-digital-product-team-development-service-pod -o jsonpath='{.items[0].metadata.name}');" >> $GITHUB_ENV
+
       - name: "Copy files to service pod"
         env:
-          SERVICE_POD: ${{ secrets.SERVICE_POD }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          SERVICE_POD: ${{ env.SERVICE_POD }}
         run: |
-          kubectl cp -n ${KUBE_NAMESPACE} storybook-static ${SERVICE_POD}:/tmp/storybook-static
+          kubectl cp -n ${KUBE_NAMESPACE} storybook-static ${ SERVICE_POD }:/tmp/storybook-static
 
       - name: "Sync to S3"
         env:
             AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-            SERVICE_POD: ${{ secrets.SERVICE_POD }}
+            SERVICE_POD: ${{ env.SERVICE_POD }}
         run: |
-          kubectl exec -n ${KUBE_NAMESPACE} -it pod/${SERVICE_POD} -- aws s3 sync /tmp/storybook-static s3://${AWS_S3_BUCKET} --follow-symlinks --delete
+          kubectl exec -n ${KUBE_NAMESPACE} -it pod/${ SERVICE_POD } -- aws s3 sync /tmp/storybook-static s3://${AWS_S3_BUCKET} --follow-symlinks --delete
