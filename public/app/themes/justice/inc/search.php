@@ -372,8 +372,7 @@ class Search
             return;
         }
 
-        $query_string = $_SERVER['QUERY_STRING'];
-        $query_string = explode('&', $query_string);
+        $query_string = explode('&', $_SERVER['QUERY_STRING'] ?? '');
 
         foreach ($query_string as $query) {
             error_log($query);
