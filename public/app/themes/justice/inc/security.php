@@ -116,7 +116,6 @@ class Security
         return str_replace('ver=' . $this->wp_version, 'ver=' . $this->hashed_wp_version, $tag);
     }
 
-
     /**
      * Disable REST API for non-logged in users.
      *
