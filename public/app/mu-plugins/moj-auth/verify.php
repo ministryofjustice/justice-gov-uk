@@ -17,6 +17,11 @@ if (!file_exists($autoload)) {
     http_response_code(401) && exit();
 }
 
+if (isset($_ENV['MOJ_AUTH_ENABLED']) && $_ENV['MOJ_AUTH_ENABLED'] === 'false') {
+    error_log('MOJ_AUTH_ENABLED is false - skipping auth check.');
+    http_response_code(200) && exit();
+}
+
 require_once  $autoload;
 require_once 'traits/jwt.php';
 require_once 'traits/utils.php';

@@ -15,28 +15,28 @@ class Search
     public function addHooks()
     {
         // Add a rewrite rule to handle an empty search.
-        add_action('init', fn () => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
+        add_action('init', fn() => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
         // Add a rewrite rule to handle the old search urls.
         add_action('template_redirect', [$this, 'redirectOldSearchUrls']);
         // Add a rewrite rule to handle the search string.
         add_filter('posts_search', [$this, 'handleEmptySearch'], 10, 2);
         // Add a query var for the parent page. This will be handled in relevanssiParentFilter.
-        add_filter('query_vars', fn ($qv) =>  array_merge($qv, array('parent')));
+        add_filter('query_vars', fn($qv) =>  array_merge($qv, array('parent')));
         // Update the search query.
         add_action('pre_get_posts', [$this, 'searchFilter']);
 
         // Relevanssi - prevent sending documents to the Relevanssi API.
-        add_filter('option_relevanssi_do_not_call_home', fn () => 'on');
-        add_filter('default_option_relevanssi_do_not_call_home', fn () => 'on');
+        add_filter('option_relevanssi_do_not_call_home', fn() => 'on');
+        add_filter('default_option_relevanssi_do_not_call_home', fn() => 'on');
 
         // Relevanssi - prevent click tracking. We don't need it and it makes the search results url messy.
-        add_filter('option_relevanssi_click_tracking', fn () => 'off');
-        add_filter('default_option_relevanssi_click_tracking', fn () => 'off');
+        add_filter('option_relevanssi_click_tracking', fn() => 'off');
+        add_filter('default_option_relevanssi_click_tracking', fn() => 'off');
 
         // Relevanssi - filters the did you mean url, to use /search instead of s=.
         add_filter('relevanssi_didyoumean_url', [$this, 'didYouMeanUrl'], 10, 3);
         // Relevanssi - add numbers to the did you mean alphabet.
-        add_filter('relevanssi_didyoumean_alphabet', fn ($alphabet) => $alphabet . '0123456789');
+        add_filter('relevanssi_didyoumean_alphabet', fn($alphabet) => $alphabet . '0123456789');
 
         // Relevanssi - filters the search results to only include the descendants.
         add_filter('relevanssi_hits_filter', [$this, 'relevanssiParentFilter']);
@@ -47,6 +47,12 @@ class Search
 
         // Relevanssi - remove searches submenus for non-admins.
         add_filter('admin_menu', [$this, 'removeSearchesSubMenus'], 999);
+
+        // Redirect the user to the search page if the URI contains multiple pages.
+        add_action('init', [$this, 'redirectMultiplePageInURI'], 1);
+
+        // Run redirectIfQueryStringHasArrays early to avoid any issues with the query string.
+        add_action('init', [$this, 'redirectIfQueryStringHasArrays'], 1);
     }
 
     /**
@@ -325,6 +331,74 @@ class Search
         if (!current_user_can('manage_options')) {
             remove_submenu_page('index.php', 'relevanssi-premium/relevanssi.php');
             remove_submenu_page('index.php', 'relevanssi_admin_search');
+        }
+    }
+
+    /**
+     * Handle malformed search URLs where the path has multiple pages.
+     *
+     * e.g /search/the/page/page/11
+     */
+
+    public function redirectMultiplePageInURI()
+    {
+        $uri = $_SERVER['REQUEST_URI'];
+        // Trim the first and last slash
+        $uri = trim($uri, '/');
+        // Split the URI by '/'
+        $uri_parts = explode('/', $uri);
+
+        // Check if the URI has at least 4 parts and the first part is 'search'
+        if (sizeof($uri_parts) < 4 || $uri_parts[0] !== 'search') {
+            return;
+        }
+
+        // Remove the first 2 from the array
+        $uri_parts = array_slice($uri_parts, 2);
+
+        // Count the number of times 'page' appears in the $uri_parts
+        $pages_count = array_count_values($uri_parts)['page'];
+
+        if ($pages_count > 1) {
+            // Redirect to the search page
+            $url = home_url('/search');
+            wp_redirect($url);
+            exit;
+        }
+    }
+
+
+    /**
+     * Handle malformed search URLs with arrays in the query string.
+     *
+     * This function will redirect the user to the search page if the query string contains arrays.
+     * e.g. /search?audience[$testing]=1 or /search?audience%5B%24testing%5D=1
+     *
+     * @return void
+     */
+
+    public function redirectIfQueryStringHasArrays()
+    {
+        // Are we on a search page? The URI starts with /search
+        if (strpos($_SERVER['REQUEST_URI'], '/search') === false) {
+            return;
+        }
+
+        $query_string = $_SERVER['QUERY_STRING'];
+        $query_string = explode('&', $query_string);
+
+        foreach ($query_string as $query) {
+            error_log($query);
+            // Get key and value
+            [$key] = explode('=', $query);
+
+            // Use regex to see if the key contains any of the invalid strings
+            if (preg_match('/(%5B|%5D|\[|\])/', $key)) {
+                // Redirect to the search page
+                $url = home_url('/search');
+                wp_redirect($url);
+                exit;
+            }
         }
     }
 }
