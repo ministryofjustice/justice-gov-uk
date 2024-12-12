@@ -1,0 +1,87 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
+
+{/* https://design-system.service.gov.uk/styles/colour/ and existing colour palette */}
+
+<Meta title="Design/Spacing" />
+
+# Spacing
+
+<table>
+  <tr>
+    <th>Spacing unit</th>
+    <th colspan="2">Measurement (rems)</th>
+  </tr>
+  <tr>
+    <td></td>
+    <th>Mobile</th>
+    <th>Desktop</th>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>0.313</td>
+    <td>0.313</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>0.625</td>
+    <td>0.625</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>0.938</td>
+    <td>0.938</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>0.938</td>
+    <td>1.25</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>0.938</td>
+    <td>1.563</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>1.25</td>
+    <td>1.875</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>1.563</td>
+    <td>2.5</td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>1.875</td>
+    <td>3.125</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>2.5</td>
+    <td>3.75</td>
+  </tr>
+</table>
+
+Spacing units are used to create consistent padding and margins throughout the application. They're only used for
+spaces: margins, padding and gaps between elements. When setting dimensions (e.g. width and height) you can use any
+unit for the design.
+
+To use the spacing units above you can use the following mixin. The mixin takes three arguments: the type of spacing,
+the spacing unit and optionally the direction. If you don't include a direction it will default to all sides.
+
+```
+@include spacing('margin', 4, 'top');
+```
+
+
+> {getReviewBlock(lastReview)}

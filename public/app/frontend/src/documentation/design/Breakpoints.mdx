@@ -1,0 +1,48 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
+
+{/* https://design-system.service.gov.uk/styles/colour/ and existing colour palette */}
+
+<Meta title="Design/Breakpoints" />
+
+# Breakpoints
+
+<table>
+  <tr>
+    <th>Screen</th>
+    <th>Pixel range</th>
+    <th>Breakpoint variable</th>
+  </tr>
+  <tr>
+    <td>Mobile</td>
+    <td>0 - 767px</td>
+    <td>Default</td>
+  </tr>
+    <tr>
+      <td>Tablet/Small screen</td>
+      <td>768px - 1023px</td>
+      <td>$justice-md</td>
+    </tr>
+      <tr>
+        <td>Desktop</td>
+        <td>1024px+</td>
+        <td>$justice-lg</td>
+      </tr>
+</table>
+
+Breakpoints are used to define the width at which a layout changes. For this project we've defined three screen sizes -
+mobile, tablet and desktop. Media queries using the preset breakpoints should use `min-width`, for example:
+
+```
+.heading {
+    font-size: 1.5rem;
+    @media screen and (min-width: $justice-lg) {
+        font-size: 3rem;
+    }
+}
+```
+
+> {getReviewBlock(lastReview)}

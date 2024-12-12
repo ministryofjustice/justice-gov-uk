@@ -1,7 +1,76 @@
 import { Meta, Subtitle } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
 
 <Meta title="Development/Build a new layout" />
 
 # Build a new layout
 
-TODO
+A layout defines the overall structure of a page or a section of a page and ensures that components are placed correctly and consistently.
+
+If you want to build a component instead see [Build a new component](/docs/development-build-a-new-component--docs)
+
+## Setup
+
+1. In `./public/app/frontend/src/components` copy the `.template` folder into `./public/app/frontend/src/layouts` and replace _.template_ in the folder and filenames with your layout's name.
+2. Open `./public/app/frontend/index.js` and add an import for your layout in the _Layouts_ section.
+3. In `[layout-name].stories.js` update `import template from './template.html.twig';` replacing _template_ with your layout's name, change the title in the `export default` block to _Layout/[Layout name]_ and remove the `tags: ['no-tests']` line to enable automated testing.
+Add the following code to the `export default` block to set the layout to fullscreen:
+```
+parameters: {
+    layout: 'fullscreen',
+},
+```
+4. If Storybook isn't already running, `cd` into `./public/app/frontend` and run `npm run storybook` to build Storybook. It should open automatically in your browser at `localhost:6006`. Your layout will be visible under **Layouts** in the sidebar.
+
+## Build a layout
+
+1. In `layout-name.stories.js` define your templates and any args they might take. For example, a layout with a sidebar that can be on the left or right of the page might look like this:
+
+```
+export const Right = Template.bind({});
+Right.args = {
+    direction: 'right',
+};
+
+export const Left = Template.bind({});
+Left.args = {
+    direction: 'left',
+};
+
+```
+
+2. Build the HTML template in `layout-name.html.twig`, defining sections of the page with Twig blocks and populating them with dummy content (See [Templating with Twig](https://twig.symfony.com/doc/3.x/templates.html). If you need to include the header and footer in your layout add `{% extends '@layouts/base/base.html.twig' %}` to the top of the Twig file
+3. Style the layout in `layout-name.scss`. Ensure you've included `@import '../../../style';` at the top of the file to use global mixins and variables.
+
+## Testing
+
+Full functional testing will take place once the layout is integrated into the backend but we can test responsiveness and accessibility within the Storybook application.
+
+### Browser testing
+
+In Storybook open your layout and click on the **Viewport** button in the toolbar at top. Use this to view the layout at different screensizes.
+
+See [Compatibility](/docs/quality-assurance-compatibility--docs) for more detailed browser testing information.
+
+### Accessibility testing
+
+In Storybook open your layout and press `⌥ + A` to open the addons panel. Click on the Accessibility tab to view any violations.
+
+See [Accessibility](/docs/quality-assurance-accessibility--docs) for more detailed accessibility testing information.
+
+## Lint
+
+Once you're happy with your layout the final step is to run the linting commands in your terminal.
+
+`npm run lint` will run the linter and show you any issues
+
+`npm run lint-fix` will automatically fix any issues that it can and list any that it couldn't
+
+## Next steps
+
+Once you've built and tested your layout in the frontend you can connect it to the backend. See [Connect a component to WordPress](/docs/development-connect-a-component-to-wordpress--docs) for more information.
+
+> {getReviewBlock(lastReview)}

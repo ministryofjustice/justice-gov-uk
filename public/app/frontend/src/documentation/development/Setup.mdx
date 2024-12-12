@@ -1,11 +1,30 @@
 import { Meta } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
 
 <Meta title="Development/Setup" />
 
-TODO: write later as structure/docker integration might change
+# Setup
 
-## Requirements
+## Frontend only
+Our component library is designed so that it can be worked on without running the backend. If you're working on a
+component and don't need to integrate it with WordPress, then you should only need to:
 
-## Installation
+1. Checkout the justice-gov-uk repository here: https://github.com/ministryofjustice/justice-gov-uk.
+2. `cd` into the `public/app/frontend` directory.
+3. **If you're using Docker**:\
+   Run `docker compose run --service-ports node node-frontend` to start the container.\
+   **If you're not using Docker**:\
+   Run `npm install` to install the required packages, then `npm run storybook` to start Storybook.
+4. Storybook should then be available at `localhost:6006`.
 
-## Architecture
+## Frontend and backend
+
+If you're working on a component and need access to WordPress for integration or testing, checkout the `justice-gov-uk` repository [here](https://github.com/ministryofjustice/justice-gov-uk) and follow the instructions in the
+ README in the `.github` directory. This will get the site running locally.
+
+Storybook should be running on `localhost:6006` and the WordPress site should be running on `justice.docker`.
+
+> {getReviewBlock(lastReview)}

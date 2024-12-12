@@ -1,4 +1,8 @@
 import { Meta, Title, IconGallery, IconItem } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-09-30';
 
 <Meta title="Design/Icons" />
 
@@ -38,3 +42,5 @@ To include an icon in your component use `<i class="icon-{name}--{sm|md|lg}">`
         <i class="icon-zip--sm" />
     </IconItem>
 </IconGallery>
+
+> {getReviewBlock(lastReview)}

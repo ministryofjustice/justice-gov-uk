@@ -1,4 +1,8 @@
 import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
 
 {/* https://design-system.service.gov.uk/styles/colour/ and existing colour palette */}
 
@@ -76,3 +80,5 @@ Update the colour palette in `public/app/frontend/documentation/design/Colours.m
         colors={{ '--justice-success': '#00703c' }}
     />
 </ColorPalette>
+
+> {getReviewBlock(lastReview)}

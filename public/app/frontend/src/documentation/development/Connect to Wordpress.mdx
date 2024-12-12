@@ -1,39 +1,93 @@
 import { Meta } from '@storybook/blocks';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
 
-<Meta title="Development/Connect a component to Wordpress" />
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
 
-// TODO: this works currently but may change. Review.
+<Meta title="Development/Connect a component to WordPress" />
 
-# Connect to Wordpress
+# Connect to WordPress
 
-Our component library is designed so that it can be worked on independently of the backend. When a component is finished this guide will walk you through integrating it into Wordpress. You don't need to have Storybook running for this.
+Our component library is designed so that it can be worked on independently of the backend. When a component or layout
+is finished this guide will walk you through integrating it with WordPress.
 
 ## Setup
 
 Run the commands to get the site running locally according to the README in `.github`
 
-## Integration
+## Examples
 
-1. Go to `public/app/themes/justice` to work on the Justice UK Wordpress theme.
-2. Find the template that you want to edit, for example if we were replacing the existing header we would want to edit `header.php`.
-3. We're using [Timber](https://timber.github.io/docs/v2/) so that we can use Twig templates in Wordpress, with the goal of separating all of our templating (HTML) from the logic (PHP). Add `Timber::render()`. to the `.php` file to render the frontend component. It should look like this:
+### Layouts
+This example will show you how to integrate a layout with the justice WordPress theme.
 
+#### Homepage template
+
+1. In the `public/app/themes/justice` directory go to views/templates and create a new template for the layout you want
+to add, in this case `home.html.twig`.
+2. Add `{% extends '@layouts/layout-name/layout-name.html.twig' %}` to the top of the file to extend the layout from the
+ design system that you want to use.
+3. Add the required variables and blocks to the template. You can find these in the matching `.twig.html` file in
+`public/app/frontend/src/layouts`, e.g.
 ```
-    Timber::render('@components/header/header.html.twig', [
-        'showLogo' => true,
-        'showSearch' => true,
-        'color' => 'light',
-        'nav' => [
-            [
-                'title' => 'Home',
-                'link' => '#',
-            ],
-            [
-                'title' => 'Procedure rules',
-                'link' => '#',
-            ],
-        ],
-    ]);
-```
+{% set direction = 'right' %}
 
-You should be able to find the required variables for each component in the matching `.twig.html` file in the frontend. 4. Go to `justice.docker` and you should see your component. Any changes made in the frontend will be reflected but you will need to refresh the page.
+{% block headerContent %}
+    {% include 'views/partials/header.html.twig' %}
+{% endblock %}
+
+{% block articleHeader %}
+    {# No title #}
+{% endblock %}
+
+{% block articleContent %}
+    <h1> {{ pageTitle.text }} </h1>
+    {{content}}
+{% endblock %}
+```
+In the example above we don't want to show an articleHeader so we leave it empty, otherwise the default articleHeader
+will be shown.
+4. Now edit `public/app/themes/justice/page_home.php` to populate the variables, in this case we want the page title and
+ page content.
+5. Add `$templates = ['templates/home.html.twig'];` to define the template to use, and write the required code to get
+the variables we need.
+6. Finally add the following code at the end of the file:
+```
+$context = Timber::context([
+    'pageTitle' => [
+        'text' => get_the_title(),
+    ],
+    'content' => get_the_content(),
+]);
+Timber::render($templates, $context);
+```
+This will setup the context for the template and render it when the homepage is accessed.
+7. Go to `justice.docker` and the homepage layout should have replaced the existing template. Any changes made in
+   the frontend will be reflected but you will need to refresh the page.
+
+### Components
+These examples will show you how to integrate a component with the justice WordPress theme.
+
+#### An image and text component
+
+1. We're going to update the homepage and replace the main page content set up in the previous example with an image and
+ text component.
+2. Go to the template you want to update, in this case `home.html.twig` in the `views/templates`* directory.  Remove the content in the `articleContent` block and replace it with an include from the design system that you want to use, e.g.
+```
+{% include '@components/image-with-text/image-with-text.html.twig' with {
+    direction: 'left',
+    title: pageTitle,
+    content: post.content,
+    image: mainImage,
+} %}
+````
+3. Go to page_home.php and update the context to include the required variables, in this case the page title, content and
+ main image.
+4. Go to `justice.docker` and the homepage layout should have updated to include the new component.
+
+*Note: To avoid repeating the same code in multiple templates, you can create a new template in the `views/partials` directory and include it in the template you want to update instead.
+
+
+## References and resources
+We're using [Timber](https://timber.github.io/docs/v2/) so that we can use Twig templates in WordPress.
+
+> {getReviewBlock(lastReview)}

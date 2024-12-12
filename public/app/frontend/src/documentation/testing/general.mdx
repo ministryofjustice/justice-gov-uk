@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/blocks';
+import viewportButton from '../images/storybook-viewport-button.png';
+import { getReviewBlock } from '../../../.storybook/utils/documentation/review-block';
+
+{/* Update the lastReview value in YYYY-MM-DD format when this page is reviewed */}
+export const lastReview = '2024-12-06';
+
+<Meta title="Quality assurance/General" />
+
+# General testing
+
+A general manual spot check should be carried out on all components to ensure they are working as expected. This should
+include checking the following:
+
+- Visual appearance
+- Responsiveness
+- Interaction
+- Accessibility
+- User flows
+
+## Visual appearance
+
+Simply check that the component looks as expected. This can be done by comparing the component to the design attached to the
+ticket where there is one, otherwise just use your best judgement that the component fits with the style of the site and
+that nothing looks out of place.
+
+## Responsiveness
+
+Check the component at different screen sizes to ensure it looks good on all devices. This can be done by resizing the
+browser window, using the device toolbar in the browser dev tools, or using a service like BrowserStack.
+
+If working in Storybook you can use the viewport addon to quickly check the component at different sizes.
+<img src={viewportButton} />
+
+## Accessibility
+
+Ensure that the component is accessible to all users. This can be done by manually checking that the component can be
+navigated using a keyboard, that all text is readable, and that all interactive elements are focusable.
+
+If working in Storybook each component, layout and example page has an accessibility tab that will show you any
+accessibility violations. If you can't see the addons panel at the bottom of the screen, you can open it by pressing 'A'
+on your keyboard.
+
+> {getReviewBlock(lastReview)}
