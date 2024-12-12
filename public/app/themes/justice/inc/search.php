@@ -60,7 +60,6 @@ class Search
      *
      * @return bool True if the search query is empty, false otherwise.
      */
-
     public function hasEmptyQuery(): bool
     {
         return empty(get_search_query());
@@ -71,7 +70,6 @@ class Search
      *
      * @return int|null The number of search results.
      */
-
     public function getResultCount(): ?int
     {
         if (empty(get_search_query())) {
@@ -89,7 +87,6 @@ class Search
      * @param array $args An array of query parameters to add or modify.
      * @return string The URL for the search results.
      */
-
     public function getSearchUrl($search, $args = [])
     {
         $url_append = '';
@@ -127,7 +124,6 @@ class Search
      *
      * @return array An array of sort options.
      */
-
     public function getSortOptions(): array
     {
         $orderby = get_query_var('orderby');
@@ -151,7 +147,6 @@ class Search
      *
      * @return void
      */
-
     public function redirectOldSearchUrls()
     {
         // Don't redirect if we're in the admin.
@@ -184,7 +179,6 @@ class Search
      * @param \WP_Query $q The main WordPress query.
      * @return string The modified search query.
      */
-
     public function handleEmptySearch($search, \WP_Query $q)
     {
         if (!is_admin() && empty($search) && $q->is_search() && $q->is_main_query()) {
@@ -203,7 +197,6 @@ class Search
      * @param \WP_Query $query The main WordPress query.
      * @return void
      */
-
     public function searchFilter($query)
     {
         if (!is_admin() && $query->is_main_query() && $query->is_search) {
@@ -217,7 +210,6 @@ class Search
      * @param string $url The URL to format.
      * @return string The formatted URL.
      */
-
     public function formattedUrl(string $url): string
     {
         $split_length = 80;
@@ -247,7 +239,6 @@ class Search
      * @param string $suggestion The suggested search query.
      * @return string The filtered URL.
      */
-
     public function didYouMeanUrl($url, $query, $suggestion): string
     {
         return empty($suggestion) ? $url : $this->getSearchUrl($suggestion);
@@ -263,7 +254,6 @@ class Search
      * @param array $hits The search results.
      * @return array The filtered search results.
      */
-
     public function relevanssiParentFilter(array $hits): array
     {
         global $wp_query;
@@ -306,7 +296,6 @@ class Search
      * @param array $columns The columns for the admin screen.
      * @return array The columns after removing any un-necessary ones.
      */
-
     public function removeColumns(array $columns): array
     {
         if (!current_user_can('manage_options')) {
@@ -325,7 +314,6 @@ class Search
      *
      * @return void
      */
-
     public function removeSearchesSubMenus()
     {
         if (!current_user_can('manage_options')) {
@@ -339,7 +327,6 @@ class Search
      *
      * e.g /search/the/page/page/11
      */
-
     public function redirectMultiplePageInURI()
     {
         $uri = $_SERVER['REQUEST_URI'];
@@ -376,7 +363,6 @@ class Search
      *
      * @return void
      */
-
     public function redirectIfQueryStringHasArrays()
     {
         // Are we on a search page? The URI starts with /search

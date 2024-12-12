@@ -109,7 +109,6 @@ class Security
      * @param $html string The HTML string of a link or script tag.
      * @return string The modified HTML string.
      */
-
     public function filterAssetQueryString($html): string
     {
         return str_replace('ver=' . $this->wp_version, 'ver=' . $this->hashed_wp_version, $html);
