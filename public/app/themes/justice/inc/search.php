@@ -331,9 +331,8 @@ class Search
      */
     public function redirectMultiplePageInURI(): void
     {
-        $uri = $_SERVER['REQUEST_URI'];
         // Trim the first and last slash
-        $uri = trim($uri, '/');
+        $uri = trim($_SERVER['REQUEST_URI'], '/');
         // Split the URI by '/'
         $uri_parts = explode('/', $uri);
 
