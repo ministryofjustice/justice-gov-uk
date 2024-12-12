@@ -104,7 +104,7 @@ class Security
     }
 
     /**
-     * Change the URL of the style tag
+     * Change the URL of the script or style tags.
      *
      * @param $tag string The HTML string of a link or script tag.
      * @return string The modified HTML string.
