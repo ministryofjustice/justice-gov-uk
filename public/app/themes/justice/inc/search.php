@@ -51,7 +51,7 @@ class Search
         // Redirect the user to the search page if the URI contains multiple pages.
         add_action('init', [$this, 'redirectMultiplePageInURI'], 1);
 
-        // Run redirectIfQueryStringHasArrays early to avoid any issues with the query string.
+        // Redirect the user to the search page if there are arrays in the the query string.
         add_action('init', [$this, 'redirectIfQueryStringHasArrays'], 1);
     }
 
