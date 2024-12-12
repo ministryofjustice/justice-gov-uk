@@ -105,6 +105,8 @@ class Security
 
     /**
      * Change the URL of the script or style tags.
+     * 
+     * @see https://developer.wordpress.org/reference/hooks/style_loader_tag/
      *
      * @param $tag string The HTML string of a link or script tag.
      * @return string The modified HTML string.
