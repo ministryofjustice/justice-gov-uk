@@ -326,8 +326,10 @@ class Search
      * Handle malformed search URLs where the path has multiple pages.
      *
      * e.g /search/the/page/page/11
+     * 
+     * @return void
      */
-    public function redirectMultiplePageInURI()
+    public function redirectMultiplePageInURI(): void
     {
         $uri = $_SERVER['REQUEST_URI'];
         // Trim the first and last slash
@@ -363,7 +365,7 @@ class Search
      *
      * @return void
      */
-    public function redirectIfQueryStringHasArrays()
+    public function redirectIfQueryStringHasArrays(): void
     {
         // Are we on a search page? The URI starts with /search
         if (strpos($_SERVER['REQUEST_URI'], '/search') === false) {
