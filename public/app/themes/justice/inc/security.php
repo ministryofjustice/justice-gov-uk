@@ -104,26 +104,6 @@ class Security
     }
 
     /**
-     * Handle malformed URLs with arrays in the query string.
-     *
-     * This function will return a 404 if the query string contains arrays for wp_lang.
-     * e.g. /wp/wp-login.php?wp_lang%5B%24testing%5D=1
-     *
-     * @return void
-     */
-
-    public function validateLoginRequest()
-    {
-        // TODO - fix this!
-        // https://justice.docker/wp/wp-login.php?wp_lang%5B%24testing%5D=1
-        error_log('In validateLoginRequest');
-        if (isset($_GET['wp_lang']) && is_array($_GET['wp_lang'])) {
-            wp_safe_redirect(wp_login_url());
-            exit;
-        }
-    }
-
-    /**
      * Change the URL of the style tag
      *
      * @param $html string The HTML string of a link or script tag.
