@@ -106,12 +106,12 @@ class Security
     /**
      * Change the URL of the style tag
      *
-     * @param $html string The HTML string of a link or script tag.
+     * @param $tag string The HTML string of a link or script tag.
      * @return string The modified HTML string.
      */
-    public function filterAssetQueryString($html): string
+    public function filterAssetQueryString(string $tag): string
     {
-        return str_replace('ver=' . $this->wp_version, 'ver=' . $this->hashed_wp_version, $html);
+        return str_replace('ver=' . $this->wp_version, 'ver=' . $this->hashed_wp_version, $tag);
     }
 
 
