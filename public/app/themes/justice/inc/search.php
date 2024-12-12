@@ -326,7 +326,7 @@ class Search
      * Handle malformed search URLs where the path has multiple pages.
      *
      * e.g /search/the/page/page/11
-     * 
+     *
      * @return void
      */
     public function redirectMultiplePageInURI(): void
