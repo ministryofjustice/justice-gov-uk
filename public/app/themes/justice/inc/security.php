@@ -22,7 +22,7 @@ class Security
         $this->wp_version = get_bloginfo('version');
         // Hash the WP version number with a salt - let's borrow AUTH_SALT for this.
         // This way a we get a unique hash per WP version but it's not reversible.
-        $this->hashed_wp_version =  substr(md5($this->wp_version . AUTH_SALT), 0, 6);
+        $this->hashed_wp_version =  substr(hash('sha256', $this->wp_version . AUTH_SALT), 0, 6);
 
         $this->actions();
     }
