@@ -8,6 +8,12 @@ if (defined('ABSPATH')) {
     http_response_code(401) && exit();
 }
 
+// Return 200 if MOJ_AUTH_ENABLED is exactly equal to false, useful when working locally.
+if (isset($_ENV['MOJ_AUTH_ENABLED']) && $_ENV['MOJ_AUTH_ENABLED'] === 'false') {
+    error_log('MOJ_AUTH_ENABLED is false - skipping auth check.');
+    http_response_code(200) && exit();
+}
+
 define('DOING_STANDALONE_VERIFY', true);
 
 $autoload = '../../../../vendor/autoload.php';
@@ -15,11 +21,6 @@ $autoload = '../../../../vendor/autoload.php';
 if (!file_exists($autoload)) {
     error_log('moj-auth/verify.php autoloader.php was not found.');
     http_response_code(401) && exit();
-}
-
-if (isset($_ENV['MOJ_AUTH_ENABLED']) && $_ENV['MOJ_AUTH_ENABLED'] === 'false') {
-    error_log('MOJ_AUTH_ENABLED is false - skipping auth check.');
-    http_response_code(200) && exit();
 }
 
 require_once  $autoload;
