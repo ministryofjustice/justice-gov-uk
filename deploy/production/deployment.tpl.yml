@@ -21,27 +21,33 @@ spec:
         app: ${KUBE_NAMESPACE}
     spec:
       volumes:
-        - name: uploads
-          emptyDir: { }
         - name: php-socket
           emptyDir: { }
       terminationGracePeriodSeconds: 35
       serviceAccountName: ${KUBE_NAMESPACE}-service
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        seccompProfile:
+          type: "RuntimeDefault"
       containers:
         - name: nginx
           image: ${ECR_URL}:${IMAGE_TAG_NGINX}
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: uploads
-              mountPath: /var/www/html/public/app/uploads
             - name: php-socket
               mountPath: /sock
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: 
+              drop: ["ALL"]
           resources:
-            requests:
+            limits:
               cpu: 500m
               memory: 200Mi
-            limits:
+            requests:
               cpu: 500m
               memory: 200Mi
           readinessProbe:
@@ -54,21 +60,22 @@ spec:
               port: 8080
 
         - name: fpm
-          image: "${ECR_URL}:${IMAGE_TAG_FPM}"
+          image: ${ECR_URL}:${IMAGE_TAG_FPM}
           volumeMounts:
-            - name: uploads
-              mountPath: /var/www/html/public/app/uploads
             - name: php-socket
               mountPath: /sock
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: 
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
           resources:
-            requests:
-              cpu: 600m
-              memory: 500Mi
             limits:
               cpu: 1000m
               memory: 500Mi
-          securityContext:
-            runAsUser: 101
+            requests:
+              cpu: 600m
+              memory: 500Mi
           # Check frequently during startup, so that scaling up can happen as fast as possible.
           startupProbe:
             exec:
