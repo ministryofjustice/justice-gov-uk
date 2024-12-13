@@ -42,9 +42,6 @@ class Security
         add_filter('wp_headers', [$this, 'headerMods']);
         add_filter('auth_cookie_expiration', [$this, 'setLoginPeriod'], 10, 0);
 
-        // Handle malformed URLs with arrays in the query string.
-        add_filter('login_init', [$this, 'validateLoginRequest'], 10, 0);
-
         // Remove emoji support.
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');
