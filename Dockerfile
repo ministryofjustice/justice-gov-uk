@@ -22,6 +22,9 @@ RUN rm zz-docker.conf && \
 ## Set our pool configuration
 COPY deploy/config/php-pool.conf pool.conf
 
+# Create volumes for so that the directories are are writeable when the container is run in read-only mode.
+VOLUME /tmp /var/www/html/public/app/uploads
+
 WORKDIR /var/www/html
 
 ###
