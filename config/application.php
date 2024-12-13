@@ -125,6 +125,9 @@ Config::define('CONCATENATE_SCRIPTS', false);
 Config::define('COMPRESS_CSS', false);
 Config::define('COMPRESS_SCRIPTS', false);
 
+// Enable the authentication mu-plugin.
+Config::define('MOJ_AUTH_ENABLED', true);
+
 // Limit the number of post revisions
 Config::define('WP_POST_REVISIONS', env('WP_POST_REVISIONS') ?? true);
 
@@ -149,7 +152,8 @@ Config::define('WP_DEBUG', true);
 Config::define('WP_DEBUG_LOG', '/dev/stderr');
 Config::define('SCRIPT_DEBUG', false);
 ini_set('display_errors', '0');
-
+// Additional logging for the authentication mu-plugin.
+Config::define('MOJ_AUTH_DEBUG', env('MOJ_AUTH_DEBUG'));
 
 /**
  * WP Redis config.

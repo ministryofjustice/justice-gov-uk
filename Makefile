@@ -16,12 +16,12 @@ k8s_pod := kubectl -n $(k8s_nsp) get pod -l app=justice-gov-uk-local -o jsonpath
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
 
 
-init: setup run
+init: setup key-gen run
 
 d-compose: local-stop
 	docker compose up -d nginx phpmyadmin php-fpm
 
-d-shell: setup dory d-compose composer
+d-shell: setup key-gen dory d-compose composer
 
 setup:
 	@chmod +x ./bin/*
@@ -101,6 +101,9 @@ test:
 test-fixes:
 	composer test:fix
 
+# JWT secret generation
+key-gen:
+	@chmod +x ./bin/local-key-gen.sh && ./bin/local-key-gen.sh
 
 #####
 ## Mock production, K8S deployment

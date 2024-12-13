@@ -8,3 +8,7 @@ data:
   WP_HOME: 'https://dev.justice.gov.uk'
   WP_SITEURL: 'https://dev.justice.gov.uk/wp'
   WP_LOOPBACK: 'http://localhost:8080'
+  # See Azure Setup in the README for more information on how to get these values.
+  # The following IDs are not private, they form part of the publicly visible oauth login url.
+  OAUTH_CLIENT_ID: "93e03e3d-3406-4bbd-9803-cbced3ec31a5"
+  OAUTH_TENANT_ID: "c6874728-71e6-41fe-a9e1-2e8c36776ad8"

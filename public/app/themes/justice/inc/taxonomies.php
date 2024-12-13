@@ -158,7 +158,7 @@ class Taxonomies
         // Map over the taxonomies and return an object with the name and value.
         return array_map(fn ($taxonomy) => (object) [
             'name' => $taxonomy->name,
-            'value' => !empty(get_query_var($taxonomy->name)) ? get_query_var($taxonomy->name) : null
+            'value' => !empty(get_query_var($taxonomy->name)) ? esc_html(get_query_var($taxonomy->name)) : null
         ], $taxonomies);
     }
 

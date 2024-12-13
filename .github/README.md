@@ -296,6 +296,39 @@ To verify that S3 & CloudFront are working correctly.
 - The img source domain should be CloudFront.
 - Directly trying to access an image via the S3 bucket url should return an access denied message.
 
+## Azure Setup
+
+### Useful links
+
+- [Ministry of Justice | Overview](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/Overview)
+- App [justicedigital-centraldigital-justice-gov-uk-preprod](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Overview/quickStartType~/null/sourceType/Microsoft_AAD_IAM/appId/93e03e3d-3406-4bbd-9803-cbced3ec31a5)
+- App [justicedigital-centraldigital-justice-gov-uk](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Overview/quickStartType~/null/sourceType/Microsoft_AAD_IAM/appId/3313c87a-399d-4130-a505-37c996721009)
+
+### Register an application
+
+1. Go to the Azure portal and sign in with your account.
+2. Click on the `Microsoft Entra ID` service.
+3. Click on `App registrations`.
+4. Click on `New registration`.
+5. Fill in the form (adjust to the environment):
+   - Name: `justicedigital-centraldigital-justice-gov-uk`
+   - Supported account types: `Accounts in this organizational directory only`
+   - Redirect URI: `Web` and `https://www.justice.gov.uk/oauth2/callback`
+     or `https://dev.justice.gov.uk/oauth2/callback` etc.
+6. Copy the `Application (client) ID` and `Directory (tenant) ID` values,
+  make them available as environment variables `OAUTH_CLIENT_ID`, `OAUTH_TENANT_ID`.
+7. Click on `Certificates & secrets` > `New client secret`.
+8. Fill in the form:
+   - Description: `Staging`
+   - Expires: `18 months`
+9. Set a reminder to update the client secret before it expires.
+10. Copy the `Value` value, make it available as environment variable `OAUTH_CLIENT_SECRET`.
+11. Make a request the Identity Team, that `User.Read` API permissions be added to the app.
+
+The oauth2 flow should now work with the Azure AD/Entra ID application.
+You can get an Access Token, Refresh Token and an expiry of the token.
+
+## Deployment
 
 ### YAML template files
 
