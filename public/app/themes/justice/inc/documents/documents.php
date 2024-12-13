@@ -107,6 +107,9 @@ class Documents
 
         // Hide the Validate Structure sub-menu from non-admins.
         add_action('admin_menu', [$this, 'hideValidateStructureSubmenu'], 30);
+
+        // Dequeue the frontend styles, we don't need them.
+        add_action('wp_enqueue_scripts', fn() => wp_dequeue_style('wp-document-revisions-front'), 100);
     }
 
 
