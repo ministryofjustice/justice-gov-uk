@@ -11,10 +11,10 @@ import { addFilter } from "@wordpress/hooks";
  */
 
 const removeCustomClassNameSupport = (settings, name) => {
-  if (
-    !name.startsWith("core/") ||
-    settings.supports?.customClassName === false
-  ) {
+  // Blocks that are allowed to have custom class name support, e.g. the list block and the horizontal styling variant.
+  const allowed = ['core/list'];
+
+  if (!name.startsWith("core/") || settings.supports?.customClassName === false || allowed.includes(name)) {
     return settings;
   }
 
