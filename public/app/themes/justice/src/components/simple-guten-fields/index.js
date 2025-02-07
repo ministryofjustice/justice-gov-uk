@@ -1,6 +1,6 @@
 // @ts-check
 import { select, useSelect } from "@wordpress/data";
-import { PluginDocumentSettingPanel } from "@wordpress/edit-post";
+import { PluginDocumentSettingPanel } from "@wordpress/editor";
 import { Fragment } from "@wordpress/element";
 import { registerPlugin } from "@wordpress/plugins";
 
