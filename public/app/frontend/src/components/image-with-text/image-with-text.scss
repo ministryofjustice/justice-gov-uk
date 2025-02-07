@@ -15,7 +15,7 @@
     }
 
     &__image {
-        flex-basis: 66.66%;
+        flex-basis: 60%;
 
         .image {
             width: 100%;
@@ -28,7 +28,7 @@
     }
 
     &__content {
-        flex-basis: 33.33%;
+        flex-basis: 40%;
         @media screen and (min-width: $justice-md) {
             @include spacing('padding', 6, 'left');
             @include spacing('padding', 6, 'right');
@@ -55,5 +55,9 @@
 
     .rich-text {
         @include spacing('margin', 4, 'top');
+        p, a {
+            @include h6;
+            font-family: var(--justice-body-font);
+        }
     }
 }

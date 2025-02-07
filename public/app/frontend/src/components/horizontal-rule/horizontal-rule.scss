@@ -1,0 +1,16 @@
+@import '../../../style';
+
+.horizontal-rule {
+  display: none;
+  @media screen and (min-width: $justice-lg) {
+    display: block;
+    &:not(&--full-width) {
+      @include container;
+    }
+    &__hr {
+      @include spacing('margin', 8, 'top');
+      margin-bottom: 0;
+      width: 100%;
+    }
+  }
+}

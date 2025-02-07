@@ -1,7 +1,6 @@
 @import '../../../style';
 
 .footer {
-    @include spacing('margin', 8, 'top');
     @include spacing('padding', 4, 'top');
 
     background-color: var(--justice-primary-black);
@@ -56,7 +55,7 @@
         @include h3;
 
         font-weight: var(--heading-font-normal);
-        color: var(--justice-primary-white);
+        color: var(--justice-secondary-blue);
     }
 
     &__gov {

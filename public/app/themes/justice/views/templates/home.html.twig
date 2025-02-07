@@ -6,6 +6,12 @@
     {% include 'views/partials/header.html.twig' %}
 {% endblock %}
 
+{% block mainContentTop %}
+    {% include '@components/horizontal-rule/horizontal-rule.html.twig' with {
+        decorative: true,
+    } %}
+{% endblock %}
+
 {% block articleHeader %}
     {# No title #}
 {% endblock %}
@@ -30,6 +36,12 @@
         {% set updatedBlock = block|merge({ isMobile }) %}
         {% include '@components/sidebar-block/sidebar-block.html.twig' with updatedBlock %}
     {% endfor %}
+{% endblock %}
+
+{% block mainContentBottom %}
+    {% include '@components/horizontal-rule/horizontal-rule.html.twig' with {
+        decorative: true,
+    } %}
 {% endblock %}
 
 {% block footerContent %}

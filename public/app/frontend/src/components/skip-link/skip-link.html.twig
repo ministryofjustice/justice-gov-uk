@@ -1,0 +1,15 @@
+{#
+@file
+A hidden link that appears when focused to skip to the main content
+
+Available variables:
+    - articleId: string The id of the main content
+example:
+    {% include '@components/button/button.html.twig' with {
+        articleId: 'main-content',
+    }%}
+#}
+
+<div class="skip-link">
+    <a class="skip-link__link" href="{{ articleId }}">Skip to main content</a>
+</div>

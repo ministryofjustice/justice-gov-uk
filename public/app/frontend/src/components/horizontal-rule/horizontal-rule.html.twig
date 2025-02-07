@@ -1,0 +1,18 @@
+{#
+@file
+An HR element that can be hidden from screenreaders when used decoratively
+
+Available variables:
+    - fullWidth: boolean (optional)  Whether the horizontal rule breaks out of the container
+    - decoration: boolean (optional) If true then hide the horizontal rule from screen readers
+example:
+    {% include '@components/horizontal-rule/horizontal-rule.html.twig' with {
+        fullWidth: true,
+        decorative: false,
+    }%}
+#}
+
+<div class="horizontal-rule{{ fullWidth ? " horizontal-rule--full-width" : ""}}">
+    <hr class="horizontal-rule__hr"
+        aria-hidden="{{ decorative ? "true" : "false" }}">
+</div>

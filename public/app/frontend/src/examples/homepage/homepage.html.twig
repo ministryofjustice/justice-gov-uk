@@ -2,6 +2,12 @@
 
 {% set direction = 'right' %}
 
+{% block mainContentTop %}
+    {% include '@components/horizontal-rule/horizontal-rule.html.twig' with {
+        decorative: true,
+    } %}
+{% endblock %}
+
 {% block articleHeader %}
     {# Empty as the page title is in the image/text component #}
 {% endblock %}
@@ -10,11 +16,10 @@
     {% include '@components/image-with-text/image-with-text.html.twig' with {
         direction: 'left',
         title: {
-            text: 'Justice on GOV.UK',
+            text: 'Justice UK',
             tag: 'h1',
-            url: '#',
         },
-        content: '<p>This website now hosts Civil and Family Procedure Committee Rules content only. You will be automatically redirected to equivalent content on <a href="#" target="_blank" rel="noopener">GOV.UK</a> or the National Archives.</p>',
+        content: '<p>This website now hosts Civil and Family Procedure Committee Rules content only. You will be automatically redirected to equivalent content on <a class="link link--new-tab" href="#">GOV.UK (opens in a new tab)</a> or the National Archives.</p>',
         image: {
             url: 'https://images.unsplash.com/photo-1589994965851-a8f479c573a9',
             alt: 'A statue of the scales of justice'
@@ -52,6 +57,12 @@
         },
     ],
 } %}
+
+{% block mainContentBottom %}
+    {% include '@components/horizontal-rule/horizontal-rule.html.twig' with {
+        decorative: true,
+    } %}
+{% endblock %}
 
 {% block sidebar %}
     {% include '@components/sidebar-block/sidebar-block.html.twig' with mostPopular %}
