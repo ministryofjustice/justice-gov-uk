@@ -5,8 +5,10 @@
     flex-direction: column;
     min-height: 100vh;
 }
+
 .footer-wrapper {
     @include spacing('margin', 8, 'top');
+
     flex: 1;
-    background-color: var(--justice-primary-black)
+    background-color: var(--justice-primary-black);
 }

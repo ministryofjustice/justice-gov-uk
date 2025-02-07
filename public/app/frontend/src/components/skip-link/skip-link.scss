@@ -1,13 +1,16 @@
 @import '../../../style';
 
 .skip-link {
-  @include spacing('padding', 4);
-  background-color: var(--gds-yellow);
-  position: absolute;
-  &:not(:active, :focus-within) {
-    @include visually-hidden;
-  }
-  a {
-    @include link('dark');
-  }
+    @include spacing('padding', 4);
+
+    background-color: var(--gds-yellow);
+    position: absolute;
+
+    &:not(:active, :focus-within) {
+        @include visually-hidden;
+    }
+
+    a {
+        @include link('dark');
+    }
 }

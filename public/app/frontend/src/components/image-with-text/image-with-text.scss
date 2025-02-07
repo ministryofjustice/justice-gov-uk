@@ -55,8 +55,11 @@
 
     .rich-text {
         @include spacing('margin', 4, 'top');
-        p, a {
+
+        p,
+        a {
             @include h6;
+
             font-family: var(--justice-body-font);
         }
     }
