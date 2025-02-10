@@ -1,5 +1,9 @@
 {% set showSearch = hasSearch ?? true %}
 
+{% include '@components/skip-link/skip-link.html.twig' with {
+    articleId: '#main-page-content',
+} %}
+
 <div class="page-wrapper">
     <div class="header-wrapper">
         {% block headerContent %}
@@ -36,8 +40,14 @@
         {% endblock %}
     </div>
     <main>
+        {% block mainContentTop %}
+            {# Used for additional content that should break out of the grid or grid container, e.g. horizontal rules for spacing #}
+        {% endblock %}
         {% block mainContent %}
-
+            {# Used for the main content of the page, constrained by the grid container and grid #}
+        {% endblock %}
+        {% block mainContentBottom %}
+            {# Used for additional content that should break out of the grid or grid container, e.g. horizontal rules for spacing #}
         {% endblock %}
     </main>
     <div class="footer-wrapper">

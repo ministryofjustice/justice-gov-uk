@@ -45,7 +45,7 @@ $context = Timber::context([
     ],
     'mainImage' => [
         'url' => get_template_directory_uri() . '/dist/img/scales-of-justice.jpg',
-        'alt' => 'Scales of justice',
+        'alt' => 'A golden statue of Lady Justice holding a sword in her right hand and scales in her left, mounted on a domed building against a blue sky with clouds.',
     ],
     'blocks' => [$blockContent],
     'content' => get_the_content(),

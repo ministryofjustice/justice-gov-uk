@@ -3,6 +3,7 @@
 
 .navigation-sections {
     @include spacing('margin', 4, 'top');
+
     display: block;
     max-width: 100%;
 

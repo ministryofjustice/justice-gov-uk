@@ -21,6 +21,8 @@ import './components/navigation-sections';
 import './components/breadcrumbs';
 import './components/hero';
 import './components/updated-date';
+import './components/horizontal-rule';
+import './components/skip-link';
 
 import navigationSecondary from './components/navigation-secondary';
 import sidebarBlock from './components/sidebar-block';
