@@ -10,7 +10,7 @@ const ControlField = withSelect((select, props) => {
   const key = meta_key + row_index + property_key;
 
   if (typeof row_index === "undefined") {
-    return { value, key, label: `Set ${label}`, help };
+    return { value, label: `Set ${label}`, help };
   }
 
   const defaultValue = props.field.default || "";
@@ -20,7 +20,6 @@ const ControlField = withSelect((select, props) => {
       typeof value[row_index][property_key] !== "undefined"
         ? value[row_index][property_key]
         : defaultValue,
-    key,
     label: `Set ${property_key.replace("_", " ")}`,
     help, 
   };

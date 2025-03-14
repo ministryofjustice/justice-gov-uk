@@ -9,7 +9,7 @@ import { roundMins, stringToHash, comboDebounce } from "../utils";
  * @see https://docs.sentry.io/platforms/javascript/configuration/integrations/httpclient
  */
 
-Sentry.addIntegration(
+window.Sentry?.addIntegration(
   new HttpClientIntegration({
     failedRequestStatusCodes: [403],
   }),
@@ -25,6 +25,9 @@ Sentry.addIntegration(
  */
 
 (() => {
+  if (!window.Sentry) {
+    return;
+  }
   let errorCount = 0;
   let errorCountAlerted = 0;
   const message =
@@ -98,41 +101,46 @@ const { fetch: originalFetch } = window;
  * @returns {Promise<Response>}
  */
 
-window.fetch = async (...args) => {
-  let [resource, config] = args;
-
-  const response = await originalFetch(resource, config);
-
-  if (response.status === 200) {
-    return response;
+(() => {
+  if (!window.Sentry) {
+    return;
   }
+  window.fetch = async (...args) => {
+    let [resource, config] = args;
 
-  // Parse the request url.
-  const requestUrlObject = new URL(resource);
-  const requestUri = `${requestUrlObject.pathname}${requestUrlObject.search}`;
+    const response = await originalFetch(resource, config);
 
-  // Generate a unique hash base on the request uri and it's body.
-  // Appending this to the Sentry event message prevents similar issues from being grouped.
-  const requestHash = stringToHash(JSON.stringify(config.body) + requestUri);
+    if (response.status === 200) {
+      return response;
+    }
 
-  // Compose a message for the Sentry issue.
-  let sentryMessage = `Failed client-side fetch request. Status code: ${response.status}`;
+    // Parse the request url.
+    const requestUrlObject = new URL(resource);
+    const requestUri = `${requestUrlObject.pathname}${requestUrlObject.search}`;
 
-  // We have a 403 that is likely from a Modsec false positive.
-  if (response.status === 403) {
-    // Append a unique hash to the log message to prevent issue merging.
-    // This will help with debugging.
-    sentryMessage += ` Request hash ${requestHash}.`;
-    // Set the url as context for the Sentry event.
-    Sentry.setContext("cloud_platform_log", {
-      url: getModsecLogUrl(requestUri),
+    // Generate a unique hash base on the request uri and it's body.
+    // Appending this to the Sentry event message prevents similar issues from being grouped.
+    const requestHash = stringToHash(JSON.stringify(config.body) + requestUri);
+
+    // Compose a message for the Sentry issue.
+    let sentryMessage = `Failed client-side fetch request. Status code: ${response.status}`;
+
+    // We have a 403 that is likely from a Modsec false positive.
+    if (response.status === 403) {
+      // Append a unique hash to the log message to prevent issue merging.
+      // This will help with debugging.
+      sentryMessage += ` Request hash ${requestHash}.`;
+      // Set the url as context for the Sentry event.
+      Sentry.setContext("cloud_platform_log", {
+        url: getModsecLogUrl(requestUri),
+      });
+    }
+
+    Sentry.captureEvent({
+      message: sentryMessage,
     });
-  }
 
-  Sentry.captureEvent({
-    message: sentryMessage,
-  });
-
-  // response interceptor here
-  return response;
-};
+    // response interceptor here
+    return response;
+  };
+})();
