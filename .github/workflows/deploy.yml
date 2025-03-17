@@ -28,6 +28,7 @@ jobs:
       - name: "Inject environment variables"
         env:
           TPL_PATH: "deploy/${{ inputs.environment }}"
+          ERROR_PAGES_PATH: "public/app/themes/justice/error-pages"
           ECR_URL: "${{ inputs.registry }}/${{ vars.ECR_REPOSITORY }}"
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
@@ -66,11 +67,20 @@ jobs:
             base64 --decode
           );
 
+          # Get the 403 and 404 error pages, and indent with 4 spaces and then trim the leading spaces.
+          export HTML_403=$(cat "$ERROR_PAGES_PATH/403.html" | sed 's/^/    /' | sed '1s/^ *//')
+          export HTML_404=$(cat "$ERROR_PAGES_PATH/404.html" | sed 's/^/    /' | sed '1s/^ *//')
+
           ## Perform find/replace 
-          ## Only replace $MODSEC_CONFIG fromn ingress.tpl.yml
+          ## Only replace $MODSEC_CONFIG from ingress.tpl.yml
           < "$TPL_PATH"/ingress.tpl.yml    envsubst '${MODSEC_CONFIG}' > "$TPL_PATH"/ingress.yaml
           < "$TPL_PATH"/secret.tpl.yml     envsubst                    > "$TPL_PATH"/secret.yaml
           < "$TPL_PATH"/deployment.tpl.yml envsubst                    > "$TPL_PATH"/deployment.yaml
+
+          # If the modsec-errors.tpl.yml file exists, perform find/replace on it
+          if [ -f "$TPL_PATH"/modsec-errors.tpl.yml ]; then
+            < "$TPL_PATH"/modsec-errors.tpl.yml envsubst > "$TPL_PATH"/modsec-errors.yaml
+          fi
 
           ## Remove template files before apply
           rm "$TPL_PATH"/*.tpl.yml
