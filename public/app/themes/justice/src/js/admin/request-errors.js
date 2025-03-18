@@ -131,7 +131,7 @@ const { fetch: originalFetch } = window;
       // This will help with debugging.
       sentryMessage += ` Request hash ${requestHash}.`;
       // Set the url as context for the Sentry event.
-      Sentry.setContext("cloud_platform_log", {
+      window.Sentry.setContext("cloud_platform_log", {
         url: getModsecLogUrl(requestUri),
       });
     }
