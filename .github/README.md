@@ -116,6 +116,8 @@ The output is served at http://pages.justice.docker
 > There is no need to install application software on your computer.<br>
 > All required software is built within the services and all services are ephemeral.
 
+Locally, if you run `make phpdoc-build`, it will build the PHP documentation and output it to the `.github/pages/_site/phpdoc` directory. This is then served at http://pages.justice.docker/phpdoc
+
 #### Volumes
 
 There are multiple volume mounts created in this project and shared across the services.

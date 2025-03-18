@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor
+        configVersion="3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.phpdoc.org"
+>
+    <title>phpDocumentor</title>
+    <paths>
+        <output>.github/pages/_site/phpdoc</output>
+    </paths>
+    <version number="3.0.0">
+        <api>
+            <source dsn=".">
+                <path>public/app/themes/justice</path>
+                <path>public/app/mu-plugins/moj-auth</path>
+            </source>
+        </api>
+    </version>
+
+</phpdocumentor>
