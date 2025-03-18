@@ -93,7 +93,7 @@ const visualEditorIsReady = () =>
   new Promise((resolve) => {
     const unsubscribe = subscribe(() => {
       if (
-        select("core/editor").isCleanNewPost() ||
+        select("core/editor")?.isCleanNewPost() ||
         select("core/block-editor").getBlockCount() > 0
       ) {
         unsubscribe();
@@ -128,10 +128,10 @@ let showIcons;
 
 subscribe(async () => {
   // Get the current editorMode
-  const newEditorMode = select("core/edit-post").getEditorMode();
+  const newEditorMode = select("core/edit-post")?.getEditorMode();
 
-  // Only do something if editorMode has changed.
-  if (newEditorMode === editorMode) {
+  // Only do something if editorMode is defined and it has changed.
+  if (typeof newEditorMode === 'undefined' || newEditorMode === editorMode) {
     return;
   }
 

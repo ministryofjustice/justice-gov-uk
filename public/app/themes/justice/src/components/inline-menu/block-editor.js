@@ -11,6 +11,7 @@ import { category } from "@wordpress/icons";
  */
 
 registerBlockType("moj/inline-menu", {
+  apiVersion: 2,
   title: "Inline menu - child pages",
   icon: "editor-insertmore",
   category: "common",

@@ -18,6 +18,6 @@ const registerEditorsKitFormats = () => {
   [anchor, underline].forEach((settings) => {
     registerFormatType(settings.name, settings);
   });
-}
+};
 
 domReady(registerEditorsKitFormats);

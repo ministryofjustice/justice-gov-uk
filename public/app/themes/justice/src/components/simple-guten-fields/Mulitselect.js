@@ -8,12 +8,13 @@ const isRepeater = (rowIndex) => {
 
 const WithHelp = (props) => (
   <BaseControl
+    key={props._key}
     id={props._key}
     help={props.help}
     className={props.classes}
     __nextHasNoMarginBottom
   >
-    <MultiSelect {...props} />
+    <MultiSelect key={props._key} {...props} />
   </BaseControl>
 );
 
@@ -44,7 +45,6 @@ let ControlField = withSelect((select, props) => {
       isMulti: isMultiProp,
       placeholder: label,
       defaultValue,
-      key,
       _key: key,
       options,
       label: `Set ${label}`,
@@ -67,7 +67,6 @@ let ControlField = withSelect((select, props) => {
       placeholder: label,
       isMulti: isMultiProp,
       defaultValue,
-      key,
       _key: key,
       options,
       label: `Set ${label}`,
