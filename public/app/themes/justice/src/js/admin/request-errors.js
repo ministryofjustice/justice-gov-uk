@@ -41,7 +41,7 @@ window.Sentry?.addIntegration(
     alert(message + errorCount);
   }, 2000);
 
-  Sentry.addEventProcessor(function (event, hint) {
+  window.Sentry.addEventProcessor(function (event, hint) {
     // If the event has a status code and it's in > 400.
     if (
       event.contexts?.response?.status_code &&
@@ -136,7 +136,7 @@ const { fetch: originalFetch } = window;
       });
     }
 
-    Sentry.captureEvent({
+    window.Sentry.captureEvent({
       message: sentryMessage,
     });
 
