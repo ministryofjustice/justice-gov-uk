@@ -7,10 +7,14 @@ const ControlField = withSelect((select, props) => {
   const { help, label, meta_key } = props.field;
   const { row_index, property_key } = props;
   const value = select("core/editor").getEditedPostAttribute("meta")[meta_key];
-  const key = meta_key + row_index + property_key;
 
   if (typeof row_index === "undefined") {
-    return { value, label: `Set ${label}`, help };
+    return {
+      value,
+      label: `Set ${label}`,
+      help,
+      __nextHasNoMarginBottom: true,
+    };
   }
 
   const defaultValue = props.field.default || "";
@@ -21,7 +25,8 @@ const ControlField = withSelect((select, props) => {
         ? value[row_index][property_key]
         : defaultValue,
     label: `Set ${property_key.replace("_", " ")}`,
-    help, 
+    help,
+    __nextHasNoMarginBottom: true,
   };
 })(TextControl);
 

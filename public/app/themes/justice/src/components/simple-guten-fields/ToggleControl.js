@@ -5,16 +5,12 @@ const ControlField = withSelect((select, props) => {
   const { help, label, meta_key } = props.field;
   const { row_index, property_key } = props;
   const value = select("core/editor").getEditedPostAttribute("meta")[meta_key];
-  // const key = meta_key + row_index + property_key;
-
-  if (typeof row_index === "undefined") {
-    return { checked: value, label, help };
-  }
 
   return {
-    checked: value[row_index][property_key],
+    checked: typeof row_index === "undefined" ? value : value[row_index][property_key],
     label,
     help,
+    __nextHasNoMarginBottom: true,
   };
 })(ToggleControl);
 
