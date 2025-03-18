@@ -39,6 +39,9 @@ jekyll-serve:
 	cd /home/pages && bundle install
 	cd /home/pages && bundle exec jekyll serve --host 0.0.0.0 --livereload --livereload-port 35729
 
+phpdoc-build:
+	docker run --rm --volume ${PWD}:/data phpdoc/phpdoc:3
+
 composer-assets:
 	@chmod +x ./bin/composer-post-install.sh
 	@chmod +x ./bin/local-composer-assets.sh
