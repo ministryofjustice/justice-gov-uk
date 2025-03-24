@@ -87,7 +87,7 @@ trait AuthJwt
     /**
      * Set a JWT cookie.
      *
-     * @return [object, string] Returns the JWT payload.
+     * @return array[object, string] Returns the payload and JWT string.
      */
     public function setJwt(object $args = new \stdClass()): array
     {
@@ -130,7 +130,7 @@ trait AuthJwt
     /**
      * Verify the JWT roles.
      *
-     * @param [string] $jwt_roles The roles from the JWT.
+     * @param string[] $jwt_roles The roles from the JWT.
      * @return bool
      */
     public function verifyJwtRoles(array $jwt_roles): bool

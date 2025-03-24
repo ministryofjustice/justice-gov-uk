@@ -160,6 +160,18 @@ class Admin
             )
         );
 
+        // If current user is admin, add a link to the phpdoc documentation.
+        if (current_user_can('administrator')) {
+            $wp_admin_bar->add_node(
+                array(
+                    'parent' => 'wp-logo-external',
+                    'id'     => 'phpdoc',
+                    'title'  => 'phpDocumentor',
+                    'href'   => 'https://howto-admin.www.justice.gov.uk/phpdoc'
+                )
+            );
+        }
+
         // Add a link to the support email.
         $wp_admin_bar->add_node(
             array(
