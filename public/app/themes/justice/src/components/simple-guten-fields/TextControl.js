@@ -13,6 +13,7 @@ const ControlField = withSelect((select, props) => {
       value,
       label: `Set ${label}`,
       help,
+      __next40pxDefaultSize: true,
       __nextHasNoMarginBottom: true,
     };
   }
@@ -26,6 +27,7 @@ const ControlField = withSelect((select, props) => {
         : defaultValue,
     label: `Set ${property_key.replace("_", " ")}`,
     help,
+    __next40pxDefaultSize: true,
     __nextHasNoMarginBottom: true,
   };
 })(TextControl);
