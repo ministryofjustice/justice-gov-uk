@@ -37,7 +37,7 @@ export const removeElementsFromMoreMenu = (mutationsList) => {
     (mutation) =>
       isElementNode(mutation.target.firstChild) &&
       mutation.target.firstChild?.classList?.contains(
-        "interface-more-menu-dropdown__content",
+        "more-menu-dropdown__content",
       ),
   );
 
@@ -48,7 +48,7 @@ export const removeElementsFromMoreMenu = (mutationsList) => {
 
   // Get the groups.
   const groups = document.querySelectorAll(
-    ".interface-more-menu-dropdown__content .components-menu-group",
+    ".more-menu-dropdown__content .components-menu-group",
   );
 
   // Return if there are no button groups.
@@ -64,7 +64,7 @@ export const removeElementsFromMoreMenu = (mutationsList) => {
 
   // Get all of the menu-more buttons.
   const buttons = document.querySelectorAll(
-    ".interface-more-menu-dropdown__content .components-button",
+    ".more-menu-dropdown__content .components-button",
   );
   // Loop over the buttons and hide the ones we don't want.
   buttons?.forEach((button) => {
