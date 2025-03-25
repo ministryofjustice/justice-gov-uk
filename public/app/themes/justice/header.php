@@ -11,6 +11,8 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>"/>
     <meta name="viewport" content="width=device-width"/>
+    <link rel="icon" type="image/png" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/img/icon/fav/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/img/icon/fav/favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/img/icon/fav/favicon-48x48.png" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/img/icon/fav/favicon.svg" />
     <link rel="shortcut icon" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/img/icon/fav/favicon.ico" />
