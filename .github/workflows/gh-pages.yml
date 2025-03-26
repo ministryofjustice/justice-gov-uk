@@ -7,6 +7,7 @@ on:
     branches: ["main"]
     paths:
       - ".github/pages/**"
+      - "public/app/*.php"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -48,6 +49,9 @@ jobs:
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+      - name: Build with phpdoc
+        # Outputs to the './_site/phpdoc' directory
+        run: docker run --rm --volume "${{ github.workspace }}:/data" phpdoc/phpdoc:3 -vv
       - name: Upload artifact
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3
