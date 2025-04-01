@@ -4,8 +4,7 @@
 ##  ▀▄▀  █▀█  █▀▄  █  █▀█  █▄█  █▄▄  ██▄  ▄█
 ##  populate as needed for testing
 ##  ... never commit!
-COMPOSER_USER := ***
-COMPOSER_PASS := ***
+RELEVANSSI_API_KEY := ***
 
 ##  ... commit these :o)
 kube := kind
@@ -114,7 +113,7 @@ key-gen:
 build-nginx:
 	@echo "\n-->  Building local Nginx  <---------------------------|\n"; sleep 3;
 	docker image build -t justice-nginx:latest --target build-nginx \
-		--build-arg COMPOSER_USER="${COMPOSER_USER}" --build-arg COMPOSER_PASS="${COMPOSER_PASS}" .
+		--build-arg RELEVANSSI_API_KEY="${RELEVANSSI_API_KEY}" .
 
 # FastCGI Process Manager for PHP
 # https://www.php.net/manual/en/install.fpm.php
@@ -122,7 +121,7 @@ build-nginx:
 build-fpm:
 	@echo "\n-->  Building local FPM  <---------------------------|\n"; sleep 3;
 	docker image build -t justice-fpm:latest --target build-fpm \
-		--build-arg COMPOSER_USER="${COMPOSER_USER}" --build-arg COMPOSER_PASS="${COMPOSER_PASS}" .
+		--build-arg RELEVANSSI_API_KEY="${RELEVANSSI_API_KEY}" .
 
 build: build-fpm build-nginx
 	@if [ ${kube} == 'kind' ]; then kind load docker-image justice-fpm:latest; kind load docker-image justice-nginx:latest; fi
