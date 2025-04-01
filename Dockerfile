@@ -117,8 +117,6 @@ FROM base-fpm AS build-fpm-composer
 
 WORKDIR /var/www/html
 
-ARG COMPOSER_USER
-ARG COMPOSER_PASS
 ARG RELEVANSSI_API_KEY
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
