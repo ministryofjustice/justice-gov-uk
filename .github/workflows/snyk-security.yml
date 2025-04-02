@@ -46,11 +46,13 @@ jobs:
         # Build the docker images for testing
       - name: Container monitor ~ build FPM & Nginx Docker images
         run: |
-          docker image build --build-arg COMPOSER_USER="$COMPOSER_USER" --build-arg COMPOSER_PASS="$COMPOSER_PASS" -t justice-fpm:snyk --target build-fpm .
-          docker image build --build-arg COMPOSER_USER="$COMPOSER_USER" --build-arg COMPOSER_PASS="$COMPOSER_PASS" -t justice-nginx:snyk --target build-nginx .
+          docker image build  -t justice-fpm:snyk --target build-fpm \
+            --build-arg RELEVANSSI_API_KEY="$RELEVANSSI_API_KEY" .
+
+          docker image build  -t justice-nginx:snyk --target build-nginx \
+            --build-arg RELEVANSSI_API_KEY="$RELEVANSSI_API_KEY" .
         env:
-          COMPOSER_USER: ${{ secrets.COMPOSER_USER }}
-          COMPOSER_PASS: ${{ secrets.COMPOSER_PASS }}
+          RELEVANSSI_API_KEY: ${{ secrets.RELEVANSSI_API_KEY }}
         # Runs Snyk Container (Container and SCA) analysis.
       - name: Container monitor ~ analyse
         run: |
