@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: custom-error-pages
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-production
 data:
   403: |
     ${HTML_403}
@@ -13,7 +13,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-errors
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-production
   labels:
     app.kubernetes.io/name: nginx-errors
     app.kubernetes.io/part-of: ingress-nginx
@@ -68,7 +68,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: nginx-errors
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-production
   labels:
     app.kubernetes.io/name: nginx-errors
     app.kubernetes.io/part-of: ingress-nginx
