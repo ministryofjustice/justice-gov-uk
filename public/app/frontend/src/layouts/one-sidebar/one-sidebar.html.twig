@@ -1,7 +1,7 @@
 {% extends '@layouts/base/base.html.twig' %}
 
 {% block articleWrapper %}
-    <article id="main-page-content" class="one-sidebar__article">
+    <article id="main-page-content" class="one-sidebar__article{{ isHomepage ? " one-sidebar__article--homepage" : "" }}">
         <div class="one-sidebar__article-header">
             {% block articleHeader %}
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pellentesque in mi
