@@ -63,7 +63,10 @@
                 @include grid-row(10, 3);
             }
             #{$this}__article {
-                @include grid-row(1, 9);
+                @include grid-row(1, 7);
+                &--homepage {
+                    @include grid-row(1, 9);
+                }
             }
         }
     }
