@@ -1,4 +1,9 @@
+ARG version_nginx=1.26.2
+
 FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
+
+# Switch to the alpine's default user, for installing packages
+USER root
 
 # Make the Nginx user available in this container
 RUN addgroup -g 101 -S nginx; adduser -u 101 -S -D -G nginx nginx
@@ -31,9 +36,10 @@ RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
 
 WORKDIR /var/www/html
 
+
 ###
 
-FROM nginx:1.26.2-alpine AS nginx-module-builder
+FROM nginx:${version_nginx}-alpine AS nginx-module-builder
 
 SHELL ["/bin/ash", "-exo", "pipefail", "-c"]
 
@@ -53,7 +59,7 @@ RUN apk update \
 
 ###
 
-FROM nginxinc/nginx-unprivileged:1.26-alpine AS base-nginx
+FROM nginxinc/nginx-unprivileged:${version_nginx}-alpine AS base-nginx
 
 USER root
 
