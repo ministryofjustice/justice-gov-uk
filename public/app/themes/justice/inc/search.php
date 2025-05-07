@@ -48,6 +48,10 @@ class Search
         // Relevanssi - remove searches submenus for non-admins.
         add_filter('admin_menu', [$this, 'removeSearchesSubMenus'], 999);
 
+        // Relevanssi - fix duplicates due to revisions.
+        // https://www.relevanssi.com/knowledge-base/publishpress-revisions-duplicate-posts/
+        add_action( 'revision_applied', fn( $published, $revision ) => relevanssi_remove_doc( $revision->ID ), 10, 2 );
+
         // Redirect the user to the search page if the URI contains multiple pages.
         add_action('init', [$this, 'redirectMultiplePageInURI'], 1);
 
