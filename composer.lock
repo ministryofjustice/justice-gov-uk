@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2b521c6dfeb1a02b70d1df241ab1533",
+    "content-hash": "ed313263b6ff9d694ec851e1e409dea1",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -2640,10 +2640,10 @@
         },
         {
             "name": "relevanssi/relevanssi-premium",
-            "version": "2.27.4",
+            "version": "2.27.6",
             "dist": {
                 "type": "zip",
-                "url": "https://www.relevanssi.com/update/get_version.php?version=2.27.4"
+                "url": "https://www.relevanssi.com/update/get_version.php?version=2.27.6"
             },
             "type": "wordpress-plugin"
         },
