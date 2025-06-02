@@ -1,4 +1,4 @@
-import { Button } from "@wordpress/components";
+import { __experimentalVStack as VStack, Button } from "@wordpress/components";
 import { select, withDispatch, useSelect } from "@wordpress/data";
 
 import controlsIndex from "./controlsIndex";
@@ -34,12 +34,12 @@ let ControlField = ({ addItem, removeItem, field, controlsIndex }) => {
   );
 
   return (
-    <>
+    <VStack>
       <h3>{`${label}`} (Repeater field):</h3>
       {Array.isArray(repeaterValues) &&
         repeaterValues.map((row, index) => {
           return (
-            <div key={`repeaterValues${index}${meta_key}`}>
+            <VStack key={`repeaterValues${index}${meta_key}`}>
               <div>
                 <b>Repeater Record {index + 1}:</b>
               </div>
@@ -59,32 +59,30 @@ let ControlField = ({ addItem, removeItem, field, controlsIndex }) => {
                   />
                 );
               })}
-              {/* {index > 0 && ( */}
               <Button
-                isSmall={true}
                 variant="secondary"
                 onClick={() => {
                   removeItem(meta_key, index, repeaterValues);
                 }}
+                isDestructive={true}
+                style={{ alignSelf: "start" }}
               >
                 Remove line {index + 1}
               </Button>
-              {/* )} */}
-              <hr />
-            </div>
+            </VStack>
           );
         })}
+
       <Button
-        isSmall={true}
         variant="secondary"
-        style={{ marginTop: "10px" }}
+        style={{ marginTop: "10px", justifyContent: "center" }}
         onClick={() => {
           addItem(meta_key, repeaterValues ?? []);
         }}
       >
         Add Item
       </Button>
-    </>
+    </VStack>
   );
 };
 

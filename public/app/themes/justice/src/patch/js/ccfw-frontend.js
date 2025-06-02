@@ -56,10 +56,13 @@ import { CCFW } from './ccfw-gtm'
                 this.$el.show()
                 this.$cookieSettingsButton.hide()
 
-                // the cookie banner is now at the top, so we scroll to the top
-                $([document.documentElement, document.body]).animate({
-                    scrollTop: $('#ccfw-page-banner').offset().top
-                }, 200)
+                const banner = $('#ccfw-page-banner');
+                // If the cookie banner exists, scroll to the top
+                if (banner.length > 0) {
+                    $([document.documentElement, document.body]).animate({
+                        scrollTop: banner.offset().top
+                    }, 200)
+                }
             },
             hideBanner: function () {
                 this.$el.hide()

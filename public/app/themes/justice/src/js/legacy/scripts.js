@@ -1,37 +1,11 @@
 import jQuery from 'jquery';
-import nselect from "./nselect";
 
 // jQuery.noConflict();
 jQuery(document).ready(function () {
 
   /**
-   * Custom selects are used on the search page.
-   */
-
-  nselect();
-
-  /**
    * The following code is legacy and is not yet fully understood.
    */
-
-  //tab-group
-  jQuery('.tab-group .tabs').each(function () {
-    //get tabs for this group
-    jQuery(this).children('li').each(function (i) {
-      jQuery(this).click(function (e, auto) {
-        if (typeof auto == "undefined") jQuery(document).stopTime('highlight');
-        e.preventDefault();
-        var thisTabGrp = jQuery(this).closest('.tab-group');
-        //toggle selected tab
-        jQuery(thisTabGrp).children('.tabs').children('li.selected').removeClass();
-        jQuery(this).addClass('selected');
-        //toggle tab contents
-        jQuery(thisTabGrp).children('.tab-content').children().each(function (j) {
-          i == j ? jQuery(this).fadeIn(250, 'swing') : jQuery(this).fadeOut(250, 'swing');
-        });
-      });
-    });
-  });
 
   //top nav sub
   jQuery('.menu-top li[class!="more"] .flyout-container div[class^="content"]').each(function () {
@@ -63,15 +37,6 @@ jQuery(document).ready(function () {
       jQuery(_parent).children('.flyout-container,.finish,span').hide();
     }
   });
-
-  //highlight auto-cycle
-  if (jQuery('#highlight').length > 0) {
-    setInterval(function() {
-      var index = jQuery('#highlight .tabs li.selected').index();
-      var size = jQuery('#highlight .tabs li').length;
-      index < size - 1 ? jQuery('#highlight .tabs li:eq(' + (index + 1) + ')').trigger('click', ['auto']) : jQuery('#highlight .tabs li:eq(0)').trigger('click', ['auto']);
-    }, 5000);
-  }
 
   //split lv2-listing
   if (jQuery('div.lv2-listing').length > 0) {
