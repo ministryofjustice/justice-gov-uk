@@ -5,7 +5,7 @@ name: Snyk Security
 
 on:
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "develop", "frontend-rework" ]
   schedule:
     - cron: '12 8 * * 2'
 
