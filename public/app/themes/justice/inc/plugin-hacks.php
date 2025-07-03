@@ -22,6 +22,5 @@ add_action('wp_enqueue_scripts', function () {
 
     // This localised variable can be accessed by both `ccfw-script-frontend` and `ccfw-script`,
     // because it is declared before the scripts in the html.
-    // wp_localize_script('ccfw-script-frontend', 'mojCcfwConfig', ['https' => wp_is_using_https()]);
-    wp_localize_script('ccfw-script-frontend', 'mojCcfwConfig', ['https' => true]);
+    wp_localize_script('ccfw-script-frontend', 'mojCcfwConfig', ['https' => wp_is_using_https()]);
 });
