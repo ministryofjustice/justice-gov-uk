@@ -15,8 +15,13 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script(
         'ccfw-script',
         get_template_directory_uri() . '/dist/patch/js/ccfw-cookie-manage.js',
-        ['jquery'],
+        ['jquery', 'ccfw-script-frontend'],
         1.2,
         true
     );
+
+    // This localised variable can be accessed by both `ccfw-script-frontend` and `ccfw-script`,
+    // because it is declared before the scripts in the html.
+    // wp_localize_script('ccfw-script-frontend', 'mojCcfwConfig', ['https' => wp_is_using_https()]);
+    wp_localize_script('ccfw-script-frontend', 'mojCcfwConfig', ['https' => true]);
 });
