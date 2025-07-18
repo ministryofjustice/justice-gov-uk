@@ -2,7 +2,7 @@
 
 namespace MOJ\Justice;
 
-use ClusterHelper;
+use MOJ\ClusterHelper;
 
 defined('ABSPATH') || exit;
 

@@ -1,8 +1,12 @@
 <?php
 
+namespace MOJ;
+
 // Do not allow access outside WP
 defined('ABSPATH') || exit;
 
+use Exception;
+use WP_REST_Response;
 use Roots\WPConfig\Config;
 
 /**
@@ -184,7 +188,7 @@ class ClusterHelper
      *
      * @return void
      */
-    static function registerCheckHomeUrlRoute(): void
+    public static function registerCheckHomeUrlRoute(): void
     {
         register_rest_route('cluster-helper/v1', '/check-home-url', [
             'permission_callback' => '__return_true', // Allow public access.

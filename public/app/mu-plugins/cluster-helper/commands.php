@@ -1,5 +1,7 @@
 <?php
 
+namespace MOJ;
+
 // Do not allow access outside WP
 defined('ABSPATH') || exit;
 
@@ -15,6 +17,7 @@ defined('ABSPATH') || exit;
  * - wp cluster-helper cleanup-hosts
  */
 
+use WP_CLI;
 use Roots\WPConfig\Config;
 
 class ClusterHelperCommands
