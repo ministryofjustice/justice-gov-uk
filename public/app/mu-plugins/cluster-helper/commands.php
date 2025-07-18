@@ -5,7 +5,7 @@ defined('ABSPATH') || exit;
 
 /**
  * This class is related to WP_CLI commands for registering and deregistering the current Nginx host.
- * 
+ *
  * Usage:
  * - wp cluster-helper register-self
  * - wp cluster-helper register-host <host>

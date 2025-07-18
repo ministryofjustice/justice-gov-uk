@@ -45,8 +45,8 @@ class ClusterHelper
 
     /**
      * Get the current nginx hosts from the option.
-     * 
-     * 
+     *
+     *
      * @param string $format The format to return the nginx hosts, either full or hostnames.
      * @return array An array of nginx hosts.
      *               - If $format is 'full', it returns the full array of nginx hosts with their timestamps.
@@ -80,7 +80,7 @@ class ClusterHelper
     /**
      * Upsert an nginx host in the option.
      * Set the entry with updated_at timestamp and unresolved_count.
-     * 
+     *
      * @param string     $host The host to upsert.
      * @param int        $unresolved_count The unresolved count to set for the host (default is 0).
      * @return bool|null Returns true if the host was already present and updated, false if it was newly added,
@@ -129,7 +129,7 @@ class ClusterHelper
      * Delete an nginx host from the option.
      * If the host exists, it will be removed from the array.
      * If it does not exist, a message will be logged indicating nothing to remove.
-     * 
+     *
      * @param string $host The host to delete.
      * @return bool|null Returns true if the host was found and deleted, false if it was not found,
      *                  or null if there was an error during the operation.
@@ -174,14 +174,14 @@ class ClusterHelper
 
     /**
      * Register a REST route to check if the current host is an Nginx host *for this application*.
-     * 
+     *
      * In the cleanup script, we need to know if a URL is still associated with this application.
      * This endpoint accepts a `home_url` parameter and checks if it matches the current site's home URL.
-     * 
+     *
      * e.g. http://172.0.0.12/wp-json/cluster-helper/v1/check-home-url?home-url=https://dev.intranet.justice.gov.uk
      *      will return true if the home URL matches the current site's home URL,
      *      or false if it does not match.
-     * 
+     *
      * @return void
      */
     static function registerCheckHomeUrlRoute(): void
@@ -259,9 +259,9 @@ class ClusterHelper
 
     /**
      * Add a dashboard widget to display the Nginx hosts.
-     * 
+     *
      * This widget will only be added if the current user has administrator capabilities.
-     * 
+     *
      * @return void
      */
     public function addDashboardWidget(): void
@@ -279,10 +279,10 @@ class ClusterHelper
 
     /**
      * Render the dashboard widget that displays the Nginx hosts.
-     * 
+     *
      * This method retrieves the Nginx hosts and displays them in a table format.
      * If no hosts are registered, it displays a message indicating that.
-     * 
+     *
      * @return void
      */
     public function renderDashboardWidget(): void
