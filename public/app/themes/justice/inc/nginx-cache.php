@@ -18,18 +18,22 @@ class NginxCache
      */
     public function addHooks()
     {
-        add_action('wp_after_insert_post', [$this, 'clear_nginx_cache'], 10, 2);
+        add_action('wp_after_insert_post', [$this, 'clearNginxCache'], 10, 2);
+
+        add_action('revisionary_revision_published', [$this, 'clearNginxCache'], 10, 1);
     }
 
     /**
      * Send a purge cache request to all Nginx servers when a post is saved or updated.
      *
-     * @param int $post_id The post ID
+     * @param int|object $post The post object, or ID
      *
      * @return void
      */
-    public function clearNginx_Cache(int $post_id): void
+    public function clearNginxCache(int|object $post): void
     {
+        $post_id = is_object($post) ? $post->ID : $post;
+
         // Check if the post is a revision or unpublished.
         if (wp_is_post_revision($post_id) || get_post_status($post_id) !== 'publish') {
             return;
