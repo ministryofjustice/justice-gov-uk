@@ -99,5 +99,5 @@ if (defined('WP_CLI') && WP_CLI) {
     WP_CLI::add_command('cluster-helper', $cluster_helper_commands);
 
     // 2. Register object as a function for the callable parameter.
-    WP_CLI::add_command('cluster-helper', 'ClusterHelperCommands');
+    WP_CLI::add_command('cluster-helper', 'MOJ\ClusterHelperCommands');
 }
