@@ -21,6 +21,7 @@ trait PageFilters
             'query_key' => 'content-quality-issue',
             'values' => [
                 'Table without header' => 'thead',
+                'Anchor without destination' => 'anchor',
             ]
         ]
     ];

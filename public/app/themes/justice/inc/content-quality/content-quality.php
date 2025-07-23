@@ -11,6 +11,7 @@ require_once 'traits/columns.php';
 require_once 'traits/dashboard-widget.php';
 require_once 'traits/filters.php';
 
+require_once 'issues/anchor.php';
 require_once 'issues/thead.php';
 
 class ContentQuality
@@ -62,6 +63,7 @@ class ContentQuality
     public function addIssues(): void
     {
         // Add the issues.
+        new ContentQualityIssueAnchor();
         new ContentQualityIssueThead();
 
         // Add more issues here as needed.

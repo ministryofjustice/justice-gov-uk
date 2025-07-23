@@ -10,38 +10,19 @@ defined('ABSPATH') || exit;
 
 require_once 'issue.php';
 
-class ContentQualityIssueThead extends ContentQualityIssue
+final class ContentQualityIssueThead extends ContentQualityIssue
 {
     CONST ISSUE_NAME = 'thead';
 
     CONST ISSUE_DESCRIPTION = 'Table without header';
 
+
     /**
-     * Parse the pages admin screen to filter by this issue.
+     * Load the pages with thead issues.
      * 
-     * This function is called when the user selects the "Table without header" filter from the pages admin screen.
-     * It loads the pages with issues and sets the query to only include those pages.
+     * This function runs an SQL query to find pages with tables that do not have a <thead> element.
      * 
-     * @param \WP_Query $query The main query object.
      * @return void
-     */
-    public function parsePagesAdminScreenQuery($query): void
-    {
-        // Load the pages with issues - don't run this on construct, as it's an expensive operation.
-        $this->loadPagesWithIssues();
-
-        $page_ids_with_issue = array_map(function ($page) {
-            return $page->ID;
-        }, $this->pages_with_issue);
-
-        $query->set('post__in', $page_ids_with_issue);
-
-        return;
-    }
-
-
-    /**
-     * Load the pages with issues
      */
     public function loadPagesWithIssues(): void
     {
@@ -74,51 +55,6 @@ class ContentQualityIssueThead extends ContentQualityIssue
         ";
 
         $this->pages_with_issue = $wpdb->get_results($query);
-    }
-
-
-    /**
-     * Check if a page has issues.
-     *
-     * @param bool $has_issues Whether the page has issues.
-     * @param int $post_id The ID of the post to check.
-     * @return bool Whether the page has issues.
-     */
-    public function pageHasIssues(bool $has_issues, int $post_id): bool
-    {
-        if($has_issues) {
-            // If the page already has issues, return true.
-            return true;
-        }
-
-        // Load the pages with issues - don't run this on construct, as it's an expensive operation.
-        $this->loadPagesWithIssues();
-
-        // Check if the post ID is in the pages with issues.
-        foreach ($this->pages_with_issue as $page) {
-            if ($page->ID == $post_id) {
-                return true;
-            }
-        }
-
-        // If the post ID is not in the pages with issues, return false.
-        return false;
-    }
-
-
-    public function filterDashboardIssues(array $issues)
-    {
-        // Load the pages with issues - don't run this on construct, as it's an expensive operation.
-        $this->loadPagesWithIssues();
-
-        // Add the pages with issues to the issues array.
-        $issues[] = [
-            'name' => $this::ISSUE_NAME,
-            'description' => $this::ISSUE_DESCRIPTION,
-            'count' => count($this->pages_with_issue)
-        ];
-
-        return $issues;
     }
 }
 

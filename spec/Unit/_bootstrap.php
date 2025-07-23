@@ -12,4 +12,5 @@ global $theme_root_dir;
 // If your project does not use autoloading via Composer, include your files now
 require_once $theme_root_dir . '/inc/admin.php';
 require_once $theme_root_dir . '/inc/block-editor.php';
+require_once $theme_root_dir . '/inc/content-quality/content-quality.php';
 require_once $theme_root_dir . '/inc/post-meta/post-meta.php';
