@@ -12,9 +12,9 @@ require_once 'issue.php';
 
 final class ContentQualityIssueThead extends ContentQualityIssue
 {
-    CONST ISSUE_NAME = 'thead';
+    const ISSUE_NAME = 'thead';
 
-    CONST ISSUE_DESCRIPTION = 'Table without header';
+    const ISSUE_DESCRIPTION = 'Table without header section';
 
 
     /**
@@ -54,8 +54,38 @@ final class ContentQualityIssueThead extends ContentQualityIssue
             ORDER BY table_count DESC
         ";
 
-        $this->pages_with_issue = $wpdb->get_results($query);
+        foreach ($wpdb->get_results($query) as $page) {
+            // Add the page to the pages with issue.
+            $this->pages_with_issue[$page->ID] = (object)[
+                'ID' => $page->ID,
+                'table_without_thead' => $page->table_count - $page->thead_count,
+            ];
+        }
+    }
+
+
+    /**
+     * Append issues for a specific page.
+     * 
+     * This function checks if the page has thead issues and appends them to the issues array.
+     * 
+     * @param array $issues The current issues array.
+     * @param int $post_id The ID of the post to check.
+     * @return array The issues array with the anchor issues appended.
+     */
+    public function appendPageIssues($issues, $post_id)
+    {
+        // Load the pages with issues - don't run this on construct, as it's an expensive operation.
+        $this->loadPagesWithIssues();
+
+        if (empty($this->pages_with_issue[$post_id])) {
+            return $issues;
+        }
+
+        $count = $this->pages_with_issue[$post_id]->table_without_thead;
+
+        $issues[] =  sprintf(_n('There is %d table without a header section', 'There are %d tables without a header section', $count, 'justice'), $count);
+
+        return $issues;
     }
 }
-
-

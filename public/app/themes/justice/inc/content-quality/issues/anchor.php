@@ -6,6 +6,12 @@ defined('ABSPATH') || exit;
 
 require_once 'issue.php';
 
+/**
+ * This class is for content quality checks related to anchor links.
+ *
+ * It extends the ContentQualityIssue class and provides a primary methods to identify (and load) pages with anchor issues.
+ * It includes helper methods to get anchors from content, check if the content has an element with a given ID.
+ */
 final class ContentQualityIssueAnchor extends ContentQualityIssue
 {
     const ISSUE_NAME = 'anchor';
@@ -47,17 +53,56 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
         ";
 
         foreach ($wpdb->get_results($query) as $page) {
+            // Keep track of broken anchors for this page.
+            $broken_anchors = [];
+
+            // Get all anchors from the content.
             $anchors = $this->getAnchorsFromContent($page->post_content);
 
+            // Loop the anchors from the content.
             foreach ($anchors as $anchor) {
                 // In $page->post_content is there an element with matching ID for each anchor?
                 if (!$this->contentHasElementWithId($page->post_content, $anchor)) {
-                    error_log('No element with ID: ' . $anchor . ' in page ID: ' . $page->ID);
-                    // TODO - keep track of which pages have which issues.
-                    $this->pages_with_issue[$page->ID] = $page;
+                    // If not, add the anchor to the broken anchors array.
+                    $broken_anchors[] = $anchor;
                 }
             }
+
+            // If there are broken anchors, add the page to the pages_with_issue array.
+            if (!empty($broken_anchors)) {
+                $this->pages_with_issue[$page->ID] = (object)[
+                    'ID' => $page->ID,
+                    'broken_anchors' =>  $broken_anchors
+                ];
+            }
         }
+    }
+
+    /**
+     * Append issues for a specific page.
+     * 
+     * This function checks if the page has anchor issues and appends them to the issues array.
+     * 
+     * @param array $issues The current issues array.
+     * @param int $post_id The ID of the post to check.
+     * @return array The issues array with the anchor issues appended.
+     */
+    public function appendPageIssues($issues, $post_id)
+    {
+        // Load the pages with issues - don't run this on construct, as it's an expensive operation.
+        $this->loadPagesWithIssues();
+
+        if (empty($this->pages_with_issue[$post_id])) {
+            return $issues;
+        }
+
+        $broken_anchors = $this->pages_with_issue[$post_id]->broken_anchors;
+        $broken_anchors_string = implode(', ', $broken_anchors);
+        $count = count($broken_anchors);
+
+        $issues[] =  sprintf(_n('The following anchor is missing a target: %s', 'The following anchors are missing a target: %s', $count, 'justice'), $broken_anchors_string);
+
+        return $issues;
     }
 
 
@@ -70,7 +115,7 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
      * @param string $content The content to check.
      * @return array An array of unique anchors found in the content.
      */
-    public function getAnchorsFromContent(string $content): array
+    public static function getAnchorsFromContent(string $content): array
     {
         // Get all of the anchor destinations as an array
         // e.g. ['#', '#section1', '#section2']
@@ -93,7 +138,7 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
      * @param string $id The ID to check for.
      * @return bool Whether the content has an element with the given ID.
      */
-    public function contentHasElementWithId(string $content, string $id): bool
+    public static function contentHasElementWithId(string $content, string $id): bool
     {
         // Check if the content has an element with the given ID, where the id is wrapped in double quotes.
         if (strpos($content, 'id="' . $id . '"') !== false) {

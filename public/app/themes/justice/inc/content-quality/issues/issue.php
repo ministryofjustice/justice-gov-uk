@@ -28,7 +28,7 @@ class ContentQualityIssue
     /**
      * @var array|null The pages with this issue.
      * This will be set when loading the pages with issues.
-     * It will be an array of page objects that have this issue.
+     * It will be an array of *partial* page objects that have this issue.
      */
     public array|null $pages_with_issue = null;
 
@@ -66,8 +66,16 @@ class ContentQualityIssue
         // Add a filter to check if a single page has issues.
         add_filter('moj_content_quality_page_has_issues', [$this, 'pageHasIssues'], 10, 2);
 
+
+        add_filter('moj_content_quality_page_get_issues', [$this, 'appendPageIssues'], 10, 2);
+
         // Add a filter to append this issue to the dashboard issues array.
         add_filter('moj_content_quality_filter_dashboard_issues', [$this, 'appendToDashboardIssues']);
+    }
+
+    public function appendPageIssues($issues, $post_id)
+    {
+        return $issues;
     }
 
 
@@ -128,15 +136,7 @@ class ContentQualityIssue
         // Load the pages with issues - don't run this on construct, as it's an expensive operation.
         $this->loadPagesWithIssues();
 
-        // Check if the post ID is in the pages with issues.
-        foreach ($this->pages_with_issue as $page) {
-            if ($page->ID == $post_id) {
-                return true;
-            }
-        }
-
-        // If the post ID is not in the pages with issues, return false.
-        return false;
+        return !empty($this->pages_with_issue[(int)$post_id]);
     }
 
 

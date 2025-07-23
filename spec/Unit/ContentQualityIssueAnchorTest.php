@@ -30,9 +30,9 @@ final class ContentQualityIssueAnchorTest extends \Codeception\Test\Unit
     {
         $instance = new ContentQualityIssueAnchor();
 
-        $this->assertEquals([], $instance->getAnchorsFromContent(''));
-        $this->assertEquals([], $instance->getAnchorsFromContent('<p>Some text with an <a href="#top">anchor</a>.</p>'));
-        $this->assertEquals(['section1'], $instance->getAnchorsFromContent('<p>Some text with an <a href="#section1">anchor</a>.</p>'));
+        $this->assertEquals([], $instance::getAnchorsFromContent(''));
+        $this->assertEquals([], $instance::getAnchorsFromContent('<p>Some text with an <a href="#top">anchor</a>.</p>'));
+        $this->assertEquals(['section1'], $instance::getAnchorsFromContent('<p>Some text with an <a href="#section1">anchor</a>.</p>'));
     }
 
     public function testContentHasElementWithId(): void

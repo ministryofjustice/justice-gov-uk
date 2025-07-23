@@ -41,7 +41,7 @@ trait PageFilters
 
         // Loop the filters and render them.
         foreach ($this::FILTERS as $filter) {
-            get_template_part('inc/documents/filters-template', null, [
+            get_template_part('inc/content-quality/traits/filters-template', null, [
                 ...$filter,
                 'value' => isset($_GET[$filter['query_key']]) ? $_GET[$filter['query_key']] : '',
             ]);
