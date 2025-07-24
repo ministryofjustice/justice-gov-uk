@@ -151,9 +151,9 @@ class Security
 
     /**
      * Disable author pages.
-     * 
+     *
      * Return status code 404 for existing and non-existing author archives.
-     * 
+     *
      * @see https://developer.wordpress.org/reference/hooks/template_redirect/
      * @return void
      */
