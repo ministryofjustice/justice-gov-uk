@@ -18,7 +18,7 @@ trait DashboardWidget
     {
         wp_add_dashboard_widget(
             'content_quality_widget',
-            __('Content Quality Issues', 'justice'),
+            __('Content Quality', 'justice'),
             [$this, 'renderDashboardWidget']
         );
     }
@@ -30,22 +30,25 @@ trait DashboardWidget
      */
     public function renderDashboardWidget(): void
     {
+        // Get the page count.
+        $page_count = wp_count_posts('page');
+
+        // Get the issues, each issue class will append an entry to the issues array.
         $issues = apply_filters('moj_content_quality_filter_dashboard_issues', []);
+        
+        // Count the pages with issues... map the ids, merge them, and count unique ids.
+        // This is to avoid counting the same page multiple times if it has multiple issues.
+        $pages_with_issues_count = count(array_unique(array_merge(...array_map(fn($issue) => $issue['ids'], $issues))));
+        
+        // Calculate the count of pages without issues.
+        // This is the total pages minus the pages with issues.
+        $pages_without_issues_count = $page_count->publish + $page_count->draft - $pages_with_issues_count;
 
-        echo '<p>This widget will report content quality issues such as missing alt text, empty headings, and tables without the header element.</p>';
-
-        if(empty($issues)) {
-            echo '<p>' . __('No content quality issues found.', 'justice') . '</p>';
-            return;
-        }
-
-        echo '<ul>';
-        foreach ($issues as $issue) {
-            echo '<li>';
-            echo '<a href="' . esc_url(admin_url('edit.php?post_type=page&content-quality-issue=' . $issue['name'])) . '">';
-            echo esc_html($issue['description']) . ' (' . $issue['count'] . ')</a>';
-            echo '</li>';
-        }
-        echo '</ul>';
+        // Render the dashboard widget template part.
+        get_template_part('inc/content-quality/traits/dashboard-widget-template', null, [
+            'issues' => $issues,
+            'without_issue_count' => $pages_without_issues_count,
+            'with_issue_count' => $pages_with_issues_count
+        ]);
     }
 }

@@ -158,7 +158,8 @@ class ContentQualityIssue
         $issues[] = [
             'name' => $this::ISSUE_NAME,
             'description' => $this::ISSUE_DESCRIPTION,
-            'count' => count($this->pages_with_issue)
+            'count' => count($this->pages_with_issue),
+            'ids' => array_keys($this->pages_with_issue),
         ];
 
         return $issues;
