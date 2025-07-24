@@ -61,7 +61,7 @@ class Security
         add_action('template_redirect', [$this, 'disableAuthorPages'], 1);
 
         // Remove the "View" link from user admin screen, since these will 404.
-        add_filter('user_row_actions', [$this, 'removeViewLinkOnUsersScreen'], PHP_INT_MAX);
+        add_filter('user_row_actions', [$this, 'removeViewLinkOnUsersScreen'], 100);
     }
 
     /**
