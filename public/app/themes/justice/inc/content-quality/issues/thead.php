@@ -12,9 +12,9 @@ require_once 'issue.php';
 
 final class ContentQualityIssueThead extends ContentQualityIssue
 {
-    const ISSUE_NAME = 'thead';
+    const ISSUE_SLUG = 'thead';
 
-    const ISSUE_DESCRIPTION = 'Table without header section';
+    const ISSUE_LABEL = 'Table without header section';
 
 
     /**

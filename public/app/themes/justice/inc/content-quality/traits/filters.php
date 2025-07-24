@@ -10,20 +10,14 @@ defined('ABSPATH') || exit;
 
 trait PageFilters
 {
-
     /**
-     * @var array $FILTERS The filters to add to the documents admin screen.
-     * @todo - This needs to be dynamic, so that it can be extended by other plugins (or sibling files).
+     * @var array $filter The filter to add to the pages admin screen.
      */
-    const FILTERS = [
-        [
-            'label' => 'Content quality',
-            'query_key' => 'content-quality-issue',
-            'values' => [
-                'Table without header' => 'thead',
-                'Anchor without destination' => 'anchor',
-            ]
-        ]
+    CONST FILTER = [
+        'label' => 'Content quality',
+        'query_key' => 'content-quality-issue',
+        // The values are added by the issues, they are an associative array with the issue label as the value and the issue slug as the key.
+        'values' => []
     ];
 
 
@@ -39,13 +33,19 @@ trait PageFilters
             return;
         }
 
-        // Loop the filters and render them.
-        foreach ($this::FILTERS as $filter) {
-            get_template_part('inc/content-quality/traits/filters-template', null, [
-                ...$filter,
-                'value' => isset($_GET[$filter['query_key']]) ? $_GET[$filter['query_key']] : '',
-            ]);
-        }
+        $filter = [
+            ...$this::FILTER,
+            'values' => apply_filters(
+                'moj_content_quality_filter_values',
+                $this::FILTER['values']
+            )
+        ];
+
+        // Render the filter.
+        get_template_part('inc/content-quality/traits/filters-template', null, [
+            ...$filter,
+            'value' => isset($_GET[$filter['query_key']]) ? $_GET[$filter['query_key']] : '',
+        ]);
     }
 
 
@@ -59,7 +59,6 @@ trait PageFilters
      */
     public function editorFiltering($query): void
     {
-
         global $pagenow;
 
         // We are not on admin page for the page post type.
@@ -73,15 +72,22 @@ trait PageFilters
             return;
         }
 
-        foreach ($this::FILTERS as $filter) {
-            $query_key = $filter['query_key'];
-            if (!isset($_GET[$query_key]) || !in_array($_GET[$query_key], $filter['values'])) {
-                continue;
-            }
-            apply_filters(
-                'moj_content_quality_filter_' . $query_key . '_' . $_GET[$query_key],
-                $query
-            );
+        $filter = [
+            ...$this::FILTER,
+            'values' => apply_filters(
+                'moj_content_quality_filter_values',
+                $this::FILTER['values']
+            )
+        ];
+
+        $query_key = $filter['query_key'];
+        if (!isset($_GET[$query_key]) || !in_array($_GET[$query_key], $filter['values'])) {
+            return;
         }
+
+        apply_filters(
+            'moj_content_quality_filter_' . $query_key . '_' . $_GET[$query_key],
+            $query
+        );
     }
 }

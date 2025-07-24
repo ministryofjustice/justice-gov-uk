@@ -14,9 +14,9 @@ require_once 'issue.php';
  */
 final class ContentQualityIssueAnchor extends ContentQualityIssue
 {
-    const ISSUE_NAME = 'anchor';
+    const ISSUE_SLUG = 'anchor';
 
-    const ISSUE_DESCRIPTION = 'Anchor links without destination';
+    const ISSUE_LABEL = 'Anchor links without destination';
 
     /**
      * @var array An array of anchors to ignore.

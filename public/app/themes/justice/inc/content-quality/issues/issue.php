@@ -17,13 +17,13 @@ class ContentQualityIssue
      * @var string|null The name of the issue.
      * This should be set in the child class.
      */
-    const ISSUE_NAME = null;
+    const ISSUE_SLUG = null;
 
     /**
      * @var string|null The description of the issue.
      * This should be set in the child class.
      */
-    const ISSUE_DESCRIPTION = null;
+    const ISSUE_LABEL = null;
 
     /**
      * @var array|null The pages with this issue.
@@ -38,12 +38,12 @@ class ContentQualityIssue
      */
     public function __construct()
     {
-        if (null === $this::ISSUE_NAME) {
-            throw new \Exception('ContentQualityIssue::ISSUE_NAME must be set in the child class.');
+        if (null === $this::ISSUE_SLUG) {
+            throw new \Exception('ContentQualityIssue::ISSUE_SLUG must be set in the child class.');
         }
 
-        if (null === $this::ISSUE_DESCRIPTION) {
-            throw new \Exception('ContentQualityIssue::ISSUE_DESCRIPTION must be set in the child class.');
+        if (null === $this::ISSUE_LABEL) {
+            throw new \Exception('ContentQualityIssue::ISSUE_LABEL must be set in the child class.');
         }
 
         $this->addHooks();
@@ -60,22 +60,38 @@ class ContentQualityIssue
      */
     public function addHooks(): void
     {
+        // Add a filter (WordPress filter) to add this issue to the filters (dropdown filter on the page screen).
+        add_filter('moj_content_quality_filter_values', [$this, 'appendEntryToFilter']);
+
         // Add a filter to the main query when filtering by this issue.
-        add_filter('moj_content_quality_filter_content-quality-issue_' . $this::ISSUE_NAME, [$this, 'parsePagesAdminScreenQuery']);
+        add_filter('moj_content_quality_filter_content-quality-issue_' . $this::ISSUE_SLUG, [$this, 'parsePagesAdminScreenQuery']);
 
         // Add a filter to check if a single page has issues.
         add_filter('moj_content_quality_page_has_issues', [$this, 'pageHasIssues'], 10, 2);
 
-
+        // Add a filter to append issues for a specific page.
         add_filter('moj_content_quality_page_get_issues', [$this, 'appendPageIssues'], 10, 2);
 
         // Add a filter to append this issue to the dashboard issues array.
         add_filter('moj_content_quality_filter_dashboard_issues', [$this, 'appendToDashboardIssues']);
     }
 
-    public function appendPageIssues($issues, $post_id)
+
+    /**
+     * Append an entry to the filter values, on the page admin screen.
+     * 
+     * This function is called when the filter values are being built for the pages admin screen.
+     * For a given extension of ContentQualityIssue, it will append the issue name and slug to the filter values.
+     * 
+     * @param array $filter_entries The current filter entries.
+     * @return array The modified filter entries with the current issue appended.
+     */
+    public function appendEntryToFilter(array $filter_entries): array
     {
-        return $issues;
+        // Add the issue to the filter entries.
+        $filter_entries[$this::ISSUE_LABEL] = $this::ISSUE_SLUG;
+
+        return $filter_entries;
     }
 
 
@@ -141,6 +157,22 @@ class ContentQualityIssue
 
 
     /**
+     * Append issues for a specific page.
+     * 
+     * This function should be implemented in the child classes.
+     * It should check if the page has issues and append them to the issues array.
+     * 
+     * @param array $issues The current issues array.
+     * @param int $post_id The ID of the post to check.
+     * @return array The issues array with the issues for the page appended.
+     */
+    public function appendPageIssues($issues, $post_id)
+    {
+        return $issues;
+    }
+
+
+    /**
      * Append an entry to the dashboard issues array.
      * 
      * This function is called when the dashboard widget is rendered.
@@ -156,8 +188,8 @@ class ContentQualityIssue
 
         // Add the pages with issues to the issues array.
         $issues[] = [
-            'name' => $this::ISSUE_NAME,
-            'description' => $this::ISSUE_DESCRIPTION,
+            'name' => $this::ISSUE_SLUG,
+            'description' => $this::ISSUE_LABEL,
             'count' => count($this->pages_with_issue),
             'ids' => array_keys($this->pages_with_issue),
         ];
