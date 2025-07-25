@@ -32,16 +32,11 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
      * It checks if there is an element with a matching ID for each anchor.
      * If there is no matching element, it adds the page to the $this->pages_with_issue property.
      *
-     * @return void
+     * @return array An array of pages with anchor issues.
      */
-    public function loadPagesWithIssues(): void
+    public function getPagesWithIssues(): array
     {
-        if (null !== $this->pages_with_issue) {
-            // Already loaded.
-            return;
-        }
-
-        $this->pages_with_issue = [];
+        $pages_with_issue = [];
 
         // Run an SQL query to find pages with tables that have anchor tags with a `#...` destination.
         global $wpdb;
@@ -70,12 +65,14 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
 
             // If there are broken anchors, add the page to the pages_with_issue array.
             if (!empty($broken_anchors)) {
-                $this->pages_with_issue[$page->ID] = (object)[
+                $pages_with_issue[$page->ID] = (object)[
                     'ID' => $page->ID,
                     'broken_anchors' =>  $broken_anchors
                 ];
             }
         }
+
+        return $pages_with_issue;
     }
 
     /**

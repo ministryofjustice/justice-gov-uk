@@ -12,6 +12,7 @@ require_once 'traits/dashboard-widget.php';
 require_once 'traits/filters.php';
 
 require_once 'issues/anchor.php';
+require_once 'issues/empty-heading.php';
 require_once 'issues/thead.php';
 
 class ContentQuality
@@ -64,6 +65,7 @@ class ContentQuality
     {
         // Add the issues.
         new ContentQualityIssueAnchor();
+        new ContentQualityIssueEmptyHeading();
         new ContentQualityIssueThead();
 
         // Add more issues here as needed.

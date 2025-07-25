@@ -35,7 +35,7 @@ trait DashboardWidget
 
         // Get the issues, each issue class will append an entry to the issues array.
         $issues = apply_filters('moj_content_quality_filter_dashboard_issues', []);
-        
+
         // Count the pages with issues... map the ids, merge them, and count unique ids.
         // This is to avoid counting the same page multiple times if it has multiple issues.
         $pages_with_issues_count = count(array_unique(array_merge(...array_map(fn($issue) => $issue['ids'], $issues))));

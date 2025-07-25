@@ -18,18 +18,15 @@ final class ContentQualityIssueThead extends ContentQualityIssue
 
 
     /**
-     * Load the pages with thead issues.
+     * Get the pages with thead issues.
      *
      * This function runs an SQL query to find pages with tables that do not have a <thead> element.
      *
-     * @return void
+     * @return array An array of pages with thead issues.
      */
-    public function loadPagesWithIssues(): void
+    public function getPagesWithIssues(): array
     {
-        if (null !== $this->pages_with_issue) {
-            // Already loaded.
-            return;
-        }
+        $pages_with_issue = [];
 
         // Run an SQL query to find pages with tables that do not have a <thead> element.
         global $wpdb;
@@ -56,11 +53,13 @@ final class ContentQualityIssueThead extends ContentQualityIssue
 
         foreach ($wpdb->get_results($query) as $page) {
             // Add the page to the pages with issue.
-            $this->pages_with_issue[$page->ID] = (object)[
+            $pages_with_issue[$page->ID] = (object)[
                 'ID' => $page->ID,
                 'table_without_thead' => $page->table_count - $page->thead_count,
             ];
         }
+
+        return $pages_with_issue;
     }
 
 

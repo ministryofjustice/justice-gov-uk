@@ -32,6 +32,19 @@ class ContentQualityIssue
      */
     public array|null $pages_with_issue = null;
 
+    /**
+     * @var string|null The transient key for caching the pages with issues.
+     * This will be set when loading the pages with issues.
+     * It is used to cache the results of the query to improve performance.
+     */
+    public string|null $transient_key = null;
+
+    /**
+     * @var int The duration for which the transient should be cached.
+     * Default is 1 week, but can be overridden in child classes.
+     */
+    public int $transient_duration = 7 * 24 * 60 * 60; // Default to 1 week in seconds (7 days * 24 hours * 60 minutes * 60 seconds).
+
 
     /**
      * Constructor
@@ -45,6 +58,8 @@ class ContentQualityIssue
         if (null === $this::ISSUE_LABEL) {
             throw new \Exception('ContentQualityIssue::ISSUE_LABEL must be set in the child class.');
         }
+
+        $this->transient_key = 'moj:content-quality:issue:' . $this::ISSUE_SLUG;
 
         $this->addHooks();
     }
@@ -96,17 +111,51 @@ class ContentQualityIssue
 
 
     /**
-     * Load pages with issues, into the $this->pages_with_issue property.
+     * Load the pages with issues into the $this->pages_with_issue property.
+     *
+     * This function checks if the pages_with_issue property is already set.
+     * And, it checks if the value is stored in a transient.
+     * If the value is cached, it uses it. Otherwise, it runs the getPages
+     */
+    public function loadPagesWithIssues(): void
+    {
+        // If the pages_with_issue property is already set, return early.
+        if (null !== $this->pages_with_issue) {
+            // Already loaded.
+            return;
+        }
+
+        // Check if the value is stored in a transient.
+        $cached_pages_with_issue = false; //get_transient($this->transient_key);
+
+        // If the value is cached, use it and return.
+        if ($cached_pages_with_issue !== false) {
+            // If the value is cached, use it.
+            $this->pages_with_issue = $cached_pages_with_issue;
+            return;
+        }
+
+        // Load the pages with issues.
+        $this->pages_with_issue = $this->getPagesWithIssues();
+
+        // Cache the pages with issues for performance.
+        set_transient($this->transient_key, $this->pages_with_issue, $this->transient_duration);
+    }
+
+
+    /**
+     * Get pages with issues.
      *
      * This function should be implemented in the child classes.
      * It could run an SQL query to find pages with issues and should set the $this->pages_with_issue property.
      *
-     * @return void
+     * @return array
      */
-    public function loadPagesWithIssues(): void
+    public function getPagesWithIssues(): array
     {
         // Intentionally left blank.
         // This function should be implemented in the child classes.
+        return [];
     }
 
 
@@ -124,9 +173,13 @@ class ContentQualityIssue
         // Load the pages with issues - don't run this on construct, as it's an expensive operation.
         $this->loadPagesWithIssues();
 
-        $page_ids_with_issue = array_map(function ($page) {
-            return $page->ID;
-        }, $this->pages_with_issue);
+        $page_ids_with_issue = array_keys($this->pages_with_issue);
+
+        if (empty($page_ids_with_issue)) {
+            // Passing an empty array to post__in will return all results.
+            // This is not what we want, so we set it to an array with a single value that will never match.
+            $page_ids_with_issue = [-1];
+        }
 
         $query->set('post__in', $page_ids_with_issue);
 
