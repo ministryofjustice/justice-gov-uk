@@ -91,24 +91,7 @@ To resolve this issue, you need to edit the page in question and either:
 
 If necessary, make reference to the [Jump Links section](/editing/block-editor.html#links-and-jump-links) of the Block Editor documentation for more information on how to create jump links.
 
-### Table without header section
-
-This issue occurs when a table is created without a header section. A header section is required for accessibility reasons, as it helps screen readers understand the structure of the table.
-
----
-
-On the Pages admin screen, the issue will be displayed as "There is 1 table without a header section".
-
----
-
-To resolve this issue, you need to edit the page in question and add a header section to the table. Then update the table content as necessary.
-
-If necessary, make reference to the [Tables section](/editing/block-editor.html#tables) of the Block Editor documentation for more information on:
-
-- how to add a header section to a table
-- how to remove a table row
-
-### Empty headings
+### Headings without content
 
 This issue occurs when a heading element is empty, meaning it does not contain any text. Empty headings can cause confusion for screen readers and should be avoided.
 
@@ -139,3 +122,20 @@ To resolve the issue, you need to either:
 
 - Remove the empty heading element
 - Or, add text to the heading element
+
+### Table without header section
+
+This issue occurs when a table is created without a header section. A header section is required for accessibility reasons, as it helps screen readers understand the structure of the table.
+
+---
+
+On the Pages admin screen, the issue will be displayed as "There is 1 table without a header section".
+
+---
+
+To resolve this issue, you need to edit the page in question and add a header section to the table. Then update the table content as necessary.
+
+If necessary, make reference to the [Tables section](/editing/block-editor.html#tables) of the Block Editor documentation for more information on:
+
+- how to add a header section to a table
+- how to remove a table row
