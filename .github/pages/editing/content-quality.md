@@ -108,3 +108,34 @@ If necessary, make reference to the [Tables section](/editing/block-editor.html#
 - how to add a header section to a table
 - how to remove a table row
 
+### Empty headings
+
+This issue occurs when a heading element is empty, meaning it does not contain any text. Empty headings can cause confusion for screen readers and should be avoided.
+
+---
+
+On the Pages admin screen, the issue will be displayed as "There is 1 heading without content".
+
+---
+
+To identify empty headings, from the edit page screen, 
+
+1. Click the "Document overview" button in the top right corner. 
+2. This will open the document overview panel, which lists all headings on the page.
+3. In the list view, look for the heading icon without any text next to it. This indicates an empty heading.
+
+<figure class="mb-5">
+  <div class="annotated-screenshot">
+   <img alt="Screenshot of the Page Edit screen with Document Overview" src="../assets/content-quality-editor-empty-headings.png" />
+   <ol>
+      <li id="annotation-editor-document-overview" class="label" style="top: 6%;left: 28%;" >Document Overview button</li>
+      <li id="annotation-editor-heading" class="label" style="top: 71%; left: 8%;" >Empty heading icon</li>
+   </ol>
+  </div>
+  <figcaption>Screenshot of the Page Edit screen with Document Overview</figcaption>
+</figure>
+
+To resolve the issue, you need to either:
+
+- Remove the empty heading element
+- Or, add text to the heading element
