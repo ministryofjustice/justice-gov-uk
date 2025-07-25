@@ -19,9 +19,9 @@ final class ContentQualityIssueThead extends ContentQualityIssue
 
     /**
      * Load the pages with thead issues.
-     * 
+     *
      * This function runs an SQL query to find pages with tables that do not have a <thead> element.
-     * 
+     *
      * @return void
      */
     public function loadPagesWithIssues(): void
@@ -66,9 +66,9 @@ final class ContentQualityIssueThead extends ContentQualityIssue
 
     /**
      * Append issues for a specific page.
-     * 
+     *
      * This function checks if the page has thead issues and appends them to the issues array.
-     * 
+     *
      * @param array $issues The current issues array.
      * @param int $post_id The ID of the post to check.
      * @return array The issues array with the anchor issues appended.

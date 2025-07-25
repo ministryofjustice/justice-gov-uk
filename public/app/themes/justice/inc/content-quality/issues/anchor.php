@@ -27,11 +27,11 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
 
     /**
      * Load the pages with anchor issues.
-     * 
+     *
      * This function runs an SQL query to find pages with anchor tags that have a # destination.
      * It checks if there is an element with a matching ID for each anchor.
      * If there is no matching element, it adds the page to the $this->pages_with_issue property.
-     * 
+     *
      * @return void
      */
     public function loadPagesWithIssues(): void
@@ -80,9 +80,9 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
 
     /**
      * Append issues for a specific page.
-     * 
+     *
      * This function checks if the page has anchor issues and appends them to the issues array.
-     * 
+     *
      * @param array $issues The current issues array.
      * @param int $post_id The ID of the post to check.
      * @return array The issues array with the anchor issues appended.
@@ -108,10 +108,10 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
 
     /**
      * Get all anchors from the content.
-     * 
+     *
      * This function extracts all anchor destinations from the content.
      * It returns an array of unique anchors, excluding those that in the ANCHORS_TO_IGNORE constant.
-     * 
+     *
      * @param string $content The content to check.
      * @return array An array of unique anchors found in the content.
      */
@@ -133,7 +133,7 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
 
     /**
      * Check if the content has an element with the given ID.
-     * 
+     *
      * @param string $content The content to check.
      * @param string $id The ID to check for.
      * @return bool Whether the content has an element with the given ID.

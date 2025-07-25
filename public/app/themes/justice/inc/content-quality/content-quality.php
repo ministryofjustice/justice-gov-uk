@@ -34,10 +34,10 @@ class ContentQuality
 
     /**
      * Add hooks for content quality checks.
-     * 
-     * This function adds the necessary hooks for content quality checks, including dashboard widgets, 
+     *
+     * This function adds the necessary hooks for content quality checks, including dashboard widgets,
      * columns in the admin screen, and filters for the pages admin screen.
-     * 
+     *
      * @return void
      */
     public function addHooks(): void
@@ -54,10 +54,10 @@ class ContentQuality
 
     /**
      * Add content quality issues.
-     * 
+     *
      * This function initializes the content quality issues that will be checked on pages.
      * It creates instances of the ContentQualityIssue classes, which will handle specific content quality checks.
-     * 
+     *
      * @return void
      */
     public function addIssues(): void

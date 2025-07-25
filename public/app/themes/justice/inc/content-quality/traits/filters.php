@@ -13,7 +13,7 @@ trait PageFilters
     /**
      * @var array $filter The filter to add to the pages admin screen.
      */
-    CONST FILTER = [
+    const FILTER = [
         'label' => 'Content quality',
         'query_key' => 'content-quality-issue',
         // The values are added by the issues, they are an associative array with the issue label as the value and the issue slug as the key.
@@ -62,8 +62,7 @@ trait PageFilters
         global $pagenow;
 
         // We are not on admin page for the page post type.
-        if (
-            !isset($_GET['post_type'])
+        if (!isset($_GET['post_type'])
             || $_GET['post_type'] !== $this->slug
             || !is_admin()
             || $pagenow !== 'edit.php'

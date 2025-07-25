@@ -52,10 +52,10 @@ class ContentQualityIssue
 
     /**
      * Add hooks for filters related to content quality.
-     * 
+     *
      * This function adds the necessary hooks for content quality checks, including dashboard widgets,
      * columns in the admin screen, and filters for the pages admin screen.
-     * 
+     *
      * @return void
      */
     public function addHooks(): void
@@ -79,10 +79,10 @@ class ContentQualityIssue
 
     /**
      * Append an entry to the filter values, on the page admin screen.
-     * 
+     *
      * This function is called when the filter values are being built for the pages admin screen.
      * For a given extension of ContentQualityIssue, it will append the issue name and slug to the filter values.
-     * 
+     *
      * @param array $filter_entries The current filter entries.
      * @return array The modified filter entries with the current issue appended.
      */
@@ -97,10 +97,10 @@ class ContentQualityIssue
 
     /**
      * Load pages with issues, into the $this->pages_with_issue property.
-     * 
+     *
      * This function should be implemented in the child classes.
      * It could run an SQL query to find pages with issues and should set the $this->pages_with_issue property.
-     * 
+     *
      * @return void
      */
     public function loadPagesWithIssues(): void
@@ -112,10 +112,10 @@ class ContentQualityIssue
 
     /**
      * Parse the pages admin screen query to filter issue.
-     * 
+     *
      * This function is called when the user selects a content-quality-issue filter from the pages admin screen.
      * For a given extension of ContentQualityIssue, it loads the pages with the issue and sets the query to only include those pages.
-     * 
+     *
      * @param \WP_Query $query The main query object.
      * @return void
      */
@@ -135,7 +135,7 @@ class ContentQualityIssue
 
     /**
      * Check if a page has issues.
-     * 
+     *
      * For a given extension of ContentQualityIssue, this function will check if the page has issues.
      *
      * @param bool $has_issues Whether the page has issues.
@@ -158,10 +158,10 @@ class ContentQualityIssue
 
     /**
      * Append issues for a specific page.
-     * 
+     *
      * This function should be implemented in the child classes.
      * It should check if the page has issues and append them to the issues array.
-     * 
+     *
      * @param array $issues The current issues array.
      * @param int $post_id The ID of the post to check.
      * @return array The issues array with the issues for the page appended.
@@ -174,10 +174,10 @@ class ContentQualityIssue
 
     /**
      * Append an entry to the dashboard issues array.
-     * 
+     *
      * This function is called when the dashboard widget is rendered.
      * For a given extension of ContentQualityIssue, it will append the issue name, description, and count of pages with issues.
-     * 
+     *
      * @param array $issues The current issues array.
      * @return array The modified issues array with the current issue appended.
      */

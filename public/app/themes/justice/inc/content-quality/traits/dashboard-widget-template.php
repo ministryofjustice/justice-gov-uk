@@ -4,8 +4,7 @@
  * Dashboard Widget template part.
  */
 
-if (
-    !defined('ABSPATH') ||
+if (!defined('ABSPATH') ||
     !isset($args['issues']) ||
     !isset($args['without_issue_count']) ||
     !isset($args['with_issue_count'])
@@ -45,12 +44,14 @@ if (
     ); ?>
 </p>
 
-<?php if (0 === $args['with_issue_count']) return; ?>
+<?php if (0 === $args['with_issue_count']) {
+    return;
+} ?>
 
 <p>Click on the issue name to view the pages with that issue.</p>
 
 <ul>
-    <?php foreach ($args['issues'] as $issue): ?>
+    <?php foreach ($args['issues'] as $issue) : ?>
         <li>
             <a href="<?php echo esc_url(add_query_arg(['content-quality-issue' => $issue['name']], admin_url('edit.php?post_type=page'))); ?>">
                 <?php echo esc_html($issue['description']); ?>
