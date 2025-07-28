@@ -56,6 +56,11 @@ class Security
 
         // Disable REST API for non-logged in users.
         add_filter('rest_authentication_errors', [$this, 'restAuth']);
+
+        // Return 404 for all author pages.
+        add_action('template_redirect', [$this, 'disableAuthorPages'], 1);
+        // Remove the "View" link from user admin screen, since these will 404.
+        add_filter('user_row_actions', [$this, 'removeViewLinkOnUsersScreen'], 100);
     }
 
     /**
@@ -142,5 +147,37 @@ class Security
         // Our custom authentication check should have no effect
         // on logged-in requests
         return $result;
+    }
+
+    /**
+     * Disable author pages.
+     *
+     * Return status code 404 for existing and non-existing author archives.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/template_redirect/
+     * @return void
+     */
+    public function disableAuthorPages(): void
+    {
+        if (isset($_GET['author']) || is_author()) {
+            global $wp_query;
+            $wp_query->set_404();
+            status_header(404);
+            nocache_headers();
+        }
+    }
+
+    /**
+     * Remove the "View" link from user admin screen.
+     *
+     * @param string[] $actions An array of action links to be displayed.
+     * @return string[] $actions The modified array of action links.
+     */
+    public function removeViewLinkOnUsersScreen(array $actions): array
+    {
+        if (isset($actions['view'])) {
+            unset($actions['view']);
+        }
+        return $actions;
     }
 }
