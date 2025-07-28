@@ -6,7 +6,6 @@ namespace Tests\Unit;
 use Tests\Support\UnitTester;
 use Codeception\Attribute\Depends;
 use MOJ\Justice\BlockEditor;
-use MOJ\Justice\PostMeta;
 use WP_Mock;
 
 final class BlockEditorTest extends \Codeception\Test\Unit

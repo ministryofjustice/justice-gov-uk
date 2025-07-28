@@ -68,6 +68,11 @@ Upon creation of a table block, you can define the number of rows and columns.
 
 Rows and columns can be added or removed later by clicking Edit table icon towards the right of the toolbar.
 
+![Table block](../assets/block-editor-table-header-section.png)
+
+For accessibility reasons, tables should always have a header section.
+To add a header section, click the table, then in the Block tab of the side menu, toggle the Header section.
+
 ### Footnotes
 
 In previous versions of the justice website, footnotes were created using links and anchor tags. 
