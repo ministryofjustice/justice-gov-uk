@@ -54,10 +54,10 @@ class Templates
 
     /**
      * Loads a string of HTML into a DOMDocument
-     * 
+     *
      * The string should be UTF-8 encoded, and it should be a partial HTML fragment,
      * i.e. it doesn't have a head, body, or doctype.
-     * 
+     *
      * @param DOMDocument $doc The DOMDocument that the html will be added to
      * @param string $html The HTML string to load into the DOMDocument
      * @return void
