@@ -51,6 +51,23 @@ class Templates
         add_action('render_block', [$this, 'replaceWordpressBlocks'], 10, 2);
     }
 
+
+    /**
+     * Loads a string of HTML into a DOMDocument
+     * 
+     * The string should be UTF-8 encoded, and it should be a partial HTML fragment,
+     * i.e. it doesn't have a head, body, or doctype.
+     * 
+     * @param DOMDocument $doc The DOMDocument that the html will be added to
+     * @param string $html The HTML string to load into the DOMDocument
+     * @return void
+     */
+    public function loadPartialHTML(DOMDocument &$doc, string $html): void
+    {
+        // Prefixing the HTML with an XML declaration to ensure proper encoding handling
+        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    }
+
     /**
      * Replace a WP block with a twig template
      *
@@ -63,7 +80,7 @@ class Templates
     public function replaceWordpressBlocks(string $block_content, array $block): string
     {
         // Only target certain blocks and only run in the main loop on pages/posts
-        if ((in_array($block['blockName'], $this->blocks)) && ( is_single() || is_page() ) && in_the_loop() && is_main_query()) {
+        if ((in_array($block['blockName'], $this->blocks)) && (is_single() || is_page()) && in_the_loop() && is_main_query()) {
             $html = $block['innerHTML'];
 
             if (!$html) {
@@ -71,8 +88,8 @@ class Templates
             }
 
             $doc = new DOMDocument();
-            // Fix odd loading of special characters (see https://php.watch/versions/8.2/mbstring-qprint-base64-uuencode-html-entities-deprecated#html)
-            $doc->loadHTML(htmlspecialchars_decode(htmlentities($html)));
+
+            $this->loadPartialHTML($doc, $html);
 
             switch ($block['blockName']) {
                 case 'core/paragraph':
@@ -109,7 +126,7 @@ class Templates
         $htmlDoc = new DOMDocument();
         $context = Timber::context($params);
         $template = Timber::compile($templates, $context);
-        $htmlDoc->loadHTML($template);
+        $this->loadPartialHTML($htmlDoc, $template);
         $appended = null;
         try {
             $els = $htmlDoc->getElementsByTagName($tagName);
@@ -138,19 +155,19 @@ class Templates
             $format = pathinfo($url, PATHINFO_EXTENSION);
             $external = $this->content->isExternal($url);
 
-            // If the href isn't set skip the loop and use the default node (needed for the anchor links in WP)
             if (!$link->getAttribute('href')) {
+                // The href isn't set skip the loop and use the default node (needed for the anchor links in WP)
                 continue;
-            // If the link is a file use the file download template, otherwise use the link template
             } else if (in_array($format, $this->allowedMimeTypes) && !$external) {
+                // The link is a file use the file download template, otherwise use the link template
                 $params = $this->getFileDownloadParams($link, $format);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, 'div', $params);
-            // Check if it has the 'to-the-top' class and use that template
             } else if ($link->getAttribute('class') === 'to-the-top') {
+                // Check if it has the 'to-the-top' class and use that template
                 $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, 'a', $params);
-            // Otherwise default to the standard link template
             } else {
+                // Otherwise default to the standard link template
                 $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);
             }
@@ -179,7 +196,9 @@ class Templates
                 // For each list element, get the label and href values
                 foreach ($innerBlocks as $block) {
                     $blockDoc = new DOMDocument();
-                    $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
+                    // $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                    $this->loadPartialHTML($blockDoc, $block['innerHTML']);
+
                     $node = $blockDoc->getElementsByTagName('a')[0];
                     $links[] = $this->getLinkParams($node);
                 }
@@ -189,7 +208,8 @@ class Templates
                 // Otherwise treat each block as a list element and render any links appropriately
                 foreach ($innerBlocks as $block) {
                     $blockDoc = new DOMDocument();
-                    $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
+                    // $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                    $this->loadPartialHTML($blockDoc, $block['innerHTML']);
                     $this->renderLinks($blockDoc);
                     $node = $blockDoc->documentElement;
                     $imported = $doc->importNode($node, true);
