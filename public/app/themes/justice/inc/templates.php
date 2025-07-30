@@ -200,7 +200,6 @@ class Templates
                 // For each list element, get the label and href values
                 foreach ($innerBlocks as $block) {
                     $blockDoc = new DOMDocument();
-                    // $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
                     $this->loadPartialHTML($blockDoc, $block['innerHTML']);
 
                     $node = $blockDoc->getElementsByTagName('a')[0];
@@ -212,7 +211,6 @@ class Templates
                 // Otherwise treat each block as a list element and render any links appropriately
                 foreach ($innerBlocks as $block) {
                     $blockDoc = new DOMDocument();
-                    // $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
                     $this->loadPartialHTML($blockDoc, $block['innerHTML']);
                     $this->renderLinks($blockDoc);
                     $node = $blockDoc->documentElement;
