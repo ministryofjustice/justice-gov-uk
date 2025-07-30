@@ -64,8 +64,9 @@ class Templates
      */
     public function loadPartialHTML(DOMDocument &$doc, string $html): void
     {
-        // $doc->encoding = 'UTF-8';
         // Prefixing the HTML with an XML declaration to ensure proper encoding handling
+        // Pass LIBXML_HTML_NOIMPLIED to avoid adding <html> and <body> tags.
+        // Pass LIBXML_HTML_NODEFDTD to avoid adding a doctype declaration.
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         // Remove the XML declaration that was added
         $doc->removeChild($doc->firstChild);
