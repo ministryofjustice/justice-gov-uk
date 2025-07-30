@@ -92,7 +92,6 @@ class Templates
             }
 
             $doc = new DOMDocument();
-
             $this->loadPartialHTML($doc, $html);
 
             switch ($block['blockName']) {
