@@ -1,34 +1,50 @@
 @import '../../../style';
 
 .file-download {
-    @include spacing('margin', 4, 'top');
+    // Style the inline variation by default
 
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    &__link-wrapper {
-        display: flex;
-        align-items: start;
-        @media screen and (min-width: $justice-lg) {
-            align-items: center;
-        }
-    }
+    // `display` will be overridden by the block variation
+    display: inline-flex;
+    // `align-items` will be overridden by the block variation
+    align-items: baseline;
 
     &__link {
-        @include spacing('margin', 1, 'right');
         @include link;
-    }
+        @include spacing('margin', 1, 'right');
 
+        // `display` will be overridden by the block variation
+        display: inline-flex;
+    }
+    
     &__icon {
         @include spacing('margin', 1, 'right');
-    }
 
+        align-self: center;
+    }
+    
     &__details {
         @include body;
 
-        display: flex;
+        // `display` will be overridden by the block variation
+        display: inline-flex;
         flex-wrap: nowrap;
         width: fit-content;
+    }
+
+    // Block variation
+    &--block {
+        @include spacing('margin', 4, 'top');
+
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    &--block & {
+        &__link,
+        &__icon,
+        &__details {
+            display: flex;
+        }
     }
 }

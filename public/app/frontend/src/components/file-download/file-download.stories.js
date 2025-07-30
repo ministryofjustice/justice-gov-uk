@@ -19,6 +19,7 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
+    variant: 'block',
     format: 'PDF',
     link: '#',
     filesize: '167 KB',
@@ -30,3 +31,17 @@ Welsh.args = {
     ...Default.args,
     language: 'Welsh',
 };
+
+export const InParagraph = Template.bind({});
+InParagraph.args = {
+    ...Default.args,
+    variant: 'inline',
+};
+InParagraph.decorators = [
+    (Story) => {
+        return `<p>
+            The ${Story()} follows the ${Story()} and ${Story()} PD Updates, 
+            which made provision to require represented claimants to use the DCP.
+        </p>`;
+    },
+];
