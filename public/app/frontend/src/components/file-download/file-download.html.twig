@@ -33,6 +33,9 @@ example:
     {% if format %}
         <span class="file-download__details">({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? ", " ~ filesize : "" }})</span>
     {% endif %}
+{# Keep the following HTML comment, it assists in removing file details that an editor has input into the content editor  #}
+{# It is used to identify the end this component, subsequently we can safely remove a duplicate string of "(PDF)". #}
+<!-- /.file-download -->
 {% if variant == "inline" %}
     </span>
 {% else %}

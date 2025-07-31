@@ -41,7 +41,6 @@ class Templates
     public function __construct()
     {
         libxml_use_internal_errors(true);
-        $this->addHooks();
         $this->documents = new Documents();
         $this->content = new Content();
     }
@@ -49,6 +48,7 @@ class Templates
     public function addHooks(): void
     {
         add_action('render_block', [$this, 'replaceWordpressBlocks'], 10, 2);
+        add_action('render_block', [$this, 'replaceDuplicateDownloadDetails'], 11, 1);
     }
 
 
@@ -305,5 +305,29 @@ class Templates
             'link' => $href,
             'language' => $language,
         ];
+    }
+
+    /**
+     * Replace duplicate "(PDF)" text following a file download block
+     *
+     * This is used to remove the duplicate "(PDF)" text that appears after the file download block.
+     * It looks for the specific HTML comment that marks the end of the file download block and
+     * replaces the "(PDF)" text that follows it with an empty string.
+     *
+     * @param string $block_content The content of the block to be processed
+     * @return string The modified block content with duplicate "(PDF)" text removed
+     */
+    public static function replaceDuplicateDownloadDetails(string $block_content): string
+    {
+        // If the block content is empty, return it as is
+        if (empty($block_content)) {
+            return $block_content;
+        }
+
+        // Regex to replace the strings:
+        // - `<!-- /.file-download --> </div> (PDF)`  -> `</div>`
+        // - `<!-- /.file-download --> </span> (PDF)` -> `</span>`
+        $regex_pattern = '/\N*<!-- \/\.file-download -->\v(\s*)<\/(div|span)>\s{0,1}\(PDF\)/';
+        return preg_replace($regex_pattern, '$1</$2>', $block_content);
     }
 }

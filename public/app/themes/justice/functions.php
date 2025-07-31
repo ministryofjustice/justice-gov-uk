@@ -79,7 +79,6 @@ new Justice\Comments();
 new Justice\Content();
 new Justice\ContentQuality();
 new Justice\Core();
-new Justice\Documents();
 new Justice\Layout();
 new Justice\Posts();
 new Justice\Redirects();
@@ -92,6 +91,10 @@ new Justice\Theme();
 
 $block_editor = new Justice\BlockEditor();
 $block_editor->addHooks();
+
+$documents = new Justice\Documents();
+$documents->addHooks();
+$documents->removeHooks();
 
 $post_meta = new Justice\PostMeta();
 $post_meta->addHooks();

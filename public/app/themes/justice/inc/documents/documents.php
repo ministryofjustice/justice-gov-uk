@@ -52,8 +52,6 @@ class Documents
 
     public function __construct()
     {
-        $this->addHooks();
-        $this->removeHooks();
         $this->post_meta = new PostMeta();
         $this->utils = new Utils();
     }
