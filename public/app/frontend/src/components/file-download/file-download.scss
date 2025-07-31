@@ -4,31 +4,26 @@
     // Style the inline variation by default
 
     // `display` will be overridden by the block variation
-    display: inline-flex;
-    // `align-items` will be overridden by the block variation
-    align-items: baseline;
+    display: inline;
 
     &__link {
         @include link;
-        @include spacing('margin', 1, 'right');
-
         // `display` will be overridden by the block variation
-        display: inline-flex;
+        display: inline;
     }
     
-    &__icon {
-        @include spacing('margin', 1, 'right');
-
-        align-self: center;
+    &__icon {       
+        display: inline-flex!important;
+        position: relative;
+        top: 2px;
     }
     
     &__details {
         @include body;
 
         // `display` will be overridden by the block variation
-        display: inline-flex;
-        flex-wrap: nowrap;
-        width: fit-content;
+        display: inline;
+        
     }
 
     // Block variation
@@ -41,10 +36,19 @@
     }
 
     &--block & {
-        &__link,
-        &__icon,
+        &__link {
+            @include spacing('margin', 1, 'right');
+            display: flex;
+        }
+        &__icon {
+            @include spacing('margin', 1, 'right');
+            display: flex;
+            align-self: center;
+        }
         &__details {
             display: flex;
+            flex-wrap: nowrap;
+            width: fit-content;
         }
     }
 }
