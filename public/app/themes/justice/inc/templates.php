@@ -119,12 +119,11 @@ class Templates
      *
      * @param DOMDocument $doc The DOMDocument that the html will be added to
      * @param array $templates An array of Twig templates to be rendered
-     * @param string $tagName (optional) The wrapper tag to find in the Twig template, e.g. a for a link component
      * @param array $params (optional) The parameters to pass to the Twig template
      *
      * @return DOMNode|bool The Twig template as a DOMNode or false if the conversion failed
      */
-    public function convertTwigTemplateToDomElement(DOMDocument $doc, array $templates, string $tagName = 'div', array $params = []): DOMNode|bool
+    public function convertTwigTemplateToDomElement(DOMDocument $doc, array $templates, array $params = []): DOMNode|bool
     {
         $htmlDoc = new DOMDocument();
         $context = Timber::context($params);
@@ -132,8 +131,7 @@ class Templates
         $this->loadPartialHTML($htmlDoc, $template);
         $appended = null;
         try {
-            $els = $htmlDoc->getElementsByTagName($tagName);
-            $imported = $doc->importNode($els[0], true);
+            $imported = $doc->importNode($htmlDoc->firstChild, true);
             $appended = $doc->appendChild($imported);
         } catch (Exception $ex) {
             error_log($ex->getMessage(), 0);
@@ -164,15 +162,15 @@ class Templates
             } else if (in_array($format, $this->allowedMimeTypes) && !$external) {
                 // The link is a file use the file download template, otherwise use the link template
                 $params = $this->getFileDownloadParams($link, $format);
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, 'div', $params);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, $params);
             } else if ($link->getAttribute('class') === 'to-the-top') {
                 // Check if it has the 'to-the-top' class and use that template
                 $params = $this->getLinkParams($link);
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, 'a', $params);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, $params);
             } else {
                 // Otherwise default to the standard link template
                 $params = $this->getLinkParams($link);
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, $params);
             }
             if ($htmlDoc) {
                 $link->parentNode->replaceChild($htmlDoc, $link);
@@ -204,7 +202,7 @@ class Templates
                     $node = $blockDoc->getElementsByTagName('a')[0];
                     $links[] = $this->getLinkParams($node);
                 }
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $navigationTemplate, 'nav', ['links' => $links]);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $navigationTemplate, ['links' => $links]);
                 $list->parentNode->replaceChild($htmlDoc, $list);
             } else {
                 // Otherwise treat each block as a list element and render any links appropriately
@@ -300,6 +298,7 @@ class Templates
         }
 
         return [
+            'variant' => 'inline',
             'format' => $format,
             'filesize' => $filesize,
             'filename' => $label,
