@@ -302,6 +302,7 @@ $iconTypes: (
 );
 
 $iconSizes: (
+    'em': 1em, // For inline icons only
     'xs': 1rem, // For decorative icons only i.e. those with aria-hidden="true"
     'sm': 1.5rem, // The smallest icon must be at least 24px x 24px to meet WCAG 2.2 AA when used in a link
     'md': 3rem,
@@ -309,15 +310,15 @@ $iconSizes: (
 );
 
 .icon {
-    @each $size, $rem in $iconSizes {
+    @each $size, $sizeValue in $iconSizes {
         @each $icon, $ext in $iconTypes {
             &-#{$icon}--#{$size} {
                 display: block;
                 background-image: url(/src/assets/icons/#{$icon}.#{$ext});
                 background-repeat: no-repeat;
-                height: $rem;
-                width: $rem;
-                background-size: $rem;
+                height: $sizeValue;
+                width: $sizeValue;
+                background-size: $sizeValue;
             }
         }
     }

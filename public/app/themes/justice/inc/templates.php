@@ -51,6 +51,27 @@ class Templates
         add_action('render_block', [$this, 'replaceDuplicateDownloadDetails'], 11, 1);
     }
 
+
+    /**
+     * Loads a string of HTML into a DOMDocument
+     *
+     * The string should be UTF-8 encoded, and it should be a partial HTML fragment,
+     * i.e. it doesn't have a head, body, or doctype.
+     *
+     * @param DOMDocument $doc The DOMDocument that the html will be added to
+     * @param string $html The HTML string to load into the DOMDocument
+     * @return void
+     */
+    public function loadPartialHTML(DOMDocument &$doc, string $html): void
+    {
+        // Prefixing the HTML with an XML declaration to ensure proper encoding handling
+        // Pass LIBXML_HTML_NOIMPLIED to avoid adding <html> and <body> tags.
+        // Pass LIBXML_HTML_NODEFDTD to avoid adding a doctype declaration.
+        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        // Remove the XML declaration that was added
+        $doc->removeChild($doc->firstChild);
+    }
+
     /**
      * Replace a WP block with a twig template
      *
@@ -71,8 +92,7 @@ class Templates
             }
 
             $doc = new DOMDocument();
-            // Fix odd loading of special characters (see https://php.watch/versions/8.2/mbstring-qprint-base64-uuencode-html-entities-deprecated#html)
-            $doc->loadHTML(htmlspecialchars_decode(htmlentities($html)));
+            $this->loadPartialHTML($doc, $html);
 
             switch ($block['blockName']) {
                 case 'core/paragraph':
@@ -99,21 +119,19 @@ class Templates
      *
      * @param DOMDocument $doc The DOMDocument that the html will be added to
      * @param array $templates An array of Twig templates to be rendered
-     * @param string $tagName (optional) The wrapper tag to find in the Twig template, e.g. a for a link component
      * @param array $params (optional) The parameters to pass to the Twig template
      *
      * @return DOMNode|bool The Twig template as a DOMNode or false if the conversion failed
      */
-    public function convertTwigTemplateToDomElement(DOMDocument $doc, array $templates, string $tagName = 'div', array $params = []): DOMNode|bool
+    public function convertTwigTemplateToDomElement(DOMDocument $doc, array $templates, array $params = []): DOMNode|bool
     {
         $htmlDoc = new DOMDocument();
         $context = Timber::context($params);
         $template = Timber::compile($templates, $context);
-        $htmlDoc->loadHTML($template);
+        $this->loadPartialHTML($htmlDoc, $template);
         $appended = null;
         try {
-            $els = $htmlDoc->getElementsByTagName($tagName);
-            $imported = $doc->importNode($els[0], true);
+            $imported = $doc->importNode($htmlDoc->firstChild, true);
             $appended = $doc->appendChild($imported);
         } catch (Exception $ex) {
             error_log($ex->getMessage(), 0);
@@ -138,21 +156,21 @@ class Templates
             $format = pathinfo($url, PATHINFO_EXTENSION);
             $external = $this->content->isExternal($url);
 
-            // If the href isn't set skip the loop and use the default node (needed for the anchor links in WP)
             if (!$link->getAttribute('href')) {
+                // The href isn't set skip the loop and use the default node (needed for the anchor links in WP)
                 continue;
-            // If the link is a file use the file download template, otherwise use the link template
             } else if (in_array($format, $this->allowedMimeTypes) && !$external) {
+                // The link is a file use the file download template, otherwise use the link template
                 $params = $this->getFileDownloadParams($link, $format);
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, 'div', $params);
-            // Check if it has the 'to-the-top' class and use that template
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, $params);
             } else if ($link->getAttribute('class') === 'to-the-top') {
+                // Check if it has the 'to-the-top' class and use that template
                 $params = $this->getLinkParams($link);
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, 'a', $params);
-            // Otherwise default to the standard link template
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, $params);
             } else {
+                // Otherwise default to the standard link template
                 $params = $this->getLinkParams($link);
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, 'a', $params);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, $params);
             }
             if ($htmlDoc) {
                 $link->parentNode->replaceChild($htmlDoc, $link);
@@ -179,17 +197,18 @@ class Templates
                 // For each list element, get the label and href values
                 foreach ($innerBlocks as $block) {
                     $blockDoc = new DOMDocument();
-                    $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
+                    $this->loadPartialHTML($blockDoc, $block['innerHTML']);
+
                     $node = $blockDoc->getElementsByTagName('a')[0];
                     $links[] = $this->getLinkParams($node);
                 }
-                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $navigationTemplate, 'nav', ['links' => $links]);
+                $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $navigationTemplate, ['links' => $links]);
                 $list->parentNode->replaceChild($htmlDoc, $list);
             } else {
                 // Otherwise treat each block as a list element and render any links appropriately
                 foreach ($innerBlocks as $block) {
                     $blockDoc = new DOMDocument();
-                    $blockDoc->loadHTML(htmlspecialchars_decode(htmlentities($block['innerHTML'])));
+                    $this->loadPartialHTML($blockDoc, $block['innerHTML']);
                     $this->renderLinks($blockDoc);
                     $node = $blockDoc->documentElement;
                     $imported = $doc->importNode($node, true);
@@ -279,6 +298,7 @@ class Templates
         }
 
         return [
+            'variant' => 'inline',
             'format' => $format,
             'filesize' => $filesize,
             'filename' => $label,
