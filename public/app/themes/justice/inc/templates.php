@@ -26,6 +26,7 @@ class Templates
         'ppt',
         'zip',
         'xls',
+        'xlsx',
     ];
 
     public array $blocks = [
