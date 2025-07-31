@@ -16,3 +16,4 @@ require_once $theme_root_dir . '/inc/content-quality/issues/anchor.php';
 require_once $theme_root_dir . '/inc/content-quality/issues/empty-heading.php';
 require_once $theme_root_dir . '/inc/content-quality/issues/thead.php';
 require_once $theme_root_dir . '/inc/post-meta/post-meta.php';
+require_once $theme_root_dir . '/inc/templates.php';
