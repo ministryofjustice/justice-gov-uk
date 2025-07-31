@@ -45,3 +45,17 @@ InParagraph.decorators = [
         </p>`;
     },
 ];
+
+export const TextWrap = Template.bind({});
+TextWrap.args = {
+    ...Default.args,
+    variant: 'inline',
+    filename: 'Practice Direction 51L New Bill of Costs Pilot Excel version of precedent'
+};
+TextWrap.decorators = [
+    (Story) => {
+        return `<p style="max-width: 450px;">
+            ${Story()}
+        </p>`;
+    },
+];

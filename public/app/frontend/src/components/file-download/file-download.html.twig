@@ -28,7 +28,7 @@ example:
     <i class="file-download__icon icon-{{ format|lower }}--{{ variant == "inline" ? "em" : "sm"}}" aria-hidden="true"></i>
     <a class="file-download__link" href={{ link }}>
         <span class="file-download__prefix visually-hidden">Download</span>
-        {{ filename }}
+        {{- filename -}}
     </a>
     {% if format %}
         <span class="file-download__details">({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? ", " ~ filesize : "" }})</span>
