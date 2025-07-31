@@ -26,3 +26,14 @@ NewTabVisuallyHidden.args = {
     newTab: true,
     newTabVisuallyHidden: true,
 };
+
+export const InParagraph = Template.bind({});
+InParagraph.args = {
+    ...Default.args,
+    newTab: true,
+};
+InParagraph.decorators = [
+    (Story) => {
+        return `<p>Lorem ipsum dolor sit${Story()}amet, consectetur adipiscing elit</p>`;
+    },
+];

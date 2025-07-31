@@ -18,17 +18,20 @@ example:
         url: 'https://google.com',
         label: 'Click here'
     }%}
-#}
-<a
+
+Developer notes:
+    - Since this is an inline element, there are intentionally no newlines before and after the element.
+    - Since this is an inline element, `{{-`, `-}}`, `{%-` and `-%}}` template tags have been used to strip whitespace.
+#}<a
     class="link{{ newTab ? " link--new-tab" : "" }}"
     href="{{ url }}"
     {{ newTab ? " target='_blank' rel='noreferrer noopener'" : "" }}
     {{ onClick ? " onclick='" ~ onClick ~ "'" : "" }}
 >
-    {{ label }}
-    {% if newTab and newTabVisuallyHidden %}
+    {{- label -}}
+    {%- if newTab and newTabVisuallyHidden -%}
         <span class="visually-hidden"> (opens in a new tab)</span>
-    {% elseif newTab and not manualNewTabText %}
-        (opens in a new tab)
-    {% endif %}
+    {%- elseif newTab and not manualNewTabText -%}
+        {{- " (opens in a new tab)" -}}
+    {%- endif -%}
 </a>
