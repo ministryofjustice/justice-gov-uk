@@ -289,11 +289,11 @@ class Templates
 
     /**
      * Replace duplicate "(PDF)" text following a file download block
-     * 
+     *
      * This is used to remove the duplicate "(PDF)" text that appears after the file download block.
      * It looks for the specific HTML comment that marks the end of the file download block and
      * replaces the "(PDF)" text that follows it with an empty string.
-     * 
+     *
      * @param string $block_content The content of the block to be processed
      * @return string The modified block content with duplicate "(PDF)" text removed
      */
