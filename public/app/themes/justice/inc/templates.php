@@ -327,7 +327,7 @@ class Templates
         // Regex to replace the strings:
         // - `<!-- /.file-download --> </div> (PDF)`  -> `</div>`
         // - `<!-- /.file-download --> </span> (PDF)` -> `</span>`
-        $regex_pattern = '/\N*<!-- \/\.file-download -->\v(\s*)<\/(div|span)> \(PDF\)/';
+        $regex_pattern = '/\N*<!-- \/\.file-download -->\v(\s*)<\/(div|span)>\s{0,1}\(PDF\)/';
         return preg_replace($regex_pattern, '$1</$2>', $block_content);
     }
 }
