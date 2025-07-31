@@ -34,6 +34,6 @@ InParagraph.args = {
 };
 InParagraph.decorators = [
     (Story) => {
-        return `<p>Lorem ipsum dolor sit${Story()}amet, consectetur adipiscing elit</p>`;
+        return `<p>Lorem ipsum dolor sit ${Story()} amet, consectetur adipiscing elit</p>`;
     },
 ];
