@@ -123,6 +123,22 @@ To resolve the issue, you need to either:
 - Remove the empty heading element
 - Or, add text to the heading element
 
+### Incomplete table header
+
+This issue occurs when a table has one or more header cells that are not empty. This can cause confusion for screen readers, as they expect header cells to contain descriptive text.
+
+---
+
+On the Pages admin screen, the issue will be displayed as "There is 1 table with an incomplete header".
+
+---
+
+To resolve this issue, you need to edit the page in question and ensure that table is using a header section and that all table cells in the header section contain descriptive text.
+
+If necessary, make reference to the [Tables section](/editing/block-editor.html#tables) of the Block Editor documentation for more information on:
+
+- how to add a header section to a table
+
 ### Table without header section
 
 This issue occurs when a table is created without a header section. A header section is required for accessibility reasons, as it helps screen readers understand the structure of the table.
