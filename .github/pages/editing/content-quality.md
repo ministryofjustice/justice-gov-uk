@@ -135,9 +135,12 @@ On the Pages admin screen, the issue will be displayed as "There is 1 table with
 
 To resolve this issue, you need to edit the page in question and ensure that table is using a header section and that all table cells in the header section contain descriptive text.
 
+If a column of the table is entirely empty, it is recommended to remove that column from the table.
+
 If necessary, make reference to the [Tables section](/editing/block-editor.html#tables) of the Block Editor documentation for more information on:
 
 - how to add a header section to a table
+- how to remove a table column or row
 
 ### Table without header section
 
