@@ -11,7 +11,7 @@ require_once 'issue.php';
  *
  * It extends the ContentQualityIssue class and provides primary methods to identify (and load) pages with incomplete table headers.
  * It includes helper methods to get incomplete table headers from content, and check is a string is all whitespace characters.
- * 
+ *
  * Even though the class is named `ContentQualityIssueIncompleteThead`, it checks for incomplete table headers in the first row of the table,
  * regardless of the element names. This means that it works for tables with the following structures:
  * - `thead` and `th`
@@ -138,10 +138,10 @@ final class ContentQualityIssueIncompleteThead extends ContentQualityIssue
 
     /**
      * Check if a string contains only whitespace characters.
-     * 
+     *
      * This function checks if the string consists entirely of whitespace characters,
      * including spaces, tabs, and non-breaking spaces.
-     * 
+     *
      * @param string $string The string to check.
      * @return bool True if the string contains only whitespace characters, false otherwise.
      */
