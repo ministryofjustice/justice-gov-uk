@@ -9,7 +9,7 @@ require_once 'issue.php';
 /**
  * This class is for content quality checks related to anchor links.
  *
- * It extends the ContentQualityIssue class and provides a primary methods to identify (and load) pages with anchor issues.
+ * It extends the ContentQualityIssue class and provides primary methods to identify (and load) pages with anchor issues.
  * It includes helper methods to get anchors from content, check if the content has an element with a given ID.
  */
 final class ContentQualityIssueAnchor extends ContentQualityIssue
