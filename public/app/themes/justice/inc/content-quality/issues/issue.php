@@ -126,7 +126,7 @@ class ContentQualityIssue
         }
 
         // Check if the value is stored in a transient.
-        $cached_pages_with_issue = false; //get_transient($this->transient_key);
+        $cached_pages_with_issue = get_transient($this->transient_key);
 
         // If the value is cached, use it and return.
         if ($cached_pages_with_issue !== false) {
