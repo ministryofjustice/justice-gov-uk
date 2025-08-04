@@ -63,8 +63,6 @@ final class ContentQualityIssueIncompleteThead extends ContentQualityIssue
         foreach ($wpdb->get_results($query) as $page) :
             $incomplete_thead_count = is_null($page->incomplete_thead_count) ? null : (int)$page->incomplete_thead_count;
 
-            error_log("Page ID: {$page->ID}, Incomplete Table Count: $incomplete_thead_count");
-
             if (is_null($incomplete_thead_count)) {
                 // The table didn't contain a transient value, so we need to check the content.
                 $incomplete_thead_count = $this->getIncompleteTheadFromContent($page->post_content);
