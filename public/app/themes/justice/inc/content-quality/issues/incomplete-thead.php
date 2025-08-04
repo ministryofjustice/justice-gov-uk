@@ -37,30 +37,51 @@ final class ContentQualityIssueIncompleteThead extends ContentQualityIssue
     public function getPagesWithIssues(): array
     {
         $pages_with_issue = [];
+        $transient_updates = [];
 
-        // Run an SQL query to find pages with tables that have anchor tags with a `#...` destination.
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified
+            SELECT ID, post_content, post_modified, options.option_value AS incomplete_thead_count
             FROM {$wpdb->posts}
-            WHERE post_type = 'page' AND post_content LIKE '%<table%'
+            -- To save us from running get_transient in a php loop, 
+            -- we can join the options table to get the transient value here
+            LEFT JOIN {$wpdb->options} AS options 
+            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:incomplete-thead:', ID)
+            -- Where clauses
+            WHERE
+                -- options value should be null or not 0
+                ( options.option_value IS NULL OR options.option_value != '0' ) AND
+                -- Post type should be page 
+                post_type = 'page' AND
+                -- Post content should contain a table tag
+                post_content LIKE '%<table%'
         ";
 
         $wpdb->get_results($query);
 
         foreach ($wpdb->get_results($query) as $page) :
-            $incomplete_thead_count = $this->getIncompleteTheadFromContent($page->post_content);
+            $incomplete_thead_count = is_null($page->incomplete_thead_count) ? null : (int)$page->incomplete_thead_count;
 
-            if ($incomplete_thead_count === 0) {
-                continue;
+            error_log("Page ID: {$page->ID}, Incomplete Table Count: $incomplete_thead_count");
+
+            if (is_null($incomplete_thead_count)) {
+                // The table didn't contain a transient value, so we need to check the content.
+                $incomplete_thead_count = $this->getIncompleteTheadFromContent($page->post_content);
+                // Add the value to the transient updates array, this will be used in a bulk update later.
+                $transient_updates["$this->transient_key:{$page->ID}"] = $incomplete_thead_count;
             }
 
-            $pages_with_issue[$page->ID] = (object)[
-                'ID' => $page->ID,
-                'incomplete_thead_count' => $incomplete_thead_count,
-            ];
+            // If the transient value is > 0, add it to the pages_with_issue array.
+            if ($page->incomplete_thead_count) {
+                $pages_with_issue[$page->ID] = $page->incomplete_thead_count;
+            }
         endforeach;
+
+        if (sizeof($transient_updates)) {
+            $expiry = time() + $this->transient_duration;
+            $this->bulkSetTransientInDatabase($transient_updates, $expiry);
+        }
 
         return $pages_with_issue;
     }
@@ -80,11 +101,11 @@ final class ContentQualityIssueIncompleteThead extends ContentQualityIssue
         // Load the pages with issues - don't run this on construct, as it's an expensive operation.
         $this->loadPagesWithIssues();
 
-        if (empty($this->pages_with_issue[$post_id])) {
+        if (!isset($this->pages_with_issue[$post_id])) {
             return $issues;
         }
 
-        $count = $this->pages_with_issue[$post_id]->incomplete_thead_count;
+        $count = $this->pages_with_issue[$post_id];
 
         $issues[] =  sprintf(_n('There is %d table with an incomplete header', 'There are %d tables with an incomplete header', $count, 'justice'), $count);
 
