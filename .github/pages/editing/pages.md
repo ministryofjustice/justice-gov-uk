@@ -85,8 +85,6 @@ See the screenshot for the location of the [Page](#annotation-page) tab and
 
 #### Title tag setting
 
-The title tag is one of the afore mentioned settings. The following guidance is provided to help you create an accessible title tag.
-
 ![Screenshot of the Title Tag field](../assets/page-title-tag.png)
 
 Each page should have a unique, descriptive title that accurately reflects its purpose and content. Page titles should be structured consistently across the service while still being specific.
