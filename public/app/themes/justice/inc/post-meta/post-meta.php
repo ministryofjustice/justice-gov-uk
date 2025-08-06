@@ -126,9 +126,14 @@ class PostMeta
         $title_tag = $this->getMeta('_title_tag', get_the_ID());
 
         if (!empty($title_tag)) {
+            // Get the document title separator.
+            $sep = apply_filters('document_title_separator', '-');
+            // Replace hyphen and all types of dashes with the correct separator.
+            $title_tag = str_replace(['-', '–', '—'], $sep, $title_tag);
+            // Trim the title and assign it to the title parts.
             $title_parts['title'] = trim($title_tag);
+            // Remove the tagline from the title parts.
             unset($title_parts['tagline']);
-            unset($title_parts['site']);
         }
 
         return $title_parts;

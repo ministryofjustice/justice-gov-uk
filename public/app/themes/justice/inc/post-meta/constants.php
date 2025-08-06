@@ -56,7 +56,10 @@ class PostMetaConstants
         $fields_array[] = [
             'meta_key'  => '_title_tag',
             'help'      =>
-            'Optional. Used for search result titles (internal & external) and browser tabs. ' .
+            'Optional. Used for search result titles (internal & external) and browser tabs.</br>' .
+                '<a href="https://howto-admin.www.justice.gov.uk/pages.html#title-tag-setting" target="_blank">' .
+                'Creating an accessible title tag' .
+                '</a></br>' .
                 'Default: Page title.'
         ];
 

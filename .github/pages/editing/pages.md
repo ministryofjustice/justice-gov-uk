@@ -83,6 +83,21 @@ The most used settings are:
 See the screenshot for the location of the [Page](#annotation-page) tab and
 [Settings](#annotation-settings) fields.
 
+#### Title tag setting
+
+![Screenshot of the Title Tag field](../assets/page-title-tag.png)
+
+Each page should have a unique, descriptive title that accurately reflects its purpose and content. Page titles should be structured consistently across the service while still being specific.
+
+A good format to follow is: [Page-specific title] – [Area of the website] – Justice UK
+
+e.g.
+
+- Glossary – Family Procedure Rules – Justice UK
+- Standard directions – Civil Procedure Rules – Justice UK
+
+The trailing "– Justice UK" is added automatically, so you do not need to include it in the title tag.
+
 ### Publishing a new page immediately
 
 To publish a page immediately, click the Publish button in the top right corner of the page editor.
