@@ -14,6 +14,7 @@ if (!defined('ABSPATH')) {
 
 require_once 'columns.php';
 require_once 'filters.php';
+require_once 'permalinks.php';
 
 /**
  * Actions and filters related to WordPress documents post type.
@@ -23,6 +24,7 @@ class Documents
 
     use DocumentColumns;
     use DocumentFilters;
+    use DocumentPermalinks;
 
     // File extensions to mark as downloadable in S3.
     private array $content_disposition_extensions = [
@@ -110,6 +112,9 @@ class Documents
 
         // Dequeue the frontend styles, we don't need them.
         add_action('wp_enqueue_scripts', fn() => wp_dequeue_style('wp-document-revisions-front'), 100);
+
+        // Permalinks
+        $this->addPermalinkHooks();
     }
 
 

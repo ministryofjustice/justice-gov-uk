@@ -1,0 +1,37 @@
+// Styling the previous permalinks section on the document edit page.
+
+.previous-permalinks {
+  ul {
+    display: inline;
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      display: inline;
+      margin-right: 0.5em;
+      &:not(:last-child)::after {
+        // Add a comma after each item except the last one.
+        content: ", ";
+      }
+    }
+  }
+
+  .previous-permalinks__delete {
+    display: none;
+  }
+
+  .previous-permalinks__close {
+    display: none;
+    font-size: 11px;
+  }
+
+  body.previous-permalinks-is-editing & {
+    .previous-permalinks__delete,
+    .previous-permalinks__close {
+      display: inline-block;
+    }
+    .previous-permalinks__edit {
+        display: none;
+    }
+  }
+}
