@@ -193,8 +193,8 @@ class Documents
 
         echo '<p>' .
             'Guidance on creating accessible permalinks can be found at ' .
-            '<a href="https://howto-admin.www.justice.gov.uk/editing/documents.html#document-permalink" target="_blank">' . 
-            'Choosing a document permalink' . 
+            '<a href="https://howto-admin.www.justice.gov.uk/editing/documents.html#document-permalink" target="_blank">' .
+            'Choosing a document permalink' .
             '</a>.</br>' .
             'Editing the permalink here will update the URL of the document, ' .
             'and frequent changes to the should be avoided. ' .

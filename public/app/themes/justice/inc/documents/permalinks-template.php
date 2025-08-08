@@ -4,8 +4,7 @@
  * Permalinks template part.
  */
 
-if (
-    !defined('ABSPATH') ||
+if (!defined('ABSPATH') ||
     empty($args['post_id']) ||
     empty($args['links'])
 ) {

@@ -194,10 +194,10 @@ class AmazonS3AndCloudFrontTweaks
 
     /**
      * This function updates the Content-Disposition header for a document attachment.
-     * 
+     *
      * It uses the AWS S3 client to copy the object with the new Content-Disposition metadata.
      * This is necessary to ensure that the document is downloaded with the correct filename.
-     * 
+     *
      * @param int $document_id The ID of the document to update.
      * @return void
      */

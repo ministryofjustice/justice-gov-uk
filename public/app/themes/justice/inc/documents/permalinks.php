@@ -35,7 +35,7 @@ trait DocumentPermalinks
         /**
          * In public/app/plugins/wp-document-revisions/includes/class-wp-document-revisions.php
          * there is no hook for when `update_post_slug_field` is called to update the permalink.
-         * 
+         *
          * We can detect this ourselves by setting markers on this class, and then checking
          * them in the when get_sample_permalink_html filter is called.
          */
@@ -70,7 +70,7 @@ trait DocumentPermalinks
      * Meaning, it allows a post_name/slug with spaces to be saved to the database.
      *
      * There is no hook in that function to allow us to sanitize the slug before it is saved.
-     * So, let's shoehorn the `pre_wp_unique_post_slug` hook provided by `wp_unique_post_slug` 
+     * So, let's shoehorn the `pre_wp_unique_post_slug` hook provided by `wp_unique_post_slug`
      * to sanitize the slug before it is saved.
      *
      * This workaround can be removed if the following PR is merged:
@@ -114,7 +114,7 @@ trait DocumentPermalinks
      * This function is called when the sample permalink HTML is generated
      * (this is the permalink html that is shown under the title field in the document edit screen).
      * It appends a list of previous permalinks to the HTML.
-     * 
+     *
      * @param string $return The current sample permalink HTML.
      * @param int $post_id The post ID of the document.
      * @return string The updated sample permalink HTML with previous permalinks appended.
@@ -327,8 +327,7 @@ trait DocumentPermalinks
         // Split the directory into parts, to make sure the last part is the document slug.
         $dirname_parts = explode('/', $path_parts['dirname']);
 
-        if (
-            empty($path_parts['extension']) ||
+        if (empty($path_parts['extension']) ||
             empty($path_parts['filename']) ||
             $path_parts['extension'] === 'php' ||
             end($dirname_parts) !== $this->document_slug
