@@ -30,7 +30,9 @@ if (
                     aria-label="Delete permalink"
                     data-post-id="<?php echo esc_attr($args['post_id']); ?>"
                     data-nonce="<?php echo esc_attr($args['nonce']); ?>"
-                    data-post-name="<?php echo esc_attr($link['post_name']); ?>">
+                    data-post-name="<?php echo esc_attr($link['post_name']); ?>"
+                    data-permalink="<?php echo esc_attr($link['display_link']); ?>"
+                    >
                     Delete
                 </button>
             </li>

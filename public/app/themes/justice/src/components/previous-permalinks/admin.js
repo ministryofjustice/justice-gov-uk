@@ -1,11 +1,15 @@
 import jQuery from "jquery";
 
 jQuery(document).ready(function ($) {
-  const handlePermalinkDelete = (postId, postName, nonce) => {
-    const confirmDelete = confirm("Are you sure you want to delete this slug?");
-      if (!confirmDelete) {
-        return; // If user cancels, exit the function
-      }
+  const handlePermalinkDelete = (postId, postName, permalink, nonce) => {
+    const confirmDelete = confirm(
+      `Are you sure you want to delete the previous permalink?\n` +
+      `It could result in broken links.\n\n` +
+      `${permalink}`,
+    );
+    if (!confirmDelete) {
+      return; // If user cancels, exit the function
+    }
 
     $.ajax({
       url: window.ajaxurl,
@@ -47,6 +51,7 @@ jQuery(document).ready(function ($) {
           handlePermalinkDelete(
             e.target.dataset["postId"],
             e.target.dataset["postName"],
+            e.target.dataset["permalink"],
             e.target.dataset["nonce"],
           );
         });
