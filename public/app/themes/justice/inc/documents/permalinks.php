@@ -4,16 +4,6 @@ namespace MOJ\Justice;
 
 defined('ABSPATH') || exit;
 
-// TODO
-// [x] Handle edits via Quick Edit
-// [x] On single document edit page, slug can be set with spaces - but then the links do not work!
-// [x] When a permalink is updated, make sure it is not a previous permalink for any document.
-// [x] When a permalink is updated, if it's a previous url for the current document, then remove it from that list.
-// [ ] Option to delete a document's previous permalink.
-// [ ] When the slug is updated, make sure to update the content disposition on S3.
-// [x] Improve css styling.
-// [ ] Update the 'Editing the permalink here...' advice
-
 trait DocumentPermalinks
 {
     public $ajax_previous_slug = '';
@@ -22,60 +12,25 @@ trait DocumentPermalinks
 
     public function addPermalinkHooks(): void
     {
+        // Sanitize the document slug before it is saved.
+        add_filter('pre_wp_unique_post_slug', [$this, 'sanitizeDocumentSlug'], 10, 6);
+
+        // Hook into the sample permalink HTML generation to append previous permalinks HTML.
         add_action('get_sample_permalink_html', [$this, 'appendPreviousPermalinks'], 10, 2);
 
-        add_action('template_redirect', [$this, 'redirectPreviousPermalinks'], 20, 5);
+        // Avoid a conflict between a new document slug and other documents' previous slugs.
+        add_filter('wp_unique_post_slug', [$this, 'handleSlugConflict'], 10, 5);
+
+        // Handle the deletion of a previous permalink via AJAX.
+        add_action('wp_ajax_delete_previous_permalink', [$this, 'deletePreviousPermalink']);
 
         // Handle edits via the Quick Edit interface.
         add_action('post_updated', function ($post_id, $post_after, $post_before) {
             $this->handleDocumentPermalinkUpdate($post_id, $post_before?->post_name ?? '', $post_after->post_name);
         }, 10, 3);
 
-        add_filter('wp_unique_post_slug', [$this, 'handleSlugConflict'], 10, 5);
-
-        add_action('wp_ajax_delete_previous_permalink', [$this, 'deletePreviousPermalink']);
-
-        /**
-         * In public/app/plugins/wp-document-revisions/includes/class-wp-document-revisions.php
-         * the `update_post_slug_field` function odes not sanitize the slug before updating it.
-         * Meaning, it allows a post_name/slug with spaces to be saved to the database.
-         *
-         * There is no hook in that function to allow us to sanitize the slug before it is saved.
-         * So, let's shoehorn the `pre_wp_unique_post_slug` hook provided by `wp_unique_post_slug` 
-         * to sanitize the slug before it is saved.
-         *
-         * This workaround can be removed if the following PR is merged:
-         * @see https://github.com/wp-document-revisions/wp-document-revisions/pull/369
-         *
-         * @param string|null $override_slug The slug to override the default slug.
-         * @param string $slug The slug to be sanitized.
-         * @param int $post_id The post ID.
-         * @param string $post_status The post status.
-         * @param string $post_type The post type.
-         * @param int $post_parent The post parent ID.
-         * @return string|null The sanitized slug or the original slug if no sanitization was needed.
-         */
-        add_filter('pre_wp_unique_post_slug', function (string|null $override_slug, string $slug, int $post_id, string $post_status, string $post_type, $post_parent) {
-            // If the post type is not 'document', we don't need to sanitize the slug.
-            if ($post_type !== 'document') {
-                return $override_slug;
-            }
-
-            // Sanitize the slug to remove spaces and other unwanted characters.
-            $sanitized_slug = sanitize_title($slug);
-
-            // Check if sanitizing the slug changed it.
-            if ($sanitized_slug === $slug) {
-                // If the slug is already sanitized, return the original override slug.
-                return $override_slug;
-            }
-
-            // Since returning a value for this filter stops the rest of wp_unique_post_slug from running, run it here.
-            // The only difference to the original function is that we are using the sanitized slug.
-            $override_slug = wp_unique_post_slug($sanitized_slug, $post_id, $post_status, $post_type, $post_parent);
-
-            return $override_slug;
-        }, 10, 6);
+        // Handle redirects when a user tries to access a previous permalink.
+        add_action('template_redirect', [$this, 'redirectPreviousPermalinks'], 20, 5);
 
         /**
          * In public/app/plugins/wp-document-revisions/includes/class-wp-document-revisions.php
@@ -108,128 +63,50 @@ trait DocumentPermalinks
         }, 1, 4);
     }
 
-    public function deletePreviousPermalink()
-    {
-
-        check_ajax_referer('moj_justice_delete_slug', 'nonce');  // Check the nonce.
-
-        $post_id = intval($_POST['post_id']);
-
-        $slug_to_delete = sanitize_title($_POST['post_name']);
-
-        if (! $this->isDocument($post_id)) {
-            wp_die("-1");
-        }
-
-        global $wp_post_statuses;
-
-        $query_args = [
-            'post_type' => $this->slug,
-            'posts_per_page' => 1,
-            'post_status' => array_keys($wp_post_statuses), // Check all post statuses.
-            'include' => [$post_id], // Exclude the current post.
-        ];
-
-        $document = get_posts([
-            ...$query_args,
-            'meta_query' => [
-                [
-                    'key' => 'previous_post_name',
-                    'value' => $slug_to_delete
-                ]
-            ],
-        ]);
-
-        if (isset($document[0]?->ID)) {
-            delete_post_meta($post_id, 'previous_post_name', $slug_to_delete);
-        }
-
-        // If no document found, return.
-        if (!isset($document[0]?->ID)) {
-            $document = get_posts($query_args);
-        }
-
-        wp_die(get_sample_permalink_html($post_id, $document[0]->title, $document[0]->post_name));
-    }
 
     /**
-     * Handle conflicts between a document slug, and other document's previous slugs.
+     * In public/app/plugins/wp-document-revisions/includes/class-wp-document-revisions.php
+     * the `update_post_slug_field` function odes not sanitize the slug before updating it.
+     * Meaning, it allows a post_name/slug with spaces to be saved to the database.
      *
-     * This function is called by the filter at the end of the `wp_unique_post_slug` function.
-     * It checks if the slug is a previous slug for any other document, and if so,
-     * it adds a suffix to the slug to avoid the conflict.
+     * There is no hook in that function to allow us to sanitize the slug before it is saved.
+     * So, let's shoehorn the `pre_wp_unique_post_slug` hook provided by `wp_unique_post_slug` 
+     * to sanitize the slug before it is saved.
      *
-     * @param string $slug The slug to check for conflicts.
-     * @param int $post_id The post ID of the document being checked.
-     * @param string $post_status The post status of the document being checked.
-     * @param string $post_type The post type of the document being checked.
-     * @param int $post_parent The post parent ID of the document being checked.
-     * @return string The slug with a suffix added or increased if there was a conflict.
+     * This workaround can be removed if the following PR is merged:
+     * @see https://github.com/wp-document-revisions/wp-document-revisions/pull/369
+     *
+     * @param string|null $override_slug The slug to override the default slug.
+     * @param string $slug The slug to be sanitized.
+     * @param int $post_id The post ID.
+     * @param string $post_status The post status.
+     * @param string $post_type The post type.
+     * @param int $post_parent The post parent ID.
+     * @return string|null The sanitized slug or the original slug if no sanitization was needed.
      */
-    public function handleSlugConflict(string $slug, int $post_id, string $post_status, string $post_type, int $post_parent)
+    public function sanitizeDocumentSlug(string|null $override_slug, string $slug, int $post_id, string $post_status, string $post_type, $post_parent)
     {
-        if (!$this->isDocument($post_id)) {
-            return $slug;
+        // If the post type is not 'document', we don't need to sanitize the slug.
+        if ($post_type !== 'document') {
+            return $override_slug;
         }
 
-        global $wp_post_statuses;
+        // Sanitize the slug to remove spaces and other unwanted characters.
+        $sanitized_slug = sanitize_title($slug);
 
-        // Is the slug a previously used slug for any other document?
-        $document = get_posts([
-            'post_type' => $this->slug,
-            'posts_per_page' => 1,
-            'post_status' => array_keys($wp_post_statuses), // Check all post statuses.
-            'exclude' => [$post_id], // Exclude the current post.
-            'meta_query' => [
-                [
-                    'key' => 'previous_post_name',
-                    'value' => $slug
-                ]
-            ],
-        ]);
-
-        if (empty($document[0]?->ID)) {
-            // There is no document with this slug as a previous post name, so we can return the slug as is.
-            return $slug;
+        // Check if sanitizing the slug changed it.
+        if ($sanitized_slug === $slug) {
+            // If the slug is already sanitized, return the original override slug.
+            return $override_slug;
         }
 
-        // There is a different document with this slug as a previous post name.
-        // Add a suffix or increase the suffix by one, to avoid a conflict with the other document.
-        $revised_slug = self::addOrIncreaseSuffix($slug);
+        // Since returning a value for this filter stops the rest of wp_unique_post_slug from running, run it here.
+        // The only difference to the original function is that we are using the sanitized slug.
+        $override_slug = wp_unique_post_slug($sanitized_slug, $post_id, $post_status, $post_type, $post_parent);
 
-        // Now re-run it through the wp_unique_post_slug function to ensure it is unique.
-        return wp_unique_post_slug($revised_slug, $post_id, $post_status, $post_type, $post_parent);
+        return $override_slug;
     }
 
-
-    /**
-     * Handle the permalink update for a document.
-     *
-     * This function runs when a permalink has been updated.
-     * - it checks if the post is a document
-     * - it adds the previous slug to the post meta
-     * - it removes the new slug from the previous post names if it exists.
-     *
-     * @param int $post_id The post ID of the document.
-     * @param string $previous_slug The previous slug of the document.
-     * @param string $new_slug The new slug of the document.
-     */
-    public function handleDocumentPermalinkUpdate(int $post_id, string $previous_slug, string $new_slug): void
-    {
-        if (!$this->isDocument($post_id) || $previous_slug === $new_slug) {
-            return;
-        }
-
-        if (!empty($new_slug)) {
-            // If the new slug is already in the previous post names, remove it.
-            delete_post_meta($post_id, 'previous_post_name', $new_slug);
-        }
-
-        if (!empty($previous_slug)) {
-            // Add the previous slug to the post meta.
-            add_post_meta($post_id, 'previous_post_name', $previous_slug);
-        }
-    }
 
     /**
      * Append previous permalinks to the sample permalink HTML.
@@ -249,7 +126,7 @@ trait DocumentPermalinks
         }
 
         // Get all of the previous post names, this is ordered by oldest to newest.
-        $pervious_post_names = get_post_meta($post_id, 'previous_post_name', false);
+        $pervious_post_names = get_post_meta($post_id, '_previous_post_name', false);
 
         if (empty($pervious_post_names)) {
             return $return;
@@ -288,6 +165,151 @@ trait DocumentPermalinks
         return $return;
     }
 
+
+    /**
+     * Handle conflicts between a document slug, and other document's previous slugs.
+     *
+     * This function is called by the filter at the end of the `wp_unique_post_slug` function.
+     * It checks if the slug is a previous slug for any other document, and if so,
+     * it adds a suffix to the slug to avoid the conflict.
+     *
+     * @param string $slug The slug to check for conflicts.
+     * @param int $post_id The post ID of the document being checked.
+     * @param string $post_status The post status of the document being checked.
+     * @param string $post_type The post type of the document being checked.
+     * @param int $post_parent The post parent ID of the document being checked.
+     * @return string The slug with a suffix added or increased if there was a conflict.
+     */
+    public function handleSlugConflict(string $slug, int $post_id, string $post_status, string $post_type, int $post_parent)
+    {
+        if (!$this->isDocument($post_id)) {
+            return $slug;
+        }
+
+        global $wp_post_statuses;
+
+        // Is the slug a previously used slug for any other document?
+        $document = get_posts([
+            'post_type' => $this->slug,
+            'posts_per_page' => 1,
+            'post_status' => array_keys($wp_post_statuses), // Check all post statuses.
+            'exclude' => [$post_id], // Exclude the current post.
+            'meta_query' => [
+                [
+                    'key' => '_previous_post_name',
+                    'value' => $slug
+                ]
+            ],
+        ]);
+
+        if (empty($document[0]?->ID)) {
+            // There is no document with this slug as a previous post name, so we can return the slug as is.
+            return $slug;
+        }
+
+        // There is a different document with this slug as a previous post name.
+        // Add a suffix or increase the suffix by one, to avoid a conflict with the other document.
+        $revised_slug = self::addOrIncreaseSuffix($slug);
+
+        // Now re-run it through the wp_unique_post_slug function to ensure it is unique.
+        return wp_unique_post_slug($revised_slug, $post_id, $post_status, $post_type, $post_parent);
+    }
+
+
+    /**
+     * Admin AJAX endpoint to delete a document's previous permalink.
+     *
+     * This function is called when the user clicks the delete button on a previous permalink.
+     * It checks if the user has permission to edit documents, and if the post is a document.
+     * It then checks if the previous permalink exists in the post meta,
+     * and if it does, it deletes it from the post meta.
+     *
+     * Finally it returns the sample permalink HTML for the document,
+     * which will update the permalink field on the document edit screen.
+     *
+     * @return void
+     */
+    public function deletePreviousPermalink(): void
+    {
+        check_ajax_referer('moj_justice_delete_slug', 'nonce');  // Check the nonce.
+
+        // Check that the user can edit documents.
+        if (!current_user_can('edit_documents')) {
+            wp_die("-1");
+        }
+
+        $post_id = intval($_POST['post_id']);
+
+        $slug_to_delete = sanitize_title($_POST['post_name']);
+
+        if (! $this->isDocument($post_id)) {
+            wp_die("-1");
+        }
+
+        global $wp_post_statuses;
+
+        $query_args = [
+            'post_type' => $this->slug,
+            'posts_per_page' => 1,
+            'post_status' => array_keys($wp_post_statuses), // Check all post statuses.
+            'include' => [$post_id], // Exclude the current post.
+        ];
+
+        $document = get_posts([
+            ...$query_args,
+            'meta_query' => [
+                [
+                    'key' => '_previous_post_name',
+                    'value' => $slug_to_delete
+                ]
+            ],
+        ]);
+
+        if (isset($document[0]?->ID)) {
+            delete_post_meta($post_id, '_previous_post_name', $slug_to_delete);
+        }
+
+        // If no document found, return.
+        if (!isset($document[0]?->ID)) {
+            $document = get_posts($query_args);
+        }
+
+        wp_die(get_sample_permalink_html($post_id, $document[0]->title, $document[0]->post_name));
+    }
+
+
+    /**
+     * Handle the permalink update for a document.
+     *
+     * This function runs when a permalink has been updated.
+     * - it checks if the post is a document
+     * - it adds the previous slug to the post meta
+     * - it removes the new slug from the previous post names if it exists.
+     *
+     * @param int $post_id The post ID of the document.
+     * @param string $previous_slug The previous slug of the document.
+     * @param string $new_slug The new slug of the document.
+     */
+    public function handleDocumentPermalinkUpdate(int $post_id, string $previous_slug, string $new_slug): void
+    {
+        if (!$this->isDocument($post_id) || $previous_slug === $new_slug) {
+            return;
+        }
+
+        do_action('document_permalink_updated', $post_id, $previous_slug, $new_slug);
+
+        if (!empty($new_slug)) {
+            // If the new slug is already in the previous post names, remove it.
+            delete_post_meta($post_id, '_previous_post_name', $new_slug);
+        }
+
+        if (!empty($previous_slug)) {
+            // Add the previous slug to the post meta.
+            add_post_meta($post_id, '_previous_post_name', $previous_slug);
+        }
+    }
+
+
     /**
      * Redirect to the current document permalink, if the current request is for a previous permalink.
      *
@@ -302,12 +324,14 @@ trait DocumentPermalinks
         global $wp;
         $path_parts = pathinfo($wp->request);
 
+        // Split the directory into parts, to make sure the last part is the document slug.
+        $dirname_parts = explode('/', $path_parts['dirname']);
+
         if (
-            !$path_parts['extension'] ||
-            !$path_parts['dirname'] ||
-            !$path_parts['filename'] ||
+            empty($path_parts['extension']) ||
+            empty($path_parts['filename']) ||
             $path_parts['extension'] === 'php' ||
-            $path_parts['dirname'] !== $this->document_slug
+            end($dirname_parts) !== $this->document_slug
         ) {
             return;
         }
@@ -318,7 +342,7 @@ trait DocumentPermalinks
             'post_status' => ['publish', 'private'],
             'meta_query' => [
                 [
-                    'key' => 'previous_post_name',
+                    'key' => '_previous_post_name',
                     'value' => $path_parts['filename']
                 ]
             ],
@@ -337,6 +361,7 @@ trait DocumentPermalinks
         wp_safe_redirect(get_permalink($document[0]->ID), 301);
         exit;
     }
+
 
     /**
      * Add or increase the suffix of a slug.
