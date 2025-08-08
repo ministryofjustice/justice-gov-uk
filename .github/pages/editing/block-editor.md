@@ -192,7 +192,7 @@ You'll now see a small anchor icon next to all inline anchors.
 
 ## Q & A
 
-### How do I change block types. e.g. from a list block to a paragraph(s) block?
+### How do I change block types. e.g. from a list block to a paragraph(s) block? {#change-block-type}
 
 To change a block type, click on the block you want to change, 
 then click on the block type icon at the far left of the toolbar. 
