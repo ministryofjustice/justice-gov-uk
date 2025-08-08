@@ -61,12 +61,27 @@ See the screenshot for the location of: the [Revision Summary](#annotation-revis
 1. Click the Publish button.
 1. A permalink will be generated for the document. You can change it by clicking the Edit button next to the permalink.
    The permalink is the URL that will be used to access the document.
-   It should only be set once and should not be changed after the document is published.
+   Ideally, it should only be set once and should not be changed after the document has been published.
 1. Right click the permalink to either copy the link or open it in a new tab.
 1. This permalink can now be used to link to the document from other pages on the site.
 
 {: .highlight }
 See the screenshot for the location of the [Permalink](#annotation-permalink) field.
+
+### Choosing the document permalink {#document-permalink}
+
+> A document title is typically the first piece of information announced by screen readers when a PDF is opened. When titles are vague, auto-generated, or non-descriptive, it becomes harder for users, particularly those using assistive technologies, to identify and differentiate between documents, especially when multiple PDFs are open or saved locally.
+
+Document permalinks should be structured consistently across the service while still being specific.
+
+
+A good format to follow is: [Document type]-[Document version]-\[Month\]-\[Year\]
+
+e.g. **civil-procedure-rules-update-no-56-and-57-march-2024** instead of **cpr_update56_57_pdf-1**
+
+{: .highlight }
+It is possible to update the document permalink at any time without breaking existing links to the document.  
+Changes should only be made to improve the accessibility of a permalink, and frequent changes should be avoided.
 
 ### Schedule publication
 

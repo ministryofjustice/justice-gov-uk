@@ -192,9 +192,12 @@ class Documents
         }
 
         echo '<p>' .
-            'Editing the permalink here will update the URL of the document. ' .
-            'Only do this before sharing/publishing new documents. ' .
-            'Editing the permalink for an established document will result in a broken link.' .
+            'Guidance on creating accessible permalinks can be found at ' .
+            '<a href="https://howto-admin.www.justice.gov.uk/editing/documents.html#document-permalink" target="_blank">' . 
+            'Choosing a document permalink' . 
+            '</a>.</br>' .
+            'Editing the permalink here will update the URL of the document, ' .
+            'and frequent changes to the should be avoided. ' .
             '</p>';
     }
 
