@@ -227,14 +227,15 @@ class AmazonS3AndCloudFrontTweaks
         $s3_client = $reflectionProperty->getValue($provider);
 
         $bucket = $as3cf_item->bucket();
+        $key = $as3cf_item->provider_key();
         $filename = basename(get_permalink($document_id));
 
         // Use COPY on the $s3_client to update the Content Disposition metadata,
         // since PUT cannot be used for partial updates.
         $s3_client->copyObject([
             'Bucket' => $bucket,
-            'CopySource' => "{$bucket}/{$as3cf_item->provider_key()}",
-            'Key' => $as3cf_item->provider_key(),
+            'CopySource' => "{$bucket}/{$key}",
+            'Key' => $key,
             'MetadataDirective' => 'REPLACE',
             'ContentDisposition' => 'attachment; filename="' . $filename . '"'
         ]);
