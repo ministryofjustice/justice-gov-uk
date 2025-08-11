@@ -43,7 +43,7 @@
     }
 
     &__link {
-        @include link('light');
+        @include link('light', 'menu');
 
         display: flex;
         align-items: center;
