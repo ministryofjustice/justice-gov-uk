@@ -45,8 +45,9 @@ example:
         {% if item.children %}
             <li class="navigation-secondary__list-item navigation-secondary__list-item--level-{{ menu_level }}{{ item.active ? " navigation-secondary__list-item--active" : "" }}">
                 <div class="navigation-secondary__list-item-wrapper navigation-secondary__show-all">
-                    <a class="navigation-secondary__link" {{ item.active ? "" : "href='" ~ item.link ~ "'" }}
-                       role="link" {{ item.active ? "aria-disabled='true'" : "" }}>
+                    <a class="navigation-secondary__link"
+                        role="link" {{ item.active ? "aria-disabled='true'" : "href='#{ item.link }'" }}
+                    >
                         All {{ item.label }} content
                     </a>
                 </div>
@@ -62,8 +63,9 @@ example:
                     </button>
                 {% else %}
                     <div class="navigation-secondary__list-item-wrapper">
-                        <a class="navigation-secondary__link" {{ item.active ? "" : "href='" ~ item.link ~ "'" }}
-                           role="link" {{ item.active ? "aria-disabled='true'" : "" }}>
+                        <a class="navigation-secondary__link" role="link" 
+                            {{ item.active ? "aria-current='page' aria-disabled='true'" : "href='#{ item.link }'" }}
+                        >
                             {{ item.label }}
                         </a>
                     </div>
