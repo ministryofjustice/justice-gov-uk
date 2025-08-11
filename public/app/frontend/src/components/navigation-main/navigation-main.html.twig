@@ -37,6 +37,7 @@ example:
                         onClick: link.onClick,
                         url: link.url,
                         label: link.label,
+                        ariaCurrent: link.active ? "page" : false,
                     } %}
                 </li>
             {% endfor %}
