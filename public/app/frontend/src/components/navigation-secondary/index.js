@@ -12,11 +12,14 @@ export default function () {
     const button = el.querySelector('.navigation-secondary__button');
     const nav = el.querySelector('.navigation-secondary__nav');
     button.addEventListener('click', () => {
+        // Get the current state, so that the following actions don't go out of sync.
+        const initiallyOpen = nav.classList.contains('navigation-secondary__nav--open');
+        // Toggle the open class on the nav element.
         nav.classList.toggle('navigation-secondary__nav--open');
-        button.setAttribute(
-            'aria-expanded',
-            !(button.getAttribute('aria-expanded') === 'true')
-        );
+        // Set the aria-expanded attribute on the button.
+        button.setAttribute('aria-expanded', !initiallyOpen);
+        // Update the text content of the button's visually hidden span.
+        button.querySelector('.visually-hidden').textContent = initiallyOpen ? 'Open secondary ' :  'Close secondary ';
     });
 
     function initDropdowns(list) {
