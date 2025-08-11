@@ -123,6 +123,20 @@ To resolve the issue, you need to either:
 - Remove the empty heading element
 - Or, add text to the heading element
 
+{: .highlight }
+When deleting an empty header element, check that you are not inadvertently deleting a heading that is used as a jump link target. This will be indicated by a blue underline. In this case, an additional option is to [change the block](/editing/block-editor.html#change-block-type) type from heading to a paragraph.
+
+<figure class="mb-5">
+  <div class="annotated-screenshot">
+   <img alt="Screenshot of the an empty heading containing an jump link target" src="../assets/content-quality-editor-empty-headings-anchor.png" />
+   <ol>
+      <li id="annotation-editor-document-overview" class="label" style="top: 62%;left: 30%;" >Blue underline</li>
+   </ol>
+  </div>
+  <figcaption>Screenshot of the an empty heading containing an jump link target</figcaption>
+</figure>
+
+
 ### Incomplete table header
 
 This issue occurs when a table has one or more header cells that are not empty. This can cause confusion for screen readers, as they expect header cells to contain descriptive text.
