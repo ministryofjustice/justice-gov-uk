@@ -39,7 +39,7 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-link:', ID)
+            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-href:', ID)
             -- Where clauses
             WHERE
                 -- options value should be null or not 0
@@ -93,14 +93,9 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
             return $issues;
         }
 
-        $counts = $this->pages_with_issue[$post_id];
+        $count = $this->pages_with_issue[$post_id];
 
-        if ($counts['text']) {
-            $issues[] =  sprintf(_n('There is %d email link with inconsistent text', 'There are %d email links with inconsistent text', $counts['text'], 'justice'), $counts['text']);
-        }
-        if ($counts['email']) {
-            $issues[] =  sprintf(_n('There is %d email link with an invalid email address', 'There are %d email links with an invalid email address', $counts['email'], 'justice'), $counts['email']);
-        }
+        $issues[] =  sprintf(_n('There is %d email link with an invalid email address', 'There are %d email links with an invalid email address', $count, 'justice'), $count);
 
         return $issues;
     }

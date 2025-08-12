@@ -35,7 +35,7 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified, options.option_value AS inaccessible_email_text_counts
+            SELECT ID, post_content, post_modified, options.option_value AS inaccessible_email_text_count
             FROM {$wpdb->posts}
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
