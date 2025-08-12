@@ -34,7 +34,7 @@
         }
 
         a {
-            @include link('light');
+            @include link('light', 'menu');
             @include spacing('padding', 2, 'top');
             @include spacing('padding', 2, 'bottom');
 

@@ -324,7 +324,7 @@ $iconSizes: (
     }
 }
 
-@mixin link($type: 'dark') {
+@mixin link($type: 'dark', $context: 'default') {
     @include body;
     outline: none;
     color: var(--justice-primary-black);
@@ -348,14 +348,16 @@ $iconSizes: (
             text-decoration: none;
         }
         @if ($type == 'light') {
-            font-family: var(--body-font);
             color: var(--justice-primary-white);
-            text-decoration: none;
             &:hover,
             &:visited,
             &:active {
                 color: var(--justice-primary-white);
             }
+        }
+        @if ($context == 'menu') {
+            font-family: var(--body-font);
+            text-decoration: none;
             &:hover {
                 text-decoration: underline;
                 outline: none;
