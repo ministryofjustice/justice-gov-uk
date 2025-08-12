@@ -18,11 +18,13 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
 
 
     /**
-     * Get the pages with thead issues.
+     * Get the pages with invalid email href issues.
      *
-     * This function runs an SQL query to find pages with tables that do not have a <thead> element.
+     * This function runs an SQL query to find pages with mailto strings.
+     * It checks if the link href contains email addresses in a valid format.
+     * If the href is not a valid email address, it is counted as an issue.
      *
-     * @return array An array of pages with thead issues.
+     * @return array An array of pages with email-href issues.
      */
     public function getPagesWithIssues(): array
     {
@@ -48,12 +50,10 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
                 post_content LIKE '%mailto%'
         ";
 
-        error_log('getPagesWithIssues called for ' . $this::ISSUE_SLUG);
-
         foreach ($wpdb->get_results($query) as $page) :
             $invalid_email_href_count = is_null($page->invalid_email_href_count) ? null : (int)$page->invalid_email_href_count;
 
-            if (1 || is_null($invalid_email_href_count)) {
+            if (is_null($invalid_email_href_count)) {
                 // The table didn't contain a transient value, so we need to check the content.
                 $invalid_email_href_count = $this->getInvalidEmailsFromContent($page->post_content);
                 // Add the value to the transient updates array, this will be used in a bulk update later.
@@ -82,7 +82,7 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
      *
      * @param array $issues The current issues array.
      * @param int $post_id The ID of the post to check.
-     * @return array The issues array with the anchor issues appended.
+     * @return array The issues array with the email href issues appended.
      */
     public function appendPageIssues($issues, $post_id)
     {
@@ -108,15 +108,13 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
     /**
      * Get inconsistently formatted emails from the content.
      *
-     * This function checks for mailto: links, where the link text does not match the email address.
+     * This function checks for mailto: links for invalid email strings.
      *
      * @param string $content The content to check.
-     * @return int The number of inconsistently formatted email links found in the content.
+     * @return int The number of invalid email links found in the content.
      */
     public static function getInvalidEmailsFromContent(string $content): int
     {
-        $count = 0;
-
         if (empty($content)) {
             return 0;
         }
@@ -127,6 +125,8 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
         // Suppress warnings from invalid HTML, this is necessary because the content may not be well-formed HTML.
         // The LIBXML_HTML_NOIMPLIED and LIBXML_HTML_NODEFDTD options prevent the addition of <html> and <body> tags.
         @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $invalid_email_href_count = 0;
 
         foreach ($dom->getElementsByTagName('a') as $a_element) {
             $href = $a_element->getAttribute('href');
@@ -139,13 +139,24 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
 
             // If any of the emails is false then we have an invalid email.
             if (in_array(false, $emails, true)) {
-                $count++;
+                $invalid_email_href_count++;
             }
         }
 
-        return $count;
+        return $invalid_email_href_count;
     }
 
+    /**
+     * Get emails from a mailto href.
+     *
+     * This function extracts email addresses from a mailto href string.
+     * It validates the email addresses and returns an array of valid emails.
+     * If an email is invalid, it returns false for that email.
+     * If the href is empty or not a mailto link, it returns an empty array.
+     *
+     * @param string $href The href string to extract emails from.
+     * @return array An array of valid email addresses or false for invalid emails.
+     */
     public static function getEmailsFromHref(string $href): array
     {
         if (empty($href) || strpos($href, 'mailto:') !== 0) {
@@ -163,13 +174,13 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return $email; // Return the email if it's valid.
             }
-            
+
             // Percent decode the email address.
-            $email = rawurldecode($email);
-            $email = trim($email);
-            
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                return $email; // Return the email if it's valid.
+            $decoded_email = trim(rawurldecode($email));
+
+            if (filter_var($decoded_email, FILTER_VALIDATE_EMAIL)) {
+                // Return the email if it's valid.
+                return $decoded_email;
             }
 
             // Return false for invalid emails.

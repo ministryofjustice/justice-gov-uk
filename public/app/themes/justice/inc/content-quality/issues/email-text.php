@@ -19,9 +19,11 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
 
 
     /**
-     * Get the pages with thead issues.
+     * Get the pages with inaccessible email text issues.
      *
-     * This function runs an SQL query to find pages with tables that do not have a <thead> element.
+     * This function runs an SQL query to find pages with mailto strings.
+     * It checks if the link text is in an accessible format.
+     * The link text should eb an email address, not a generic "Email Us" or similar text.
      *
      * @return array An array of pages with thead issues.
      */
@@ -100,17 +102,15 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
     }
 
     /**
-     * Get inconsistently formatted emails from the content.
+     * Get inaccessibly formatted email links found in the content.
      *
      * This function checks for mailto: links, where the link text does not match the email address.
      *
      * @param string $content The content to check.
-     * @return int The number of inconsistently formatted email links found in the content.
+     * @return int The number of inaccessibly formatted email links found in the content.
      */
     public static function getInaccessibleEmailLinksFromContent(string $content): int
     {
-        $count = 0;
-
         if (empty($content)) {
             return 0;
         }
@@ -122,11 +122,14 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
         // The LIBXML_HTML_NOIMPLIED and LIBXML_HTML_NODEFDTD options prevent the addition of <html> and <body> tags.
         @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
+        $inaccessible_email_text_count = 0;
+
         foreach ($dom->getElementsByTagName('a') as $a_element) {
             $href = $a_element->getAttribute('href');
 
             if (empty($href) || strpos($href, 'mailto:') !== 0) {
-                continue; // Skip if href is empty or not a mailto link.
+                // Skip if href is empty or not a mailto link.
+                continue;
             }
 
             $emails = ContentQualityIssueEmailHref::class::getEmailsFromHref($href);
@@ -134,17 +137,17 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
             $link_text = trim($a_element->textContent);
 
             if (!str_contains($link_text, '@')) {
-                $count++;
-                continue; // If the link text does not contain an '@', it's an inaccessible email text.
+                $inaccessible_email_text_count++;
+                // If the link text does not contain an '@', it's an inaccessible email text.
+                continue;
             }
 
             // If the href is for a single email, it should match the link text.
             if (sizeof($emails) === 1 && strtolower($emails[0]) !== strtolower($link_text)) {
-                $count++;
-                continue; // If the email matches the link text, skip.
+                $inaccessible_email_text_count++;
             }
         }
 
-        return $count;
+        return $inaccessible_email_text_count;
     }
 }
