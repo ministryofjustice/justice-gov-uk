@@ -12,6 +12,8 @@ require_once 'traits/dashboard-widget.php';
 require_once 'traits/filters.php';
 
 require_once 'issues/anchor.php';
+require_once 'issues/email-href.php';
+require_once 'issues/email-text.php';
 require_once 'issues/empty-heading.php';
 require_once 'issues/incomplete-thead.php';
 require_once 'issues/thead.php';
@@ -66,6 +68,8 @@ class ContentQuality
     {
         // Add the issues.
         new ContentQualityIssueAnchor();
+        new ContentQualityIssueEmailHref();
+        new ContentQualityIssueEmailText();
         new ContentQualityIssueEmptyHeading();
         new ContentQualityIssueIncompleteThead();
         new ContentQualityIssueThead();
