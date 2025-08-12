@@ -13,7 +13,7 @@ export default function () {
     const nav = el.querySelector('.navigation-secondary__nav');
     button.addEventListener('click', () => {
         // Get the current state, so that the following actions don't go out of sync.
-        const willOpen = nav.classList.contains('navigation-secondary__nav--open');
+        const willOpen = !nav.classList.contains('navigation-secondary__nav--open');
         // Toggle the open class on the nav element.
         nav.classList.toggle('navigation-secondary__nav--open');
         // Set the aria-expanded attribute on the button.
