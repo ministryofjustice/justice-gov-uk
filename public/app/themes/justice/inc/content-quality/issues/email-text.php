@@ -123,8 +123,6 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
         @$dom->loadHTML($content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         foreach ($dom->getElementsByTagName('a') as $a_element) {
-
-
             $href = $a_element->getAttribute('href');
 
             if (empty($href) || strpos($href, 'mailto:') !== 0) {
