@@ -18,4 +18,5 @@ require_once $theme_root_dir . '/inc/content-quality/issues/email-text.php';
 require_once $theme_root_dir . '/inc/content-quality/issues/empty-heading.php';
 require_once $theme_root_dir . '/inc/content-quality/issues/incomplete-thead.php';
 require_once $theme_root_dir . '/inc/content-quality/issues/thead.php';
+require_once $theme_root_dir . '/inc/documents/permalinks.php';
 require_once $theme_root_dir . '/inc/post-meta/post-meta.php';
