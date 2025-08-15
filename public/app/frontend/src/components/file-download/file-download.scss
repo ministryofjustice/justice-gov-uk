@@ -13,8 +13,12 @@
     }
     
     &__icon {       
+        @include spacing('margin', 1, 'right');
+
         display: inline-flex!important;
         position: relative;
+
+        // `top` will be overridden by the block variation
         top: 2px;
     }
     
@@ -23,7 +27,6 @@
 
         // `display` will be overridden by the block variation
         display: inline;
-        
     }
 
     // Block variation
@@ -31,7 +34,6 @@
         @include spacing('margin', 4, 'top');
 
         display: flex;
-        align-items: center;
         flex-wrap: wrap;
     }
 
@@ -41,9 +43,7 @@
             display: flex;
         }
         &__icon {
-            @include spacing('margin', 1, 'right');
-            display: flex;
-            align-self: center;
+            top: 0;
         }
         &__details {
             display: flex;
