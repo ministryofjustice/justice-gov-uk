@@ -288,12 +288,21 @@ class Templates
 
         if ($node instanceof DOMElement) {
             $href = $node->getAttribute('href');
-            $label = $node->nodeValue;
+            $label = $node->nodeValue ? trim($node->nodeValue) : $node->nodeValue;
 
             // Get the document ID from the link
             $postId = $this->documents->getDocumentIdByUrl($href);
 
-            $label = $label ?? get_the_title($postId);
+            // If the label is empty, try to get it from the post title
+            if (empty($label) && $postId) {
+                $label = get_the_title($postId);
+            }
+
+            // If the label is still empty, use the filename from the URL
+            if (empty($label)) {
+                $label = pathinfo($href, PATHINFO_FILENAME);
+            }
+
             $filesize = $this->content->getFormattedFilesize($postId);
             $format = strtoupper(ltrim($format, '.'));
         }
