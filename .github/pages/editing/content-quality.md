@@ -137,6 +137,21 @@ When deleting an empty header element, check that you are not inadvertently dele
 </figure>
 
 
+### Inaccessible email text
+
+An email address link with the text displayed in full (example@domain.com), clearly signals to users that clicking the link will open their default email client. 
+
+However, on some pages emails are presented as linked text such as "email us", "general queries" or "customer services hq". This inconsistency can lead to confusion as users may interpret plain linked text as navigation to a new page, rather than triggering an email action.
+
+---
+
+On the Pages admin screen, the issue will be displayed as "There is 1 email link with inaccessible text".
+
+---
+
+To resolve this issue, you need to edit the page in question and ensure that email links use the full email address as the link text - this may require the rephrasing of the surrounding text to maintain clarity and context.
+
+
 ### Incomplete table header
 
 This issue occurs when a table has one or more header cells that are not empty. This can cause confusion for screen readers, as they expect header cells to contain descriptive text.
