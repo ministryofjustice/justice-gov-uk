@@ -119,30 +119,11 @@ if ($postMeta->sideHasPanels('right')) {
 // Check if there are any left side panels (currently only the menu)
 if ($postMeta->sideHasPanels('left')) {
     if ($postMeta->hasPanel('menu')) {
-
         $sidePanelsLeft['menu'] = [
             'title' => 'Justice UK',
             'id' => '#main-page-content',
-            'links' => (new DynamicMenu)->getTheNavigation2()
+            'links' => (new DynamicMenu)->getTheNavigationLinks()
         ];
-
-
-        // error_log(print_r($sidePanelsLeft, true));
-
-        // $links = (new DynamicMenu)->getTheNavigation();
-        // $links = (new DynamicMenu)->getTheNavigation2();
-        // $sidePanelsLeft['menu'] = [
-        //     'title' => 'Justice UK',
-        //     'id' => '#main-page-content',
-        //     'links' => array_map(function ($link) {
-        //         return [
-        //             'label' => $link['title'],
-        //             'link' => $link['url'],
-        //             'active' => isset($link['selected']) && $link['selected'],
-        //             'ancestor' => $link['ancestor'] ?? null,
-        //         ];
-        //     }, $links)
-        // ];
     }
 }
 
