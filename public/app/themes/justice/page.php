@@ -122,7 +122,7 @@ if ($postMeta->sideHasPanels('left')) {
         $sidePanelsLeft['menu'] = [
             'title' => 'Justice UK',
             'id' => '#main-page-content',
-            'links' => (new NavigationSecondary)->getTheNavigation()
+            'links' => (new NavigationSecondary)->getCurrentPageNavigation()
         ];
     }
 }

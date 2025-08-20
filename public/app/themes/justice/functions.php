@@ -100,6 +100,8 @@ $documents->removeHooks();
 $post_meta = new Justice\PostMeta();
 $post_meta->addHooks();
 
+(new Justice\NavigationSecondary())->addHooks();
+
 $taxonomies = new Justice\Taxonomies();
 $taxonomies->addHooks();
 
