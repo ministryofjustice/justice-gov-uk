@@ -19,7 +19,7 @@ export default function () {
             }
 
             // Get the current state, so that the following actions don't go out of sync.
-            const willOpen = button.getAttribute('aria-expanded') === 'false';
+            const willOpen = button.getAttribute('aria-expanded') !== 'true';
 
             // Determine the classList method to use based on whether we are opening or closing.
             // Avoid using toggle, since it can cause the class and aria attributes to get out of sync.
