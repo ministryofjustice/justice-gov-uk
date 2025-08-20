@@ -73,6 +73,8 @@ class DynamicMenu
             // error_log('hidden: ' .  get_post_meta($post->ID, '_dynamic_menu_exclude_this', true));
             $exclude_this = get_post_meta($post->ID, '_dynamic_menu_exclude_this', true);
             return [
+                // Unique ID for use in the `aria-controls` attribute.
+                'id' => sanitize_title($this->post_meta->getShortTitle($post->ID)) . "-{$post->ID}",
                 'label' => $this->post_meta->getShortTitle($post->ID),
                 'url' => get_permalink($post->ID),
                 'children' => $this->getChildrenForNavigation($post->ID) ?: [],
@@ -82,17 +84,12 @@ class DynamicMenu
     }
 
     /**
-     * getTheNavigation
-     * Get the entries as an array.
+     * getTheNavigationLinks
+     * Get the entries as an array, for navigation-secondary.twig.
      */
 
-    public function getTheNavigation2(): array | null
+    public function getTheNavigationLinks(): array | null
     {
-        // Properties : url
-        // label
-        // active
-        // children
-
         function findItemIndexesByUrl(array &$items, string $url): bool
         {
             foreach ($items as  &$item) {
@@ -130,7 +127,7 @@ class DynamicMenu
 
         $items = get_transient('moj_justice_dynamic_menu');
 
-        if ($items !== false) {
+        if (0 && $items !== false) {
             error_log('Using cached dynamic menu');
             findItemIndexesByUrl($items, get_permalink(get_the_ID()));
             removeHiddenAndUpdateActiveItems($items);
@@ -140,11 +137,15 @@ class DynamicMenu
         $items = [
             // Courts
             [
+                // Unique ID for use in the `aria-controls` attribute.
+                'id' => "www-gov-uk-government-organisations-hm-courts-and-tribunals-service",
                 'label' => 'Courts',
                 'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
             ],
             // Procedure rules
             [
+                // Unique ID for use in the `aria-controls` attribute.
+                'id' => "procedure-rules-" . get_page_by_path('courts/procedure-rules')->ID,
                 'label' => 'Procedure rules',
                 'url' => '/courts/procedure-rules',
                 'expanded' => true,
@@ -153,6 +154,8 @@ class DynamicMenu
             ],
             // Offenders
             [
+                // Unique ID for use in the `aria-controls` attribute.
+                'id' => "www-gov-uk-government-organisations-hm-prison-and-probation-service",
                 'label' => 'Offenders',
                 'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
             ],
@@ -166,6 +169,11 @@ class DynamicMenu
 
         return $items;
     }
+
+   /**
+     * getTheNavigation
+     * Get the entries as an array.
+     */
 
     public function getTheNavigation(string $location = 'sidebar'): array | null
     {
@@ -188,18 +196,35 @@ class DynamicMenu
             $ancestor_ids = array_reverse($ancestor_ids);
 
             // Parent page loop
-            foreach ($ancestor_ids as $i => $ancestor_id) {
+            foreach ($ancestor_ids as $ancestor_id) {
                 $entries[] = [
                     'level' => 1,
                     'title' => $post_meta->getShortTitle($ancestor_id),
-                    'url' => get_permalink($ancestor_id),
-                    'ancestor' => $location === 'sidebar' && $i >= 2,
+                    'url' => get_permalink($ancestor_id)
                 ];
             }
         }
 
-        // Child pages
-        $child_query_args = array(
+        // Current page
+        $entries[] = [
+            'level' => 1,
+            'title' => $post_meta->getShortTitle($post->ID),
+            'url' => get_permalink(),
+            // Only use the selected property on the sidebar.
+            'selected' => $location === 'sidebar'
+        ];
+
+        // On mobile duplicate the first entry (with some changes).
+        if ('mobile-nav' === $location) {
+            $first_entry = array_merge($entries[0], [
+                'level' => 0,
+                'url' => null,
+            ]);
+
+            array_unshift($entries, $first_entry);
+        }
+
+        $query_args = array(
             'order'  => 'ASC',
             'orderby' => 'menu_order',
             'post_parent' => $post->ID,
@@ -229,83 +254,11 @@ class DynamicMenu
             ),
         );
 
-        $child_query = new \WP_Query($child_query_args);
-        $child_posts = $child_query->get_posts();
-        wp_reset_postdata();
-
-
-        if (!sizeof($child_posts)) {
-            // Sibling pages
-            $sibling_query_args = [
-                'post_type' => 'page',
-                'post_parent' => $post->post_parent,
-                'posts_per_page' => -1,
-                'order' => 'ASC',
-                'orderby' => 'menu_order',
-                // Exclude pages with the tags in $excluded_child_pages_tags.
-                'tax_query' => [
-                    [
-                        'taxonomy' => 'post_tag',
-                        'field' => 'slug',
-                        'operator' => 'NOT IN',
-                        'terms' => $this->excluded_child_pages_tags,
-                    ],
-                ],
-                // Exclude pages with the _dynamic_menu_exclude_this meta set to true.
-                'meta_query' => array(
-                    'relation' => 'OR',
-                    array(
-                        'key' => '_dynamic_menu_exclude_this',
-                        'value' => false,
-                        'compare' => '=',
-                    ),
-                    array(
-                        'key' => '_dynamic_menu_exclude_this',
-                        'compare' => 'NOT EXISTS',
-                    ),
-                ),
-            ];
-
-            $sibling_query = new \WP_Query($sibling_query_args);
-            $sibling_posts = $sibling_query->get_posts();
-            wp_reset_postdata();
-
-            foreach ($sibling_posts as $sibling_post) {
-                $entries[] = [
-                    // 'level' => 2,
-                    'title' => $post_meta->getShortTitle($sibling_post->ID),
-                    'url' => get_permalink($sibling_post->ID),
-                    // Only use the selected property on the sidebar.
-                    'selected' => $location === 'sidebar' && $sibling_post->ID === $post->ID
-                ];
-            }
-        }
-
-        if (sizeof($child_posts)) {
-            // Current page
-            $entries[] = [
-                'level' => 1,
-                'title' => $post_meta->getShortTitle($post->ID),
-                'url' => get_permalink(),
-                // Only use the selected property on the sidebar.
-                'selected' => $location === 'sidebar'
-            ];
-        }
-
-
-        // On mobile duplicate the first entry (with some changes).
-        if ('mobile-nav' === $location) {
-            $first_entry = array_merge($entries[0], [
-                'level' => 0,
-                'url' => null,
-            ]);
-
-            array_unshift($entries, $first_entry);
-        }
-
-
         // Child pages
-        foreach ($child_posts as $post) {
+        $the_query = new \WP_Query($query_args);
+        $posts = $the_query->get_posts();
+
+        foreach ($posts as $post) {
             $entries[] = [
                 'level' => 2,
                 'title' => $post_meta->getShortTitle($post->ID),
@@ -313,6 +266,7 @@ class DynamicMenu
             ];
         }
 
+        wp_reset_postdata();
 
         // Additional entries
         $additional_entries = get_post_meta($post->ID, '_dynamic_menu_additional_entries', true);
