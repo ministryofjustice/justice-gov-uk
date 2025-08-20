@@ -22,6 +22,7 @@ Default.args = {
         {
             url: '#',
             label: 'Procedure rules',
+            expanded: true,
             children: [
                 {
                     url: '#',
@@ -40,6 +41,7 @@ Default.args = {
                 {
                     url: '#',
                     label: 'Family',
+                    expanded: true,
                     children: [
                         {
                             url: '#',
@@ -48,6 +50,45 @@ Default.args = {
                         {
                             url: '#',
                             label: 'Rules and practice directions',
+                            expanded: true,
+                            children: [
+                                {
+                                    url: '#',
+                                    label: 'Part 1 – General rules and definitions',
+                                },
+                                {
+                                    url: '#',
+                                    label: 'Part 2 – The court and its powers',
+                                },
+                                {
+                                    url: '#',
+                                    label: 'Part 3 – Case management',
+                                    expanded: true,
+                                    children: [
+                                        {
+                                            url: '#',
+                                            label: 'Part 3A – Case management powers of the court',
+                                        },
+                                        {
+                                            url: '#',
+                                            label: 'Part 3B – Case management powers of the court in family proceedings',
+                                            expanded: true,
+                                            children: [
+                                                {
+                                                    url: '#',
+                                                    label: 'Part 3B.1 – Case management powers of the court in family proceedings',
+                                                    active: true,
+                                                },
+                                                {
+                                                    url: '#',
+                                                    label: 'Part 3B.2 – Case management powers of the court in family proceedings (children)',
+                                                    expanded: true,
+                                                },
+                                            ]
+                                        },
+                                    ],
+                                },
+                            ],
                         },
                     ],
                 },

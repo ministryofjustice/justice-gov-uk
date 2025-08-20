@@ -86,7 +86,18 @@
                 }
             }
         }
+
+        &--has-sublist {
+            // Create a space for the button on the right.
+            // See `... &__button ... &--sublist` below.
+            margin-right: 2.875rem;
+            &::after {
+                // Update the inset to account for the button width.
+                inset: 0 2.875rem 0 0;
+            }
+        }
     }
+
 
     &__button {
         @include arrow-button('light');
@@ -94,23 +105,8 @@
 
         padding-left: $gutter-mobile;
         padding-right: $gutter-mobile;
-        display: flex;
-        align-items: center;
-        background-color: transparent;
 
-        @media screen and (min-width: $justice-lg) {
-            @include arrow-button('dark');
-            @include spacing('padding', 2);
-
-            color: var(--justice-link);
-            justify-content: space-between;
-
-            &:hover {
-                background-color: var(--justice-primary-grey);
-                text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
-            }
-        }
-
+        // The very first expand button - shown only on mobile screens.
         &--nav {
             font-family: var(--heading-font);
             font-weight: var(--heading-font-normal);
@@ -124,18 +120,42 @@
                 display: none;
             }
         }
+
+        // Following expand buttons, for menu items that have children.
+        &--sublist {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            
+            // This width is 2 * $gutter-mobile, plus 14px for the arrow button. 
+            width: 2.875rem;
+
+            @media screen and (min-width: $justice-lg) {
+                @include arrow-button('dark');
+
+                // Set width here to override the 100% width that is 
+                // applied by the `arrow-button` mixin.
+                width: 2.875rem;
+                
+                // Use important on padding here, to get a higher specificity 
+                // than the padding applied by the `arrow-button` mixin.
+                padding-left: $gutter-mobile!important;
+                padding-right: $gutter-mobile!important;
+            }
+        }
     }
 
     &__nav {
         @include spacing('padding', 1, 'bottom');
 
-        display: none;
+        // display: none;
 
-        &--open {
+        // &--open {
             display: flex;
             flex-direction: column;
             width: 100%;
-        }
+        // }
         @media screen and (min-width: $justice-lg) {
             display: flex;
             flex-direction: column;
@@ -222,6 +242,20 @@
             #{$this}__link,
             #{$this}__button-text {
                 @include spacing('padding', 6, 'left');
+            }
+        }
+
+        &--level-3 {
+            #{$this}__link,
+            #{$this}__button-text {
+                @include spacing('padding', 7, 'left');
+            }
+        }
+
+        &--level-4 {
+            #{$this}__link,
+            #{$this}__button-text {
+                @include spacing('padding', 8, 'left');
             }
         }
     }
