@@ -97,10 +97,10 @@ $documents = new Justice\Documents();
 $documents->addHooks();
 $documents->removeHooks();
 
+(new Justice\NavigationSecondary())->addHooks();
+
 $post_meta = new Justice\PostMeta();
 $post_meta->addHooks();
-
-(new Justice\NavigationSecondary())->addHooks();
 
 $taxonomies = new Justice\Taxonomies();
 $taxonomies->addHooks();
