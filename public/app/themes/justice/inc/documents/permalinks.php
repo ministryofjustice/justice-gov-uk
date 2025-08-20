@@ -325,7 +325,7 @@ trait DocumentPermalinks
         $path_parts = pathinfo($wp->request);
 
         // Split the directory into parts, to make sure the last part is the document slug.
-        $dirname_parts = explode('/', $path_parts['dirname']);
+        $dirname_parts = explode('/', $path_parts['dirname'] ?? '');
 
         if (empty($path_parts['extension']) ||
             empty($path_parts['filename']) ||
