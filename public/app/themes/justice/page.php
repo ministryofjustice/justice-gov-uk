@@ -5,7 +5,7 @@
  */
 
 use MOJ\Justice\PostMeta;
-use MOJ\Justice\DynamicMenu;
+use MOJ\Justice\NavigationSecondary;
 use MOJ\Justice\Content;
 
 get_header();
@@ -119,17 +119,10 @@ if ($postMeta->sideHasPanels('right')) {
 // Check if there are any left side panels (currently only the menu)
 if ($postMeta->sideHasPanels('left')) {
     if ($postMeta->hasPanel('menu')) {
-        $links = (new DynamicMenu)->getTheNavigation();
         $sidePanelsLeft['menu'] = [
             'title' => 'Justice UK',
             'id' => '#main-page-content',
-            'links' => array_map(function ($link) {
-                return [
-                    'label' => $link['title'],
-                    'link' => $link['url'],
-                    'active' => isset($link['selected']),
-                ];
-            }, $links)
+            'links' => (new NavigationSecondary)->getCurrentPageNavigation()
         ];
     }
 }
