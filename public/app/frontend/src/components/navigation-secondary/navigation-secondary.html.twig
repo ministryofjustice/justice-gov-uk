@@ -72,11 +72,11 @@ example:
                             {{ item.label }}
                         </a>
                         <button class="navigation-secondary__button navigation-secondary__button--sublist"
-                                aria-controls="{{ item.compound_id }}" 
+                                aria-controls="{{ item.id }}" 
                                 {{ item.expanded ? "aria-expanded='true' aria-label='Show less'" : "aria-label='Show more'"}} >
                         </button>
                     </div>
-                    {{ menus.menu_links(item.children, menu_level + 1, item.compound_id, null, item.expanded) }}
+                    {{ menus.menu_links(item.children, menu_level + 1, item.id, null, item.expanded) }}
                 {% else %}
                     <div class="navigation-secondary__list-item-wrapper">
                         <a class="navigation-secondary__link" role="link" 
