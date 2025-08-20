@@ -5,7 +5,7 @@
  */
 
 use MOJ\Justice\PostMeta;
-use MOJ\Justice\DynamicMenu;
+use MOJ\Justice\NavigationSecondary;
 use MOJ\Justice\Content;
 
 get_header();
@@ -122,7 +122,7 @@ if ($postMeta->sideHasPanels('left')) {
         $sidePanelsLeft['menu'] = [
             'title' => 'Justice UK',
             'id' => '#main-page-content',
-            'links' => (new DynamicMenu)->getTheNavigationLinks()
+            'links' => (new NavigationSecondary)->getTheNavigation()
         ];
     }
 }
