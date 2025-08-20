@@ -149,13 +149,13 @@
     &__nav {
         @include spacing('padding', 1, 'bottom');
 
-        // display: none;
+        display: none;
 
-        // &--open {
+        &--open {
             display: flex;
             flex-direction: column;
             width: 100%;
-        // }
+        }
         @media screen and (min-width: $justice-lg) {
             display: flex;
             flex-direction: column;
