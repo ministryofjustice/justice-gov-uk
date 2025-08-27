@@ -92,12 +92,11 @@
             // See `... &__button ... &--sublist` below.
             margin-right: 2.875rem;
             &::after {
-                // Update the inset to account for the button width.
+                // Override the inset to account for the button width.
                 inset: 0 2.875rem 0 0;
             }
         }
     }
-
 
     &__button {
         @include arrow-button('light');
@@ -127,21 +126,21 @@
             right: 0;
             top: 0;
             bottom: 0;
-            
-            // This width is 2 * $gutter-mobile, plus 14px for the arrow button. 
+
+            // This width is 2 * $gutter-mobile, plus 14px for the arrow button.
             width: 2.875rem;
 
             @media screen and (min-width: $justice-lg) {
                 @include arrow-button('dark');
 
-                // Set width here to override the 100% width that is 
+                // Set width here to override the 100% width that is
                 // applied by the `arrow-button` mixin.
                 width: 2.875rem;
-                
-                // Use important on padding here, to get a higher specificity 
+
+                // Use important on padding here, to get a higher specificity
                 // than the padding applied by the `arrow-button` mixin.
-                padding-left: $gutter-mobile!important;
-                padding-right: $gutter-mobile!important;
+                padding-left: $gutter-mobile !important;
+                padding-right: $gutter-mobile !important;
             }
         }
     }
@@ -186,6 +185,20 @@
         padding-right: $gutter-mobile;
         @media screen and (min-width: $justice-lg) {
             @include spacing('padding', 2);
+
+            // Create an after element to be used for the active state background.
+            // Use a pseudo-element to aloww for an offset when we have a sublist toggle button.
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+            }
+
+            // If the item has a sublist, we need to account for the button width.
+            &--has-sublist::after {
+                // Override the inset to account for the button width.
+                inset: 0 2.875rem 0 0;
+            }
         }
     }
 
@@ -205,7 +218,7 @@
                 }
             }
             @media screen and (min-width: $justice-lg) {
-                > #{$this}__list-item-wrapper {
+                > #{$this}__list-item-wrapper::after {
                     background-color: var(--justice-primary-grey);
                 }
                 > #{$this}__list-item-wrapper > #{$this}__link {

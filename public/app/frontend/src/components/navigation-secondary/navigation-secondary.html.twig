@@ -65,7 +65,7 @@ example:
                 ">
 
                 {% if item.children %}
-                    <div class="navigation-secondary__list-item-wrapper">
+                    <div class="navigation-secondary__list-item-wrapper navigation-secondary__list-item-wrapper--has-sublist">
                         <a class="navigation-secondary__link navigation-secondary__link--has-sublist" role="link" 
                             {{ item.active ? "aria-current='page' aria-disabled='true'" : "href='#{ item.url }'" }}
                         >
