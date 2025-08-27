@@ -30,6 +30,7 @@ require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
+require_once 'inc/navigation-secondary.php';
 require_once 'inc/plugin-hacks.php';
 require_once 'inc/post-meta/post-meta.php';
 require_once 'inc/redirects.php';
@@ -95,6 +96,8 @@ $block_editor->addHooks();
 $documents = new Justice\Documents();
 $documents->addHooks();
 $documents->removeHooks();
+
+(new Justice\NavigationSecondary())->addHooks();
 
 $post_meta = new Justice\PostMeta();
 $post_meta->addHooks();
