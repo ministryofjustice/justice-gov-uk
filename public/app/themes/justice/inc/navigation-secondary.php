@@ -83,6 +83,9 @@ class NavigationSecondary
             return $items;
         }
 
+        // Procedure rules is a seed page for the secondary navigation, get it's ID here.
+        $procedure_rules_id = get_page_by_path('courts/procedure-rules')->ID;
+
         // The items aren't cached, so populate the items array.
         $items = [
             [
@@ -91,10 +94,10 @@ class NavigationSecondary
                 'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
             ],
             [
-                'id' => "procedure-rules-" . get_page_by_path('courts/procedure-rules')->ID,
+                'id' => "procedure-rules-$procedure_rules_id",
                 'label' => 'Procedure rules',
-                'url' => '/courts/procedure-rules',
-                'children' => $this->getChildPagesForNavigation(get_page_by_path('courts/procedure-rules')->ID),
+                'url' => get_permalink($procedure_rules_id),
+                'children' => $this->getChildPagesForNavigation($procedure_rules_id),
             ],
             [
                 'id' => "www-gov-uk-government-organisations-hm-prison-and-probation-service",
