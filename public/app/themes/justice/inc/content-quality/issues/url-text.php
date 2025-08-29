@@ -97,7 +97,7 @@ final class ContentQualityIssueUrlText extends ContentQualityIssue
 
         $count = $this->pages_with_issue[$post_id];
 
-        $issues[] =  sprintf(_n('There is %d URL link with inaccessible text', 'There are %d URL links with inaccessible text', $count, 'justice'), $count);
+        $issues[] =  sprintf(_n('There is %d link with a URL for the text', 'There are %d URL links with a URL for the text', $count, 'justice'), $count);
 
         return $issues;
     }
