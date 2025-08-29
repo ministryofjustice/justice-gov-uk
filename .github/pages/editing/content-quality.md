@@ -171,6 +171,26 @@ If necessary, make reference to the [Tables section](/editing/block-editor.html#
 - how to add a header section to a table
 - how to remove a table column or row
 
+
+### Link text uses raw URLs
+
+This issue occurs when a hyperlink displays the full URL as its visible text. While this may be visually understandable to sighted users familiar with web addresses, it can create unnecessary cognitive load for users relying on screen readers. Long URLs are often read out character-by-character or as an unintelligible string, offering little context about the link’s destination.
+
+This practice also affects users with cognitive impairments, who benefit from clear and descriptive link text that communicates purpose without requiring additional interpretation.
+
+---
+
+On the Pages admin screen, the issue will be displayed as "There is 1 link with a URL for the text".
+
+---
+
+Replace raw URLs used as visible link text with descriptive phrases that clearly indicate the link’s purpose or destination. This improves accessibility and usability for all users, especially those using assistive technologies.
+
+Avoid vague phrases like "click here" or "read more". Instead, use meaningful link text that provides context.
+
+e.g. replace the link text "https://demo.justice.gov.uk/courts/procedure-rules/civil/rules/part04" with "Civil Procedure Rules Part 4".
+
+
 ### Table without header section
 
 This issue occurs when a table is created without a header section. A header section is required for accessibility reasons, as it helps screen readers understand the structure of the table.

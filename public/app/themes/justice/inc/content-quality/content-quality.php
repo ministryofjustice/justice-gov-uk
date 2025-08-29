@@ -17,6 +17,7 @@ require_once 'issues/email-text.php';
 require_once 'issues/empty-heading.php';
 require_once 'issues/incomplete-thead.php';
 require_once 'issues/thead.php';
+require_once 'issues/url-text.php';
 
 class ContentQuality
 {
@@ -73,6 +74,7 @@ class ContentQuality
         new ContentQualityIssueEmptyHeading();
         new ContentQualityIssueIncompleteThead();
         new ContentQualityIssueThead();
+        new ContentQualityIssueUrlText();
 
         // Add more issues here as needed.
         // e.g. new ContentQualityIssueAltText();
