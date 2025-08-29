@@ -18,28 +18,28 @@ example:
         filesize: '120 KbB',
         language: 'Welsh'
     }%}
-#}
 
-{% if variant == "inline" %}
-    <span class="file-download file-download--inline">
-{% else %}
-    <div class="file-download file-download--block">
-{% endif %}
-    <a class="file-download__link" href={{ link }}>
-        {{- "" -}}
-        <i class="file-download__icon icon-{{ format|lower }}--{{ variant == "inline" ? "em" : "sm"}}" aria-hidden="true"></i>
-        {{- "" -}}
-        <span class="file-download__prefix visually-hidden">Download</span>
+    TODO
+    [ ] Find and test all places where this file is included
+
+#}<a class="file-download" href={{ link }}>
+    {{- "" -}}
+    <i class="file-download__icon icon-{{ format|lower }}--em" aria-hidden="true"></i>
+    {{- "" -}}
+
+    <span class="file-download__prefix visually-hidden">Download</span>
+
+    {{- "" -}}
+    <span class="file-download__words">
         {{- filename -}}
-    </a>
-    {% if format %}
-        <span class="file-download__details">({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? ", " ~ filesize : "" }})</span>
-    {% endif %}
+
+        {%- if format -%}
+            {{- " " -}}({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? ", " ~ filesize : "" }})
+        {%- endif -%}
+    </span>
+    {{- "" -}}
+
 {# Keep the following HTML comment, it assists in removing file details that an editor has input into the content editor  #}
 {# It is used to identify the end this component, subsequently we can safely remove a duplicate string of "(PDF)". #}
 <!-- /.file-download -->
-{% if variant == "inline" %}
-    </span>
-{% else %}
-    </div>
-{% endif %}
+</a>

@@ -1,54 +1,21 @@
 @import '../../../style';
 
 .file-download {
-    // Style the inline variation by default
+    @include link;
 
-    // `display` will be overridden by the block variation
-    display: inline;
+    // Keep the icon next to the text
+    white-space: nowrap;
 
-    &__link {
-        @include link;
-        // `display` will be overridden by the block variation
-        display: inline;
-    }
-    
-    &__icon {       
+    &__icon {
         @include spacing('margin', 1, 'right');
-
+        // Override the default icon styles
         display: inline-flex!important;
         position: relative;
-
-        // `top` will be overridden by the block variation
         top: 2px;
     }
-    
-    &__details {
-        @include body;
 
-        // `display` will be overridden by the block variation
-        display: inline;
-    }
-
-    // Block variation
-    &--block {
-        @include spacing('margin', 4, 'top');
-
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    &--block & {
-        &__link {
-            @include spacing('margin', 1, 'right');
-            display: flex;
-        }
-        &__icon {
-            top: 0;
-        }
-        &__details {
-            display: flex;
-            flex-wrap: nowrap;
-            width: fit-content;
-        }
+    &__words {
+        // Override the previously set `white-space` to allow wrapping
+        white-space: normal;
     }
 }
