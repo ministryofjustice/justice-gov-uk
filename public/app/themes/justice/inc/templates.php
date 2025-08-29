@@ -336,6 +336,6 @@ class Templates
         // Regex to replace the string:
         // - `<!-- /.file-download --> </a> (PDF)` -> `</a>`
         $regex_pattern = '/<!-- \/\.file-download -->\v(\s*)?<\/a>\s{0,1}\(PDF\)/';
-        return preg_replace($regex_pattern, '$1</a>', $block_content);
+        return preg_replace($regex_pattern, '</a>', $block_content);
     }
 }
