@@ -308,7 +308,6 @@ class Templates
         }
 
         return [
-            'variant' => 'inline',
             'format' => $format,
             'filesize' => $filesize,
             'filename' => $label,

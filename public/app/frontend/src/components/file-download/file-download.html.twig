@@ -3,7 +3,6 @@
 A file (pdf) for download
 
 Available variables:
-    - variant: 'block'|'inline' The display variant of the component
     - format: 'PDF'|'ZIP'|'DOC' The file format
     - link: string The link to the file
     - filename: string The name of the file
@@ -11,7 +10,6 @@ Available variables:
     - language: string The language of the file if different to the language of the page
 example:
     {% include '@components/file-download/file-download.html.twig' with {
-        variant: 'inline'
         format: 'PDF',
         link: '#',
         filename: 'User manual',
