@@ -3,7 +3,6 @@
 A file (pdf) for download
 
 Available variables:
-    - variant: 'block'|'inline' The display variant of the component
     - format: 'PDF'|'ZIP'|'DOC' The file format
     - link: string The link to the file
     - filename: string The name of the file
@@ -11,35 +10,30 @@ Available variables:
     - language: string The language of the file if different to the language of the page
 example:
     {% include '@components/file-download/file-download.html.twig' with {
-        variant: 'inline'
         format: 'PDF',
         link: '#',
         filename: 'User manual',
         filesize: '120 KbB',
         language: 'Welsh'
     }%}
-#}
+#}<a class="file-download" href={{ link }}>
+    {{- "" -}}
+    <i class="file-download__icon icon-{{ format|lower }}--em" aria-hidden="true"></i>
+    {{- "" -}}
 
-{% if variant == "inline" %}
-    <span class="file-download file-download--inline">
-{% else %}
-    <div class="file-download file-download--block">
-{% endif %}
-    <a class="file-download__link" href={{ link }}>
-        {{- "" -}}
-        <i class="file-download__icon icon-{{ format|lower }}--{{ variant == "inline" ? "em" : "sm"}}" aria-hidden="true"></i>
-        {{- "" -}}
-        <span class="file-download__prefix visually-hidden">Download</span>
+    <span class="file-download__prefix visually-hidden">Download</span>
+
+    {{- "" -}}
+    <span class="file-download__text">
         {{- filename -}}
-    </a>
-    {% if format %}
-        <span class="file-download__details">({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? ", " ~ filesize : "" }})</span>
-    {% endif %}
+
+        {%- if format -%}
+            {{- " " -}}({{ language ? language ~ ", " : "" }}{{ format }}{{ filesize ? ", " ~ filesize : "" }})
+        {%- endif -%}
+    </span>
+    {{- "" -}}
+
 {# Keep the following HTML comment, it assists in removing file details that an editor has input into the content editor  #}
 {# It is used to identify the end this component, subsequently we can safely remove a duplicate string of "(PDF)". #}
 <!-- /.file-download -->
-{% if variant == "inline" %}
-    </span>
-{% else %}
-    </div>
-{% endif %}
+</a>

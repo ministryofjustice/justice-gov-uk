@@ -32,5 +32,13 @@ Default.args = {
             description:
                 '…is being tested across five regions, at eight Family Court locations. The amendment extends the testing sites to Central London, Liverpool and Reading Family Courts in order to increase the…',
         },
+        {
+            title: 'Civil Procedure Rules - Update 7',
+            url: 'https://www.justice.gov.uk/courts/procedure-rules/civil/documents/cpr_update7_pdf.zip',
+            date: '16 May 2024',
+            isDocument: true,
+            format: 'PDF',
+            filesize: '167 KB',
+        },
     ],
 };

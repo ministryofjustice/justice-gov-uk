@@ -19,7 +19,6 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-    variant: 'block',
     format: 'PDF',
     link: '#',
     filesize: '167 KB',
@@ -35,7 +34,6 @@ Welsh.args = {
 export const InParagraph = Template.bind({});
 InParagraph.args = {
     ...Default.args,
-    variant: 'inline',
 };
 InParagraph.decorators = [
     (Story) => {
@@ -49,7 +47,6 @@ InParagraph.decorators = [
 export const TextWrap = Template.bind({});
 TextWrap.args = {
     ...Default.args,
-    variant: 'inline',
     filename: 'Practice Direction 51L New Bill of Costs Pilot Excel version of precedent'
 };
 TextWrap.decorators = [
