@@ -141,20 +141,11 @@
     }
 
     .file-download {
+        display: flex;
         margin-top: 0;
-        display: inline;
 
         &__icon {
-            float: left;
-            display: inline;
-        }
-
-        &__link {
-            display: inline;
-        }
-
-        &__details {
-            margin-left: 0;
+            flex-shrink: 0;
         }
     }
 
