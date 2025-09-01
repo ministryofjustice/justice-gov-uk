@@ -89,6 +89,16 @@ class ContentQualityIssue
 
         // Add a filter to append this issue to the dashboard issues array.
         add_filter('moj_content_quality_filter_dashboard_issues', [$this, 'appendToDashboardIssues']);
+
+        // Add a filter so that when pages are saved, any issues saved in the transient are cleared.
+        add_action('save_post_page', function (int $post_id) {
+            // Delete the transient for this issue (if Object Cache is enabled, this will delete the transient from the cache).
+            delete_transient($this->transient_key);
+            delete_transient("$this->transient_key:{$post_id}");
+            // Delete from database too, since come extensions of this class are using that.
+            $this->deleteTransientFromDatabase($this->transient_key);
+            $this->deleteTransientFromDatabase("$this->transient_key:{$post_id}");
+        });
     }
 
 
@@ -126,7 +136,7 @@ class ContentQualityIssue
         }
 
         // Check if the value is stored in a transient.
-        $cached_pages_with_issue = false; //get_transient($this->transient_key);
+        $cached_pages_with_issue = get_transient($this->transient_key);
 
         // If the value is cached, use it and return.
         if ($cached_pages_with_issue !== false) {
@@ -248,5 +258,60 @@ class ContentQualityIssue
         ];
 
         return $issues;
+    }
+
+    /**
+     * Bulk set transient values in the database.
+     *
+     * This function is used to set multiple transient values in the database at once.
+     * It constructs a single SQL query to insert or update the transient values.
+     *
+     * @param array $values An associative array of transient keys and their values.
+     * @param int $expiry The expiry time for the transients, in seconds epoch format.
+     * @return void
+     */
+    public function bulkSetTransientInDatabase(array $values, int $expiry): void
+    {
+        global $wpdb;
+
+        $query = "INSERT INTO {$wpdb->options} (option_name, option_value, autoload) VALUES ";
+        foreach ($values as $key => $value) {
+            $query .= $wpdb->prepare(
+                "(%s, %s, %s), ",
+                "_transient_timeout_$key",
+                $expiry,
+                'no'
+            );
+            $query .= $wpdb->prepare(
+                "(%s, %s, %s), ",
+                "_transient_$key",
+                $value,
+                'no'
+            );
+        }
+        $query = rtrim($query, ', ');
+        $query .= " ON DUPLICATE KEY UPDATE option_value = VALUES(option_value), autoload = VALUES(autoload)";
+        $wpdb->query($query);
+    }
+
+    /**
+     * Delete a transient from the database.
+     *
+     * This function deletes a transient from the database by removing both the transient and its timeout.
+     *
+     * @param string $transient_key The key of the transient to delete.
+     * @return void
+     */
+    public function deleteTransientFromDatabase(string $transient_key): void
+    {
+        global $wpdb;
+
+        $query = $wpdb->prepare(
+            "DELETE FROM {$wpdb->options} WHERE option_name = %s OR option_name = %s",
+            "_transient_timeout_$transient_key",
+            "_transient_$transient_key"
+        );
+
+        $wpdb->query($query);
     }
 }
