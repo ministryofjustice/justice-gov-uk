@@ -560,6 +560,14 @@ $iconSizes: (
             margin-bottom: 0;
         }
     }
+
+    @media print {
+        // On print, append the URL to external links.
+        .link--external::after {
+            content: " (" attr(href) ")";
+            font-size: 0.8em;
+        }
+    }
 }
 
 // From GDS https://design-system.service.gov.uk/styles/layout/
