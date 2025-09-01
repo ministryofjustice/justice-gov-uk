@@ -14,7 +14,7 @@ final class ContentQualityIssueUrlText extends ContentQualityIssue
 {
     const ISSUE_SLUG = 'url-text';
 
-    const ISSUE_LABEL = 'Inaccessible URL link text';
+    const ISSUE_LABEL = 'Links with a URL for the text';
 
 
     /**
