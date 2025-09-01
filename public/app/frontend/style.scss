@@ -567,6 +567,7 @@ $iconSizes: (
         .link--external::after {
             content: " (" attr(href) ")";
             font-size: 0.8em;
+            word-break: break-word;
         }
     }
 }
