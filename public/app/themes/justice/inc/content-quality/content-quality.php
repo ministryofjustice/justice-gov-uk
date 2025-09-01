@@ -14,6 +14,7 @@ require_once 'traits/filters.php';
 require_once 'issues/anchor.php';
 require_once 'issues/empty-heading.php';
 require_once 'issues/thead.php';
+require_once 'issues/url-text.php';
 
 class ContentQuality
 {
@@ -67,6 +68,7 @@ class ContentQuality
         new ContentQualityIssueAnchor();
         new ContentQualityIssueEmptyHeading();
         new ContentQualityIssueThead();
+        new ContentQualityIssueUrlText();
 
         // Add more issues here as needed.
         // e.g. new ContentQualityIssueAltText();

@@ -258,7 +258,8 @@ class Templates
             $url = $node->getAttribute('href');
             $id = $node->getAttribute('id');
             $label = $node->nodeValue ?: pathinfo($url, PATHINFO_FILENAME);
-            $newTab = $this->content->isExternal($url);
+            $external = $this->content->isExternal($url);
+            $newTab = $external || $node->getAttribute('target') === '_blank';
             // If the label already has new tab/window then don't repeat it
             $manualNewTabText = (str_contains($label, 'new tab') || str_contains($label, 'new window'));
         }
@@ -268,6 +269,7 @@ class Templates
             'url' => $url,
             'newTab' => $newTab,
             'manualNewTabText' => $manualNewTabText,
+            'external' => $external,
             'id' => $id
         ];
     }
