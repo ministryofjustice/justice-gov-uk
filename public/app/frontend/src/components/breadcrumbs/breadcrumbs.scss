@@ -1,4 +1,4 @@
-@import '../../../style';
+@use '../../../style';
 
 .breadcrumbs {
     &__list {
@@ -10,13 +10,13 @@
 
     &__item {
         a {
-            @include link;
+            @include style.link;
         }
 
         &:not(&:last-child) {
             &::after {
-                @include spacing('margin', 1, 'left');
-                @include spacing('margin', 1, 'right');
+                @include style.spacing('margin', 1, 'left');
+                @include style.spacing('margin', 1, 'right');
 
                 content: '\00BB';
                 color: var(--justice-primary-grey);

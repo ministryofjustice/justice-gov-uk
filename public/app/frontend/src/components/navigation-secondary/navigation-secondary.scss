@@ -1,19 +1,19 @@
 @use 'sass:map';
-@import '../../../style';
+@use '../../../style';
 
 .navigation-secondary {
     $this: &;
 
     display: flex;
     flex-direction: column;
-    width: calc(100% + ($gutter-mobile * 2));
+    width: calc(100% + (style.$gutter-mobile * 2));
     height: fit-content;
-    margin-left: calc($gutter-mobile * -1);
-    margin-right: calc($gutter-mobile * -1);
+    margin-left: calc(style.$gutter-mobile * -1);
+    margin-right: calc(style.$gutter-mobile * -1);
     background-color: var(--justice-primary-black);
 
-    @media screen and (min-width: $justice-lg) {
-        @include spacing('margin', 8, 'top');
+    @media screen and (min-width: style.$justice-lg) {
+        @include style.spacing('margin', 8, 'top');
 
         width: 100%;
         margin: 0;
@@ -22,17 +22,17 @@
 
     &__skip-to-article {
         &:not(:active, :focus-within) {
-            @include visually-hidden;
+            @include style.visually-hidden;
         }
     }
 
     &__heading {
         display: none;
-        @media screen and (min-width: $justice-lg) {
-            @include panel-title;
-            @include spacing('padding', 2);
-            @include spacing('padding', 3, 'top');
-            @include spacing('padding', 3, 'bottom');
+        @media screen and (min-width: style.$justice-lg) {
+            @include style.panel-title;
+            @include style.spacing('padding', 2);
+            @include style.spacing('padding', 3, 'top');
+            @include style.spacing('padding', 3, 'bottom');
 
             display: flex;
             align-items: center;
@@ -43,7 +43,7 @@
     }
 
     &__link {
-        @include link('light', 'menu');
+        @include style.link('light', 'menu');
 
         display: flex;
         align-items: center;
@@ -70,8 +70,8 @@
             }
         }
 
-        @media screen and (min-width: $justice-lg) {
-            @include link;
+        @media screen and (min-width: style.$justice-lg) {
+            @include style.link;
 
             &:visited {
                 color: var(--justice-link);
@@ -99,11 +99,11 @@
     }
 
     &__button {
-        @include arrow-button('light');
-        @include spacing('padding', 2);
+        @include style.arrow-button('light');
+        @include style.spacing('padding', 2);
 
-        padding-left: $gutter-mobile;
-        padding-right: $gutter-mobile;
+        padding-left: style.$gutter-mobile;
+        padding-right: style.$gutter-mobile;
 
         // The very first expand button - shown only on mobile screens.
         &--nav {
@@ -113,9 +113,9 @@
             text-transform: capitalize;
 
             &::after {
-                @include spacing('margin', 2, 'left');
+                @include style.spacing('margin', 2, 'left');
             }
-            @media screen and (min-width: $justice-lg) {
+            @media screen and (min-width: style.$justice-lg) {
                 display: none;
             }
         }
@@ -130,8 +130,8 @@
             // This width is 2 * $gutter-mobile, plus 14px for the arrow button.
             width: 2.875rem;
 
-            @media screen and (min-width: $justice-lg) {
-                @include arrow-button('dark');
+            @media screen and (min-width: style.$justice-lg) {
+                @include style.arrow-button('dark');
 
                 // Set width here to override the 100% width that is
                 // applied by the `arrow-button` mixin.
@@ -139,14 +139,14 @@
 
                 // Use important on padding here, to get a higher specificity
                 // than the padding applied by the `arrow-button` mixin.
-                padding-left: $gutter-mobile !important;
-                padding-right: $gutter-mobile !important;
+                padding-left: style.$gutter-mobile !important;
+                padding-right: style.$gutter-mobile !important;
             }
         }
     }
 
     &__nav {
-        @include spacing('padding', 1, 'bottom');
+        @include style.spacing('padding', 1, 'bottom');
 
         display: none;
 
@@ -155,7 +155,7 @@
             flex-direction: column;
             width: 100%;
         }
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -176,15 +176,15 @@
     }
 
     &__list-item-wrapper {
-        @include spacing('padding', 2);
+        @include style.spacing('padding', 2);
 
         position: relative;
         display: flex;
         justify-content: space-between;
-        padding-left: $gutter-mobile;
-        padding-right: $gutter-mobile;
-        @media screen and (min-width: $justice-lg) {
-            @include spacing('padding', 2);
+        padding-left: style.$gutter-mobile;
+        padding-right: style.$gutter-mobile;
+        @media screen and (min-width: style.$justice-lg) {
+            @include style.spacing('padding', 2);
 
             // Create an after element to be used for the active state background.
             // Use a pseudo-element to aloww for an offset when we have a sublist toggle button.
@@ -217,7 +217,7 @@
                     text-decoration: none;
                 }
             }
-            @media screen and (min-width: $justice-lg) {
+            @media screen and (min-width: style.$justice-lg) {
                 > #{$this}__list-item-wrapper::after {
                     background-color: var(--justice-primary-grey);
                 }
@@ -239,7 +239,7 @@
         &--level-1,
         &--level-2 {
             background-color: var(--justice-primary-black);
-            @media screen and (min-width: $justice-lg) {
+            @media screen and (min-width: style.$justice-lg) {
                 background-color: var(--justice-secondary-grey-blue);
             }
         }
@@ -247,35 +247,35 @@
         &--level-1 {
             #{$this}__link,
             #{$this}__button-text {
-                @include spacing('padding', 2, 'left');
+                @include style.spacing('padding', 2, 'left');
             }
         }
 
         &--level-2 {
             #{$this}__link,
             #{$this}__button-text {
-                @include spacing('padding', 6, 'left');
+                @include style.spacing('padding', 6, 'left');
             }
         }
 
         &--level-3 {
             #{$this}__link,
             #{$this}__button-text {
-                @include spacing('padding', 7, 'left');
+                @include style.spacing('padding', 7, 'left');
             }
         }
 
         &--level-4 {
             #{$this}__link,
             #{$this}__button-text {
-                @include spacing('padding', 8, 'left');
+                @include style.spacing('padding', 8, 'left');
             }
         }
     }
 
     &__show-all {
         background-color: var(--justice-primary-black);
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             background-color: var(--justice-secondary-grey-blue);
         }
     }

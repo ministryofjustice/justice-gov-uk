@@ -1,16 +1,16 @@
-@import '../../../style';
+@use '../../../style';
 
 .pagination {
     $this: &;
 
-    @include spacing('margin', 8, 'top');
+    @include style.spacing('margin', 8, 'top');
 
     display: flex;
     justify-content: center;
 
     &__list {
-        @include spacing('margin', 9, 'left');
-        @include spacing('margin', 9, 'right');
+        @include style.spacing('margin', 9, 'left');
+        @include style.spacing('margin', 9, 'right');
 
         display: flex;
         flex-direction: row;
@@ -18,9 +18,9 @@
     }
 
     &__link {
-        @include link;
-        @include spacing('padding', 1, 'left');
-        @include spacing('padding', 1, 'right');
+        @include style.link;
+        @include style.spacing('padding', 1, 'left');
+        @include style.spacing('padding', 1, 'right');
 
         display: flex;
         justify-content: center;
@@ -29,19 +29,19 @@
 
         &--previous {
             #{$this}__link-text {
-                @include spacing('padding', 1, 'left');
+                @include style.spacing('padding', 1, 'left');
             }
         }
 
         &--next {
             #{$this}__link-text {
-                @include spacing('padding', 1, 'right');
+                @include style.spacing('padding', 1, 'right');
             }
         }
     }
 
     &__link.disabled {
-        @include disabled;
+        @include style.disabled;
 
         color: var(--justice-primary-black);
 
@@ -51,8 +51,8 @@
     }
 
     &__link-text {
-        @media screen and (width <= calc($justice-lg - 1px)) {
-            @include visually-hidden;
+        @media screen and (width <= calc(style.$justice-lg - 1px)) {
+            @include style.visually-hidden;
         }
     }
 }

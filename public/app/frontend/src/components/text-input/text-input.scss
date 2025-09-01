@@ -1,4 +1,4 @@
-@import '../../../style';
+@use '../../../style';
 
 .text-input {
     $this: &;
@@ -7,14 +7,14 @@
     align-items: center;
 
     &__label {
-        @include body;
-        @include spacing('margin', 2, 'right');
+        @include style.body;
+        @include style.spacing('margin', 2, 'right');
     }
 
     &__input {
-        @include body;
-        @include spacing('padding', 1);
-        @include focus-outline;
+        @include style.body;
+        @include style.spacing('padding', 1);
+        @include style.focus-outline;
 
         width: 100%;
         border: 2px solid var(--justice-border-input);
@@ -28,7 +28,7 @@
         #{$this}__label,
         #{$this}__input,
         #{$this}__wrapper {
-            @include disabled;
+            @include style.disabled;
         }
     }
 }

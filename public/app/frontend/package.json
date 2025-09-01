@@ -35,7 +35,7 @@
     "postcss-css-variables": "^0.19.0",
     "postcss-inline-svg": "^6.0.0",
     "postcss-loader": "^8.1.1",
-    "sass": "^1.77.6",
+    "sass": "^1.91.0",
     "sass-loader": "^14.2.1",
     "storybook": "^8.1.10",
     "stylelint": "^16.6.1",

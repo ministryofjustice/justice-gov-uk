@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @use "sass:map";
 
 :root {
@@ -118,15 +119,15 @@ $spacing-units-desktop: (
 
 @mixin spacing($type: 'margin', $unit: 1, $direction: 'all') {
     @if ($direction != 'all') {
-        #{$type}-#{$direction}: map-get($spacing-units-mobile, $unit);
+        #{$type}-#{$direction}: map.get($spacing-units-mobile, $unit);
         @media screen and (min-width: $justice-lg) {
-            #{$type}-#{$direction}: map-get($spacing-units-desktop, $unit);
+            #{$type}-#{$direction}: map.get($spacing-units-desktop, $unit);
         }
     }
     @else {
-        #{$type}: map-get($spacing-units-mobile, $unit);
+        #{$type}: map.get($spacing-units-mobile, $unit);
         @media screen and (min-width: $justice-lg) {
-            #{$type}: map-get($spacing-units-desktop, $unit);
+            #{$type}: map.get($spacing-units-desktop, $unit);
         }
     }
 
@@ -135,7 +136,7 @@ $spacing-units-desktop: (
 // Headings https://design-system.service.gov.uk/styles/type-scale/
 // Use map-get instead of the spacing function here otherwise it's harder to override per component due to css specificity
 @mixin h1 {
-    margin-top: map-get($spacing-units-mobile, 8);
+    margin-top: map.get($spacing-units-mobile, 8);
     margin-bottom: 0;
     font-size: 2rem;
     line-height: 2.188rem;
@@ -146,14 +147,14 @@ $spacing-units-desktop: (
         @include caption('h1');
     }
     @media screen and (min-width: $justice-lg) {
-        margin-top: map-get($spacing-units-desktop, 8);
+        margin-top: map.get($spacing-units-desktop, 8);
         font-size: 3rem;
         line-height: 3.125rem;
     }
 }
 
 @mixin h2 {
-    margin-top: map-get($spacing-units-mobile, 6);
+    margin-top: map.get($spacing-units-mobile, 6);
     margin-bottom: 0;
     font-size: 1.688rem;
     line-height: 1.875rem;
@@ -164,14 +165,14 @@ $spacing-units-desktop: (
         @include caption('h2');
     }
     @media screen and (min-width: $justice-lg) {
-        margin-top: map-get($spacing-units-desktop, 6);
+        margin-top: map.get($spacing-units-desktop, 6);
         font-size: 2.25rem;
         line-height: 2.5rem;
     }
 }
 
 @mixin h3 {
-    margin-top: map-get($spacing-units-mobile, 4);
+    margin-top: map.get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1.313rem;
     line-height: 1.563rem;
@@ -182,14 +183,14 @@ $spacing-units-desktop: (
         @include caption('h3');
     }
     @media screen and (min-width: $justice-lg) {
-        margin-top: map-get($spacing-units-desktop, 4);
+        margin-top: map.get($spacing-units-desktop, 4);
         font-size: 1.625rem;
         line-height: 1.875rem;
     }
 }
 
 @mixin h4 {
-    margin-top: map-get($spacing-units-mobile, 4);
+    margin-top: map.get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1.25rem;
     line-height: 1.563rem;
@@ -197,14 +198,14 @@ $spacing-units-desktop: (
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
     @media screen and (min-width: $justice-lg) {
-        margin-top: map-get($spacing-units-desktop, 4);
+        margin-top: map.get($spacing-units-desktop, 4);
         font-size: 1.375rem;
         line-height: 1.875rem;
     }
 }
 
 @mixin h5 {
-    margin-top: map-get($spacing-units-mobile, 4);
+    margin-top: map.get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1.188rem;
     line-height: 1.563rem;
@@ -212,7 +213,7 @@ $spacing-units-desktop: (
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
     @media screen and (min-width: $justice-lg) {
-        margin-top: map-get($spacing-units-desktop, 4);
+        margin-top: map.get($spacing-units-desktop, 4);
         font-size: 1.188rem;
         line-height: 1.875rem;
     }
@@ -220,7 +221,7 @@ $spacing-units-desktop: (
 }
 
 @mixin h6 {
-    margin-top: map-get($spacing-units-mobile, 4);
+    margin-top: map.get($spacing-units-mobile, 4);
     margin-bottom: 0;
     font-size: 1.188rem;
     line-height: 1.563rem;
@@ -228,7 +229,7 @@ $spacing-units-desktop: (
     font-weight: var(--heading-font-normal);
     color: var(--justice-primary-black);
     @media screen and (min-width: $justice-lg) {
-        margin-top: map-get($spacing-units-desktop, 4);
+        margin-top: map.get($spacing-units-desktop, 4);
         font-size: 1.188rem;
         line-height: 1.875rem;
     }
@@ -310,16 +311,18 @@ $iconSizes: (
     'lg': 6rem
 );
 
-.icon {
-    @each $size, $sizeValue in $iconSizes {
-        @each $icon, $ext in $iconTypes {
-            &-#{$icon}--#{$size} {
-                display: block;
-                background-image: url(/src/assets/icons/#{$icon}.#{$ext});
-                background-repeat: no-repeat;
-                height: $sizeValue;
-                width: $sizeValue;
-                background-size: $sizeValue;
+@mixin icons() {
+    .icon {
+        @each $size, $sizeValue in $iconSizes {
+            @each $icon, $ext in $iconTypes {
+                &-#{$icon}--#{$size} {
+                    display: block;
+                    background-image: url(/src/assets/icons/#{$icon}.#{$ext});
+                    background-repeat: no-repeat;
+                    height: $sizeValue;
+                    width: $sizeValue;
+                    background-size: $sizeValue;
+                }
             }
         }
     }

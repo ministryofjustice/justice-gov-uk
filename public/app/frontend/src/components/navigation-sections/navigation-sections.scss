@@ -1,8 +1,8 @@
 @use 'sass:map';
-@import '../../../style';
+@use '../../../style';
 
 .navigation-sections {
-    @include spacing('margin', 4, 'top');
+    @include style.spacing('margin', 4, 'top');
 
     display: block;
     max-width: 100%;
@@ -12,13 +12,13 @@
         grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
         align-items: baseline;
         gap: 0.5rem;
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: style.$justice-md) {
             grid-template-columns: repeat(auto-fit, minmax(16%, 1fr));
         }
     }
 
     &__list-item {
-        @include spacing('padding', 1);
+        @include style.spacing('padding', 1);
 
         position: relative;
         display: flex;
@@ -26,7 +26,7 @@
         border: 1px solid var(--justice-border);
 
         a {
-            @include link;
+            @include style.link;
 
             &::after {
                 content: '';

@@ -1,15 +1,15 @@
-@import '../../../style';
+@use '../../../style';
 
 .button {
     &--primary {
-        @include button('primary');
+        @include style.button('primary');
     }
 
     &--dark {
-        @include button('dark');
+        @include style.button('dark');
     }
 
     &--light {
-        @include button('light');
+        @include style.button('light');
     }
 }

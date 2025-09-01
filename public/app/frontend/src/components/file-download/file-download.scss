@@ -1,13 +1,13 @@
-@import '../../../style';
+@use '../../../style';
 
 .file-download {
-    @include link;
+    @include style.link;
 
     // Keep the icon next to the text
     white-space: nowrap;
 
     &__icon {
-        @include spacing('margin', 1, 'right');
+        @include style.spacing('margin', 1, 'right');
         // Override the default icon styles
         display: inline-flex!important;
         position: relative;

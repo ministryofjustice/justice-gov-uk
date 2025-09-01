@@ -1,8 +1,8 @@
-@import '../../../style';
+@use '../../../style';
 
 .to-the-top {
-    @include link;
-    @include spacing('margin', 4, 'top');
+    @include style.link;
+    @include style.spacing('margin', 4, 'top');
 
     display: flex;
     align-items: center;
@@ -13,13 +13,13 @@
     }
 
     &::after {
-        @include triangle('top', var(--justice-link), 0.5rem);
-        @include spacing('margin', 1, 'left');
+        @include style.triangle('top', var(--justice-link), 0.5rem);
+        @include style.spacing('margin', 1, 'left');
     }
 
     &:hover {
         &::after {
-            @include triangle('top', var(--justice-link-hover), 0.5rem);
+            @include style.triangle('top', var(--justice-link-hover), 0.5rem);
         }
 
         &:visited {
@@ -29,7 +29,7 @@
 
     &:focus-visible:not(:active, :hover) {
         &::after {
-            @include triangle('top', var(--gds-black), 0.5rem);
+            @include style.triangle('top', var(--gds-black), 0.5rem);
         }
     }
 }
