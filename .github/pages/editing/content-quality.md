@@ -143,7 +143,7 @@ Avoid vague phrases like "click here" or "read more". Instead, use meaningful li
 e.g. replace the link text "https://www.justice.gov.uk/courts/procedure-rules/civil/rules/part04" with "Civil Procedure Rules Part 4".
 
 {: .highlight }
-Historically, using the full URL as link text would have been a means to ensure the link was visible when a page was printed. However, this is no longer necessary, and the full URL will be appended automatically upon printing.
+Historically, using the full URL as link text would have been a means to ensure the link was visible when a page was printed. However, this is no longer necessary, and the full URL to external sites will be appended automatically upon printing.
 
 
 ### Table without header section
