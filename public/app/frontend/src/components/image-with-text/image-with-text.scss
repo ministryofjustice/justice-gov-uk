@@ -1,10 +1,10 @@
-@import '../../../style';
+@use '../../../style';
 
 .image-with-text {
     display: flex;
     flex-direction: column;
     width: 100%;
-    @media screen and (min-width: $justice-md) {
+    @media screen and (min-width: style.$justice-md) {
         &--right {
             flex-direction: row-reverse;
         }
@@ -20,7 +20,7 @@
         .image {
             width: 100%;
             height: 12rem;
-            @media screen and (min-width: $justice-md) {
+            @media screen and (min-width: style.$justice-md) {
                 height: 100%;
                 max-height: 17rem;
             }
@@ -29,9 +29,9 @@
 
     &__content {
         flex-basis: 40%;
-        @media screen and (min-width: $justice-md) {
-            @include spacing('padding', 6, 'left');
-            @include spacing('padding', 6, 'right');
+        @media screen and (min-width: style.$justice-md) {
+            @include style.spacing('padding', 6, 'left');
+            @include style.spacing('padding', 6, 'right');
 
             margin-top: 0;
         }
@@ -39,14 +39,14 @@
 
     &__title {
         > :is(h1, h2, h3, h4, h5, h6) {
-            @include h2;
-            @media screen and (min-width: $justice-md) {
+            @include style.h2;
+            @media screen and (min-width: style.$justice-md) {
                 margin-top: 0;
             }
         }
 
         a {
-            @include link;
+            @include style.link;
 
             font-family: inherit;
             font-size: inherit;
@@ -54,11 +54,11 @@
     }
 
     .rich-text {
-        @include spacing('margin', 4, 'top');
+        @include style.spacing('margin', 4, 'top');
 
         p,
         a {
-            @include h6;
+            @include style.h6;
 
             font-family: var(--justice-body-font);
         }

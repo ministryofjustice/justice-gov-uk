@@ -1,16 +1,16 @@
-@import '../../../style';
+@use '../../../style';
 
 .footer {
-    @include spacing('padding', 4, 'top');
+    @include style.spacing('padding', 4, 'top');
 
     background-color: var(--justice-primary-black);
 
     &__container {
-        @include container;
+        @include style.container;
 
         display: flex;
         flex-direction: column;
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             justify-content: space-between;
         }
     }
@@ -19,8 +19,8 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        @include spacing('padding', 4, 'bottom');
-        @media screen and (min-width: $justice-lg) {
+        @include style.spacing('padding', 4, 'bottom');
+        @media screen and (min-width: style.$justice-lg) {
             flex-direction: row;
             margin-left: -0.625rem;
         }
@@ -28,38 +28,38 @@
 
     &__link {
         a {
-            @include link('light', 'menu');
-            @include spacing('padding', 2, 'top');
-            @include spacing('padding', 2, 'bottom');
+            @include style.link('light', 'menu');
+            @include style.spacing('padding', 2, 'top');
+            @include style.spacing('padding', 2, 'bottom');
 
             display: block;
-            @media screen and (min-width: $justice-lg) {
-                @include spacing('padding', 1, 'top');
-                @include spacing('padding', 1, 'bottom');
-                @include spacing('padding', 2, 'left');
-                @include spacing('padding', 2, 'right');
+            @media screen and (min-width: style.$justice-lg) {
+                @include style.spacing('padding', 1, 'top');
+                @include style.spacing('padding', 1, 'bottom');
+                @include style.spacing('padding', 2, 'left');
+                @include style.spacing('padding', 2, 'right');
             }
         }
     }
 
     &__details {
-        @include body;
-        @include spacing('padding', 2, 'top');
-        @include spacing('padding', 4, 'bottom');
+        @include style.body;
+        @include style.spacing('padding', 2, 'top');
+        @include style.spacing('padding', 4, 'bottom');
 
         border-top: 1px solid var(--justice-border);
         color: var(--justice-primary-white);
     }
 
     &__heading {
-        @include h3;
+        @include style.h3;
 
         font-weight: var(--heading-font-normal);
         color: var(--justice-secondary-light-blue);
     }
 
     &__gov {
-        @include focus-outline;
+        @include style.focus-outline;
 
         color: transparent;
         display: block;
@@ -67,7 +67,7 @@
     }
 
     &__logo {
-        @include spacing('margin', 4, 'top');
+        @include style.spacing('margin', 4, 'top');
 
         background-image: url('../../assets/govuk-logo-2.png');
         background-repeat: no-repeat;
@@ -77,12 +77,12 @@
     }
 
     &__content {
-        @include spacing('margin', 4, 'top');
+        @include style.spacing('margin', 4, 'top');
 
         color: var(--justice-primary-white);
 
         a {
-            @include link('light');
+            @include style.link('light');
 
             text-decoration: underline;
 
@@ -93,8 +93,8 @@
     }
 
     &__copyright {
-        @include spacing('padding', 2, 'top');
-        @include spacing('padding', 4, 'bottom');
+        @include style.spacing('padding', 2, 'top');
+        @include style.spacing('padding', 4, 'bottom');
 
         color: var(--justice-primary-white);
         display: flex;

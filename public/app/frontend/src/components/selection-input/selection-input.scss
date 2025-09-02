@@ -1,4 +1,4 @@
-@import '../../../style';
+@use '../../../style';
 
 .selection-input {
     $this: &;
@@ -6,7 +6,7 @@
     position: relative;
 
     &__legend {
-        @include h3;
+        @include style.h3;
     }
 
     &__fieldset {
@@ -16,12 +16,12 @@
     }
 
     &__options {
-        @include spacing('margin', 2, 'top');
+        @include style.spacing('margin', 2, 'top');
 
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             flex-direction: row;
 
             &--vertical {
@@ -145,12 +145,12 @@
     }
 
     &__hint {
-        @include small;
-        @include spacing('margin', 1, 'top');
+        @include style.small;
+        @include style.spacing('margin', 1, 'top');
     }
 
     &__error-text {
-        @include spacing('margin', 1, 'bottom');
+        @include style.spacing('margin', 1, 'bottom');
 
         color: var(--justice-error);
         font-weight: var(--body-font-bold);
@@ -175,6 +175,6 @@
     }
 
     &--error {
-        @include error-highlight;
+        @include style.error-highlight;
     }
 }

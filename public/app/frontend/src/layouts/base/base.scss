@@ -1,4 +1,4 @@
-@import '../../../style';
+@use '../../../style';
 
 .page-wrapper {
     display: flex;
@@ -7,7 +7,7 @@
 }
 
 .footer-wrapper {
-    @include spacing('margin', 8, 'top');
+    @include style.spacing('margin', 8, 'top');
 
     flex: 1;
     background-color: var(--justice-primary-black);

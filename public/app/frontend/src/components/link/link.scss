@@ -1,5 +1,5 @@
-@import '../../../style';
+@use '../../../style';
 
 .link {
-    @include link;
+    @include style.link;
 }

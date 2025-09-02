@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import "./style.scss";
+@use "style";
 
 html {
     font-size: 16px;
@@ -9,32 +9,32 @@ html, body {
 }
 
 body, p {
-    @include body;
+    @include style.body;
     margin: 0;
 }
 
 h1, .h1 {
-    @include h1;
+    @include style.h1;
 }
 
 h2, .h2 {
-    @include h2;
+    @include style.h2;
 }
 
 h3, .h3 {
-    @include h3;
+    @include style.h3;
 }
 
 h4, .h4 {
-    @include h4;
+    @include style.h4;
 }
 
 h5, .h5 {
-    @include h5;
+    @include style.h5;
 }
 
 h6, .h6 {
-    @include h6;
+    @include style.h6;
 }
 
 ul, ol {
@@ -45,5 +45,7 @@ ul, ol {
 }
 
 .visually-hidden {
-    @include visually-hidden;
+    @include style.visually-hidden;
 }
+
+@include style.icons;

@@ -1,4 +1,4 @@
-@import '../../../style';
+@use '../../../style';
 
 .sidebar-block {
     width: 100%;
@@ -14,7 +14,7 @@
     }
 
     &__description {
-        @include spacing('margin', 2, 'bottom');
+        @include style.spacing('margin', 2, 'bottom');
     }
 
     &__heading-wrapper {
@@ -24,7 +24,7 @@
     }
 
     &__heading {
-        @include panel-title;
+        @include style.panel-title;
 
         display: flex;
         justify-content: space-between;
@@ -36,10 +36,10 @@
 
     &__heading-text {
         display: none;
-        @media screen and (min-width: $justice-lg) {
-            @include spacing('padding', 2);
-            @include spacing('padding', 3, 'top');
-            @include spacing('padding', 3, 'bottom');
+        @media screen and (min-width: style.$justice-lg) {
+            @include style.spacing('padding', 2);
+            @include style.spacing('padding', 3, 'top');
+            @include style.spacing('padding', 3, 'bottom');
 
             display: flex;
             justify-content: space-between;
@@ -63,25 +63,25 @@
     }
 
     &__heading-button {
-        @include arrow-button('light');
-        @include panel-title;
+        @include style.arrow-button('light');
+        @include style.panel-title;
 
         margin: 0;
         color: var(--justice-primary-white);
-        @include spacing('padding', 2);
-        @include spacing('padding', 4, 'top');
-        @include spacing('padding', 4, 'bottom');
+        @include style.spacing('padding', 2);
+        @include style.spacing('padding', 4, 'top');
+        @include style.spacing('padding', 4, 'bottom');
 
         width: 100%;
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             display: none;
         }
     }
 
     &__content {
-        @include spacing('padding', 2);
-        @include spacing('padding', 3, 'top');
-        @include spacing('padding', 3, 'bottom');
+        @include style.spacing('padding', 2);
+        @include style.spacing('padding', 3, 'top');
+        @include style.spacing('padding', 3, 'bottom');
 
         background-color: var(--justice-secondary-grey-blue);
         display: none;
@@ -89,18 +89,18 @@
         &--open {
             display: block;
         }
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             display: block;
         }
     }
 
     &__list {
         > li {
-            @include spacing('padding', 1, 'top');
-            @include spacing('padding', 1, 'bottom');
+            @include style.spacing('padding', 1, 'top');
+            @include style.spacing('padding', 1, 'bottom');
 
             a {
-                @include link;
+                @include style.link;
             }
 
             &:first-child {
@@ -114,15 +114,15 @@
     }
 
     &__search-filter-field {
-        @include spacing('margin', 4, 'top');
+        @include style.spacing('margin', 4, 'top');
 
         &:first-child {
-            @include spacing('margin', 2, 'top');
+            @include style.spacing('margin', 2, 'top');
         }
     }
 
     &__search-filter-buttons {
-        @include spacing('margin', 6, 'top');
+        @include style.spacing('margin', 6, 'top');
 
         display: flex;
         justify-content: end;
@@ -131,13 +131,13 @@
 
     &__search-filter--disabled {
         .selection-input__legend {
-            @include disabled;
+            @include style.disabled;
         }
     }
 
     &__search-filter-no-query-hint {
-        @include spacing('margin', 2, 'top');
-        @include body;
+        @include style.spacing('margin', 2, 'top');
+        @include style.body;
     }
 
     .file-download {
@@ -150,7 +150,7 @@
     }
 
     .search-bar {
-        @include spacing('padding', 2, 'top');
+        @include style.spacing('padding', 2, 'top');
 
         input {
             padding-right: 0;

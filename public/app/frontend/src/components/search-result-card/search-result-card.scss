@@ -1,10 +1,10 @@
-@import '../../../style';
+@use '../../../style';
 
 .search-result-card {
     margin-top: 0;
 
     &__title {
-        @include h3;
+        @include style.h3;
 
         margin-top: 0;
 
@@ -21,20 +21,20 @@
             font-family: inherit;
             word-break: break-word;
         }
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             margin-top: 0;
         }
     }
 
     &__description {
-        @include spacing('margin', 1, 'top');
+        @include style.spacing('margin', 1, 'top');
 
         overflow-wrap: break-word;
     }
 
     &__url {
-        @include spacing('margin', 1, 'top');
-        @include small;
+        @include style.spacing('margin', 1, 'top');
+        @include style.small;
 
         overflow-wrap: break-word;
     }

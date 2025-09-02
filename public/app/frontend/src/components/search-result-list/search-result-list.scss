@@ -1,9 +1,9 @@
-@import '../../../style';
+@use '../../../style';
 
 .search-result-list {
     &__element {
-        @include spacing('padding', 6, 'top');
-        @include spacing('padding', 6, 'bottom');
+        @include style.spacing('padding', 6, 'top');
+        @include style.spacing('padding', 6, 'bottom');
 
         border-bottom: 1px solid var(--justice-border);
 

@@ -1,17 +1,17 @@
-@import '../../../style';
+@use '../../../style';
 
 .header {
-    @include spacing('padding', 2, 'top');
+    @include style.spacing('padding', 2, 'top');
 
     background-color: var(--justice-primary-black);
 
     &__container {
-        @include container;
+        @include style.container;
 
         display: flex;
         flex-direction: column;
-        @media screen and (min-width: $justice-lg) {
-            @include spacing('margin', 1, 'bottom');
+        @media screen and (min-width: style.$justice-lg) {
+            @include style.spacing('margin', 1, 'bottom');
 
             flex-direction: row;
             justify-content: space-between;
@@ -20,8 +20,8 @@
     }
 
     &__home {
-        @include focus-outline;
-        @include spacing('margin', 3, 'bottom');
+        @include style.focus-outline;
+        @include style.spacing('margin', 3, 'bottom');
 
         color: transparent;
     }
@@ -37,7 +37,7 @@
     &__logo,
     &__logotype {
         margin-right: 0.075rem;
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: style.$justice-md) {
             margin-right: 0.1rem;
         }
         background-repeat: no-repeat;
@@ -48,7 +48,7 @@
         width: 3rem;
         height: 3rem;
 
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: style.$justice-md) {
             width: 3.75rem;
             height: 3.75rem;
         }
@@ -61,7 +61,7 @@
         height: 2.15625rem;
         width: 6.65625rem;
         
-        @media screen and (min-width: $justice-md) {
+        @media screen and (min-width: style.$justice-md) {
             margin-top: 0.1rem;
             height: 2.875rem;
             width: 8.875rem; // (306 / 100) * 2.875
@@ -77,15 +77,15 @@
     }
 
     &__search {
-        @include spacing('margin', 1, 'bottom');
+        @include style.spacing('margin', 1, 'bottom');
 
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             margin-bottom: 0;
         }
 
         input[type='text'] {
             width: 100%;
-            @media screen and (min-width: $justice-lg) {
+            @media screen and (min-width: style.$justice-lg) {
                 width: 15rem;
             }
         }

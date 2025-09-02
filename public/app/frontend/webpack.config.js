@@ -49,7 +49,12 @@ module.exports = {
             },
             {
                 test: /\.s?css$/i,
-                use: [MiniCssExtractPlugin.loader, { loader: 'css-loader', options: { url: true, sourceMap: true } }, 'postcss-loader', 'sass-loader']
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    { loader: 'css-loader', options: { url: true, sourceMap: true } },
+                    'postcss-loader',
+                    { loader: "sass-loader", options: { api: "modern-compiler" } }
+                ]
             },
             {
                 test: /\.(jpg|png|svg|gif)$/,

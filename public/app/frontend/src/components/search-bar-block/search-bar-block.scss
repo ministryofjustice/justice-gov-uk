@@ -1,11 +1,11 @@
-@import '../../../style';
+@use '../../../style';
 
 .search-bar-block {
     display: flex;
     flex-direction: column;
 
     &__wrapper {
-        @include spacing('padding', 2);
+        @include style.spacing('padding', 2);
 
         display: flex;
         background-color: var(--justice-primary-grey);
@@ -16,39 +16,39 @@
 
     &__search {
         width: 100%;
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             width: 70%;
         }
     }
 
     &__results {
-        @include spacing('margin', 1, 'top');
+        @include style.spacing('margin', 1, 'top');
 
         display: flex;
         justify-content: end;
         width: 100%;
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             margin-top: 0;
             width: 30%;
         }
     }
 
     &__did-you-mean {
-        @include spacing('margin', 4, 'top');
+        @include style.spacing('margin', 4, 'top');
 
         display: block;
         width: 100%;
         a {
-            @include link();
+            @include style.link();
         }
     }
 
     &__results-text {
-        @include body;
+        @include style.body;
     }
 
     &__filter.disabled {
-        @include disabled;
+        @include style.disabled;
 
         color: var(--justice-primary-black);
 
@@ -58,23 +58,23 @@
     }
 
     &__filters-wrapper {
-        @include spacing('padding', 2, 'top');
+        @include style.spacing('padding', 2, 'top');
 
         display: flex;
         justify-content: space-between;
-        @media screen and (min-width: $justice-lg) {
+        @media screen and (min-width: style.$justice-lg) {
             justify-content: start;
         }
     }
 
     &__filters {
-        @include spacing('padding', 2, 'left');
+        @include style.spacing('padding', 2, 'left');
     }
 
     &__filter {
-        @include spacing('padding', 1, 'right');
-        @include spacing('padding', 1, 'left');
-        @include link;
+        @include style.spacing('padding', 1, 'right');
+        @include style.spacing('padding', 1, 'left');
+        @include style.link;
 
         border-left: 1px var(--justice-border) solid;
 
