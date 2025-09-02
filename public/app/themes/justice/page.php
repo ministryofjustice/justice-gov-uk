@@ -6,8 +6,9 @@ defined('ABSPATH') || exit;
  * The template for displaying a generic page
  */
 
-use Timber\Timber;
+use MOJ\Justice\Breadcrumbs;
 use MOJ\Justice\PageController;
+use Timber\Timber;
 
 $page_controller = new PageController();
 
@@ -17,7 +18,7 @@ $context = Timber::context([
     'title' => get_the_title(),
     'homeUrl' => home_url(),
     'permalink' => get_the_permalink(),
-    'breadcrumbs' => (new MOJ\Justice\Breadcrumbs)->getTheBreadcrumbs(),
+    'breadcrumbs' => (new Breadcrumbs)->getTheBreadcrumbs(),
     'updatedDate' => $page_controller->getUpdatedAt(),
     'sidePanelsRight' => $page_controller->getRightSidePanels(),
     'sidePanelsLeft' => $page_controller->getLeftSidePanels(),
