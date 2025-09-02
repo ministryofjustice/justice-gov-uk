@@ -62,13 +62,13 @@ class ThemeAssets
         }
 
         // Check if the manifest contains the expected entries.
-        if(!$frontend_assets['main.css']) {
+        if (!$frontend_assets['main.css']) {
             throw new \Error(
                 'The manifest file does not contain the expected "main.css" entry.'
             );
         }
 
-        if(!$frontend_assets['main.js']) {
+        if (!$frontend_assets['main.js']) {
             throw new \Error(
                 'The manifest file does not contain the expected "main.js" entry.'
             );
