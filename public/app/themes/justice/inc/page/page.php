@@ -16,12 +16,15 @@ require_once 'constants.php';
 use MOJ\Justice\NavigationSecondary;
 use MOJ\Justice\PostMeta;
 use MOJ\Justice\PageConstants;
+use MOJ\Justice\TemplateLinks;
 
 class PageController
 {
 
     // Variable to hold the PostMeta instance.
-    public $post_meta = null;
+    public PostMeta $post_meta;
+
+    public TemplateLinks $links;
 
     /**
      * Constructor.
@@ -31,6 +34,7 @@ class PageController
     public function __construct()
     {
         $this->post_meta = new PostMeta(get_the_ID());
+        $this->links = new TemplateLinks();
     }
 
     /**
@@ -92,15 +96,28 @@ class PageController
         foreach (PageConstants::PANELS_RIGHT as $panel => $variant) {
             if ($this->post_meta->hasPanel($panel)) {
 
-                // If the panel is related or other_websites then populate the links array.
                 if ('related' === $panel) {
-                    // TODO - format links with opens in new bab if external. And download link if file.
                     $variant['links'] = $this->post_meta->getMeta('_panel_related_entries');
                 }
 
                 if ('other_websites' === $panel) {
-                    // TODO - format links with opens in new bab if external. And download link if file.
                     $variant['links'] = $this->post_meta->getMeta('_panel_other_websites_entries');
+                }
+
+                if (empty($variant['links'])) {
+                    // Skip panels with no links
+                    $side_panels[$panel] = $variant;
+                    continue;
+                }
+
+                // Process the links for the panel
+                foreach ($variant['links'] as &$link) {
+                    $link = $this->links->getLinkParams(
+                        $link['url'],
+                        $link['label'] ?? null,
+                        $link['id'] ?? null,
+                        $link['target'] ?? null
+                    );
                 }
 
                 $side_panels[$panel] = $variant;

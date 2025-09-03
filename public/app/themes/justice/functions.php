@@ -41,6 +41,7 @@ require_once 'inc/simple-definition-list-blocks.php';
 require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/sitemap.php';
 require_once 'inc/taxonomies.php';
+require_once 'inc/template-links.php';
 require_once 'inc/templates.php';
 require_once 'inc/theme-assets.php';
 require_once 'inc/theme.php';
