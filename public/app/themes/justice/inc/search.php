@@ -333,7 +333,7 @@ class Search
     /**
      * Create a scheduled event to index the site daily.
      *
-     * This helps us avoid a situation where there is a partial index due 
+     * This helps us avoid a situation where there is a partial index due
      * a dev. oversight, a crash or other issue.
      *
      * @return void
@@ -355,7 +355,7 @@ class Search
      */
     public function triggerWpCliIndex(): void
     {
-        if(!wp_doing_cron()) {
+        if (!wp_doing_cron()) {
             // If not running in a cron job, return early.
             return;
         }
@@ -363,7 +363,7 @@ class Search
         // Execute the WP CLI command to index the site.
         $output = shell_exec("wp relevanssi index");
 
-        if(str_contains($output, 'Success')) {
+        if (str_contains($output, 'Success')) {
             // If the output contains 'Success', the indexing was successful.
             error_log('triggerWpCliIndex completed');
             return;
