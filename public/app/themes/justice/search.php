@@ -4,9 +4,11 @@
  *
  */
 
+use MOJ\Justice\Breadcrumbs;
+use MOJ\Justice\Content;
 use MOJ\Justice\Search;
 use MOJ\Justice\Taxonomies;
-use \MOJ\Justice\Content;
+use Timber\Timber;
 
 global $wp_query;
 $query = get_search_query();
@@ -20,16 +22,7 @@ $formattedResults = [];
 $didYouMean = null;
 $pagination = null;
 
-$breadcrumbs = [
-    [
-        'label' => 'Home',
-        'url' => '/',
-    ],
-    [
-        'label' => 'Search',
-        'url' => '/search',
-    ]
-];
+$breadcrumbs = (new Breadcrumbs)->getTheBreadcrumbs();
 
 get_header();
 
@@ -72,7 +65,7 @@ if ($query) {
 
     $formattedResults = [];
 
-// Format the results into a structure the frontend understands
+    // Format the results into a structure the frontend understands
     foreach ($results as $result) {
         $postId = $result->id;
         $filesize = null;
