@@ -2,6 +2,11 @@
 
 namespace MOJ\Justice;
 
+/**
+ * Constants for the PageController.
+ * These constants define the structure and content of the left and right side panels.
+ */
+
 defined('ABSPATH') || exit;
 
 class PageConstants
@@ -37,7 +42,7 @@ class PageConstants
                 'hiddenInputs' => [
                     [
                         'name' => 'parent',
-                        'value' => '153', // TODO - what is this?
+                        'value' => '153',
                     ],
                 ],
             ],

@@ -148,11 +148,6 @@ class Templates
         foreach ($links as $link) {
             $params = $this->links->getLinkParamsFromNode($link);
 
-            if (is_null($params)) {
-                // If the link doesn't have an href, skip it
-                continue;
-            }
-
             if (isset($params['format'])) {
                 // The link is a file use the file download template, otherwise use the link template
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, $params);

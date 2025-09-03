@@ -14,14 +14,12 @@ defined('ABSPATH') || exit;
 require_once 'constants.php';
 
 use MOJ\Justice\NavigationSecondary;
-use MOJ\Justice\PostMeta;
 use MOJ\Justice\PageConstants;
+use MOJ\Justice\PostMeta;
 use MOJ\Justice\TemplateLinks;
 
 class PageController
 {
-
-    // Variable to hold the PostMeta instance.
     public PostMeta $post_meta;
 
     public TemplateLinks $links;
@@ -39,6 +37,7 @@ class PageController
 
     /**
      * Get the template to render.
+     *
      * This checks if there are any left side panels and returns the appropriate template.
      * If there are no left side panels, it uses a single sidebar template.
      * Otherwise, it uses a two sidebar template.
@@ -96,12 +95,13 @@ class PageController
         foreach (PageConstants::PANELS_RIGHT as $panel => $variant) {
             if ($this->post_meta->hasPanel($panel)) {
 
-                if ('related' === $panel) {
-                    $variant['links'] = $this->post_meta->getMeta('_panel_related_entries');
-                }
-
+                // Update the constants with the current post meta, for other websites and related panels.
                 if ('other_websites' === $panel) {
                     $variant['links'] = $this->post_meta->getMeta('_panel_other_websites_entries');
+                }
+
+                if ('related' === $panel) {
+                    $variant['links'] = $this->post_meta->getMeta('_panel_related_entries');
                 }
 
                 if (empty($variant['links'])) {

@@ -11,11 +11,13 @@ class TemplateLinks
     // Only use the extensions that we expect otherwise use the standard link component
     const array ALLOWED_EXTENSIONS = [
         'doc',
+        'docx',
         'pdf',
         'ppt',
-        'zip',
+        'pptx',
         'xls',
         'xlsx',
+        'zip',
     ];
 
     public Documents $documents;
@@ -27,6 +29,14 @@ class TemplateLinks
         $this->content = new Content();
     }
 
+    /**
+     * Get the link parameters from a DOMElement.
+     *
+     * This is a wrapper around getLinkParams to extract the parameters from a DOMElement.
+     *
+     * @param DOMElement $node The DOMElement to extract parameters from.
+     * @return array|null The link parameters, or null if the href is not set.
+     */
     public function getLinkParamsFromNode(\DOMElement $node): array|null
     {
         return $this->getLinkParams(
@@ -37,31 +47,47 @@ class TemplateLinks
         );
     }
 
+
+    /**
+     * Get the link parameters based on the URL, label, ID, and target.
+     * 
+     * This method determines if the link is a file download or a standard link,
+     * and returns the appropriate parameters for rendering.
+     * 
+     * @param string|null $url The URL of the link.
+     */
     public function getLinkParams(
         string|null $url,
         string|null $label = null,
         string|null  $id = null,
         string|null $target = null
     ): array|null {
-        if (!$url) {
-            // If the href isn't set, return an empty array
-            return null;
-        }
-
         $format = pathinfo($url, PATHINFO_EXTENSION);
         $external = $this->content->isExternal($url);
 
         if (in_array($format, SELF::ALLOWED_EXTENSIONS) && !$external) {
             // We are dealing with an internal download file
-            return $this->getFileDownloadParams($url, $format, $label, $id);
+            return $this->getFileDownloadParams($url, $label, $id);
         }
 
-        return $this->geStandardLinkParams($url, $label, $id, $target);
+        return $this->getStandardLinkParams($url, $label, $id, $target);
     }
 
 
-
-    public function geStandardLinkParams($url, $label = null, $id = null, $target = null): array
+    /**
+     * Get the parameters for a standard link.
+     *
+     * This method determines the parameters for a standard link based on the URL, label, ID, and target.
+     * It checks if the link is external, whether it should open in a new tab,
+     * and whether the label already contains text indicating it opens in a new tab or window.
+     * 
+     * @param string|null $url The URL of the link.
+     * @param string|null $label The label for the link.
+     * @param string|null $id The ID of the link.
+     * @param string|null $target The target attribute of the link.
+     * @return array The parameters for the standard link.
+     */
+    public function getStandardLinkParams($url, $label = null, $id = null, $target = null): array
     {
         // Determine properties based upon the URL and label
         $external = $this->content->isExternal($url);
@@ -86,8 +112,22 @@ class TemplateLinks
     }
 
 
-    public function getFileDownloadParams($url, $format, $label = null, $id = null): array
+    /**
+     * Get the parameters for a file download link.
+     *
+     * This method determines the parameters for a file download link based on the URL, label, and ID.
+     * It extracts the file format, calculates the file size, and retrieves the document ID.
+     * If the label is not provided, it uses the filename from the URL.
+     * 
+     * @param string $url The URL of the file.
+     * @param string|null $label The label for the file download link.
+     * @param string|null $id The ID of the file download link.
+     * @return array The parameters for the file download link.
+     */
+    public function getFileDownloadParams($url, $label = null, $id = null): array
     {
+        $format = pathinfo($url, PATHINFO_EXTENSION);
+
         $label = $label ? trim($label) : null;
 
         // Get the document ID from the link
@@ -103,17 +143,14 @@ class TemplateLinks
             $label = pathinfo($url, PATHINFO_FILENAME);
         }
 
-        $filesize = $this->content->getFormattedFilesize($post_id);
-
-        $format = strtoupper(ltrim($format, '.'));
-
         return [
-            'format' => $format,
-            'filesize' => $filesize,
+            // Pass the ID, unmodified.
+            'id' => $id,
+            'format' => strtoupper($format),
+            'filesize' => $this->content->getFormattedFilesize($post_id),
             'filename' => $label,
             'link' => $url,
             'language' => null,
-            'id' => $id,
         ];
     }
 }
