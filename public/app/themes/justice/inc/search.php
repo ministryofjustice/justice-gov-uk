@@ -43,6 +43,12 @@ class Search
 
         // Relevanssi - remove searches submenus for non-admins.
         add_filter('admin_menu', [$this, 'removeSearchesSubMenus'], 999);
+
+        // Relevanssi - add a scheduled event to index the site daily.
+        add_action('wp', [$this, 'createIndexScheduledEvent']);
+
+        // Relevanssi - trigger the WP CLI indexing command.
+        add_action('relevanssi_trigger_index', [$this, 'triggerWpCliIndex']);
     }
 
     /**
@@ -322,5 +328,48 @@ class Search
             remove_submenu_page('index.php', 'relevanssi-premium/relevanssi.php');
             remove_submenu_page('index.php', 'relevanssi_admin_search');
         }
+    }
+
+    /**
+     * Create a scheduled event to index the site daily.
+     *
+     * This helps us avoid a situation where there is a partial index due 
+     * a dev. oversight, a crash or other issue.
+     *
+     * @return void
+     */
+    public static function createIndexScheduledEvent(): void
+    {
+        if (!wp_next_scheduled('relevanssi_trigger_index')) {
+            wp_schedule_event(strtotime('02:30:00'), 'daily', 'relevanssi_trigger_index');
+        }
+    }
+
+    /**
+     * Trigger the WP CLI indexing command.
+     *
+     * Using WP_CLI is the advised approach for indexing with Relevanssi.
+     *
+     * @see https://www.relevanssi.com/knowledge-base/indexing-cron-job/
+     * @see https://www.relevanssi.com/user-manual/wp-cli/
+     */
+    public function triggerWpCliIndex(): void
+    {
+        if(!wp_doing_cron()) {
+            // If not running in a cron job, return early.
+            return;
+        }
+
+        // Execute the WP CLI command to index the site.
+        $output = shell_exec("wp relevanssi index");
+
+        if(str_contains($output, 'Success')) {
+            // If the output contains 'Success', the indexing was successful.
+            error_log('triggerWpCliIndex completed');
+            return;
+        }
+
+        // If the output does not contain 'Success', log the output.
+        error_log("Relevanssi indexing failed with output: \n$output");
     }
 }
