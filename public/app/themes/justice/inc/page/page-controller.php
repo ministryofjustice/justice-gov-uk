@@ -3,7 +3,7 @@
 /**
  * This class is responsible for the logic related to the template page.php
  *
- * The logic is located in this controller file, leaving the template file (page.php) 
+ * The logic is located in this controller file, leaving the template file (page.php)
  * clean and focused on passing prepared values to Timber.
  */
 
@@ -52,7 +52,7 @@ class PageController
 
     /**
      * Get the left side panels.
-     * 
+     *
      * This checks if there are any left side panels (currently only the menu).
      * If there are no left side panels or the menu panel is not enabled, it returns an empty array.
      * Otherwise, it returns an array with the menu panel and its links.
@@ -94,7 +94,6 @@ class PageController
 
         foreach (PageConstants::PANELS_RIGHT as $panel => $variant) {
             if ($this->post_meta->hasPanel($panel)) {
-
                 // Update the constants with the current post meta, for other websites and related panels.
                 if ('other_websites' === $panel) {
                     $variant['links'] = $this->post_meta->getMeta('_panel_other_websites_entries');
@@ -130,11 +129,11 @@ class PageController
 
     /**
      * Get the updated date.
-     * 
+     *
      * This checks if the '_show_updated_at' meta field is set for the post.
      * If it is set, it returns the modified date formatted as specified.
      * If not, it returns null.
-     * 
+     *
      * @return string|null The formatted updated date or null if not set.
      */
     public function getUpdatedAt(): string|null

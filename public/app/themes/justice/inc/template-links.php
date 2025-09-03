@@ -50,10 +50,10 @@ class TemplateLinks
 
     /**
      * Get the link parameters based on the URL, label, ID, and target.
-     * 
+     *
      * This method determines if the link is a file download or a standard link,
      * and returns the appropriate parameters for rendering.
-     * 
+     *
      * @param string|null $url The URL of the link.
      */
     public function getLinkParams(
@@ -65,7 +65,7 @@ class TemplateLinks
         $format = pathinfo($url, PATHINFO_EXTENSION);
         $external = $this->content->isExternal($url);
 
-        if (in_array($format, SELF::ALLOWED_EXTENSIONS) && !$external) {
+        if (in_array($format, self::ALLOWED_EXTENSIONS) && !$external) {
             // We are dealing with an internal download file
             return $this->getFileDownloadParams($url, $label, $id);
         }
@@ -80,7 +80,7 @@ class TemplateLinks
      * This method determines the parameters for a standard link based on the URL, label, ID, and target.
      * It checks if the link is external, whether it should open in a new tab,
      * and whether the label already contains text indicating it opens in a new tab or window.
-     * 
+     *
      * @param string|null $url The URL of the link.
      * @param string|null $label The label for the link.
      * @param string|null $id The ID of the link.
@@ -118,7 +118,7 @@ class TemplateLinks
      * This method determines the parameters for a file download link based on the URL, label, and ID.
      * It extracts the file format, calculates the file size, and retrieves the document ID.
      * If the label is not provided, it uses the filename from the URL.
-     * 
+     *
      * @param string $url The URL of the file.
      * @param string|null $label The label for the file download link.
      * @param string|null $id The ID of the file download link.
