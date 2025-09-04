@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template for displaying the search page
  *
@@ -72,7 +73,7 @@ if ($query) {
 
     $formattedResults = [];
 
-// Format the results into a structure the frontend understands
+    // Format the results into a structure the frontend understands
     foreach ($results as $result) {
         $postId = $result->id;
         $filesize = null;
@@ -118,6 +119,9 @@ $hiddenInputs = array_filter(array_map(function ($input) {
     return null;
 }, $allowedParams));
 
+$parentId = get_query_var('parent');
+$parentTitle = $parentId ? get_the_title($parentId) : null;
+
 $searchBarBlock = [
     'variant' => 'main',
     'results' => $search->getResultCount(),
@@ -126,9 +130,9 @@ $searchBarBlock = [
     'search' => [
         'id' => 'search-bar-main',
         'action' => '/search',
-        'input'=> [
-            'labelHidden'=> true,
-            'label' => 'Search',
+        'input' => [
+            'labelHidden' => true,
+            'label' => $parentTitle ? "Enter your $parentTitle search" : 'Search',
             'id' => 'searchbox-top',
             'name' => 's',
             'value' => $query,
@@ -140,7 +144,6 @@ $searchBarBlock = [
     ]
 ];
 
-$parentId = get_query_var('parent');
 $sortOrder = get_query_var('orderby');
 
 $filterBlock = [
@@ -168,8 +171,19 @@ $filterBlock = [
 
 $templates = ['templates/search.html.twig'];
 
+// Set the title based on whether there is a search query.
+$title = $query ? 'Search Results' : 'Search';
+
+// If there is a parent title, append it to the title.
+if ($parentTitle) {
+    // e.g. "Search in Civil Procedure Rules"
+    // or,  "Search Results for Civil Procedure Rules"
+    $title .= $query ? " for " : " in ";
+    $title .= $parentTitle;
+}
+
 $context = Timber::context([
-    'title' => 'Search',
+    'title' => $title,
     'breadcrumbs' => $breadcrumbs,
     'filter' => $filterBlock,
     'searchBlock' => $searchBarBlock,
