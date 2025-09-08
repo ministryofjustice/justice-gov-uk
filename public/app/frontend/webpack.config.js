@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 module.exports = {
     experiments: {
@@ -12,8 +13,9 @@ module.exports = {
         },
     },
     output: {
-        filename: '[name].js',
+        filename: '[name].js?ver=[contenthash]',
         path: path.resolve(__dirname, 'dist'),
+        clean: true,
     },
     resolve: {
         modules: [path.resolve(__dirname, '/node_modules/')],
@@ -62,8 +64,14 @@ module.exports = {
             },
         ],
     },
-    plugins: [new MiniCssExtractPlugin({
-        filename: '[name].css',
-        chunkFilename: '[id].css',
-    })],
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].css?ver=[contenthash]',
+            chunkFilename: '[id].css',
+        }),
+        new WebpackManifestPlugin({
+            filter: (file) => ['main.css', 'main.js'].includes(file.name),
+            publicPath: '',
+        })
+    ],
 }

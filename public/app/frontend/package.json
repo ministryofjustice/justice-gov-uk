@@ -46,7 +46,8 @@
     "twig": "^1.17.1",
     "twigjs-loader": "^1.0.3",
     "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-manifest-plugin": "^5.0.1"
   },
   "browserslist": [
     "last 2 versions",
