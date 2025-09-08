@@ -39,7 +39,7 @@ class Breadcrumbs
 
         // Home page
         $breadcrumbs[] = [
-            'title' =>  'Home',
+            'label' =>  'Home',
             'url' =>  get_home_url(),
         ];
 
@@ -56,7 +56,7 @@ class Breadcrumbs
             // Parent page loop
             foreach ($ancestor_ids as $ancestor_id) {
                 $breadcrumbs[] = [
-                    'title' => $post_meta->getShortTitle($ancestor_id),
+                    'label' => $post_meta->getShortTitle($ancestor_id),
                     'url' => get_permalink($ancestor_id)
                 ];
             }
@@ -64,7 +64,7 @@ class Breadcrumbs
 
         // Current page
         $breadcrumbs[] = [
-            'title' => $post_meta->getShortTitle(),
+            'label' => $post_meta->getShortTitle(),
             'url' => $is_search_with_parent ? get_the_permalink() : null,
             'last' => $is_search_with_parent ? false : true
         ];
@@ -72,7 +72,7 @@ class Breadcrumbs
         // Maybe append search page.
         if ($is_search_with_parent) {
             $breadcrumbs[] = [
-                'title' => 'Search',
+                'label' => 'Search',
                 'url' => null,
                 'last' => true
             ];

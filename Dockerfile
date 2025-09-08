@@ -190,6 +190,7 @@ COPY --from=build-fpm-composer ${path}/public/app/languages public/app/languages
 COPY --from=build-fpm-composer ${path}/public/wp public/wp
 COPY --from=build-fpm-composer ${path}/vendor vendor
 COPY --from=assets-build       --chown=nginx:nginx /node/dist/php public/app/themes/justice/dist/php
+COPY --from=assets-build       --chown=nginx:nginx /node/frontend/dist/manifest.json public/app/frontend/dist/manifest.json
 
 # non-root
 USER 101
