@@ -18,9 +18,9 @@ if (!$moj_breadcrumbs) {
     <?php foreach ($moj_breadcrumbs as $breadcrumb) { ?>
         <li>
             <?php if ($breadcrumb['url']) { ?>
-                <a href="<?php echo $breadcrumb['url']; ?>"><?php echo $breadcrumb['title']; ?></a>
+                <a href="<?php echo $breadcrumb['url']; ?>"><?php echo $breadcrumb['label']; ?></a>
             <?php } else { ?>
-                <?php echo $breadcrumb['title']; ?>
+                <?php echo $breadcrumb['label']; ?>
             <?php } ?>
         </li>
 
