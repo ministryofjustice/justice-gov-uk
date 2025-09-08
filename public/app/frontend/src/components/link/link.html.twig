@@ -33,9 +33,7 @@ Developer notes:
     {{ ariaCurrent ? " aria-current='#{ariaCurrent|e('html_attr')}'" }}
 >
     {{- label -}}
-    {%- if newTab and newTabVisuallyHidden -%}
-        <span class="visually-hidden"> (opens in a new tab)</span>
-    {%- elseif newTab and not manualNewTabText -%}
-        {{- " (opens in a new tab)" -}}
+    {%- if newTab -%}
+        <span class="link__new-tab-suffix{{ newTabVisuallyHidden ? " visually-hidden" }}"> (opens in a new tab)</span>
     {%- endif -%}
 </a>

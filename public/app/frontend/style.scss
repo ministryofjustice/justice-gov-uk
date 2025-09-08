@@ -372,6 +372,12 @@ $iconSizes: (
             }
         }
     }
+    @media print {
+        // On print hide the ' (opens in a new tab)' suffix
+        .link__new-tab-suffix {
+            display: none;
+        }
+    }
 }
 
 @mixin button($type: 'primary') {

@@ -15,6 +15,7 @@ services:
       target: dev
     volumes:
       - theme_dist:/var/www/html/public/app/themes/justice/dist
+      - frontend_dist:/var/www/html/public/app/frontend/dist
       - .:/var/www/html
       - php-socket:/sock
     env_file:
