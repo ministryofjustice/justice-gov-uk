@@ -5,9 +5,11 @@
  *
  */
 
+use MOJ\Justice\Breadcrumbs;
+use MOJ\Justice\Content;
 use MOJ\Justice\Search;
 use MOJ\Justice\Taxonomies;
-use \MOJ\Justice\Content;
+use Timber\Timber;
 
 global $wp_query;
 $query = get_search_query();
@@ -21,16 +23,7 @@ $formattedResults = [];
 $didYouMean = null;
 $pagination = null;
 
-$breadcrumbs = [
-    [
-        'label' => 'Home',
-        'url' => '/',
-    ],
-    [
-        'label' => 'Search',
-        'url' => '/search',
-    ]
-];
+$breadcrumbs = (new Breadcrumbs)->getTheBreadcrumbs();
 
 get_header();
 

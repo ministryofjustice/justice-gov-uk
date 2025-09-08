@@ -3,7 +3,6 @@
 namespace MOJ\Justice;
 
 use DOMDocument;
-use DOMElement;
 use DOMNode;
 use DOMXPath;
 use Timber\Timber;
@@ -19,15 +18,7 @@ if (!defined('ABSPATH')) {
 
 class Templates
 {
-    // Only use the mime types that we expect otherwise use the standard link component
-    public array $allowedMimeTypes = [
-        'doc',
-        'pdf',
-        'ppt',
-        'zip',
-        'xls',
-        'xlsx',
-    ];
+    
 
     public array $blocks = [
         'core/paragraph',
@@ -38,12 +29,14 @@ class Templates
 
     public Documents $documents;
     public Content $content;
+    public TemplateLinks $links;
 
     public function __construct()
     {
         libxml_use_internal_errors(true);
         $this->documents = new Documents();
         $this->content = new Content();
+        $this->links = new TemplateLinks();
     }
 
     public function addHooks(): void
@@ -153,32 +146,26 @@ class Templates
         $toTheTopTemplate = ['partials/to-the-top.html.twig'];
         $links = $doc->getElementsByTagName('a');
         foreach ($links as $link) {
-            $url = $link->getAttribute('href');
-            $format = pathinfo($url, PATHINFO_EXTENSION);
-            $external = $this->content->isExternal($url);
+            $params = $this->links->getLinkParamsFromNode($link);
 
-            if (!$link->getAttribute('href')) {
-                // The href isn't set skip the loop and use the default node (needed for the anchor links in WP)
-                continue;
-            } else if (in_array($format, $this->allowedMimeTypes) && !$external) {
+            if (isset($params['format'])) {
                 // The link is a file use the file download template, otherwise use the link template
-                $params = $this->getFileDownloadParams($link, $format);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $fileTemplate, $params);
             } else if ($link->getAttribute('class') === 'to-the-top') {
                 // Check if it has the 'to-the-top' class and use that template
-                $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $toTheTopTemplate, $params);
             } else {
                 // Otherwise default to the standard link template
-                $params = $this->getLinkParams($link);
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $linkTemplate, $params);
             }
+
             if ($htmlDoc) {
                 $link->parentNode->replaceChild($htmlDoc, $link);
             }
         }
     }
 
+    
     /**
      * Applies the navigation sections template to list elements with the "Horizontal & Border" style
      *
@@ -201,7 +188,7 @@ class Templates
                     $this->loadPartialHTML($blockDoc, $block['innerHTML']);
 
                     $node = $blockDoc->getElementsByTagName('a')[0];
-                    $links[] = $this->getLinkParams($node);
+                    $links[] = $this->links->getLinkParamsFromNode($node);
                 }
                 $htmlDoc = $this->convertTwigTemplateToDomElement($doc, $navigationTemplate, ['links' => $links]);
                 $list->parentNode->replaceChild($htmlDoc, $list);
@@ -239,84 +226,6 @@ class Templates
         }
     }
 
-    /**
-     * Gets the required parameters for links
-     *
-     * @param DOMNode $node The DOMNode containing the link information
-     *
-     * @return array An array of parameters to pass to the link template
-     */
-    public function getLinkParams(DOMNode $node): array
-    {
-        $label = null;
-        $url = null;
-        $id = null;
-        $newTab = false;
-        $manualNewTabText = false;
-
-        if ($node instanceof DOMElement) {
-            $url = $node->getAttribute('href');
-            $id = $node->getAttribute('id');
-            $label = $node->nodeValue ?: pathinfo($url, PATHINFO_FILENAME);
-            $external = $this->content->isExternal($url);
-            $newTab = $external || $node->getAttribute('target') === '_blank';
-            // If the label already has new tab/window then don't repeat it
-            $manualNewTabText = (str_contains($label, 'new tab') || str_contains($label, 'new window'));
-        }
-
-        return [
-            'label' => $label,
-            'url' => $url,
-            'newTab' => $newTab,
-            'manualNewTabText' => $manualNewTabText,
-            'external' => $external,
-            'id' => $id
-        ];
-    }
-
-    /**
-     * Gets the required parameters for file download links
-     *
-     * @param DOMNode $node The DOMNode containing the link information
-     *
-     * @return array An array of parameters to pass to the link template
-     */
-    public function getFileDownloadParams(DOMNode $node, $format): array
-    {
-        $href = null;
-        $filesize = null;
-        $language = null;
-        $label = null;
-
-        if ($node instanceof DOMElement) {
-            $href = $node->getAttribute('href');
-            $label = $node->nodeValue ? trim($node->nodeValue) : $node->nodeValue;
-
-            // Get the document ID from the link
-            $postId = $this->documents->getDocumentIdByUrl($href);
-
-            // If the label is empty, try to get it from the post title
-            if (empty($label) && $postId) {
-                $label = get_the_title($postId);
-            }
-
-            // If the label is still empty, use the filename from the URL
-            if (empty($label)) {
-                $label = pathinfo($href, PATHINFO_FILENAME);
-            }
-
-            $filesize = $this->content->getFormattedFilesize($postId);
-            $format = strtoupper(ltrim($format, '.'));
-        }
-
-        return [
-            'format' => $format,
-            'filesize' => $filesize,
-            'filename' => $label,
-            'link' => $href,
-            'language' => $language,
-        ];
-    }
 
     /**
      * Replace duplicate "(PDF)" text following a file download block
