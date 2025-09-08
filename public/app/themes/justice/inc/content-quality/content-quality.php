@@ -10,17 +10,20 @@ defined('ABSPATH') || exit;
 require_once 'traits/columns.php';
 require_once 'traits/dashboard-widget.php';
 require_once 'traits/filters.php';
+require_once 'traits/options.php';
 
 require_once 'issues/anchor.php';
 require_once 'issues/email-href.php';
 require_once 'issues/email-text.php';
 require_once 'issues/empty-heading.php';
 require_once 'issues/incomplete-thead.php';
+require_once 'issues/spelling.php';
 require_once 'issues/thead.php';
 
 class ContentQuality
 {
     use DashboardWidget;
+    use OptionsPage;
     use PageColumns;
     use PageFilters;
 
@@ -54,6 +57,8 @@ class ContentQuality
         // Filters.
         add_action('restrict_manage_posts', [$this, 'addFilteringDropdown']);
         add_filter('parse_query', [$this, 'editorFiltering']);
+        // Options page.
+        add_action('admin_menu', [$this, 'addOptionsPage']);
     }
 
     /**
@@ -67,12 +72,13 @@ class ContentQuality
     public function addIssues(): void
     {
         // Add the issues.
-        new ContentQualityIssueAnchor();
-        new ContentQualityIssueEmailHref();
-        new ContentQualityIssueEmailText();
-        new ContentQualityIssueEmptyHeading();
-        new ContentQualityIssueIncompleteThead();
-        new ContentQualityIssueThead();
+        // new ContentQualityIssueAnchor();
+        // new ContentQualityIssueEmailHref();
+        // new ContentQualityIssueEmailText();
+        // new ContentQualityIssueEmptyHeading();
+        // new ContentQualityIssueIncompleteThead();
+        new ContentQualityIssueSpelling();
+        // new ContentQualityIssueThead();
 
         // Add more issues here as needed.
         // e.g. new ContentQualityIssueAltText();

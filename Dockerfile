@@ -90,7 +90,16 @@ USER 101
 
 ## target: dev
 FROM base-fpm AS dev
-RUN apk add --update nano nodejs npm inotify-tools
+RUN apk add --update nano nodejs npm inotify-tools aspell aspell-en aspell-dev hunspell hunspell-en-gb hunspell-dev
+
+RUN apk add --no-cache --virtual .build-deps pcre-dev $PHPIZE_DEPS
+
+# Install pspell module
+# PhpSpellcheck\Spellchecker\Aspell works without installing pspell.
+RUN pecl install pspell && \
+    docker-php-ext-enable pspell
+
+RUN apk del .build-deps libtool automake aspell-dev $PHPIZE_DEPS
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

@@ -72,6 +72,7 @@
         "stayallive/wp-sentry": "^8.3.1",
         "symfony/filesystem": "<7.0",
         "symfony/process": "<7.0",
+        "tigitz/php-spellchecker": "^0.8.0",
         "vlucas/phpdotenv": "^5.5",
         "wp-cli/wp-cli-bundle": "^2.10",
         "wpackagist-plugin/amazon-s3-and-cloudfront": "^3.2",

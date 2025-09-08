@@ -1,0 +1,101 @@
+<?php
+
+namespace Tests\Unit;
+
+use Tests\Support\UnitTester;
+use MOJ\Justice\ContentQualityIssueSpelling;
+use WP_Mock;
+
+final class ContentQualityIssueSpellingTest extends \Codeception\Test\Unit
+{
+
+    protected UnitTester $tester;
+
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        WP_Mock::setUp();
+
+        // If no function wp_kses
+        if (!function_exists('wp_kses')) {
+            require_once '/var/www/html/public/wp/wp-includes/kses.php';
+        }
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        WP_Mock::tearDown();
+    }
+
+    public function testGetSpellingIssuesFromContent(): void
+    {
+
+        WP_Mock::userFunction('wp_allowed_protocols')
+            ->with()
+            ->andReturn(['http', 'https']);
+
+        $instance = new ContentQualityIssueSpelling();
+
+        // Test empty content
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('', []));
+
+        // Test content with no spelling issues
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('This is a test.', []));
+
+        // Test content with one spelling issue
+        $this->assertSame(['documen'], $instance->getSpellingIssuesFromContent('This is a <a>documen</a>t with a misspelled word.', []));
+
+        // Test an american spelling
+        $this->assertSame(['color'], $instance->getSpellingIssuesFromContent('color', []));
+
+        // Test html is ignored
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('<img href="http://example.com" />', []));
+
+        // Test wp typo in html comment
+        $this->assertSame(['wp'], $instance->getSpellingIssuesFromContent('wp', []));
+
+        // Test wp typo in html comment
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('<!-- wp:paragraph -->', []));
+
+        // // Test content with hashtag
+        $this->assertSame(['FunnyMemes'], $instance->getSpellingIssuesFromContent('FunnyMemes', []));
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('#FunnyMemes', []));
+
+        // Test content with the dictionary file
+        $instance = new ContentQualityIssueSpelling();
+        $dictionary_file = dirname(__DIR__) . '/Unit/spelling-dictionary.dic';
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('This is a test with notaword and documen and color.', [], $dictionary_file));
+
+        // Test a place name
+        // $this->assertSame([], $instance->getSpellingIssuesFromContent('Birmingham', []));
+    }
+
+    public function testAllowedSpellingSanitization(): void
+    {
+        $instance = new ContentQualityIssueSpelling();
+
+        // Test empty input
+        $this->assertSame('', $instance->allowedSpellingSanitization(''));
+
+        // Test single word input
+        $this->assertSame('test', $instance->allowedSpellingSanitization('test'));
+
+        // Test multiple words input
+        $input = "word1\nword2\nword3";
+        $expected = "word1\nword2\nword3";
+        $this->assertSame($expected, $instance->allowedSpellingSanitization($input));
+
+        // Test input with extra spaces
+        $inputWithSpaces = "  word1  \n  word2  \n  word3  ";
+        $this->assertSame($expected, $instance->allowedSpellingSanitization($inputWithSpaces));
+
+        // Test with 2 words on the same line
+        $inputWithTwoWords = "word1 word2";
+        $expectedWithTwoWords = "word1\nword2";
+        $this->assertSame($expectedWithTwoWords, $instance->allowedSpellingSanitization($inputWithTwoWords));
+    }
+}
