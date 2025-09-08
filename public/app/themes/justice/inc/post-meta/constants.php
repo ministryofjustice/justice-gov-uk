@@ -17,6 +17,11 @@ class PostMetaConstants
         ['label' => 'Wales', 'value' => '1'],
     ];
 
+    public $values_language =  [
+        ['label' => 'English', 'value' => 'en_GB'],
+        ['label' => 'Welsh', 'value' => 'cy_GB'],
+    ];
+
     /**
      * Schemas.
      */
@@ -196,6 +201,24 @@ class PostMetaConstants
                     ],
                 ],
             ],
+            'conditions'   => [
+                [
+                    'target'    => 'attribute.template',
+                    'operator'  => '!==',
+                    'value'     => 'page_home.php',
+                ]
+            ],
+        ];
+
+        $fields_array[] = [
+            'single'        => true,
+            'meta_key'      => '_language',
+            'label'         => 'Language',
+            'control'       => 'select',
+            'type'          => 'string',
+            'default'       => $this->values_language[0]['value'],
+            'options'       => $this->values_language,
+            'help'          => 'Language for this content.',
             'conditions'   => [
                 [
                     'target'    => 'attribute.template',
