@@ -95,7 +95,7 @@ class BlockEditor
                 'action' => '/search',
                 'input'=> [
                     'labelHidden'=> true,
-                    'label' => 'Search',
+                    'label' => 'Enter your ' . get_the_title() . ' search',
                     'id' => 'searchbar-embedded-input',
                     'name' => 's',
                 ],
