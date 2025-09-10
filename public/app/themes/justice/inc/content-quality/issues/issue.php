@@ -253,9 +253,7 @@ class ContentQualityIssue
         $this->loadPagesWithIssues();
 
         // Filter out any entries with the value 'queued'.
-        $pages_with_issue = array_filter($this->pages_with_issue, function ($issue) {
-            return $issue !== 'queued';
-        });
+        $pages_with_issue = array_filter($this->pages_with_issue, fn($issue) => $issue !== 'queued');
 
         // Add the pages with issues to the issues array.
         $issues[] = [
