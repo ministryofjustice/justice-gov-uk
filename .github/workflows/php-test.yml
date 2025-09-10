@@ -13,6 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: "Install system dependencies"
+      run: apt-get update && apt-get install -y hunspell hunspell-en-gb
+
     - name: "Setup PHP"
       uses: shivammathur/setup-php@v2
       with:
@@ -39,9 +42,6 @@ jobs:
         rm -f auth.json
       env:
         RELEVANSSI_API_KEY: ${{ secrets.RELEVANSSI_API_KEY }}
-
-    - name: "Install system dependencies"
-      run: apt-get update && apt-get install -y hunspell hunspell-en-gb
 
     - name: "Run tests"
       run: make test
