@@ -21,6 +21,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
     private ?array $allowed_words = null;
 
+    public int $transient_duration = 90 * 24 * 60 * 60; // 90 days in seconds (90 days * 24 hours * 60 minutes * 60 seconds).
 
     public function addHooks(): void
     {
