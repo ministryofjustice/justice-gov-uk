@@ -20,6 +20,7 @@ class PostMetaConstants
     public $values_language =  [
         ['label' => 'English', 'value' => 'en_GB'],
         ['label' => 'Welsh', 'value' => 'cy_GB'],
+        ['label' => 'English and Welsh', 'value' => 'en_GB,cy_GB'],
     ];
 
     /**
