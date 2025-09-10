@@ -6,7 +6,6 @@ defined('ABSPATH') || exit;
 
 use PhpSpellcheck\Spellchecker\Hunspell;
 
-
 require_once 'issue.php';
 require_once 'spelling.php';
 
@@ -75,27 +74,41 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified, options.option_value AS spelling_issues
+            SELECT ID, post_content, post_modified, 
+                options.option_value AS spelling_issues,
+                postmeta.meta_value  AS language
             FROM {$wpdb->posts}
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
             ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+            ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
             -- Where clauses
             WHERE
                 -- options value should be null or not 0
                 ( options.option_value IS NULL OR options.option_value != '0' ) AND
                 -- Post type should be page 
                 post_type = 'page'
+                -- Post status should be publish, private or draft
+                AND post_status IN ('publish', 'private', 'draft')
         ";
 
         $processed_count = 0;
 
-
-        // Clear the transient for every page, so we can update it.
-        // $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_moj:content-quality:issue:spelling:%'");
-
         foreach ($wpdb->get_results($query) as $page) :
+
+            $path = parse_url(get_permalink($page->ID), PHP_URL_PATH);
+            if (preg_match('/^\/news(-\d+)?\//', $path)) {
+                // If the path starts with /news/ or /news-<number>/, skip it.
+                continue;
+            }
+
+            if (isset($page->language) && 'en_GB' !== $page->language) {
+                // Skip pages that are not English GB.
+                continue;
+            }
+
             $spelling_issues = maybe_unserialize($page->spelling_issues);
 
             if (is_null($spelling_issues) && $processed_count < $process_batch_size) {
@@ -177,7 +190,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
      * @param string $content The content to check.
      * @return array An array of spelling issues found in the content.
      */
-    public function getSpellingIssuesFromContent(string $content, array $allowed_words, ?string $dictionary_file = null): array
+    public function getSpellingIssuesFromContent(string $content, array $allowed_words, ?string $dictionary_file = null, ?string $affix_file = null): array
     {
         if (empty($content)) {
             return [];
@@ -188,6 +201,9 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
         // Replace non-breaking spaces with regular spaces
         $content = str_replace('&nbsp;', ' ', $content);
+
+        // Replace line break with spaces
+        $content = str_replace("<br>", ' ', $content);
 
         // Ignore hashtags, as they are not relevant for spelling checks
         $content = preg_replace('/#([a-zA-Z0-9_]+)/', ' ', $content);
@@ -201,13 +217,19 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Use regex to remove words that contain numbers.
         $content = preg_replace('/\b\w*[0-9]+\w*\b/', ' ', $content);
 
+        // Ignore ULRs, as they are not relevant for spelling checks
+        // URLs are sometimes used as the text part of an a tag, or just plain text.
+        // Often they wont have the protocol at the start
+        // e.g. 'example.com/wp-content/london'
+        $content = preg_replace('/\b[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?\b/', ' ', $content);
+
         // Loop over the words and remove any allowed words.
         if (!empty($allowed_words)) {
             foreach ($allowed_words as $allowed_word) {
                 // Escape the allowed word for regex.
                 $allowed_word = preg_quote($allowed_word, '/');
                 // Remove the allowed word from the content.
-                $content = preg_replace('/\b' . $allowed_word . '\b/i', ' ', $content);
+                $content = preg_replace('/\b' . $allowed_word . '(?!\w)/i', ' ', $content);
             }
         }
 
@@ -235,12 +257,37 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
         $spelling_issues = [];
 
-        $misspellings = $this->hunspell->check($content, ['en_GB-large'], ['from_example']);
+        $misspellings = $this->hunspell->check($content, ['en_GB-large']);
 
-        foreach ($misspellings as $misspelling) {
+        $misspelling_words = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings));
 
-            if (!in_array($misspelling->getWord(), $spelling_issues)) {
-                $spelling_issues[] = $misspelling->getWord();
+        // TODO - tidy this up
+
+        $misspellings_starting_or_ending_with_quote = array_filter(
+            $misspelling_words,
+            fn($misspelling) => (str_starts_with($misspelling, "'") || str_ends_with($misspelling, "'"))
+        );
+
+        // Remove the quotes and try again.
+        $retry_words = array_map(fn($misspelling) => trim($misspelling, "'"), $misspellings_starting_or_ending_with_quote);
+
+        $retry_misspellings = $this->hunspell->check(implode(' ', $retry_words), ['en_GB-large']);
+
+        // Remove $misspellings_starting_or_ending_with_quote from $misspelling_words
+        $misspelling_words = array_diff($misspelling_words, $misspellings_starting_or_ending_with_quote);
+
+        // Add the retry misspellings to the misspelling words.
+        $misspelling_words = array_merge($misspelling_words, array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($retry_misspellings)));
+
+        // error_log('Misspellings found: ' . implode(', ', $misspellings_starting_or_ending_with_quote));
+
+        // Order alphabetically
+        sort($misspelling_words);
+
+        foreach ($misspelling_words as $word) {
+
+            if (!in_array($word, $spelling_issues)) {
+                $spelling_issues[] = $word;
             }
         }
 
