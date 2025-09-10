@@ -72,9 +72,9 @@ final class ContentQualityIssueSpellingTest extends \Codeception\Test\Unit
         $this->assertSame([], $instance->getSpellingIssuesFromContent("It's a test.", []));
 
         // Test quoted words
-        $this->assertSame([], $instance->getSpellingIssuesFromContent("test 'solicitor test", [] ));
-        $this->assertSame([], $instance->getSpellingIssuesFromContent("test 'solicitor' test", [] ));
-        $this->assertSame([], $instance->getSpellingIssuesFromContent("test solicitor' test", [] ));
+        $this->assertSame([], $instance->getSpellingIssuesFromContent("test 'solicitor test", []));
+        $this->assertSame([], $instance->getSpellingIssuesFromContent("test 'solicitor' test", []));
+        $this->assertSame([], $instance->getSpellingIssuesFromContent("test solicitor' test", []));
         
         // Test URLs
         $this->assertSame([], $instance->getSpellingIssuesFromContent('example.com/wp-content/london', []));
