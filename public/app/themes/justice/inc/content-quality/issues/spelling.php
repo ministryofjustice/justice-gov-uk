@@ -48,7 +48,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
     }
 
 
-
     /**
      * Adds a custom cron schedule of 1 minute.
      *
