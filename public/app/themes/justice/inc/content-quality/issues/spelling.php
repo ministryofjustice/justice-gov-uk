@@ -15,20 +15,12 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
     const ISSUE_LABEL = 'Incorrect spelling';
 
-
     private ?Hunspell $hunspell = null;
 
-    private $dictionary = null;
+    private $dictionary_file = null;
 
     private ?array $allowed_words = null;
 
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function addHooks(): void
     {
@@ -55,17 +47,48 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
     }
 
 
+
+    /**
+     * Adds a custom cron schedule of 1 minute.
+     *
+     * @param array $schedules
+     * @return array
+     */
+    public function addOneMinuteCronSchedule(array $schedules): array
+    {
+        $schedules['one_minute'] = [
+            'interval' => 60,
+            'display' => 'Every Minute'
+        ];
+
+        return $schedules;
+    }
+
+
     /**
      * Get the pages with spelling issues.
+     *
+     * This function retrieves pages with spelling issues by checking the content against the Hunspell dictionary.
+     * If a cached/transient value is found in the database, it will be used.
+     * If not, it will process the content and cache the results in a transient.
+     *
+     * The result will be an array in the shape of:
+     * [
+     *    <page_id> => [<misspelled_word_1>, <misspelled_word_2>, ...],
+     *    ...
+     * ]
      *
      * @return array An array of pages with spelling issues.
      */
     public function getPagesWithIssues(): array
     {
+        // Arrays for appending to later.
+        // This will contain the pages with issues.
         $pages_with_issue = [];
+        // If pages have been processed then their issues will be appended to this variable, to be saved in the database.
         $transient_updates = [];
 
-        // Has the funciton been triggered by a cron job?
+        // Has the function been triggered by a cron job?
         $doing_cron = defined('DOING_CRON') && DOING_CRON;
         // If so, lets process a batch of 10 pages at a time.
         // If not, we have been triggered by a browser request, so don't process a batch.
@@ -94,8 +117,10 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
                 AND post_status IN ('publish', 'private', 'draft')
         ";
 
+        // Create a counter for how many pages we have processed.
         $processed_count = 0;
 
+        // Loop over every page, and work out if we need to process it's content with the spelling checker.
         foreach ($wpdb->get_results($query) as $page) :
 
             $path = parse_url(get_permalink($page->ID), PHP_URL_PATH);
@@ -109,20 +134,28 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
                 continue;
             }
 
+            // Attempt to unserialize the value of this page's spelling issues.
             $spelling_issues = maybe_unserialize($page->spelling_issues);
 
             if (is_null($spelling_issues) && $processed_count < $process_batch_size) {
+                // Let's process some content...
                 if (!$this->allowed_words) {
+                    // Get the allowed words from the options table.
                     $allowed_words = get_option('moj_content_quality_spelling_allowed_words', '');
-                    $this->allowed_words = array_filter(array_map('trim', explode("\n", $allowed_words)));
+                    $this->allowed_words = array_filter(explode("\n", $allowed_words));
                 }
-                if (!$this->dictionary) {
-                    $this->dictionary = get_template_directory() . '/inc/content-quality/issues/spelling-dictionary.dic';
+
+                if (!$this->dictionary_file) {
+                    // Get the dictionary file path.
+                    $this->dictionary_file = get_template_directory() . '/inc/content-quality/issues/spelling-dictionary.dic';
                 }
+
                 // The table didn't contain a transient value, so we need to check the content.
-                $spelling_issues = $this->getSpellingIssuesFromContent($page->post_content, $this->allowed_words, $this->dictionary);
+                $spelling_issues = $this->getSpellingIssuesFromContent($page->post_content, $this->allowed_words, $this->dictionary_file);
+
                 // Increase the processed count.
                 $processed_count++;
+
                 // Add the value to the transient updates array, this will be used in a bulk update later.
                 $transient_updates["$this->transient_key:{$page->ID}"] = serialize($spelling_issues);
             }
@@ -161,36 +194,41 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Load the pages with issues - don't run this on construct, as it's an expensive operation.
         $this->loadPagesWithIssues();
 
+        // If we have no issues then, return the issues array as is.
         if (empty($this->pages_with_issue[$post_id])) {
             return $issues;
         }
 
+        // If the issue is 'queued', then append the appropriate message.
         if ('queued' === $this->pages_with_issue[$post_id]) {
-            $issues[] = sprintf(
-                __('The page is queued for spelling issues.', 'justice'),
-            );
+            $issues[] = __('The page is queued for spelling issues.', 'justice');
             return $issues;
         }
 
+        // If we are here, then we have an array of issues.
         $count = sizeof($this->pages_with_issue[$post_id]);
 
-        $text = sprintf(_n('There is %d spelling mistake:', 'There are %d spelling mistakes:', $count, 'justice'), $count);
-
-        $text .= ' ' . implode(', ', $this->pages_with_issue[$post_id]);
-
-        $issues[] =  $text;
+        // Construct text to with the number of spelling issues, and the misspelled words.
+        $issues[] = sprintf(
+            _n('There is %d spelling mistake: %s', 'There are %d spelling mistakes: %s', $count, 'justice'),
+            $count,
+            implode(', ', $this->pages_with_issue[$post_id])
+        );
 
         return $issues;
     }
 
 
     /**
-     * Get spelling issued in the content.
+     * Get spelling issues in the content.
+     *
+     * This function checks the content for spelling issues using the Hunspell library.
+     * It strips HTML tags, removes URLs, and checks the content against the Hunspell dictionary.
      *
      * @param string $content The content to check.
      * @return array An array of spelling issues found in the content.
      */
-    public function getSpellingIssuesFromContent(string $content, array $allowed_words, ?string $dictionary_file = null, ?string $affix_file = null): array
+    public function getSpellingIssuesFromContent(string $content, array $allowed_words, ?string $dictionary_file = null): array
     {
         if (empty($content)) {
             return [];
@@ -295,6 +333,14 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
     }
 
 
+    // - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // ⬇️ Settings for allowed words ⬇️ 
+    // 
+    // The functions below are related to allowing words 
+    // that are not in the dictionary. 
+    // - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
     /**
      * Register the settings field for allowed words, on the Content Quality Settings page.
      * 
@@ -328,6 +374,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
             'moj_content_quality_spelling_section'
         );
     }
+
 
     /**
      * Render the allowed words field.
@@ -379,7 +426,14 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         );
     }
 
-    public function allowedSpellingSanitization($input): string
+
+    /**
+     * Sanitize the allowed spelling words input.
+     *
+     * @param string $input The input string to sanitize.
+     * @return string The sanitized string with allowed words, one per line.
+     */
+    public function allowedSpellingSanitization(string $input): string
     {
         // Replace spaces with new lines.
         $input = preg_replace('/\s+/', "\n", $input);
@@ -396,26 +450,13 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Remove duplicates
         $lines = array_unique($lines);
 
+        // Sort the lines alphabetically.
+        sort($lines);
+
         // Convert the lines back to a single string.
         $string = implode("\n", $lines);
 
         return $string;
-    }
-
-    /**
-     * Adds a custom cron schedule of 1 minute.
-     *
-     * @param array $schedules
-     * @return array
-     */
-    public function addOneMinuteCronSchedule(array $schedules): array
-    {
-        $schedules['one_minute'] = [
-            'interval' => 60,
-            'display' => 'Every Minute'
-        ];
-
-        return $schedules;
     }
 
 
