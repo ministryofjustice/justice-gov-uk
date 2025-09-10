@@ -72,13 +72,13 @@ class ContentQuality
     public function addIssues(): void
     {
         // Add the issues.
-        new ContentQualityIssueAnchor();
-        new ContentQualityIssueEmailHref();
-        new ContentQualityIssueEmailText();
-        new ContentQualityIssueEmptyHeading();
-        new ContentQualityIssueIncompleteThead();
+        // new ContentQualityIssueAnchor();
+        // new ContentQualityIssueEmailHref();
+        // new ContentQualityIssueEmailText();
+        // new ContentQualityIssueEmptyHeading();
+        // new ContentQualityIssueIncompleteThead();
         new ContentQualityIssueSpelling();
-        new ContentQualityIssueThead();
+        // new ContentQualityIssueThead();
 
         // Add more issues here as needed.
         // e.g. new ContentQualityIssueAltText();

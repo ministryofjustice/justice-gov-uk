@@ -403,6 +403,19 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
             return;
         }
 
+        // Use filter to get the pages that are queued for spelling issues.
+        $pages_in_queue = array_filter($this->pages_with_issue, fn($issues) => $issues === 'queued');
+
+        if(sizeof($pages_in_queue)) {
+            printf(
+                '<p class="description">%s</p>',
+                sprintf(
+                    esc_html__('There are currently %d pages being processed for spelling issues.', 'justice'),
+                    count($pages_in_queue)
+                )
+            );
+        }
+
         // Filter out any entries with the value 'queued'.
         $pages_with_issue = array_filter($this->pages_with_issue, fn($issues) => $issues !== 'queued');
 
