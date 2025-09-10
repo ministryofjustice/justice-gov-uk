@@ -122,7 +122,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
         // Loop over every page, and work out if we need to process it's content with the spelling checker.
         foreach ($wpdb->get_results($query) as $page) :
-
             $path = parse_url(get_permalink($page->ID), PHP_URL_PATH);
             if (preg_match('/^\/news(-\d+)?\//', $path)) {
                 // If the path starts with /news/ or /news-<number>/, skip it.
@@ -272,7 +271,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         }
 
         if (!($this->hunspell instanceof Hunspell)) {
-
             $this->hunspell = Hunspell::create();
 
             if ($dictionary_file && file_exists($dictionary_file)) {
@@ -323,7 +321,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         sort($misspelling_words);
 
         foreach ($misspelling_words as $word) {
-
             if (!in_array($word, $spelling_issues)) {
                 $spelling_issues[] = $word;
             }
@@ -334,16 +331,16 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // ⬇️ Settings for allowed words ⬇️ 
-    // 
-    // The functions below are related to allowing words 
-    // that are not in the dictionary. 
+    // ⬇️ Settings for allowed words ⬇️
+    //
+    // The functions below are related to allowing words
+    // that are not in the dictionary.
     // - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
     /**
      * Register the settings field for allowed words, on the Content Quality Settings page.
-     * 
+     *
      * This function registers the settings field for allowed words in the content quality options page.
      * It adds a settings field to the 'moj_content_quality_spelling_options' section
      * and renders the allowed words field.
@@ -378,7 +375,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
     /**
      * Render the allowed words field.
-     * 
+     *
      * @return void
      */
     public function renderAllowedWordsField(): void
@@ -406,7 +403,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Use filter to get the pages that are queued for spelling issues.
         $pages_in_queue = array_filter($this->pages_with_issue, fn($issues) => $issues === 'queued');
 
-        if(sizeof($pages_in_queue)) {
+        if (sizeof($pages_in_queue)) {
             printf(
                 '<p class="description">%s</p>',
                 sprintf(
