@@ -5,6 +5,10 @@ FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 # Switch to the alpine's default user, for installing packages
 USER root
 
+# Add hunspell for spell checking
+RUN apk update --no-cache \
+    && apk add hunspell hunspell-en-gb
+
 # Make the Nginx user available in this container
 RUN addgroup -g 101 -S nginx; adduser -u 101 -S -D -G nginx nginx
 
@@ -90,16 +94,7 @@ USER 101
 
 ## target: dev
 FROM base-fpm AS dev
-RUN apk add --update nano nodejs npm inotify-tools aspell aspell-en aspell-dev hunspell hunspell-en-gb hunspell-dev
-
-RUN apk add --no-cache --virtual .build-deps pcre-dev $PHPIZE_DEPS
-
-# Install pspell module
-# PhpSpellcheck\Spellchecker\Aspell works without installing pspell.
-RUN pecl install pspell && \
-    docker-php-ext-enable pspell
-
-RUN apk del .build-deps libtool automake aspell-dev $PHPIZE_DEPS
+RUN apk add --update nano nodejs npm inotify-tools
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
