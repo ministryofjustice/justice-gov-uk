@@ -43,8 +43,8 @@ jobs:
     - name: "Install system dependencies"
       run: sudo apt-get update && sudo apt-get install -y hunspell hunspell-en-gb
 
-    - name: "Log hunspell version"
-      run: hunspell --version
+    - name: "Log hunspell version and dictionary"
+      run: hunspell --version && hunspell -D
 
     - name: "Run tests"
       run: make test
