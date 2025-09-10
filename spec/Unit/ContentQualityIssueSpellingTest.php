@@ -20,7 +20,7 @@ final class ContentQualityIssueSpellingTest extends \Codeception\Test\Unit
 
         // If no function wp_kses
         if (!function_exists('wp_kses')) {
-            require_once '/var/www/html/public/wp/wp-includes/kses.php';
+            require_once dirname(__DIR__, 2) . '/public/wp/wp-includes/kses.php';
         }
     }
 
