@@ -336,7 +336,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         $misspellings_to_report = [];
 
         foreach ($misspelling_words_1 as $word) {
-            if((str_starts_with($word, "'") || str_ends_with($word, "'"))) {
+            if ((str_starts_with($word, "'") || str_ends_with($word, "'"))) {
                 // If the word starts or ends with a single quote, we need to retry it.
                 // Trim the quotes and add it to the retry list.
                 $misspellings_to_retry[] =  trim($word, "'");
