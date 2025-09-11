@@ -59,16 +59,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Register the settings field for allowed words.
         add_action('admin_init', [$this, 'registerSettingsField']);
 
-        // Create a scheduled task to run `processPages` every minute.
-        add_action('init', function () {
-            if (!wp_next_scheduled('moj_content_quality_spelling_cron')) {
-                wp_schedule_event(time(), 'one_minute', 'moj_content_quality_spelling_cron');
-            }
-        });
-
-        // Hook the cron job to the processPages method.
-        add_action('moj_content_quality_spelling_cron', [$this, 'processPages']);
-
         // Handle the update of allowed words, i.e. clear transients if necessary.
         add_action('update_option_moj_content_quality_spelling_allowed_words', [$this, 'handleAllowedWordsUpdate'], 10, 2);
     }

@@ -17,23 +17,6 @@ final class ContentQualityIssueThead extends ContentQualityIssue
     const ISSUE_LABEL = 'Table without header section';
 
 
-    public function addHooks(): void
-    {
-        // Call the parent class addHooks method.
-        parent::addHooks();
-
-        // Create a scheduled task to run `processPages` every minute.
-        add_action('init', function () {
-            if (!wp_next_scheduled('moj_content_quality_thead_cron')) {
-                $jitter_between_runs = rand(0, 59);
-                wp_schedule_event(time() + $jitter_between_runs, 'one_minute', 'moj_content_quality_thead_cron');
-            }
-        });
-
-        // Hook the cron job to the processPages method.
-        add_action('moj_content_quality_thead_cron', [$this, 'processPages']);
-    }
-
     /**
      * Get the pages with thead issues.
      *
