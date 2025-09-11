@@ -28,60 +28,104 @@ final class ContentQualityIssueIncompleteThead extends ContentQualityIssue
     /**
      * Get the pages with empty table header issues.
      *
-     * This function runs an SQL query to find pages with table tags.
-     * It checks if the is an empty cell on the top row of the tables.
-     * If there are tables with an empty header, the page is added to the $this->pages_with_issue property.
+     * This function retrieves pages with incomplete table header issues from cache only.
      *
      * @return array An array of pages with empty heading issues.
      */
     public function getPagesWithIssues(): array
     {
         $pages_with_issue = [];
+
+        global $wpdb;
+
+        $query = "
+            SELECT
+                ID,
+                COALESCE(options.option_value, 'queued') AS issue_count
+            FROM {$wpdb->posts} AS p
+            -- To save us from running get_transient in a php loop, 
+            -- we can join the options table to get the transient value here
+            LEFT JOIN {$wpdb->options} AS options 
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:incomplete-thead:', ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+            -- Where clauses
+            WHERE
+                ( options.option_value IS NULL OR options.option_value != '0' ) AND
+                post_type = 'page' AND
+                p.post_status IN ('publish', 'private', 'draft') AND
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
+
+        ";
+
+        foreach ($wpdb->get_results($query) as $page) {
+            // Add the page to the pages with issue.
+            $pages_with_issue[$page->ID] = $page->issue_count;
+        }
+
+        return $pages_with_issue;
+    }
+
+
+    /**
+     * Process pages to identify empty table header issues.
+     *
+     * This function runs an SQL query to find pages with table tags.
+     * It checks if the is an empty cell on the top row of the tables.
+     *
+     * @return void
+     */
+    public function processPages(): void
+    {
         $transient_updates = [];
 
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified, options.option_value AS incomplete_thead_count
-            FROM {$wpdb->posts}
+            SELECT
+                ID,
+                -- Only return the post content if it contains an mailto string
+                CASE 
+                    WHEN p.post_content LIKE '%<table%' THEN p.post_content 
+                    ELSE NULL 
+                END AS post_content,
+                -- Check if the post content contains an mailto string
+                IFNULL(p.post_content LIKE '%<table%', 0) AS contains_target_string
+            FROM {$wpdb->posts} AS p
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:incomplete-thead:', ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:incomplete-thead:', ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
             -- Where clauses
             WHERE
-                -- options value should be null or not 0
-                ( options.option_value IS NULL OR options.option_value != '0' ) AND
-                -- Post type should be page 
+                options.option_value IS NULL AND
                 post_type = 'page' AND
-                -- Post content should contain a table tag
-                post_content LIKE '%<table%'
+                p.post_status IN ('publish', 'private', 'draft') AND
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
         ";
 
-        $wpdb->get_results($query);
-
         foreach ($wpdb->get_results($query) as $page) :
-            $incomplete_thead_count = is_null($page->incomplete_thead_count) ? null : (int)$page->incomplete_thead_count;
-
-            if (is_null($incomplete_thead_count)) {
-                // The table didn't contain a transient value, so we need to check the content.
-                $incomplete_thead_count = $this->getIncompleteTheadFromContent($page->post_content);
-                // Add the value to the transient updates array, this will be used in a bulk update later.
-                $transient_updates["$this->transient_key:{$page->ID}"] = $incomplete_thead_count;
+            if ($page->contains_target_string == 0) {
+                // If the post content does not contain any mailto string, set the transient value to 0.
+                $transient_updates["$this->transient_key:{$page->ID}"] = 0;
+                continue;
             }
 
-            // If the transient value is > 0, add it to the pages_with_issue array.
-            if ($page->incomplete_thead_count) {
-                $pages_with_issue[$page->ID] = $page->incomplete_thead_count;
-            }
+            // Get the number of incomplete table headers from the post content.
+            $incomplete_thead_count = $this->getIncompleteTheadFromContent($page->post_content);
+            // Add the value to the transient updates array, this will be used in a bulk update later.
+            $transient_updates["$this->transient_key:{$page->ID}"] = $incomplete_thead_count;
         endforeach;
 
         if (sizeof($transient_updates)) {
             $expiry = time() + $this->transient_duration;
             $this->bulkSetTransientInDatabase($transient_updates, $expiry);
-        }
 
-        return $pages_with_issue;
+            // Individual page transients have been updated, so clear the cache for this issue as a whole.
+            delete_transient($this->transient_key);
+        }
     }
 
 
@@ -100,6 +144,12 @@ final class ContentQualityIssueIncompleteThead extends ContentQualityIssue
         $this->loadPagesWithIssues();
 
         if (!isset($this->pages_with_issue[$post_id])) {
+            return $issues;
+        }
+
+        // If the issue is 'queued', then append the appropriate message.
+        if ('queued' === $this->pages_with_issue[$post_id]) {
+            $issues[] = __('The page is queued for incomplete header issues.', 'justice');
             return $issues;
         }
 
