@@ -5,6 +5,10 @@ FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 # Switch to the alpine's default user, for installing packages
 USER root
 
+# Add hunspell for spell checking
+RUN apk update --no-cache \
+    && apk add hunspell hunspell-en-gb
+
 # Make the Nginx user available in this container
 RUN addgroup -g 101 -S nginx; adduser -u 101 -S -D -G nginx nginx
 

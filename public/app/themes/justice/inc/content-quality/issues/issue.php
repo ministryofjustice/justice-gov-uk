@@ -183,7 +183,10 @@ class ContentQualityIssue
         // Load the pages with issues - don't run this on construct, as it's an expensive operation.
         $this->loadPagesWithIssues();
 
-        $page_ids_with_issue = array_keys($this->pages_with_issue);
+        // Filter out any entries with the value 'queued'.
+        $pages_with_issue = array_filter($this->pages_with_issue, fn($issue) => $issue !== 'queued');
+
+        $page_ids_with_issue = array_keys($pages_with_issue);
 
         if (empty($page_ids_with_issue)) {
             // Passing an empty array to post__in will return all results.
@@ -249,12 +252,15 @@ class ContentQualityIssue
         // Load the pages with issues - don't run this on construct, as it's an expensive operation.
         $this->loadPagesWithIssues();
 
+        // Filter out any entries with the value 'queued'.
+        $pages_with_issue = array_filter($this->pages_with_issue, fn($issue) => $issue !== 'queued');
+
         // Add the pages with issues to the issues array.
         $issues[] = [
             'name' => $this::ISSUE_SLUG,
             'description' => $this::ISSUE_LABEL,
-            'count' => count($this->pages_with_issue),
-            'ids' => array_keys($this->pages_with_issue),
+            'count' => count($pages_with_issue),
+            'ids' => array_keys($pages_with_issue),
         ];
 
         return $issues;
