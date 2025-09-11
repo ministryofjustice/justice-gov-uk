@@ -60,6 +60,7 @@ class ContentQualityCommands
                         update_post_meta($page_id, '_content_quality_exclude', 1);
                     } else {
                         WP_CLI::log('Not excluding page ' . $page_id . ' with path ' . $path);
+                        update_post_meta($page_id, '_content_quality_exclude', 0);
                     }
                 }
 
