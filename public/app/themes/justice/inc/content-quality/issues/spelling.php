@@ -59,9 +59,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Register the settings field for allowed words.
         add_action('admin_init', [$this, 'registerSettingsField']);
 
-        // Create a 1 minute schedule
-        add_filter('cron_schedules', [$this, 'addOneMinuteCronSchedule']);
-
         // Create a scheduled task to run `processPages` every minute.
         add_action('init', function () {
             if (!wp_next_scheduled('moj_content_quality_spelling_cron')) {
@@ -77,21 +74,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
     }
 
 
-    /**
-     * Adds a custom cron schedule of 1 minute.
-     *
-     * @param array $schedules
-     * @return array
-     */
-    public function addOneMinuteCronSchedule(array $schedules): array
-    {
-        $schedules['one_minute'] = [
-            'interval' => 60,
-            'display' => 'Every Minute'
-        ];
-
-        return $schedules;
-    }
 
 
     /**

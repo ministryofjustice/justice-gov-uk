@@ -17,6 +17,23 @@ final class ContentQualityIssueEmptyHeading extends ContentQualityIssue
 
     const ISSUE_LABEL = 'Headings without content';
 
+    public function addHooks(): void
+    {
+        // Call the parent class addHooks method.
+        parent::addHooks();
+
+        // Create a scheduled task to run `processPages` every minute.
+        add_action('init', function () {
+            if (!wp_next_scheduled('moj_content_quality_empty_heading_cron')) {
+                $jitter_between_runs = rand(0, 59);
+                wp_schedule_event(time() + $jitter_between_runs, 'one_minute', 'moj_content_quality_empty_heading_cron');
+            }
+        });
+
+        // Hook the cron job to the processPages method.
+        add_action('moj_content_quality_empty_heading_cron', [$this, 'processPages']);
+    }
+
 
     /**
      * Get the pages with anchor issues.
@@ -35,27 +52,79 @@ final class ContentQualityIssueEmptyHeading extends ContentQualityIssue
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified
-            FROM {$wpdb->posts}
-            WHERE post_type = 'page' AND post_content LIKE '%wp-block-heading%'
+            SELECT 
+                ID,
+                COALESCE(options.option_value, 'queued') AS issue_count
+            FROM {$wpdb->posts} AS p
+            -- To save us from running get_transient in a php loop, 
+            -- we can join the options table to get the transient value here
+            LEFT JOIN {$wpdb->options} AS options 
+            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:empty-heading:', p.ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+            ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+            WHERE
+                -- options value should be null or not an empty serialized array
+                ( options.option_value IS NULL OR options.option_value != 0 ) AND
+                post_type = 'page' 
+                AND post_content LIKE '%wp-block-heading%'
+                -- Post status should be publish, private or draft
+                AND post_status IN ('publish', 'private', 'draft')
+                -- If the _content_quality_exclude meta key is not set, or is set to 0.
+                AND (postmeta.meta_value IS NULL OR postmeta.meta_value = '0')
         ";
 
-        $wpdb->get_results($query);
-
+        // Loop over every page, and unserialize the value of this page's spelling issues.
         foreach ($wpdb->get_results($query) as $page) :
-            $empty_heading_count = $this->getEmptyHeadingsFromContent($page->post_content);
-
-            if ($empty_heading_count === 0) {
-                continue;
-            }
-
-            $pages_with_issue[$page->ID] = (object)[
-                'ID' => $page->ID,
-                'empty_heading_count' => $empty_heading_count,
-            ];
+            $pages_with_issue[$page->ID] = $page->issue_count;
         endforeach;
 
         return $pages_with_issue;
+    }
+
+
+
+    public function processPages(): void
+    {
+        $transient_updates = [];
+
+        // Run an SQL query to find pages with tables that have anchor tags with a `#...` destination.
+        global $wpdb;
+
+        $query = "
+            SELECT 
+                ID,
+                p.post_content
+            FROM {$wpdb->posts} AS p
+            -- To save us from running get_transient in a php loop, 
+            -- we can join the options table to get the transient value here
+            LEFT JOIN {$wpdb->options} AS options 
+            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:empty-heading:', p.ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta_2
+            ON postmeta_2.post_id = ID AND postmeta_2.meta_key = '_content_quality_exclude'
+            WHERE
+                -- options value should be null
+                options.option_value IS NULL AND
+                -- Post type should be page 
+                post_type = 'page' 
+                AND post_content LIKE '%wp-block-heading%'
+                -- Post status should be publish, private or draft
+                AND post_status IN ('publish', 'private', 'draft')
+                -- Exclude pages that have the _content_quality_exclude meta key set to 1
+                AND (postmeta_2.meta_value IS NULL OR postmeta_2.meta_value = '0')
+        ";
+
+        foreach ($wpdb->get_results($query) as $page) :
+            // Add the value to the transient updates array, this will be used in a bulk update later.
+            $transient_updates["$this->transient_key:{$page->ID}"] = $this->getEmptyHeadingsFromContent($page->post_content);
+        endforeach;
+
+        if (sizeof($transient_updates)) {
+            $expiry = time() + $this->transient_duration;
+            $this->bulkSetTransientInDatabase($transient_updates, $expiry);
+
+            // Individual page transients have been updated, so clear the cache for this issue as a whole.
+            delete_transient($this->transient_key);
+        }
     }
 
 
@@ -77,7 +146,13 @@ final class ContentQualityIssueEmptyHeading extends ContentQualityIssue
             return $issues;
         }
 
-        $count = $this->pages_with_issue[$post_id]->empty_heading_count;
+        // If the issue is 'queued', then append the appropriate message.
+        if ('queued' === $this->pages_with_issue[$post_id]) {
+            $issues[] = __('The page is queued for heading without content issues.', 'justice');
+            return $issues;
+        }
+
+        $count = $this->pages_with_issue[$post_id];
 
         $issues[] =  sprintf(_n('There is %d heading without content', 'There are %d headings without content', $count, 'justice'), $count);
 
