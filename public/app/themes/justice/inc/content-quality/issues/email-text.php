@@ -21,45 +21,104 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
     /**
      * Get the pages with inaccessible email text issues.
      *
-     * This function runs an SQL query to find pages with mailto strings.
-     * It checks if the link text is in an accessible format.
-     * The link text should eb an email address, not a generic "Email Us" or similar text.
+     * This function retrieves pages with spelling issues from cache only.
      *
      * @return array An array of pages with thead issues.
      */
     public function getPagesWithIssues(): array
     {
         $pages_with_issue = [];
-        $transient_updates = [];
 
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified, options.option_value AS inaccessible_email_text_count
-            FROM {$wpdb->posts}
+            SELECT
+                ID,
+                COALESCE(options.option_value, 'queued') AS issue_count
+            FROM {$wpdb->posts} AS p
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-text:', ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-text:', ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
             -- Where clauses
             WHERE
                 -- options value should be null or not 0
                 ( options.option_value IS NULL OR options.option_value != '0' ) AND
                 -- Post type should be page 
                 post_type = 'page' AND
-                -- Post content should contain a table tag
-                post_content LIKE '%mailto%'
+                -- Post status should be publish, private or draft
+                p.post_status IN ('publish', 'private', 'draft') AND
+                -- Post meta, for _content_quality_exclude, should be null or 0
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
+        ";
+
+        foreach ($wpdb->get_results($query) as $page) {
+            // Add the page to the pages with issue.
+            $pages_with_issue[$page->ID] = $page->issue_count;
+        }
+
+        return $pages_with_issue;
+    }
+
+
+    /**
+     * Process pages to identify inaccessible email text issues.
+     *
+     * This function runs an SQL query to find pages with mailto strings.
+     * It checks if the link text is in an accessible format.
+     * The link text should be an email address, not a generic "Email Us" or similar text.
+     *
+     * @return void
+     */
+    public function processPages(): void
+    {
+        $transient_updates = [];
+
+        global $wpdb;
+
+        $query = "
+            SELECT
+                ID,
+                -- Only return the post content if it contains an mailto string
+                CASE 
+                    WHEN p.post_content LIKE '%mailto%' THEN p.post_content 
+                    ELSE NULL 
+                END AS post_content,
+                -- Check if the post content contains an mailto string
+                IFNULL(p.post_content LIKE '%mailto%', 0) AS contains_target_string
+            FROM {$wpdb->posts} AS p
+            -- To save us from running get_transient in a php loop, 
+            -- we can join the options table to get the transient value here
+            LEFT JOIN {$wpdb->options} AS options 
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-text:', ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+            -- Where clauses
+            WHERE
+                -- options value should be null or not 0
+                -- ( options.option_value IS NULL ) AND
+                -- Post type should be page 
+                post_type = 'page' AND
+                -- Post status should be publish, private or draft
+                p.post_status IN ('publish', 'private', 'draft') AND
+                -- Post meta, for _content_quality_exclude, should be null or 0
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
         ";
 
         foreach ($wpdb->get_results($query) as $page) :
-            $inaccessible_email_text_count = is_null($page->inaccessible_email_text_count) ? null : (int)$page->inaccessible_email_text_count;
-
-            if (is_null($inaccessible_email_text_count)) {
-                // The table didn't contain a transient value, so we need to check the content.
-                $inaccessible_email_text_count = $this->getInaccessibleEmailLinksFromContent($page->post_content);
-                // Add the value to the transient updates array, this will be used in a bulk update later.
-                $transient_updates["$this->transient_key:{$page->ID}"] = $inaccessible_email_text_count;
+            if ($page->contains_target_string == 0) {
+                // If the post content does not contain any mailto string, set the transient value to 0.
+                $transient_updates["$this->transient_key:{$page->ID}"] = 0;
+                continue;
             }
+
+            // Get the number of inaccessibly formatted email links from the post content.
+            $inaccessible_email_text_count = $this->getInaccessibleEmailLinksFromContent($page->post_content);
+            // Add the value to the transient updates array, this will be used in a bulk update later.
+            $transient_updates["$this->transient_key:{$page->ID}"] = $inaccessible_email_text_count;
+
 
             // If the value is > 0, add it to the pages_with_issue array.
             if ($inaccessible_email_text_count) {
@@ -70,9 +129,10 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
         if (sizeof($transient_updates)) {
             $expiry = time() + $this->transient_duration;
             $this->bulkSetTransientInDatabase($transient_updates, $expiry);
-        }
 
-        return $pages_with_issue;
+            // Individual page transients have been updated, so clear the cache for this issue as a whole.
+            delete_transient($this->transient_key);
+        }
     }
 
 
@@ -91,6 +151,12 @@ final class ContentQualityIssueEmailText extends ContentQualityIssue
         $this->loadPagesWithIssues();
 
         if (empty($this->pages_with_issue[$post_id])) {
+            return $issues;
+        }
+
+        // If the issue is 'queued', then append the appropriate message.
+        if ('queued' === $this->pages_with_issue[$post_id]) {
+            $issues[] = __('The page is queued for invalid email link text issues.', 'justice');
             return $issues;
         }
 
