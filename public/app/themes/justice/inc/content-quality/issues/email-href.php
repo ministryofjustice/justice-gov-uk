@@ -20,58 +20,94 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
     /**
      * Get the pages with invalid email href issues.
      *
-     * This function runs an SQL query to find pages with mailto strings.
-     * It checks if the link href contains email addresses in a valid format.
-     * If the href is not a valid email address, it is counted as an issue.
+     * This function retrieves pages with email-href issues from cache only.
      *
      * @return array An array of pages with email-href issues.
      */
     public function getPagesWithIssues(): array
     {
         $pages_with_issue = [];
+
+        global $wpdb;
+
+        $query = "
+            SELECT ID,
+                COALESCE(options.option_value, 'queued') AS issue_count
+            FROM {$wpdb->posts} AS p
+            -- To save us from running get_transient in a php loop, 
+            -- we can join the options table to get the transient value here
+            LEFT JOIN {$wpdb->options} AS options 
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-href:', ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+            -- Where clauses
+            WHERE
+                ( options.option_value IS NULL OR options.option_value != '0' ) AND
+                post_type = 'page' AND
+                p.post_status IN ('publish', 'private', 'draft') AND
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
+
+        ";
+
+        foreach ($wpdb->get_results($query) as $page) {
+            // Add the page to the pages with issue.
+            $pages_with_issue[$page->ID] = $page->issue_count;
+        }
+
+        return $pages_with_issue;
+    }
+
+    /**
+     * Process pages for email href issues.
+     *
+     * This function runs an SQL query to find pages with mailto strings.
+     * It checks if the link href contains email addresses in a valid format.
+     * If the href is not a valid email address, it is counted as an issue.
+     *
+     * @return void 
+     */
+    public function processPages(): void
+    {
         $transient_updates = [];
 
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified, options.option_value AS invalid_email_href_count
-            FROM {$wpdb->posts}
+            SELECT 
+                ID,
+                post_content
+            FROM {$wpdb->posts} AS p
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-href:', ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:email-href:', ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
             -- Where clauses
             WHERE
-                -- options value should be null or not 0
-                ( options.option_value IS NULL OR options.option_value != '0' ) AND
-                -- Post type should be page 
+                -- options value should be null
+                options.option_value IS NULL AND
                 post_type = 'page' AND
-                -- Post content should contain a table tag
+                p.post_status IN ('publish', 'private', 'draft') AND
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0) AND
+                -- Post content should contain a mailto string
                 post_content LIKE '%mailto%'
         ";
 
         foreach ($wpdb->get_results($query) as $page) :
-            $invalid_email_href_count = is_null($page->invalid_email_href_count) ? null : (int)$page->invalid_email_href_count;
-
-            if (is_null($invalid_email_href_count)) {
-                // The table didn't contain a transient value, so we need to check the content.
-                $invalid_email_href_count = $this->getInvalidEmailsFromContent($page->post_content);
-                // Add the value to the transient updates array, this will be used in a bulk update later.
-                $transient_updates["$this->transient_key:{$page->ID}"] = $invalid_email_href_count;
-            }
-
-            // If the value is > 0, add it to the pages_with_issue array.
-            if ($invalid_email_href_count) {
-                $pages_with_issue[$page->ID] = $invalid_email_href_count;
-            }
+            // Get the number of invalid email hrefs from the post content.
+            $invalid_email_href_count = $this->getInvalidEmailsFromContent($page->post_content);
+            // Add the value to the transient updates array, this will be used in a bulk update later.
+            $transient_updates["$this->transient_key:{$page->ID}"] = $invalid_email_href_count;
         endforeach;
 
         if (sizeof($transient_updates)) {
             $expiry = time() + $this->transient_duration;
             $this->bulkSetTransientInDatabase($transient_updates, $expiry);
-        }
 
-        return $pages_with_issue;
+            // Individual page transients have been updated, so clear the cache for this issue as a whole.
+            delete_transient($this->transient_key);
+        }
     }
 
 
