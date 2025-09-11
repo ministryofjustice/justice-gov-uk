@@ -126,7 +126,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
      * Process pages for spelling issues.
      *
      * This is an expensive operation, so it is run in a cron job only.
-     * It retrieves pages that have not been processed yet, 
+     * It retrieves pages that have not been processed yet,
      * checks their content for spelling issues,
      * and updates the transient values in the database.
      *

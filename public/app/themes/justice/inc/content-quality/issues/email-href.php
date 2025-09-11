@@ -65,7 +65,7 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
      * It checks if the link href contains email addresses in a valid format.
      * If the href is not a valid email address, it is counted as an issue.
      *
-     * @return void 
+     * @return void
      */
     public function processPages(): void
     {

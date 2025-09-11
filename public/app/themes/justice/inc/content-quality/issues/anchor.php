@@ -103,7 +103,6 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
         ";
 
         foreach ($wpdb->get_results($query) as $page) {
-
             if ($page->contains_href_string == 0) {
                 // If the post content does not contain any href="#", set the transient value to an empty array.
                 // This will prevent the page from being processed again in the future.
