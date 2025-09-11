@@ -38,7 +38,11 @@ final class ContentQualityIssueSpellingTest extends \Codeception\Test\Unit
             ->with()
             ->andReturn(['http', 'https']);
 
-        $instance = new ContentQualityIssueSpelling();
+        // Use a dictionary that's available in Alpine (local) and Ubuntu (GitHub PHP Test workflow).
+        $dictionary_ids = ['en_GB'];
+
+        // Create an instance of ContentQualityIssueSpelling with the dictionary IDs, and no dictionary file.
+        $instance = new ContentQualityIssueSpelling($dictionary_ids, false);
 
         // Test empty content
         $this->assertSame([], $instance->getSpellingIssuesFromContent('', []));
@@ -75,22 +79,22 @@ final class ContentQualityIssueSpellingTest extends \Codeception\Test\Unit
         $this->assertSame([], $instance->getSpellingIssuesFromContent("test 'solicitor test", []));
         $this->assertSame([], $instance->getSpellingIssuesFromContent("test 'solicitor' test", []));
         $this->assertSame([], $instance->getSpellingIssuesFromContent("test solicitor' test", []));
-        
+
         // Test URLs
         $this->assertSame([], $instance->getSpellingIssuesFromContent('example.com/wp-content/london', []));
-        
+
         // Test words with brackets, these must be passed as allowed words, not in the dictionary.
         $this->assertSame([], $instance->getSpellingIssuesFromContent('test child(ren) test', ['child(ren)']));
 
         // Test content with the dictionary file
-        $instance = new ContentQualityIssueSpelling();
         $dictionary_file = dirname(__DIR__) . '/Unit/fixtures/content-quality-spellings.dic';
+        $instance = new ContentQualityIssueSpelling($dictionary_ids, $dictionary_file);
         $this->assertSame([], $instance->getSpellingIssuesFromContent('This is a test with notaword and documen and color.', [], $dictionary_file));
     }
 
     public function testAllowedSpellingSanitization(): void
     {
-        $instance = new ContentQualityIssueSpelling();
+        $instance = new ContentQualityIssueSpelling(['en_GB'], false);
 
         // Test empty input
         $this->assertSame('', $instance->allowedSpellingSanitization(''));

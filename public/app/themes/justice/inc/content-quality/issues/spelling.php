@@ -17,11 +17,43 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
     private ?Hunspell $hunspell = null;
 
-    private $dictionary_file = null;
+    private array $dictionary_ids = [];
+
+    private ?string $dictionary_file = null;
 
     private ?array $allowed_words = null;
 
     public int $transient_duration = 90 * 24 * 60 * 60; // 90 days in seconds (90 days * 24 hours * 60 minutes * 60 seconds).
+
+    /**
+     * Constructor.
+     *
+     * Accepts an argument for dictionary id's, which can be used to specify the dictionary IDs to use for spell checking.
+     */
+    public function __construct(?array $dictionary_ids = null, string|false|null $dictionary_file = null)
+    {
+        parent::__construct();
+
+        // Set the dictionary IDs, use a default if none are provided.
+        $this->dictionary_ids = $dictionary_ids ?: ['en_GB-large'];
+
+        error_log('type od dictionary_file: ' . gettype($dictionary_file));
+
+        // Set the dictionary file.
+        switch (gettype($dictionary_file)) {
+            case 'string':
+                // If the dictionary file is a string, use it as the path to the dictionary file.
+                $this->dictionary_file = $dictionary_file;
+                break;
+            case 'NULL':
+                // If the dictionary file is null, use the default dictionary file.
+                $this->dictionary_file = get_template_directory() . '/inc/content-quality/issues/spelling-dictionary.dic';
+                break;
+            default:
+                // If the dictionary file is false, do not use a dictionary file.
+                $this->dictionary_file = null;
+        }
+    }
 
     public function addHooks(): void
     {
@@ -44,6 +76,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Hook the cron job to the getPagesWithIssues method.
         add_action('moj_content_quality_spelling_cron', [$this, 'getPagesWithIssues']);
 
+        // Handle the update of allowed words, i.e. clear transients if necessary.
         add_action('update_option_moj_content_quality_spelling_allowed_words', [$this, 'handleAllowedWordsUpdate'], 10, 2);
     }
 
@@ -144,13 +177,8 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
                     $this->allowed_words = array_filter(explode("\n", $allowed_words));
                 }
 
-                if (!$this->dictionary_file) {
-                    // Get the dictionary file path.
-                    $this->dictionary_file = get_template_directory() . '/inc/content-quality/issues/spelling-dictionary.dic';
-                }
-
                 // The table didn't contain a transient value, so we need to check the content.
-                $spelling_issues = $this->getSpellingIssuesFromContent($page->post_content, $this->allowed_words, $this->dictionary_file);
+                $spelling_issues = $this->getSpellingIssuesFromContent($page->post_content, $this->allowed_words);
 
                 // Increase the processed count.
                 $processed_count++;
@@ -225,9 +253,10 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
      * It strips HTML tags, removes URLs, and checks the content against the Hunspell dictionary.
      *
      * @param string $content The content to check.
+     * @param array $allowed_words An array of words that should be allowed even if they are not in the dictionary.
      * @return array An array of spelling issues found in the content.
      */
-    public function getSpellingIssuesFromContent(string $content, array $allowed_words, ?string $dictionary_file = null): array
+    public function getSpellingIssuesFromContent(string $content, array $allowed_words): array
     {
         if (empty($content)) {
             return [];
@@ -273,7 +302,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         if (!($this->hunspell instanceof Hunspell)) {
             $this->hunspell = Hunspell::create();
 
-            if ($dictionary_file && file_exists($dictionary_file)) {
+            if ($this->dictionary_file && file_exists($this->dictionary_file)) {
                 // Start a workaround to set the dictionary file.
                 // This is needed because the Hunspell class does not allow setting the dictionary file directly.
 
@@ -281,19 +310,21 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
                 $binary_path = $this->hunspell->getBinaryPath();
 
                 // 2. Add the dictionary file as an argument.
-                $binary_path = $binary_path->addArgs(['-p', $dictionary_file]);
+                $binary_path = $binary_path->addArgs(['-p', $this->dictionary_file]);
 
                 // 3. Reconstruct the Hunspell instance with the new binary path.
                 // Note that `__construct` is a public method, so we can call it directly.
                 $this->hunspell->__construct($binary_path);
-            } else if ($dictionary_file) {
-                error_log("Spelling dictionary file not found: $dictionary_file");
+            } else if ($this->dictionary_file) {
+                error_log("Spelling dictionary file not found: $this->dictionary_file");
+            } else {
+                error_log('No dictionary file provided, not using personal dictionary.');
             }
         }
 
         $spelling_issues = [];
 
-        $misspellings = $this->hunspell->check($content, ['en_GB-large']);
+        $misspellings = $this->hunspell->check($content, $this->dictionary_ids);
 
         $misspelling_words = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings));
 
