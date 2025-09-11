@@ -75,7 +75,13 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
         $query = "
             SELECT 
                 ID,
-                post_content
+                -- Only return the post content if it contains an mailto string
+                CASE 
+                    WHEN p.post_content LIKE '%mailto%' THEN p.post_content 
+                    ELSE NULL 
+                END AS post_content,
+                -- Check if the post content contains an mailto string
+                IFNULL(p.post_content LIKE '%mailto%', 0) AS contains_target_string
             FROM {$wpdb->posts} AS p
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
@@ -89,12 +95,16 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
                 options.option_value IS NULL AND
                 post_type = 'page' AND
                 p.post_status IN ('publish', 'private', 'draft') AND
-                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0) AND
-                -- Post content should contain a mailto string
-                post_content LIKE '%mailto%'
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
         ";
 
         foreach ($wpdb->get_results($query) as $page) :
+            if ($page->contains_target_string == 0) {
+                // If the post content does not contain any mailto string, set the transient value to 0.
+                $transient_updates["$this->transient_key:{$page->ID}"] = 0;
+                continue;
+            }
+
             // Get the number of invalid email hrefs from the post content.
             $invalid_email_href_count = $this->getInvalidEmailsFromContent($page->post_content);
             // Add the value to the transient updates array, this will be used in a bulk update later.
@@ -126,6 +136,12 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
         $this->loadPagesWithIssues();
 
         if (empty($this->pages_with_issue[$post_id])) {
+            return $issues;
+        }
+
+        // If the issue is 'queued', then append the appropriate message.
+        if ('queued' === $this->pages_with_issue[$post_id]) {
+            $issues[] = __('The page is queued for invalid email address issues.', 'justice');
             return $issues;
         }
 
