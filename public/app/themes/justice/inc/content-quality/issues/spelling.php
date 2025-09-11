@@ -37,8 +37,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Set the dictionary IDs, use a default if none are provided.
         $this->dictionary_ids = $dictionary_ids ?: ['en_GB-large'];
 
-        error_log('type od dictionary_file: ' . gettype($dictionary_file));
-
         // Set the dictionary file.
         switch (gettype($dictionary_file)) {
             case 'string':
@@ -317,47 +315,50 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
                 $this->hunspell->__construct($binary_path);
             } else if ($this->dictionary_file) {
                 error_log("Spelling dictionary file not found: $this->dictionary_file");
-            } else {
-                error_log('No dictionary file provided, not using personal dictionary.');
             }
         }
 
-        $spelling_issues = [];
+        // Get the misspellings from the Hunspell instance.
+        $misspellings_iterator_1 = $this->hunspell->check($content, $this->dictionary_ids);
 
-        $misspellings = $this->hunspell->check($content, $this->dictionary_ids);
+        // Get an array of words that are misspelled.
+        $misspelling_words_1 = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings_iterator_1));
+        
+        // Ensure the array is unique, do this ASAP to avoid wasted processing.
+        $misspelling_words_1 = array_unique($misspelling_words_1);
 
-        $misspelling_words = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings));
+        // Hunspell will report a word as misspelled if it starts or ends with a single quote.
+        // We need to handle this case, as it is not a spelling issue.
+        // Classify the misspelled words into two arrays:
+        // 1. Words that need to be retried (start or end with a single quote).
+        // 2. Words that can be reported as misspelled.
+        $misspellings_to_retry = [];
+        $misspellings_to_report = [];
 
-        // TODO - tidy this up
+        foreach ($misspelling_words_1 as $word) {
+            if((str_starts_with($word, "'") || str_ends_with($word, "'"))) {
+                // If the word starts or ends with a single quote, we need to retry it.
+                // Trim the quotes and add it to the retry list.
+                $misspellings_to_retry[] =  trim($word, "'");
+            } else {
+                // Otherwise, we can add it to the misspellings report.
+                $misspellings_to_report[] = $word;
+            }
+        }
 
-        $misspellings_starting_or_ending_with_quote = array_filter(
-            $misspelling_words,
-            fn($misspelling) => (str_starts_with($misspelling, "'") || str_ends_with($misspelling, "'"))
-        );
+        // Get the misspellings from the Hunspell instance - take 2.
+        $misspellings_iterator_2 = $this->hunspell->check(implode(' ', $misspellings_to_retry), $this->dictionary_ids);
 
-        // Remove the quotes and try again.
-        $retry_words = array_map(fn($misspelling) => trim($misspelling, "'"), $misspellings_starting_or_ending_with_quote);
-
-        $retry_misspellings = $this->hunspell->check(implode(' ', $retry_words), ['en_GB-large']);
-
-        // Remove $misspellings_starting_or_ending_with_quote from $misspelling_words
-        $misspelling_words = array_diff($misspelling_words, $misspellings_starting_or_ending_with_quote);
+        // Get an array of words that are misspelled - take 2.
+        $misspelling_words_2 = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings_iterator_2));
 
         // Add the retry misspellings to the misspelling words.
-        $misspelling_words = array_merge($misspelling_words, array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($retry_misspellings)));
-
-        // error_log('Misspellings found: ' . implode(', ', $misspellings_starting_or_ending_with_quote));
+        $misspelling_words = array_merge($misspellings_to_report, $misspelling_words_2);
 
         // Order alphabetically
         sort($misspelling_words);
 
-        foreach ($misspelling_words as $word) {
-            if (!in_array($word, $spelling_issues)) {
-                $spelling_issues[] = $word;
-            }
-        }
-
-        return $spelling_issues;
+        return $misspelling_words;
     }
 
 
