@@ -49,7 +49,6 @@ final class ContentQualityIssueEmptyHeading extends ContentQualityIssue
                 -- options value should be null or not an empty serialized array
                 ( options.option_value IS NULL OR options.option_value != 0 ) AND
                 post_type = 'page' 
-                AND post_content LIKE '%wp-block-heading%'
                 -- Post status should be publish, private or draft
                 AND post_status IN ('publish', 'private', 'draft')
                 -- If the _content_quality_exclude meta key is not set, or is set to 0.
@@ -76,7 +75,13 @@ final class ContentQualityIssueEmptyHeading extends ContentQualityIssue
         $query = "
             SELECT 
                 ID,
-                p.post_content
+                -- Only return the post content if it contains an wp-block-heading
+                CASE 
+                    WHEN p.post_content LIKE '%wp-block-heading%' THEN p.post_content 
+                    ELSE NULL 
+                END AS post_content,
+                -- Check if the post content contains an wp-block-heading
+                IFNULL(p.post_content LIKE '%wp-block-heading%', 0) AS contains_target_string
             FROM {$wpdb->posts} AS p
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
@@ -89,7 +94,6 @@ final class ContentQualityIssueEmptyHeading extends ContentQualityIssue
                 options.option_value IS NULL AND
                 -- Post type should be page 
                 post_type = 'page' 
-                AND post_content LIKE '%wp-block-heading%'
                 -- Post status should be publish, private or draft
                 AND post_status IN ('publish', 'private', 'draft')
                 -- Exclude pages that have the _content_quality_exclude meta key set to 1
@@ -97,6 +101,12 @@ final class ContentQualityIssueEmptyHeading extends ContentQualityIssue
         ";
 
         foreach ($wpdb->get_results($query) as $page) :
+            if ($page->contains_target_string == 0) {
+                // If the post content does not contain any mailto string, set the transient value to 0.
+                $transient_updates["$this->transient_key:{$page->ID}"] = 0;
+                continue;
+            }
+
             // Add the value to the transient updates array, this will be used in a bulk update later.
             $transient_updates["$this->transient_key:{$page->ID}"] = $this->getEmptyHeadingsFromContent($page->post_content);
         endforeach;
