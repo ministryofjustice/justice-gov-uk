@@ -19,6 +19,7 @@ require_once 'inc/amazon-s3-and-cloudfront-tweaks.php';
 require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
 require_once 'inc/commands.php';
+require_once 'inc/content-quality/commands.php';
 require_once 'inc/content-quality/content-quality.php';
 require_once 'inc/content.php';
 require_once 'inc/core.php';
