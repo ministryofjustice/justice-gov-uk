@@ -94,11 +94,11 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', p.ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', p.ID)
             LEFT JOIN {$wpdb->postmeta} AS postmeta
-            ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
             LEFT JOIN {$wpdb->postmeta} AS postmeta_2
-            ON postmeta_2.post_id = ID AND postmeta_2.meta_key = '_content_quality_exclude'
+                ON postmeta_2.post_id = ID AND postmeta_2.meta_key = '_content_quality_exclude'
             -- Where clauses
             WHERE
                 -- options value should be null or not an empty serialized array
@@ -151,11 +151,11 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', p.ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', p.ID)
             LEFT JOIN {$wpdb->postmeta} AS postmeta
-            ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
             LEFT JOIN {$wpdb->postmeta} AS postmeta_2
-            ON postmeta_2.post_id = ID AND postmeta_2.meta_key = '_content_quality_exclude'
+                ON postmeta_2.post_id = ID AND postmeta_2.meta_key = '_content_quality_exclude'
             -- Where clauses
             WHERE
                 -- options value should be null

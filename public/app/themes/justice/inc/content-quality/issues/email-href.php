@@ -31,7 +31,8 @@ final class ContentQualityIssueEmailHref extends ContentQualityIssue
         global $wpdb;
 
         $query = "
-            SELECT ID,
+            SELECT 
+                ID,
                 COALESCE(options.option_value, 'queued') AS issue_count
             FROM {$wpdb->posts} AS p
             -- To save us from running get_transient in a php loop, 

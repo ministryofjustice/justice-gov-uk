@@ -43,9 +43,9 @@ final class ContentQualityIssueThead extends ContentQualityIssue
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:thead:', p.ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:thead:', p.ID)
             LEFT JOIN {$wpdb->postmeta} AS postmeta
-            ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
             WHERE
                 -- options value should be null or not zero
                 ( options.option_value IS NULL OR options.option_value != '0' ) AND
@@ -89,9 +89,9 @@ final class ContentQualityIssueThead extends ContentQualityIssue
                 ( CHAR_LENGTH(post_content) - CHAR_LENGTH( REPLACE ( post_content, '<thead', SPACE(LENGTH('<thead')-1) ) ) ) AS tables_without_thead
             FROM {$wpdb->posts} AS p
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:empty-heading:', p.ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:thead:', p.ID)
             LEFT JOIN {$wpdb->postmeta} AS postmeta
-            ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
             WHERE 
                 options.option_value IS NULL AND
                 post_type = 'page' AND
