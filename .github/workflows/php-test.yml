@@ -18,6 +18,9 @@ jobs:
       with:
         php-version: ${{ matrix.php-version }}
 
+    - name: "Install system dependencies"
+      run: sudo apt-get update && sudo apt-get install -y hunspell hunspell-en-gb
+
     - name: "Cache Composer dependencies"
       id: composer-cache
       run: echo "::set-output name=dir::$(composer config cache-files-dir)"
@@ -39,12 +42,6 @@ jobs:
         rm -f auth.json
       env:
         RELEVANSSI_API_KEY: ${{ secrets.RELEVANSSI_API_KEY }}
-
-    - name: "Install system dependencies"
-      run: sudo apt-get update && sudo apt-get install -y hunspell hunspell-en-gb
-
-    - name: "Log hunspell version and dictionary"
-      run: hunspell --version && hunspell -D
 
     - name: "Run tests"
       run: make test
