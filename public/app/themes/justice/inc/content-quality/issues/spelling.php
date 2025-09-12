@@ -21,8 +21,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
     private ?string $dictionary_file = null;
 
-    private ?array $allowed_words = null;
-
     public int $transient_duration = 90 * 24 * 60 * 60; // 90 days in seconds (90 days * 24 hours * 60 minutes * 60 seconds).
 
     /**
@@ -61,51 +59,22 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Register the settings field for allowed words.
         add_action('admin_init', [$this, 'registerSettingsField']);
 
-        // Create a 1 minute schedule
-        add_filter('cron_schedules', [$this, 'addOneMinuteCronSchedule']);
-
-        // Create a scheduled task to run `getPagesWithIssues` every minute.
-        add_action('init', function () {
-            if (!wp_next_scheduled('moj_content_quality_spelling_cron')) {
-                wp_schedule_event(time(), 'one_minute', 'moj_content_quality_spelling_cron');
-            }
-        });
-
-        // Hook the cron job to the getPagesWithIssues method.
-        add_action('moj_content_quality_spelling_cron', [$this, 'getPagesWithIssues']);
-
         // Handle the update of allowed words, i.e. clear transients if necessary.
         add_action('update_option_moj_content_quality_spelling_allowed_words', [$this, 'handleAllowedWordsUpdate'], 10, 2);
     }
 
 
-    /**
-     * Adds a custom cron schedule of 1 minute.
-     *
-     * @param array $schedules
-     * @return array
-     */
-    public function addOneMinuteCronSchedule(array $schedules): array
-    {
-        $schedules['one_minute'] = [
-            'interval' => 60,
-            'display' => 'Every Minute'
-        ];
-
-        return $schedules;
-    }
 
 
     /**
      * Get the pages with spelling issues.
      *
-     * This function retrieves pages with spelling issues by checking the content against the Hunspell dictionary.
-     * If a cached/transient value is found in the database, it will be used.
-     * If not, it will process the content and cache the results in a transient.
+     * This function retrieves pages with spelling issues from cache only.
      *
      * The result will be an array in the shape of:
      * [
      *    <page_id> => [<misspelled_word_1>, <misspelled_word_2>, ...],
+     *    <page_id> => 'queued', // If the page is queued for processing.
      *    ...
      * ]
      *
@@ -113,95 +82,114 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
      */
     public function getPagesWithIssues(): array
     {
-        // Arrays for appending to later.
-        // This will contain the pages with issues.
         $pages_with_issue = [];
-        // If pages have been processed then their issues will be appended to this variable, to be saved in the database.
-        $transient_updates = [];
-
-        // Has the function been triggered by a cron job?
-        $doing_cron = defined('DOING_CRON') && DOING_CRON;
-        // If so, lets process a batch of 10 pages at a time.
-        // If not, we have been triggered by a browser request, so don't process a batch.
-        $process_batch_size = $doing_cron ? 10 : 0;
 
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content, post_modified, 
-                options.option_value AS spelling_issues,
-                postmeta.meta_value  AS language
-            FROM {$wpdb->posts}
+            SELECT 
+                ID,
+                COALESCE(options.option_value, 'queued') AS spelling_issues
+            FROM {$wpdb->posts} AS p
             -- To save us from running get_transient in a php loop, 
             -- we can join the options table to get the transient value here
             LEFT JOIN {$wpdb->options} AS options 
-            ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', ID)
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', p.ID)
             LEFT JOIN {$wpdb->postmeta} AS postmeta
-            ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
+            LEFT JOIN {$wpdb->postmeta} AS postmeta_2
+                ON postmeta_2.post_id = ID AND postmeta_2.meta_key = '_content_quality_exclude'
             -- Where clauses
             WHERE
-                -- options value should be null or not 0
-                ( options.option_value IS NULL OR options.option_value != '0' ) AND
+                -- options value should be null or not an empty serialized array
+                ( options.option_value IS NULL OR options.option_value != 'a:0:{}' ) AND
                 -- Post type should be page 
-                post_type = 'page'
+                p.post_type = 'page'
                 -- Post status should be publish, private or draft
-                AND post_status IN ('publish', 'private', 'draft')
+                AND p.post_status IN ('publish', 'private', 'draft')
+                -- If the language is set, it should be English GB.
+                AND (postmeta.meta_value IS NULL OR postmeta.meta_value = 'en_GB')
+                -- If the _content_quality_exclude meta key is not set, or is set to 0.
+                AND (postmeta_2.meta_value IS NULL OR postmeta_2.meta_value = 0)
         ";
 
-        // Create a counter for how many pages we have processed.
-        $processed_count = 0;
+        // Loop over every page, and unserialize the value of this page's spelling issues.
+        foreach ($wpdb->get_results($query) as $page) :
+            $pages_with_issue[$page->ID] = maybe_unserialize($page->spelling_issues);
+        endforeach;
+
+        return $pages_with_issue;
+    }
+
+
+    /**
+     * Process pages for spelling issues.
+     *
+     * This is an expensive operation, so it is run in a cron job only.
+     * It retrieves pages that have not been processed yet,
+     * checks their content for spelling issues,
+     * and updates the transient values in the database.
+     *
+     * @return void
+     */
+    public function processPages(): void
+    {
+        // Get the allowed words from the options table.
+        $allowed_words_string = get_option('moj_content_quality_spelling_allowed_words', '');
+        $allowed_words = array_filter(explode("\n", $allowed_words_string));
+
+        // When pages are processed, their issues will be appended to this variable, to be saved in the database.
+        $transient_updates = [];
+
+        global $wpdb;
+
+        $query = "
+            SELECT 
+                ID,
+                p.post_content
+            FROM {$wpdb->posts} AS p
+            -- To save us from running get_transient in a php loop, 
+            -- we can join the options table to get the transient value here
+            LEFT JOIN {$wpdb->options} AS options 
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:spelling:', p.ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_language'
+            LEFT JOIN {$wpdb->postmeta} AS postmeta_2
+                ON postmeta_2.post_id = ID AND postmeta_2.meta_key = '_content_quality_exclude'
+            -- Where clauses
+            WHERE
+                -- options value should be null
+                options.option_value IS NULL AND
+                -- Post type should be page 
+                p.post_type = 'page'
+                -- Post status should be publish, private or draft
+                AND p.post_status IN ('publish', 'private', 'draft')
+                -- If the language is set, it should be English GB.
+                AND (postmeta.meta_value IS NULL OR postmeta.meta_value = 'en_GB')
+                -- If the _content_quality_exclude meta key is not set, or is set to 0.
+                AND (postmeta_2.meta_value IS NULL OR postmeta_2.meta_value = 0)
+            -- Set a limit to the number of pages to process at once.
+            LIMIT 10
+        ";
 
         // Loop over every page, and work out if we need to process it's content with the spelling checker.
         foreach ($wpdb->get_results($query) as $page) :
-            $path = parse_url(get_permalink($page->ID), PHP_URL_PATH);
-            if (preg_match('/^\/news(-\d+)?\//', $path)) {
-                // If the path starts with /news/ or /news-<number>/, skip it.
-                continue;
-            }
+            // Let's process some content...
 
-            if (isset($page->language) && 'en_GB' !== $page->language) {
-                // Skip pages that are not English GB.
-                continue;
-            }
+            // The table didn't contain a transient value, so we need to check the content.
+            $spelling_issues = $this->getSpellingIssuesFromContent($page->post_content, $allowed_words);
 
-            // Attempt to unserialize the value of this page's spelling issues.
-            $spelling_issues = maybe_unserialize($page->spelling_issues);
-
-            if (is_null($spelling_issues) && $processed_count < $process_batch_size) {
-                // Let's process some content...
-                if (!$this->allowed_words) {
-                    // Get the allowed words from the options table.
-                    $allowed_words = get_option('moj_content_quality_spelling_allowed_words', '');
-                    $this->allowed_words = array_filter(explode("\n", $allowed_words));
-                }
-
-                // The table didn't contain a transient value, so we need to check the content.
-                $spelling_issues = $this->getSpellingIssuesFromContent($page->post_content, $this->allowed_words);
-
-                // Increase the processed count.
-                $processed_count++;
-
-                // Add the value to the transient updates array, this will be used in a bulk update later.
-                $transient_updates["$this->transient_key:{$page->ID}"] = serialize($spelling_issues);
-            }
-
-            if (is_null($spelling_issues)) {
-                // If spelling_issues is still null here, we have reached the batch size, mark the page as queued.
-                $spelling_issues = 'queued';
-            }
-
-            // If the value is queued, or the array is not empty, add the value to the pages_with_issue array.
-            if (!empty($spelling_issues)) {
-                $pages_with_issue[$page->ID] = $spelling_issues;
-            }
+            // Add the value to the transient updates array, this will be used in a bulk update later.
+            $transient_updates["$this->transient_key:{$page->ID}"] = serialize($spelling_issues);
         endforeach;
 
         if (sizeof($transient_updates)) {
             $expiry = time() + $this->transient_duration;
             $this->bulkSetTransientInDatabase($transient_updates, $expiry);
-        }
 
-        return $pages_with_issue;
+            // Individual page transients have been updated, so clear the cache for this issue as a whole.
+            delete_transient($this->transient_key);
+        }
     }
 
 
@@ -323,7 +311,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
 
         // Get an array of words that are misspelled.
         $misspelling_words_1 = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings_iterator_1));
-        
+
         // Ensure the array is unique, do this ASAP to avoid wasted processing.
         $misspelling_words_1 = array_unique($misspelling_words_1);
 
@@ -527,7 +515,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // If any words have been removed from the allowed list, then we need to delete the transients to reprocess all pages.
         if (sizeof($removed_words)) {
             global $wpdb;
-            $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_moj:content-quality:issue:spelling:%'");
+            $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_moj:content-quality:issue:spelling%'");
             // Return early, we don't need to do anything else.
             return;
         }
@@ -557,5 +545,8 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
             error_log('Deleting transient for page ID: ' . $page_id);
             $this->deleteTransientFromDatabase($this->transient_key . ':' . $page_id);
         }
+
+        // Individual page transients have been updated, so clear the cache for this issue as a whole.
+        delete_transient($this->transient_key);
     }
 }

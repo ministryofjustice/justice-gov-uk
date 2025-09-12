@@ -59,6 +59,8 @@ class ContentQuality
         add_filter('parse_query', [$this, 'editorFiltering']);
         // Options page.
         add_action('admin_menu', [$this, 'addOptionsPage']);
+        // Create a 1 minute schedule
+        add_filter('cron_schedules', [$this, 'addOneMinuteCronSchedule']);
     }
 
     /**
@@ -83,5 +85,22 @@ class ContentQuality
         // Add more issues here as needed.
         // e.g. new ContentQualityIssueAltText();
         // e.g. new ContentQualityIssueEmptyHeadings();
+    }
+
+
+    /**
+     * Adds a custom cron schedule of 1 minute.
+     *
+     * @param array $schedules
+     * @return array
+     */
+    public function addOneMinuteCronSchedule(array $schedules): array
+    {
+        $schedules['one_minute'] = [
+            'interval' => 60,
+            'display' => 'Every Minute'
+        ];
+
+        return $schedules;
     }
 }

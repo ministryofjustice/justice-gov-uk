@@ -45,6 +45,8 @@ class ContentQualityIssue
      */
     public int $transient_duration = 7 * 24 * 60 * 60; // Default to 1 week in seconds (7 days * 24 hours * 60 minutes * 60 seconds).
 
+    public string $cron_name = '';
+
 
     /**
      * Constructor
@@ -60,6 +62,8 @@ class ContentQualityIssue
         }
 
         $this->transient_key = 'moj:content-quality:issue:' . $this::ISSUE_SLUG;
+
+        $this->cron_name =  'moj_content_quality_cron_' . str_replace('-', '_', $this::ISSUE_SLUG);
 
         $this->addHooks();
     }
@@ -99,6 +103,21 @@ class ContentQualityIssue
             $this->deleteTransientFromDatabase($this->transient_key);
             $this->deleteTransientFromDatabase("$this->transient_key:{$post_id}");
         });
+
+        // Create a scheduled task to run `processPages` every minute.
+        add_action('init', function () {
+            if (!wp_next_scheduled($this->cron_name)) {
+                // Add a random jitter between 0 and 59 seconds to the next scheduled time.
+                // This is to prevent all crons from running at the same time.
+                $jitter_between_runs = rand(0, 59);
+                wp_schedule_event(time() + $jitter_between_runs, 'one_minute', $this->cron_name);
+            }
+        });
+
+        if (method_exists($this, 'processPages')) {
+            // Hook the cron job to the processPages method.
+            add_action($this->cron_name, [$this, 'processPages']);
+        }
     }
 
 

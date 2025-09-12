@@ -28,9 +28,7 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
     /**
      * Load the pages with anchor issues.
      *
-     * This function runs an SQL query to find pages with anchor tags that have a # destination.
-     * It checks if there is an element with a matching ID for each anchor.
-     * If there is no matching element, it adds the page to the $this->pages_with_issue property.
+     * This function retrieves pages with anchor issues from cache only.
      *
      * @return array An array of pages with anchor issues.
      */
@@ -42,12 +40,76 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
         global $wpdb;
 
         $query = "
-            SELECT ID, post_content
-            FROM {$wpdb->posts}
-            WHERE post_type = 'page' AND post_content LIKE '%href=\"#%'
+            SELECT 
+                ID,
+                COALESCE(options.option_value, 'queued') AS issues
+            FROM {$wpdb->posts} AS p
+            LEFT JOIN {$wpdb->options} AS options 
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:anchor:', p.ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+            WHERE 
+                ( options.option_value IS NULL OR options.option_value != 'a:0:{}' ) AND
+                post_type = 'page' AND 
+                p.post_status IN ('publish', 'private', 'draft') AND
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
+        ";
+
+        // Loop over every page, and unserialize the value of this page's spelling issues.
+        foreach ($wpdb->get_results($query) as $page) :
+            $pages_with_issue[$page->ID] = maybe_unserialize($page->issues);
+        endforeach;
+
+        return $pages_with_issue;
+    }
+
+
+    /**
+     * Process pages for anchor issues.
+     *
+     * This function runs an SQL query to find pages with anchor tags that have a # destination.
+     * It checks if there is an element with a matching ID for each anchor.
+     * If there is no matching element, it adds the anchor issue to the transient updates array.
+     * Finally, it updates the transients in the database.
+     *
+     * @return void
+     */
+    public function processPages(): void
+    {
+        $transient_updates = [];
+
+        global $wpdb;
+
+        $query = "
+            SELECT 
+                ID,
+                -- Only return the post content if it contains an href=\"#\"
+                CASE 
+                    WHEN p.post_content LIKE '%href=\"#%' THEN p.post_content 
+                    ELSE NULL 
+                END AS post_content,
+                -- Check if the post content contains an href=\"#\"
+                IFNULL(p.post_content LIKE '%href=\"#%', 0) AS contains_href_string
+            FROM {$wpdb->posts} AS p
+            LEFT JOIN {$wpdb->options} AS options 
+                ON options.option_name = CONCAT('_transient_moj:content-quality:issue:anchor:', p.ID)
+            LEFT JOIN {$wpdb->postmeta} AS postmeta
+                ON postmeta.post_id = ID AND postmeta.meta_key = '_content_quality_exclude'
+            WHERE 
+                ( options.option_value IS NULL ) AND
+                post_type = 'page' AND 
+                p.post_status IN ('publish', 'private', 'draft') AND
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = 0)
         ";
 
         foreach ($wpdb->get_results($query) as $page) {
+            if ($page->contains_href_string == 0) {
+                // If the post content does not contain any href="#", set the transient value to an empty array.
+                // This will prevent the page from being processed again in the future.
+                $transient_updates["$this->transient_key:{$page->ID}"] = serialize([]);
+                continue;
+            }
+
             // Keep track of broken anchors for this page.
             $broken_anchors = [];
 
@@ -63,16 +125,17 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
                 }
             }
 
-            // If there are broken anchors, add the page to the pages_with_issue array.
-            if (!empty($broken_anchors)) {
-                $pages_with_issue[$page->ID] = (object)[
-                    'ID' => $page->ID,
-                    'broken_anchors' =>  $broken_anchors
-                ];
-            }
+            // Add the value to the transient updates array, this will be used in a bulk update later.
+            $transient_updates["$this->transient_key:{$page->ID}"] = serialize($broken_anchors);
         }
 
-        return $pages_with_issue;
+        if (sizeof($transient_updates)) {
+            $expiry = time() + $this->transient_duration;
+            $this->bulkSetTransientInDatabase($transient_updates, $expiry);
+
+            // Individual page transients have been updated, so clear the cache for this issue as a whole.
+            delete_transient($this->transient_key);
+        }
     }
 
     /**
@@ -93,7 +156,13 @@ final class ContentQualityIssueAnchor extends ContentQualityIssue
             return $issues;
         }
 
-        $broken_anchors = $this->pages_with_issue[$post_id]->broken_anchors;
+        // If the issue is 'queued', then append the appropriate message.
+        if ('queued' === $this->pages_with_issue[$post_id]) {
+            $issues[] = __('The page is queued for broken anchor issues.', 'justice');
+            return $issues;
+        }
+
+        $broken_anchors = $this->pages_with_issue[$post_id];
         $broken_anchors_string = implode(', ', $broken_anchors);
         $count = count($broken_anchors);
 
