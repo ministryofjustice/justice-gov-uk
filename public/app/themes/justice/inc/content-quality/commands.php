@@ -47,9 +47,6 @@ class ContentQualityCommands
                     'post_status' => ['publish', 'private'],
                 ]);
 
-                // WP_CLI::log('IDS: ' . implode(', ', $get_all_page_ids->posts));
-                // WP_CLI::log('Count: ' . count($get_all_page_ids->posts));
-
                 // Loop through all posts, and if it is a news post, set the metadata _content_quality_exclude to 1.
                 foreach ($get_all_page_ids->posts as $page_id) {
                     $path = parse_url(get_permalink($page_id), PHP_URL_PATH);
