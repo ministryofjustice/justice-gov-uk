@@ -372,9 +372,6 @@ class ContentQualityCommands
                     wp_cache_flush();
                 }
 
-
-
-
                 break;
 
             default:
