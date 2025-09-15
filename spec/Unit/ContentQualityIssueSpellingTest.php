@@ -80,11 +80,23 @@ final class ContentQualityIssueSpellingTest extends \Codeception\Test\Unit
         $this->assertSame([], $instance->getSpellingIssuesFromContent("test 'solicitor' test", []));
         $this->assertSame([], $instance->getSpellingIssuesFromContent("test solicitor' test", []));
 
+        // Test html and spacing
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('Contents of this Practice Direction<table><thead><tr><th>Title</th>', []));
+
         // Test URLs
         $this->assertSame([], $instance->getSpellingIssuesFromContent('example.com/wp-content/london', []));
 
+        // Test single and double letter references.
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('test (z) (gg) test', []));
+
         // Test words with brackets, these must be passed as allowed words, not in the dictionary.
         $this->assertSame([], $instance->getSpellingIssuesFromContent('test child(ren) test', ['child(ren)']));
+        
+        // Test allowed phrases, these must be passed as allowed words, not in the dictionary.
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('apply to a judge ex parte for such a direction', ['ex parte']));
+
+        // Test hyphenated allowed words
+        $this->assertSame([], $instance->getSpellingIssuesFromContent('for example, CD-ROMs, DVDs, USB drives', ['CD-ROMs']));
 
         // Test content with the dictionary file
         $dictionary_file = dirname(__DIR__) . '/Unit/fixtures/content-quality-spellings.dic';
@@ -113,7 +125,12 @@ final class ContentQualityIssueSpellingTest extends \Codeception\Test\Unit
 
         // Test with 2 words on the same line
         $inputWithTwoWords = "word1 word2";
-        $expectedWithTwoWords = "word1\nword2";
+        $expectedWithTwoWords = "word1 word2";
         $this->assertSame($expectedWithTwoWords, $instance->allowedSpellingSanitization($inputWithTwoWords));
+
+        // Test hyphenated words
+        $inputWithHyphen = "CD-ROMs\nword2\nword3";
+        $expectedWithHyphen = "CD-ROMs\nword2\nword3";
+        $this->assertSame($expectedWithHyphen, $instance->allowedSpellingSanitization($inputWithHyphen));
     }
 }

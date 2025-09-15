@@ -136,7 +136,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
     {
         // Get the allowed words from the options table.
         $allowed_words_string = get_option('moj_content_quality_spelling_allowed_words', '');
-        $allowed_words = array_filter(explode("\n", $allowed_words_string));
+        $allowed_words = array_map('trim', explode("\n", $allowed_words_string));
 
         // When pages are processed, their issues will be appended to this variable, to be saved in the database.
         $transient_updates = [];
@@ -168,9 +168,13 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
                 AND (postmeta.meta_value IS NULL OR postmeta.meta_value = 'en_GB')
                 -- If the _content_quality_exclude meta key is not set, or is set to 0.
                 AND (postmeta_2.meta_value IS NULL OR postmeta_2.meta_value = 0)
+                -- AND ID = 25783
             -- Set a limit to the number of pages to process at once.
-            LIMIT 10
+            LIMIT 100
         ";
+
+        // Delete the transients for this issue, so that we can reprocess the pages.
+        // $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_moj:content-quality:issue:spelling%'");
 
         // Loop over every page, and work out if we need to process it's content with the spelling checker.
         foreach ($wpdb->get_results($query) as $page) :
@@ -244,18 +248,25 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
      */
     public function getSpellingIssuesFromContent(string $content, array $allowed_words): array
     {
+
+        error_log('getSpellingIssuesFromContent called');
+
         if (empty($content)) {
             return [];
         }
 
         // Add a space before closing tags
-        $content = str_replace('</', ' </', $content);
+        $content = str_replace('</', "\n</", $content);
+
+        // Add new lines before block level tags, otherwise some words will be joined.
+        $content = str_replace('<div', "\n<div", $content);
+        $content = str_replace('<table', "\n<table", $content);
 
         // Replace non-breaking spaces with regular spaces
         $content = str_replace('&nbsp;', ' ', $content);
 
         // Replace line break with spaces
-        $content = str_replace("<br>", ' ', $content);
+        $content = str_replace("<br>", "\n", $content);
 
         // Ignore hashtags, as they are not relevant for spelling checks
         $content = preg_replace('/#([a-zA-Z0-9_]+)/', ' ', $content);
@@ -263,8 +274,14 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Remove HTML comments
         $content =  preg_replace('/<!--(.*)-->/Uis', '', $content);
 
+        // Remove single or double lowercase characters inside parentheses, e.g. (a), (gg).
+        $content = preg_replace('/\(\s*[a-z]{1,2}\s*\)/', ' ', $content);
+
         // Us the wp_kses function to strip all HTML tags.
         $content = \wp_kses($content, [], []);
+
+        // Decode html entities, e.g. &copy; &reg; &amp; etc.
+        $content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         // Use regex to remove words that contain numbers.
         $content = preg_replace('/\b\w*[0-9]+\w*\b/', ' ', $content);
@@ -275,15 +292,38 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // e.g. 'example.com/wp-content/london'
         $content = preg_replace('/\b[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?\b/', ' ', $content);
 
+        // if (str_contains($content, 'CD-ROMs')) {
+        //     error_log('Content contains CD-ROMs');
+        // } else {
+        //     error_log('Content does not contain CD-ROMs');
+        // }
+
         // Loop over the words and remove any allowed words.
         if (!empty($allowed_words)) {
             foreach ($allowed_words as $allowed_word) {
+                // $allowed_word = trim($allowed_word);
+
                 // Escape the allowed word for regex.
                 $allowed_word = preg_quote($allowed_word, '/');
+
                 // Remove the allowed word from the content.
                 $content = preg_replace('/\b' . $allowed_word . '(?!\w)/i', ' ', $content);
             }
         }
+
+        // $regex_pattern = '/\bCD\-ROMs/';
+
+        // $content = preg_replace($regex_pattern, ' ', $content);
+
+
+        // Does content contain CD-ROMS string?
+        // if (str_contains($content, 'CD-ROMs')) {
+        //     error_log('Content contains CD-ROMs');
+        // } else {
+        //     error_log('Content does not contain CD-ROMs');
+        // }
+
+        // return [];
 
         if (!($this->hunspell instanceof Hunspell)) {
             $this->hunspell = Hunspell::create();
@@ -306,8 +346,48 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
             }
         }
 
+        // Are there any weird characters in the content?
+
+        // $zero_width_characters = preg_match('/[\x{200B}-\x{200D}\x{FEFF}]/u', $content);
+
+        // error_log('Zero width characters found: ' . ($zero_width_characters ? 'yes' : 'no'));
+
+        // error_log($content);
+
+        // Write the content to a file for debugging.
+        // file_put_contents(get_template_directory() . '/inc/content-quality/issues/spelling-debug.txt', $content);
+
+        // Split the content into 10 equal parts
+        // $content_small = explode("\n", $content);
+        // $line_count = count($content_small);
+        // // Remove the last half of the lines, as they are not relevant for spelling checks.
+        // $content_small = array_slice($content_small, 0, ceil($line_count / 2));
+
+        // $small_string = implode(' ', $content_small);
+
         // Get the misspellings from the Hunspell instance.
         $misspellings_iterator_1 = $this->hunspell->check($content, $this->dictionary_ids);
+
+        // foreach ($misspellings_iterator_1 as $misspelling) {
+        //     // Get position of the misspelled word.
+        //     $word = $misspelling->getWord();
+
+        //     $misspelling->getLineNumber(); // '1'
+        //     $misspelling->getOffset();
+
+        //     error_log('In debug, word: ' . $word . ' is misspelled.');
+
+        //     error_log('In debug, line: ' . $misspelling->getLineNumber() . ', offset: ' . $misspelling->getOffset() . '.');
+
+        //     // $content_lines = explode("\n", $content);
+
+        //     // Get the text surrounding the mistake, based on the $content, line number and offset.
+        //     // This is useful for debugging, but not needed for the final output.
+        //     // error_log('Line with mistake : ' . $content_lines[$misspelling->getLineNumber() - 1]);
+
+        // }
+
+        // return [];
 
         // Get an array of words that are misspelled.
         $misspelling_words_1 = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings_iterator_1));
@@ -466,7 +546,7 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
     public function allowedSpellingSanitization(string $input): string
     {
         // Replace spaces with new lines.
-        $input = preg_replace('/\s+/', "\n", $input);
+        // $input = preg_replace('/\s+/', "\n", $input);
 
         // Split the input into lines.
         $lines = explode("\n", $input);
