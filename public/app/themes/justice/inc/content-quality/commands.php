@@ -333,14 +333,11 @@ class ContentQualityCommands
                 foreach ($typos as $typo => $correction) {
                     // Run a search-replace command for each typo.
                     $response = WP_CLI::runcommand(
-                        'search-replace ' . escapeshellarg($typo) . ' ' . escapeshellarg($correction),
-                        // 'search-replace ' . escapeshellarg($typo) . ' ' . escapeshellarg($correction) . ' wp_posts',
+                        'search-replace ' . escapeshellarg($typo) . ' ' . escapeshellarg($correction) . ' wp_posts',
                         $options
                     );
 
                     if ($response?->return_code === 0) {
-                        // WP_CLI::log("Successfully fixed typo '$typo' to '$correction'.");
-                        // WP_CLI::log(print_r($response->stdout));
                         WP_CLI::log("Successfully fixed typo '$typo' to '$correction' $response->stdout times.");
                         // Add the number of replacements to the running total.
                         $running_total += (int)$response->stdout;
