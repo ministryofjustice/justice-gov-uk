@@ -338,13 +338,6 @@ class ContentQualityCommands
                         $options
                     );
 
-                    // $typo_is_lowercase = strtolower($typo) === $typo;
-                    // $typo_has_space_at_start_and_end = strpos($typo, ' ') === 0 && strrpos($typo, ' ') === strlen($typo) - 1;
-
-                    // if($typo_is_lowercase && !$typo_has_space_at_start_and_end) {
-                    //     WP_CLI::warning("!!! The typo '$typo' may cause an issue.");
-                    // }
-
                     if ($response?->return_code === 0) {
                         // WP_CLI::log("Successfully fixed typo '$typo' to '$correction'.");
                         // WP_CLI::log(print_r($response->stdout));

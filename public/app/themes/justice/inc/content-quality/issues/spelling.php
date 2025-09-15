@@ -292,12 +292,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // e.g. 'example.com/wp-content/london'
         $content = preg_replace('/\b[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?\b/', ' ', $content);
 
-        // if (str_contains($content, 'CD-ROMs')) {
-        //     error_log('Content contains CD-ROMs');
-        // } else {
-        //     error_log('Content does not contain CD-ROMs');
-        // }
-
         // Loop over the words and remove any allowed words.
         if (!empty($allowed_words)) {
             foreach ($allowed_words as $allowed_word) {
@@ -310,20 +304,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
                 $content = preg_replace('/\b' . $allowed_word . '(?!\w)/i', ' ', $content);
             }
         }
-
-        // $regex_pattern = '/\bCD\-ROMs/';
-
-        // $content = preg_replace($regex_pattern, ' ', $content);
-
-
-        // Does content contain CD-ROMS string?
-        // if (str_contains($content, 'CD-ROMs')) {
-        //     error_log('Content contains CD-ROMs');
-        // } else {
-        //     error_log('Content does not contain CD-ROMs');
-        // }
-
-        // return [];
 
         if (!($this->hunspell instanceof Hunspell)) {
             $this->hunspell = Hunspell::create();
@@ -346,48 +326,8 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
             }
         }
 
-        // Are there any weird characters in the content?
-
-        // $zero_width_characters = preg_match('/[\x{200B}-\x{200D}\x{FEFF}]/u', $content);
-
-        // error_log('Zero width characters found: ' . ($zero_width_characters ? 'yes' : 'no'));
-
-        // error_log($content);
-
-        // Write the content to a file for debugging.
-        // file_put_contents(get_template_directory() . '/inc/content-quality/issues/spelling-debug.txt', $content);
-
-        // Split the content into 10 equal parts
-        // $content_small = explode("\n", $content);
-        // $line_count = count($content_small);
-        // // Remove the last half of the lines, as they are not relevant for spelling checks.
-        // $content_small = array_slice($content_small, 0, ceil($line_count / 2));
-
-        // $small_string = implode(' ', $content_small);
-
         // Get the misspellings from the Hunspell instance.
         $misspellings_iterator_1 = $this->hunspell->check($content, $this->dictionary_ids);
-
-        // foreach ($misspellings_iterator_1 as $misspelling) {
-        //     // Get position of the misspelled word.
-        //     $word = $misspelling->getWord();
-
-        //     $misspelling->getLineNumber(); // '1'
-        //     $misspelling->getOffset();
-
-        //     error_log('In debug, word: ' . $word . ' is misspelled.');
-
-        //     error_log('In debug, line: ' . $misspelling->getLineNumber() . ', offset: ' . $misspelling->getOffset() . '.');
-
-        //     // $content_lines = explode("\n", $content);
-
-        //     // Get the text surrounding the mistake, based on the $content, line number and offset.
-        //     // This is useful for debugging, but not needed for the final output.
-        //     // error_log('Line with mistake : ' . $content_lines[$misspelling->getLineNumber() - 1]);
-
-        // }
-
-        // return [];
 
         // Get an array of words that are misspelled.
         $misspelling_words_1 = array_map(fn($misspelling) => $misspelling->getWord(), iterator_to_array($misspellings_iterator_1));
