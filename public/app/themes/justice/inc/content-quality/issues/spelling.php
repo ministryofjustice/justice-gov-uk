@@ -295,8 +295,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
         // Loop over the words and remove any allowed words.
         if (!empty($allowed_words)) {
             foreach ($allowed_words as $allowed_word) {
-                // $allowed_word = trim($allowed_word);
-
                 // Escape the allowed word for regex.
                 $allowed_word = preg_quote($allowed_word, '/');
 
@@ -485,9 +483,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
      */
     public function allowedSpellingSanitization(string $input): string
     {
-        // Replace spaces with new lines.
-        // $input = preg_replace('/\s+/', "\n", $input);
-
         // Split the input into lines.
         $lines = explode("\n", $input);
 
