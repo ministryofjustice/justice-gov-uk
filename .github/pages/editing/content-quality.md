@@ -66,6 +66,28 @@ The Content Quality column displays the number of issues for each page.
 
 To filter pages by issue, use the [Issue Filter](#annotation-filter) dropdown. This allows you to quickly find pages with specific content quality issues.
 
+## Settings
+
+Settings related to content quality can be found on the [settings screen](https://www.justice.gov.uk/wp/wp-admin/edit.php?post_type=page&page=content-quality-settings). Typically, updating these settings is not necessary, but they can be useful for advanced users.
+
+<figure class="mb-5">
+  <div class="annotated-screenshot">
+   <img alt="Screenshot of the Pages admin screen (with filter)" src="../assets/content-quality-settings-screen.png" />
+   <ol>
+      <li id="annotation-filter" class="label" style="top: 18%; left: 52%;" >Allowed words</li>
+      <li id="annotation-filter" class="label" style="top: 80%; left: 52%;" >Misspellings</li>
+   </ol>
+  </div>
+  <figcaption>Screenshot of the Content Quality Settings screen</figcaption>
+</figure>
+
+Here, there is a text input filed for adding allowed words to the spell checker dictionary. Words should be entered one per line. This field is useful for allowing specific terms that are not recognized by the (British English) spell checker, such as acronyms, latin phrases, or specific legal terms.
+
+{: .highlight }
+In some cases it may be useful to add a mispelled word to the dictionary. For example the misspelled word "affadavit" has been added, because there is the following content on the site: "...para 13.4 reference to ‘affadavit’ should be to ‘affidavit’"
+
+To assist in identifying misspelled words across the site, there is a list of misspellings. These should either be corrected or added to the allowed words list.
+
 ## Resolving issues
 
 The following sections can be used as reference for resolving issues, or will be useful when writing new content.
@@ -170,6 +192,23 @@ If necessary, make reference to the [Tables section](/editing/block-editor.html#
 
 - how to add a header section to a table
 - how to remove a table column or row
+
+
+### Incorrect spellings
+
+This issue occurs when a word is misspelled or not recognized by the spell checker. The spell checker uses British English, so it may not recognize some words that are commonly used in other variants of English.
+
+--- 
+
+On the Pages admin screen, the issue will be displayed as "There is 1 spelling mistake: CMCC".
+
+---
+
+To resolve this issue, you need to either:
+
+- edit the page in question and correct the spelling mistake.
+- if the word is a valid term that is not recognized by the spell checker, you can add it to the allowed words list in the [Content Quality Settings](https://www.justice.gov.uk/wp/wp-admin/edit.php?post_type=page&page=content-quality-settings).
+
 
 ### Table without header section
 
