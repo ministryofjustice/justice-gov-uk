@@ -121,7 +121,7 @@ example:
                         {% endif %}
                     {% endfor %}
                     {% for input in hiddenInputs %}
-                        <input type="hidden" name="{{ input.name }}" value="{{ input.value }}">
+                        <input type="hidden" name="{{ input.name|e('html') }}" value="{{ input.value|e('html') }}">
                     {% endfor %}
                 </div>
                 <div class="sidebar-block__search-filter-buttons">

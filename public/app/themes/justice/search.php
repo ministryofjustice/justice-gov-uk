@@ -99,21 +99,55 @@ if ($query) {
     }
 }
 
-$allowedParams = ['parent', 'post_types', 'orderby', 'section', 'organisation', 'type', 'audience'];
+$parentId = get_post((int) get_query_var('parent')) ? (int) get_query_var('parent') : null;
+$parentTitle = $parentId ? get_the_title($parentId) : null;
+
+$searchHiddenParams = ['section', 'organisation', 'type', 'audience'];
 // Get current query params to persist across searches
-$hiddenInputs = array_filter(array_map(function ($input) {
+$searchHiddenInputs = array_filter(array_map(function ($input) {
     $value = get_query_var($input);
     if ($value) {
         return [
             'name' => $input,
-            'value' => $value,
+            'value' => esc_html($value),
         ];
     }
     return null;
-}, $allowedParams));
+}, $searchHiddenParams));
 
-$parentId = get_query_var('parent');
-$parentTitle = $parentId ? get_the_title($parentId) : null;
+$filterHiddenInputs = [[
+    'name' => 's',
+    'value' => $query,
+]];
+
+if ($parentId) {
+    $searchHiddenInputs[] = [
+        'name' => 'parent',
+        'value' => $parentId,
+    ];
+    $filterHiddenInputs[] = [
+        'name' => 'parent',
+        'value' => $parentId,
+    ];
+}
+
+if (in_array(get_query_var('orderby'), ['date', 'relevance'])) {
+    $searchHiddenInputs[] = [
+        'name' => 'orderby',
+        'value' => get_query_var('orderby'),
+    ];
+    $filterHiddenInputs[] = [
+        'name' => 'orderby',
+        'value' => get_query_var('orderby'),
+    ];
+}
+
+if (get_query_var('post_types') === 'page') {
+    $searchHiddenInputs[] = [
+        'name' => 'post_types',
+        'value' => 'page',
+    ];
+}
 
 $searchBarBlock = [
     'variant' => 'main',
@@ -130,14 +164,12 @@ $searchBarBlock = [
             'name' => 's',
             'value' => $query,
         ],
-        'hiddenInputs' => $hiddenInputs,
+        'hiddenInputs' => $searchHiddenInputs,
         'button' => [
             'text' => 'Search',
         ]
     ]
 ];
-
-$sortOrder = get_query_var('orderby');
 
 $filterBlock = [
     'variant' => 'search-filter',
@@ -145,20 +177,7 @@ $filterBlock = [
     'subtitle' => 'Filter results by',
     'submitText' => 'Apply filters',
     'noQuery' => !$query,
-    'hiddenInputs' => [
-        [
-            'name' => 's',
-            'value' => $query,
-        ],
-        ...($sortOrder ? [[
-            'name' => 'orderby',
-            'value' => $sortOrder,
-        ]] : []),
-        ...($parentId ? [[
-            'name' => 'parent',
-            'value' => $parentId,
-        ]] : []),
-    ],
+    'hiddenInputs' => $filterHiddenInputs,
     'fields' => $filters,
 ];
 

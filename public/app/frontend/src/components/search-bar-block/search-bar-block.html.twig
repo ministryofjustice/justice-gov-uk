@@ -65,7 +65,7 @@ example:
     {% endif %}
     {% if didYouMean %}
         <div class="search-bar-block__did-you-mean">
-            <p>Did you mean: <a href="{{ didYouMean.url }}">{{ didYouMean.term }}</a>?</p>
+            <p>Did you mean: <a href="{{ didYouMean.url }}">{{ didYouMean.term|e('html') }}</a>?</p>
         </div>
     {% endif %}
 </div>
