@@ -156,7 +156,6 @@ class ContentQualityCommands
                     ' daysbefore ' => ' days before ',
                     ' daysof ' => ' days of ',
                     ' deductionfrom ' => ' deduction from ',
-                    ' directions ' => ' directions ',
                     ' Directionss<' => ' Directions<',
                     ' ddirections ' => ' directions ',
                     '-ddirections-' => '-directions-',
@@ -166,7 +165,7 @@ class ContentQualityCommands
                     ' digitial ' => ' digital ',
                     ' Directon ' => ' Direction ',
                     ' documen</a>t ' => ' document</a> ',
-                    ' DRsfrom ' => 'DRs from ',
+                    ' DRsfrom ' => ' DRs from ',
                     'Employ-ment ' => 'Employment ',
                     ' entry’has ' => ' entry’ has ',
                     ' EVIDENCEThis ' => ' EVIDENCE This ',
@@ -347,7 +346,7 @@ class ContentQualityCommands
                 }
 
                 if ($dry_run) {
-                    WP_CLI::log("$running_total typos fixed. Please run the command without --dry-run to apply the changes.");
+                    WP_CLI::log("$running_total typos fixed. Please run the command without --dry-run=false to apply the changes.");
                 }
 
                 if (!$dry_run) {
