@@ -1,0 +1,31 @@
+{
+  "tasks": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "deno run --permission-set=build --watch=src build.js",
+    "build": "deno run --permission-set=build build.js"
+  },
+  "permissions": {
+    "build": {
+      "env": [
+        "ESBUILD_BINARY_PATH",
+        "XDG_CACHE_HOME",
+        "HOME",
+        "NPM_CONFIG_REGISTRY",
+        "SASS_PATH"
+      ],
+      "read": [
+        "/root/.cache/esbuild/bin/@esbuild-linux-arm64@0.25.10",
+        "/app/src",
+        "./dist"
+      ],
+      "write": ["./dist"],
+      "run": ["/usr/local/bin/esbuild"]
+    }
+  },
+  "imports": {
+    "@std/encoding": "jsr:@std/encoding@^1.0.10",
+    "@std/fs": "jsr:@std/fs@^1.0.19",
+    "@std/path": "jsr:@std/path@^1.1.2",
+    "@tsukina-7mochi/esbuild-plugin-sass": "jsr:@tsukina-7mochi/esbuild-plugin-sass@^0.2.3"
+  }
+}

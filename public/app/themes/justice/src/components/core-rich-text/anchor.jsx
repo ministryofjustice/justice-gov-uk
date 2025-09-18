@@ -94,7 +94,7 @@ const visualEditorIsReady = () =>
     const unsubscribe = subscribe(() => {
       if (
         select("core/editor")?.isCleanNewPost() ||
-        select("core/block-editor").getBlockCount() > 0
+        (select("core/block-editor")?.getBlockCount() ?? 0) > 0
       ) {
         unsubscribe();
         resolve();

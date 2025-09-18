@@ -182,6 +182,68 @@ RUN rm -rf node_modules
 
 ###
 
+
+FROM denoland/deno AS deno-dev
+
+WORKDIR /app
+
+ENV ESBUILD_BINARY_PATH=/usr/local/bin/esbuild
+
+# Install curl and ca-certificates for downloading esbuild
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates
+
+# Install, verify and extract esbuild
+# The version should match the one used in build.js
+RUN curl https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.10.tgz -o /tmp/esbuild-linux-x64.tgz
+
+# Clean up the apt cache to reduce image size
+RUN apt-get remove --purge -y curl && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+# Verify the checksum of the downloaded file, exit if it doesn't match
+# The checksum is obtained by downloading the file and running `sha256sum` on it.
+# This isn't ideal, but it does identify tampering after the first build.
+RUN echo '25a7b968b8e5172baaa8f44f91b71c1d2d7e760042c691f22ab59527d870d145 /tmp/esbuild-linux-x64.tgz' | sha256sum -c
+
+RUN tar -xzf /tmp/esbuild-linux-x64.tgz -C /tmp && \
+    mv /tmp/package/bin/esbuild $ESBUILD_BINARY_PATH && \
+    chmod +x $ESBUILD_BINARY_PATH && \
+    rm -rf /tmp/package /tmp/esbuild-linux-x64.tgz
+
+
+# Set all of /app and /app/dist as writeable by the Deno user.
+RUN mkdir -p /app/dist && \
+    chown -R deno:deno /app && \
+    chown -R deno:deno /app/dist
+
+# Make /app/node_modules and set it writeable by the Deno user.
+RUN mkdir -p /app/node_modules && \
+    chown -R deno:deno /app/node_modules
+    
+# Prefer not to run as root.
+USER deno
+
+# Cache the dependencies as a layer (the following two steps are re-run only when deps.ts is modified).
+COPY ./public/app/themes/justice/deno.jsonc        ./deno.jsonc
+COPY ./public/app/themes/justice/deno.lock         ./deno.lock
+COPY ./public/app/themes/justice/package.json      ./package.json
+
+RUN deno install
+
+# Copy the rest of the source code.
+# This will be re-run only when the source code is modified.
+COPY ./public/app/themes/justice/src               ./src
+COPY ./public/app/themes/justice/build.js          ./build.js
+COPY ./public/app/themes/justice/style.css         ./style.css
+COPY ./public/app/themes/justice/jsconfig.json     ./jsconfig.json
+
+
+###
+
 FROM ruby:3 AS jekyll-dev
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
