@@ -183,7 +183,7 @@ RUN rm -rf node_modules
 ###
 
 
-FROM denoland/deno AS deno-dev
+FROM denoland/deno AS deno-base
 
 WORKDIR /app
 
@@ -234,12 +234,20 @@ COPY ./public/app/themes/justice/package.json      ./package.json
 
 RUN deno install
 
+
+FROM deno-base AS deno-dev
+
+
+FROM deno-base AS deno-build
+
 # Copy the rest of the source code.
 # This will be re-run only when the source code is modified.
 COPY ./public/app/themes/justice/src               ./src
 COPY ./public/app/themes/justice/build.js          ./build.js
 COPY ./public/app/themes/justice/style.css         ./style.css
 COPY ./public/app/themes/justice/jsconfig.json     ./jsconfig.json
+
+RUN deno task build
 
 
 ###
@@ -272,7 +280,7 @@ COPY --from=build-fpm-composer ${path}/public/app/plugins public/app/plugins
 COPY --from=build-fpm-composer ${path}/public/app/languages public/app/languages
 COPY --from=build-fpm-composer ${path}/public/wp public/wp
 COPY --from=build-fpm-composer ${path}/vendor vendor
-COPY --from=assets-build       --chown=nginx:nginx /node/dist/php public/app/themes/justice/dist/php
+COPY --from=deno-build         --chown=nginx:nginx /app/dist/php public/app/themes/justice/dist/php
 
 # non-root
 USER 101
@@ -309,5 +317,5 @@ COPY --from=build-fpm-composer --chown=nginx:nginx /var/www/html/public/wp/wp-ad
 COPY --from=build-fpm-composer --chown=nginx:nginx /var/www/html/vendor-assets                ./
 
 # Grab assets for Nginx
-COPY --from=assets-build /node/dist        public/app/themes/justice/dist/
-COPY --from=assets-build /node/style.css   public/app/themes/justice/
+COPY --from=deno-build /app/dist        public/app/themes/justice/dist/
+COPY --from=deno-build /app/style.css   public/app/themes/justice/
