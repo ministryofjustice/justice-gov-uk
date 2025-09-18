@@ -1,4 +1,4 @@
-// import jQuery from "jquery";
+import jQuery from "jquery";
 
 jQuery(document).ready(function ($) {
   const handlePermalinkDelete = (postId, postName, permalink, nonce) => {

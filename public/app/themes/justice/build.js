@@ -305,7 +305,11 @@ const buildTasks = [
     globals: { jquery: { varName: "jQuery", type: "cjs" } },
   },
   { src: "src/js/login.js", dest: "dist/js/login.min.js" },
-  { src: "src/js/admin/index.js", dest: "dist/admin.min.js" },
+  {
+    src: "src/js/admin/index.js",
+    dest: "dist/admin.min.js",
+    globals: { jquery: { varName: "jQuery", type: "cjs" } },
+  },
   /** Blocks **/
   // Need to replicate `@tinypixelco/laravel-mix-wp-blocks` functionality
   // https://laravel-mix.com/extensions/wp-blocks
