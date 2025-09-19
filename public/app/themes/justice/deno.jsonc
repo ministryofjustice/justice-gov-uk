@@ -1,0 +1,40 @@
+{
+  "tasks": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "deno run --permission-set=build --watch=src build.js",
+    "build": "deno run --permission-set=build build.js"
+  },
+  "permissions": {
+    "build": {
+      // ⛓️‍💥 NPM supply chain attack note: lock down access to environment variables, build.js can only access these.
+      // e.g. it can't access `SUPER_SECRET_TOKEN` etc.
+      "env": [
+        "ESBUILD_BINARY_PATH",
+        "XDG_CACHE_HOME",
+        "HOME",
+        "NPM_CONFIG_REGISTRY",
+        "SASS_PATH"
+      ],
+      // ⛓️‍💥 NPM supply chain attack note: lock down access to the file system, locations that build.js can read.
+      // e.g. it can't access `~/.ssh` or `~/.aws` etc.
+      "read": [
+        "/app/src",
+        "./dist"
+      ],
+      // ⛓️‍💥 NPM supply chain attack note: a locked down allow list of locations build.js can write to.
+      "write": ["./dist"],
+      // ⛓️‍💥 NPM supply chain attack note: only allow running of the esbuild binary.
+      // The binary has all permissions, since the deno permission model doesn't apply to it.
+      "run": ["/usr/local/bin/esbuild"],
+      // ⛓️‍💥 NPM supply chain attack note: build.js has no network access (false by default but let's be explicit)
+      // This prevents exfiltration of data or downloading of malicious code.
+      "net": false
+    }
+  },
+  "imports": {
+    "@std/encoding": "jsr:@std/encoding@^1.0.10",
+    "@std/fs": "jsr:@std/fs@^1.0.19",
+    "@std/path": "jsr:@std/path@^1.1.2",
+    "@tsukina-7mochi/esbuild-plugin-sass": "jsr:@tsukina-7mochi/esbuild-plugin-sass@^0.2.3"
+  }
+}
