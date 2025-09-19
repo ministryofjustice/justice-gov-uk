@@ -1,13 +1,11 @@
 name: "PHP Syntax Check, virus scanning, and WP Plugins & Themes vulnerability scanning"
 
 on:
-  workflow_dispatch:
   pull_request:
-    branches:
-      - '**'
-  push:
-    branches:
-      - '**'
+    branches: [ "main", "develop", "frontend-rework" ]
+  schedule:
+    - cron: '22 8 * * *' # Every day at 08:22 UTC
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -36,4 +34,5 @@ jobs:
           wp_core_version: '6.7.3'
           composer_build: 'true'
         env:
-          COMPOSER_AUTH: '{"http-basic": {"www.relevanssi.com": {"username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}"}}}'
+          COMPOSER_AUTH: '{ "http-basic": { "www.relevanssi.com": { "username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}" } } }'
+
