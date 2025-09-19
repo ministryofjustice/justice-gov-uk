@@ -1,0 +1,27 @@
+name: "PHP Syntax Check, virus scanning, and WP Plugins & Themes vulnerability scanning"
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - '**'
+  push:
+    branches:
+      - '**'
+
+jobs:
+  wp-scanner:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      
+      - name: WordPress Scanner
+        uses: 10up/wp-scanner-action@v1
+        with:
+          content_dir: './public/app/frontend'
+          wp_core_version: '6.7.3'
+          composer_build: 'true'
