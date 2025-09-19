@@ -22,7 +22,7 @@ jobs:
       - name: WordPress Scanner
         uses: 10up/wp-scanner-action@v1
         with:
-          content_dir: './public/app/frontend'
+          content_dir: './public/app'
           wp_core_version: '6.7.3'
           composer_build: 'true'
         env:
