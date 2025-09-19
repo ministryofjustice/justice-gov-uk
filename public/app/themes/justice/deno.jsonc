@@ -6,6 +6,8 @@
   },
   "permissions": {
     "build": {
+      // ⛓️‍💥 NPM supply chain attack note: lock down access to environment variables, build.js can only access these.
+      // e.g. it can't access `SUPER_SECRET_TOKEN` etc.
       "env": [
         "ESBUILD_BINARY_PATH",
         "XDG_CACHE_HOME",
@@ -13,13 +15,20 @@
         "NPM_CONFIG_REGISTRY",
         "SASS_PATH"
       ],
+      // ⛓️‍💥 NPM supply chain attack note: lock down access to the file system, locations that build.js can read.
+      // e.g. it can't access `~/.ssh` or `~/.aws` etc.
       "read": [
-        "/root/.cache/esbuild/bin/@esbuild-linux-arm64@0.25.10",
         "/app/src",
         "./dist"
       ],
+      // ⛓️‍💥 NPM supply chain attack note: a locked down allow list of locations build.js can write to.
       "write": ["./dist"],
-      "run": ["/usr/local/bin/esbuild"]
+      // ⛓️‍💥 NPM supply chain attack note: only allow running of the esbuild binary.
+      // The binary has all permissions, since the deno permission model doesn't apply to it.
+      "run": ["/usr/local/bin/esbuild"],
+      // ⛓️‍💥 NPM supply chain attack note: build.js has no network access (false by default but let's be explicit)
+      // This prevents exfiltration of data or downloading of malicious code.
+      "net": false
     }
   },
   "imports": {

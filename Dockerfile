@@ -182,11 +182,12 @@ RUN rm -rf node_modules
 
 ###
 
-
+# ⛓️‍💥 NPM supply chain attack note: Trust Docker Hub and Deno to provide a safe container image.
 FROM denoland/deno AS deno-base
 
 WORKDIR /app
 
+# Set the path for the esbuild binary, accessed in the Dockerfile and build.js
 ENV ESBUILD_BINARY_PATH=/usr/local/bin/esbuild
 
 # Install curl and ca-certificates for downloading esbuild
@@ -197,6 +198,8 @@ RUN apt-get update && \
 
 # Install, verify and extract esbuild
 # The version should match the one used in build.js
+
+# ⛓️‍💥 NPM supply chain attack note: Trust esbuild to have published a safe package (esbuild binary) to npm
 RUN curl https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.10.tgz -o /tmp/esbuild-linux-x64.tgz
 
 # Clean up the apt cache to reduce image size
@@ -207,13 +210,15 @@ RUN apt-get remove --purge -y curl && \
 # Verify the checksum of the downloaded file, exit if it doesn't match
 # The checksum is obtained by downloading the file and running `sha256sum` on it.
 # This isn't ideal, but it does identify tampering after the first build.
+
+# ⛓️‍💥 NPM supply chain attack note: Trust that the package was safe, when it was first downloaded to obtain the checksum.
 RUN echo '25a7b968b8e5172baaa8f44f91b71c1d2d7e760042c691f22ab59527d870d145 /tmp/esbuild-linux-x64.tgz' | sha256sum -c
 
+# Extract the package and move the esbuild binary to the correct location
 RUN tar -xzf /tmp/esbuild-linux-x64.tgz -C /tmp && \
     mv /tmp/package/bin/esbuild $ESBUILD_BINARY_PATH && \
     chmod +x $ESBUILD_BINARY_PATH && \
     rm -rf /tmp/package /tmp/esbuild-linux-x64.tgz
-
 
 # Set all of /app and /app/dist as writeable by the Deno user.
 RUN mkdir -p /app/dist && \
@@ -232,9 +237,10 @@ COPY ./public/app/themes/justice/deno.jsonc        ./deno.jsonc
 COPY ./public/app/themes/justice/deno.lock         ./deno.lock
 COPY ./public/app/themes/justice/package.json      ./package.json
 
-RUN deno install
+# ⛓️‍💥 NPM supply chain attack note: scripts like postinstall are disallowed by default
+RUN deno install --frozen
 
-
+# Create the deno-dev target, it's the same as base, but added convenience.
 FROM deno-base AS deno-dev
 
 
