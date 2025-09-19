@@ -20,10 +20,9 @@ jobs:
           ref: ${{ github.ref }}
 
       # Edit wp-cli.yml, replace path: /var/www/html/public/wp with /github/workspace/wordpress
-      - name: Edit wp-cli.yml
+      - name: Delete wp-cli.yml
         run: |
-          sed -i 's|path: /var/www/html/public/wp|path: /github/workspace/wordpress|' wp-cli.yml
-          cat wp-cli.yml
+          rm -f wp-cli.yml
       
       - name: WordPress Scanner
         uses: 10up/wp-scanner-action@v1
