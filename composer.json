@@ -37,14 +37,15 @@
             "url": "https://wp-languages.github.io"
         },
         { 
-            "type": "package", 
+            "type": "package",
+            "canonical": false,
             "package": {  
                 "name": "relevanssi/relevanssi-premium",
-                "version": "2.27.6", 
+                "version": "2.28.0", 
                 "type": "wordpress-plugin",
                 "dist": { 
                 "type": "zip", 
-                "url": "https://www.relevanssi.com/update/get_version.php?version=2.27.6"
+                "url": "https://www.relevanssi.com/update/get_version.php?version=2.28.0"
                 }
             } 
         },
@@ -70,8 +71,8 @@
         "roots/wp-config": "^1.0",
         "roots/wp-password-bcrypt": "^1.1.0",
         "stayallive/wp-sentry": "^8.3.1",
-        "symfony/filesystem": "<7.0",
-        "symfony/process": "<7.0",
+        "symfony/filesystem": "^7.0",
+        "symfony/process": "^7.0",
         "tigitz/php-spellchecker": "^0.8.0",
         "vlucas/phpdotenv": "^5.5",
         "wp-cli/wp-cli-bundle": "^2.10",
