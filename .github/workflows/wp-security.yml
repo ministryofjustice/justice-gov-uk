@@ -1,4 +1,4 @@
-name: "PHP Syntax Check, virus scanning, and WP Plugins & Themes vulnerability scanning"
+name: "WP Plugins vulnerability and Virus scanning"
 
 on:
   pull_request:
