@@ -9,8 +9,13 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: read
+
 jobs:
   wp-scanner:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
 
     steps:
@@ -19,17 +24,16 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      # Edit wp-cli.yml, replace path: /var/www/html/public/wp with /github/workspace/wordpress
+      # Delete wp-cli.yml, since the path will be incorrect for this workflow
       - name: Delete wp-cli.yml
         run: |
           rm -f wp-cli.yml
       
       - name: WordPress Scanner
-        uses: 10up/wp-scanner-action@v1
+        uses: 10up/wp-scanner-action@v75371fe927396bd16da76de26884d9b777e92b0d # 1.0.1
         with:
           content_dir: './public/app'
           wp_core_version: '6.7.3'
           composer_build: 'true'
-          disable_virus_scan: 'true' # TEMP.
         env:
           COMPOSER_AUTH: '{"http-basic": {"www.relevanssi.com": {"username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}"}}}'
