@@ -30,7 +30,7 @@ jobs:
           rm -f wp-cli.yml
       
       - name: WordPress Scanner
-        uses: 10up/wp-scanner-action@v75371fe927396bd16da76de26884d9b777e92b0d # 1.0.1
+        uses: 10up/wp-scanner-action@75371fe927396bd16da76de26884d9b777e92b0d # 1.0.1
         with:
           content_dir: './public/app'
           wp_core_version: '6.7.3'
