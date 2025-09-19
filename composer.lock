@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d24e830fb4def15691c79713c4fe9d35",
+    "content-hash": "a04b7e6328bcb3d97225734a6346513d",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -7043,15 +7043,15 @@
         },
         {
             "name": "wpackagist-plugin/safe-redirect-manager",
-            "version": "2.2.2",
+            "version": "1.11.1",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/safe-redirect-manager/",
-                "reference": "tags/2.2.2"
+                "reference": "tags/1.11.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/safe-redirect-manager.2.2.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/safe-redirect-manager.1.11.1.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
