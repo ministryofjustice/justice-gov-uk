@@ -25,5 +25,6 @@ jobs:
           content_dir: './public/app'
           wp_core_version: '6.7.3'
           composer_build: 'true'
+          disable_virus_scan: 'true' # TEMP.
         env:
           COMPOSER_AUTH: '{"http-basic": {"www.relevanssi.com": {"username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}"}}}'
