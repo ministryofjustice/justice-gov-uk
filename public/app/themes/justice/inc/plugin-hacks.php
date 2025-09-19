@@ -24,3 +24,14 @@ add_action('wp_enqueue_scripts', function () {
     // because it is declared before the scripts in the html.
     wp_localize_script('ccfw-script-frontend', 'mojCcfwConfig', ['https' => wp_is_using_https()]);
 });
+
+if (class_exists('PPVersionNotices\Module\TopNotice\Module')) {
+    // Remove the 'revisionary' Upgrade to Pro notice
+    add_filter(\PPVersionNotices\Module\TopNotice\Module::SETTINGS_FILTER, function ($settings) {
+        if (isset($settings['revisionary']['message']) && str_contains($settings['revisionary']['message'], 'Upgrade to Pro')) {
+            unset($settings['revisionary']);
+        }
+
+        return $settings;
+    }, 99);
+}
