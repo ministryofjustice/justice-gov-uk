@@ -19,13 +19,13 @@ class Updates
     {
         /**
          * Prevent http requests to api.wordpress.org to check for WP core versions.
-         * 
+         *
          * Even though `AUTOMATIC_UPDATER_DISABLED` is set to true, we need to block
          * requests api.wordpress.org to where WP checks for available versions.
-         * 
-         * This filter's function returns a dummy payload that will prevent an api request, 
+         *
+         * This filter's function returns a dummy payload that will prevent an api request,
          * and not cause an error.
-         * 
+         *
          * @see https://wp-kama.com/2020/disable-wp-updates-check
          * @see https://developer.wordpress.org/reference/functions/wp_version_check/
          */
@@ -40,10 +40,10 @@ class Updates
 
         /**
          * Prevent http requests to api.wordpress.org to check for theme version.
-         * 
+         *
          * This filter's function returns a dummy payload that will prevent an api request,
          * and not cause an error.
-         * 
+         *
          * @see https://wp-kama.com/2020/disable-wp-updates-check
          * @see https://developer.wordpress.org/reference/functions/wp_update_themes/
          */
@@ -62,10 +62,10 @@ class Updates
 
         /**
          * Prevent http requests to api.wordpress.org to check for plugin versions.
-         * 
+         *
          * This filter's function returns a dummy payload that will prevent an api request,
          * and not cause an error.
-         * 
+         *
          * @see https://wp-kama.com/2020/disable-wp-updates-check
          * @see https://developer.wordpress.org/reference/functions/wp_update_plugins/
          */

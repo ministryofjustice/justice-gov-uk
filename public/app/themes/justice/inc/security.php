@@ -24,7 +24,7 @@ class Security
     /**
      * The application host e.g. intranet.docker or intranet.justice.gov.uk
      */
-    private string $home_host;  
+    private string $home_host;
 
     /**
      * Set properties and run actions.
@@ -53,7 +53,7 @@ class Security
             array_push($this->known_hosts, $custom_s3_host);
         }
 
-        if($loopback_url = Config::get('WP_LOOPBACK')) {
+        if ($loopback_url = Config::get('WP_LOOPBACK')) {
             // Push the loopback URL host to known_hosts.
             array_push($this->known_hosts, parse_url($loopback_url, PHP_URL_HOST));
         }
@@ -219,9 +219,9 @@ class Security
 
     /**
      * Log the urls of requests to unknown hosts.
-     * 
+     *
      * This could be useful in identifying requests to malicious URLs.
-     * 
+     *
      * @param false|array|\WP_Error $response
      * @param array $parsed_args
      * @param string $url
