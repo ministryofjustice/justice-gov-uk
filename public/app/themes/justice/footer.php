@@ -1,54 +1,61 @@
-<div class="device-only">
+<?php
 
-    <div class="anchor-link">
-        <div class="bar-left"></div>
-        <a href="#top"> Top ↑ </a>
-        <div class="bar-right"></div>
-    </div>
+use Roots\WPConfig\Config;
 
-    <a id="phone-nav-anchor" name="phonenav"></a>
+if (Config::get('FRONTEND_VERSION') === 1) {
+    require get_template_directory() . '/footer.v1.php';
+    return;
+}
 
-    <ul id="phone-nav-top" class="menu-top">
-        <li><a href="/">Home</a></li>
-    </ul>
-    
-    <?php get_template_part('template-parts/nav/mobile'); ?>
-
-</div>
-
-<div class="h-line"></div>
-<div id="footer-bar">
-    <div>
-    </div>
-</div>
-<div id="footer-wrapper">
-    <div class="container-wrapper">
-        <div id="footer">
-            <ul class="box25p">
-                <li><a href="<?php echo home_url('/help/accessibility'); ?>">Accessibility</a></li>
-                <li><a href="<?php echo home_url('/privacy/cookies'); ?>">Cookies</a></li>
-                <li><a href="https://www.gov.uk/government/organisations/ministry-of-justice">Contacts</a></li>
-                <li><a href="<?php echo home_url('/copyright'); ?>">Copyright</a></li>
-                <li><a href="<?php echo home_url('/help'); ?>">Help</a></li>
-                <li><a href="<?php echo home_url('/privacy'); ?>">Privacy</a></li>
-                <li><a href="<?php echo home_url('/ministry-of-justice-webchats'); ?>">Webchats</a></li>
-                <li><a href="<?php echo home_url('/website-queries'); ?>">Website queries</a></li>
-            </ul>
-            <div class="f-line"></div>
-            <h1>Citizen and business advice</h1>
-            <ul id="f-govuk" class="box50p">
-                <li><a class="bgimg" href="http://www.gov.uk/">GOV UK</a></li>
-                <li>For citizen and business advice on justice, rights and more visit
-                    <a href="http://www.gov.uk/">GOV.UK</a>
-                </li>
-            </ul>
-            <div class="f-line"></div>
-            <ul id="f-copy">
-                <li>© Crown copyright</li>
-            </ul>
+?>
+        </main>
+        <div class="footer-wrapper">
+            <footer class="footer">
+                <div class="footer__container">
+                    <ul class="footer__links">
+                        <li class="footer__link">
+                            <a class="link" href="<?php home_url('/help/accessibility'); ?>">Accessibility</a>
+                        </li>
+                        <li class="footer__link">
+                            <a class="link" href="<?php home_url('/privacy/cookies'); ?>">Cookies</a>
+                        </li>
+                        <li class="footer__link">
+                            <a class="link" href="https://www.gov.uk/government/organisations/ministry-of-justice">Contacts</a>
+                        </li>
+                        <li class="footer__link">
+                            <a class="link" href="<?php home_url('/copyright'); ?>">Copyright</a>
+                        </li>
+                        <li class="footer__link">
+                            <a class="link" href="<?php home_url('/help'); ?>">Help</a>
+                        </li>
+                        <li class="footer__link">
+                            <a class="link" href="<?php home_url('/privacy'); ?>">Privacy</a>
+                        </li>
+                        <li class="footer__link">
+                            <a class="link" href="<?php home_url('/ministry-of-justice-webchats'); ?>">Webchats</a>
+                        </li>
+                        <li class="footer__link">
+                            <a class="link" href="<?php home_url('/website-queries'); ?>">Website queries</a>
+                        </li>
+                    </ul>
+                    <div class="footer__details">
+                        <p class="footer__heading">Citizen and business advice</p>
+                        <div class="footer__content-wrapper">
+                            <?php // Hide logo link from screen readers as it's repeated in the text link ?>
+                            <a class="footer__gov" href="https://www.gov.uk/" tabindex="-1" aria-hidden="true">
+                                    <div class="footer__logo"></div>
+                            </a>
+                            <p class="footer__content">
+                                For citizen and business advice on justice, rights and more visit <a href="https://www.gov.uk/">GOV.UK <span class="visually-hidden">(opens in a new tab)</span></a>
+                            </p>
+                        </div>
+                    </div>
+                    <p class="footer__copyright">
+                        © Crown copyright
+                    </p>
+                </div>
+            </footer>
         </div>
-    </div>
-</div>
-<?php wp_footer() ?>
-</body>
+        <?php wp_footer() ?>
+    </body>
 </html>

@@ -1,0 +1,22 @@
+// This file is for the v1 of the frontend/app styles.
+// For the time being it is compiled to dist/app.min.js, see webpack.mix.js for details.
+
+// Legacy styles (from Squiz).
+@import "../css/global.css";
+@import "../css/media.queries.css";
+
+// Non-legacy styles.
+@import "../components/core-rich-text/frontend";
+@import "../components/search/frontend";
+@import "../components/simple-definition-list-blocks/frontend";
+@import "../components/to-the-top/frontend.css";
+
+@import "app/v1-common";
+@import "app/v1-form";
+@import "app/v1-layout";
+
+@import "app/plugins";
+@import "app/debug";
+
+@import "admin/admin-bar-logo";
+

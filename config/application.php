@@ -199,6 +199,22 @@ if (file_exists(__DIR__ . '/wp-offload-media.php')) {
 }
 
 /**
+ * Frontend upgrade settings
+ */
+
+switch (true) {
+    case in_array(env('FRONTEND_VERSION'), ['1', '2'], true):
+        Config::define('FRONTEND_VERSION', (int) env('FRONTEND_VERSION'));
+        break;
+    case isset($_COOKIE['justice_theme_version']) && in_array($_COOKIE['justice_theme_version'], ['1', '2'], true):
+        Config::define('FRONTEND_VERSION', (int) $_COOKIE['justice_theme_version']);
+        break;
+    default:
+        Config::define('FRONTEND_VERSION', 1);
+        break;
+}
+
+/**
  * Environment-specific settings
  */
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';

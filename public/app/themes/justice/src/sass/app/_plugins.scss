@@ -1,17 +1,3 @@
-@import "admin-bar-logo";
-
-.inline-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  grid-gap: 1em;
-  margin: 1em 0;
-  padding: 0 !important;
-  list-style: none !important;
-
-  li {
-    padding-left: 0 !important;
-  }
-}
 
 /**
  * #ccfw-page-banner
@@ -60,4 +46,9 @@
       top: 7.5px !important;
     }
   }
+}
+
+// Recolour PublishPress preview banner to better fit the theme
+.rvy_preview_msgspan {
+  background-color: #373737 !important;
 }

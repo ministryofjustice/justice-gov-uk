@@ -1,0 +1,160 @@
+@use '../v2-mixins.scss' as mixins;
+
+
+.sidebar-block {
+    width: 100%;
+
+    &--brand {
+        display: block;
+        background-image: url('./assets/moj-logo.gif');
+        background-position: left;
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 4.5rem;
+        width: 100%;
+    }
+
+    &__description {
+        @include mixins.spacing('margin', 2, 'bottom');
+    }
+
+    &__heading-wrapper {
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--justice-primary-black);
+    }
+
+    &__heading {
+        @include mixins.panel-title;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        margin-top: 0;
+    }
+
+    &__heading-text {
+        display: none;
+        @media screen and (min-width: mixins.$justice-lg) {
+            @include mixins.spacing('padding', 2);
+            @include mixins.spacing('padding', 3, 'top');
+            @include mixins.spacing('padding', 3, 'bottom');
+
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            &--archive {
+                display: flex;
+                align-items: center;
+
+                &::after {
+                    content: '';
+                    display: block;
+                    background-image: url('./assets/archived-page.png');
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    height: 1.5rem;
+                    width: 2rem;
+                }
+            }
+        }
+    }
+
+    &__heading-button {
+        @include mixins.arrow-button('light');
+        @include mixins.panel-title;
+
+        margin: 0;
+        color: var(--justice-primary-white);
+        @include mixins.spacing('padding', 2);
+        @include mixins.spacing('padding', 4, 'top');
+        @include mixins.spacing('padding', 4, 'bottom');
+
+        width: 100%;
+        @media screen and (min-width: mixins.$justice-lg) {
+            display: none;
+        }
+    }
+
+    &__content {
+        @include mixins.spacing('padding', 2);
+        @include mixins.spacing('padding', 3, 'top');
+        @include mixins.spacing('padding', 3, 'bottom');
+
+        background-color: var(--justice-secondary-grey-blue);
+        display: none;
+
+        &--open {
+            display: block;
+        }
+        @media screen and (min-width: mixins.$justice-lg) {
+            display: block;
+        }
+    }
+
+    &__list {
+        > li {
+            @include mixins.spacing('padding', 1, 'top');
+            @include mixins.spacing('padding', 1, 'bottom');
+
+            a {
+                @include mixins.link;
+            }
+
+            &:first-child {
+                padding-top: 0;
+            }
+
+            &:last-child {
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    &__search-filter-field {
+        @include mixins.spacing('margin', 4, 'top');
+
+        &:first-child {
+            @include mixins.spacing('margin', 2, 'top');
+        }
+    }
+
+    &__search-filter-buttons {
+        @include mixins.spacing('margin', 6, 'top');
+
+        display: flex;
+        justify-content: end;
+        gap: 1rem;
+    }
+
+    &__search-filter--disabled {
+        .selection-input__legend {
+            @include mixins.disabled;
+        }
+    }
+
+    &__search-filter-no-query-hint {
+        @include mixins.spacing('margin', 2, 'top');
+        @include mixins.body;
+    }
+
+    .file-download {
+        display: flex;
+        margin-top: 0;
+
+        &__icon {
+            flex-shrink: 0;
+        }
+    }
+
+    .search-bar {
+        @include mixins.spacing('padding', 2, 'top');
+
+        input {
+            padding-right: 0;
+        }
+    }
+}

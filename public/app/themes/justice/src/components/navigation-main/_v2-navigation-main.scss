@@ -1,0 +1,90 @@
+@use 'sass:map';
+
+@use '../v2-mixins.scss' as mixins;
+
+.navigation-main {
+    background: var(--justice-primary-black);
+
+    &__container {
+        @include mixins.container;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        @media screen and (min-width: mixins.$justice-lg) {
+            flex-direction: row;
+
+            // Have a negative margin equal to the padding spacing so the text is visually inline with the container element but so the focus highlight still has padding
+            margin-left: calc(map.get(mixins.$spacing-units-desktop, 2) * -1);
+        }
+    }
+
+    &__link {
+        position: relative;
+        border-top: 1px var(--justice-border) solid;
+
+        &:first-child {
+            border-top: none;
+        }
+
+        &:has(:focus-visible):not(:first-child, :active, :hover),
+        &:has(:focus-visible):not(:active, :hover) + li {
+            border-top: 1px var(--gds-yellow) solid;
+        }
+
+        a {
+            @include mixins.link('light', 'menu');
+            @include mixins.spacing('padding', 2, 'top');
+            @include mixins.spacing('padding', 2, 'bottom');
+
+            display: block;
+            font-family: var(--heading-font);
+            @media screen and (min-width: mixins.$justice-lg) {
+                @include mixins.spacing('padding', 1, 'top');
+                @include mixins.spacing('padding', 1, 'bottom');
+                @include mixins.spacing('padding', 2, 'left');
+                @include mixins.spacing('padding', 2, 'right');
+            }
+        }
+
+        @media screen and (min-width: mixins.$justice-lg) {
+            border-top: none;
+            border-left: 1px var(--justice-border) solid;
+
+            &:first-child {
+                border-left: none;
+            }
+
+            &:has(:focus-visible):not(:first-child, :active, :hover),
+            &:has(:focus-visible):not(:active, :hover) + li {
+                border-top: 0;
+                border-left: 1px var(--gds-yellow) solid;
+            }
+
+            // Add triangle indicator to active links
+            &--active {
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    margin-left: auto;
+                    margin-right: auto;
+                    width: 0;
+                    height: 0;
+                    border-left: 6px solid transparent;
+                    border-right: 6px solid transparent;
+                    border-top: 6px solid var(--justice-primary-black);
+                }
+
+                &:has(:focus-visible):not(:active, :hover) {
+                    &::after {
+                        border-top: 6px solid var(--gds-yellow);
+                    }
+                }
+            }
+        }
+    }
+}

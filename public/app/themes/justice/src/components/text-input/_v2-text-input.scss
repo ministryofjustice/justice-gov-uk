@@ -1,0 +1,34 @@
+@use '../v2-mixins.scss' as mixins;
+
+.text-input {
+    $this: &;
+
+    display: flex;
+    align-items: center;
+
+    &__label {
+        @include mixins.body;
+        @include mixins.spacing('margin', 2, 'right');
+    }
+
+    &__input {
+        @include mixins.body;
+        @include mixins.spacing('padding', 1);
+        @include mixins.focus-outline;
+
+        width: 100%;
+        border: 2px solid var(--justice-border-input);
+
+        &--error {
+            border-color: var(--justice-error);
+        }
+    }
+
+    &--disabled {
+        #{$this}__label,
+        #{$this}__input,
+        #{$this}__wrapper {
+            @include mixins.disabled;
+        }
+    }
+}

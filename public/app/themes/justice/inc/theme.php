@@ -10,7 +10,6 @@ defined('ABSPATH') || exit;
 
 class Theme
 {
-
     public function __construct()
     {
         $this->addHooks();
@@ -18,9 +17,32 @@ class Theme
 
     public function addHooks(): void
     {
+        add_action('init', [$this, 'setFrontendVersionCookie']);
         add_action('after_setup_theme', [$this, 'addThemeSupport']);
         add_filter('site_transient_update_themes', [$this, 'disableThemeUpdateNotification']);
     }
+
+
+    /**
+     * If there is a query string for frontend_version  then set a cookie so that the user
+     * persists with the new theme version.
+     * 
+     * @return void
+     */
+    public function setFrontendVersionCookie(): void
+    {
+        if (empty($_GET['frontend_version']) || !in_array($_GET['frontend_version'], ['1', '2'], true)) {
+            return;
+        }
+
+        $https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+        setcookie('justice_theme_version', $_GET['frontend_version'], 0, COOKIEPATH, COOKIE_DOMAIN, $https, true);
+
+        // Redirect to the homepage.
+        wp_redirect('/');
+        exit;
+    }
+
 
     /**
      * Add theme support for title-tag.
@@ -29,11 +51,11 @@ class Theme
      *
      * @return void
      */
-
     public function addThemeSupport(): void
     {
         add_theme_support('title-tag');
     }
+
 
     /**
      * Disable update notifications for the Justice Theme.

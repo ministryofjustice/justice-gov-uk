@@ -29,6 +29,7 @@ require_once 'inc/disable-posts.php';
 require_once 'inc/documents/documents.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
+require_once 'inc/header.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
 require_once 'inc/nginx-cache.php';
