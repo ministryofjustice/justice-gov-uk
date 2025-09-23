@@ -173,6 +173,20 @@ class PostMeta
     }
 
 
+    public static function getArchiveLinks(): array
+    {
+        return [
+            [
+                'url' => 'https://webarchive.nationalarchives.gov.uk/*/http://www.justice.gov.uk/index.htm',
+                'label' => 'Ministry of Justice archived websites (2007 to 2012)'
+            ],
+            [
+                'url' => 'https://webarchive.nationalarchives.gov.uk/ukgwa/timeline/https:/www.justice.gov.uk/courts/procedure-rules',
+                'label' => 'Ministry of Justice archived websites (2012 to present day)'
+            ]
+        ];
+    }
+
     public static function getPopularLinks(): array
     {
         return [

@@ -26,11 +26,21 @@ if ($post_meta->hasPanel('email_alerts')) {
 }
 
 if ($post_meta->hasPanel('related')) {
-    get_template_part('template-parts/panels/related');
+    get_template_part('template-parts/panels/list', null, [
+        'title' => 'Related pages',
+        // TODO - fortify the links with file properties.
+        'links' => $post_meta->getMeta('_panel_related_entries'),
+        'is_mobile' => $is_mobile,
+    ]);
 }
 
 if ($post_meta->hasPanel('archived')) {
-    get_template_part('template-parts/panels/archived');
+    get_template_part('template-parts/panels/list', null, [
+        'title' => 'Archived pages',
+        'links' => $post_meta::getArchiveLinks(),
+        'is_archive' => true,
+        'is_mobile' => $is_mobile,
+    ]);
 }
 
 if ($post_meta->hasPanel('popular')) {

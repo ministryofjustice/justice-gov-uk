@@ -8,6 +8,7 @@
 @use "app/v2-layout-two-sidebars";
 
 @use "../components/button/v2-button";
+@use "../components/breadcrumbs/v2-breadcrumbs";
 @use "../components/header/v2-header";
 @use "../components/horizontal-rule/v2-horizontal-rule";
 @use "../components/image/v2-image";
@@ -17,6 +18,8 @@
 @use "../components/text-input/v2-text-input";
 @use "../components/text-input-form/v2-text-input-form";
 @use "../components/rich-text/v2-rich-text";
+@use "../components/search-bar-block/v2-search-bar-block";
+@use "../components/selection-input/v2-selection-input";
 @use "../components/sidebar-block/v2-sidebar-block";
 @use "../components/footer/v2-footer";
 

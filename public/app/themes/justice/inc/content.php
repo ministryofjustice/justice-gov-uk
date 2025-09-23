@@ -3,6 +3,7 @@
 namespace MOJ\Justice;
 
 use Roots\WPConfig\Config;
+use WP_Post;
 
 defined('ABSPATH') || exit;
 
@@ -46,6 +47,22 @@ class Content
             $pattern = '/(https:\/\/webarchive\.nationalarchives\.gov\.uk)([\w\/]*)(:\/\/stage)/';
             return preg_replace($pattern, '$1$2://www', $content);
         }
+
+        return $content;
+    }
+
+
+    public static function getContentWithBlocks($post_id = null): string
+    {
+        if (!$post_id) {
+            $post_id = get_the_ID();
+        }
+
+        $original_global_post = $GLOBALS['post'] ?? null;
+        $GLOBALS['post'] = WP_Post::get_instance($post_id); // Override to ensure block parsing.
+        $content = apply_filters('the_content', get_the_content(null, false, $post_id));
+        $GLOBALS['post'] = $original_global_post; // Restore the original post.
+        unset($original_global_post);
 
         return $content;
     }

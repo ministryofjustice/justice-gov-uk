@@ -1,0 +1,94 @@
+@use "../v2-mixins.scss" as mixins;
+
+.search-bar-block {
+    display: flex;
+    flex-direction: column;
+
+    &__wrapper {
+        @include mixins.spacing('padding', 2);
+
+        display: flex;
+        background-color: var(--justice-primary-grey);
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    &__search {
+        width: 100%;
+        @media screen and (min-width: mixins.$justice-lg) {
+            width: 70%;
+        }
+    }
+
+    &__results {
+        @include mixins.spacing('margin', 1, 'top');
+
+        display: flex;
+        justify-content: end;
+        width: 100%;
+        @media screen and (min-width: mixins.$justice-lg) {
+            margin-top: 0;
+            width: 30%;
+        }
+    }
+
+    &__did-you-mean {
+        @include mixins.spacing('margin', 4, 'top');
+
+        display: block;
+        width: 100%;
+        a {
+            @include mixins.link();
+        }
+    }
+
+    &__results-text {
+        @include mixins.body;
+    }
+
+    &__filter.disabled {
+        @include mixins.disabled;
+
+        color: var(--justice-primary-black);
+
+        &:hover {
+            color: var(--justice-primary-black);
+        }
+    }
+
+    &__filters-wrapper {
+        @include mixins.spacing('padding', 2, 'top');
+
+        display: flex;
+        justify-content: space-between;
+        @media screen and (min-width: mixins.$justice-lg) {
+            justify-content: start;
+        }
+    }
+
+    &__filters {
+        @include mixins.spacing('padding', 2, 'left');
+    }
+
+    &__filter {
+        @include mixins.spacing('padding', 1, 'right');
+        @include mixins.spacing('padding', 1, 'left');
+        @include mixins.link;
+
+        border-left: 1px var(--justice-border) solid;
+
+        &:first-child {
+            padding-left: 0;
+        }
+
+        &:first-child,
+        &:focus {
+            border: none;
+        }
+
+        &:visited {
+            color: var(--justice-link);
+        }
+    }
+}

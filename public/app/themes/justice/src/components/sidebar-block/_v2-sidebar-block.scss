@@ -7,6 +7,7 @@
     &--brand {
         display: block;
         background-image: url('./assets/moj-logo.gif');
+        background-image: url('../img/moj-logo.gif');
         background-position: left;
         background-repeat: no-repeat;
         background-size: contain;
@@ -54,6 +55,7 @@
                     content: '';
                     display: block;
                     background-image: url('./assets/archived-page.png');
+                    background-image: url('../img/archived-page.png');
                     background-repeat: no-repeat;
                     background-size: contain;
                     height: 1.5rem;

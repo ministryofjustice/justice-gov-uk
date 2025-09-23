@@ -8,6 +8,8 @@ if (Config::get('FRONTEND_VERSION') === 1) {
     return;
 }
 
+// Add skip link here, or to header?
+
 /**
  *
  * Template name: Home

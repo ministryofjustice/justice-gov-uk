@@ -63,7 +63,6 @@ new Justice\Layout();
 new Justice\NginxCache();
 new Justice\Posts();
 new Justice\Redirects();
-new Justice\Search();
 new Justice\Security();
 new Justice\SimpleGutenFields();
 new Justice\SimpleDefinitionsListBlocks();
@@ -76,6 +75,8 @@ $block_editor->addHooks();
 
 $post_meta = new Justice\PostMeta();
 $post_meta->addHooks();
+
+(new Justice\Search())->addHooks();
 
 $taxonomies = new Justice\Taxonomies();
 $taxonomies->addHooks();

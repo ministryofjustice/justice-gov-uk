@@ -6,12 +6,6 @@ defined('ABSPATH') || exit;
 
 class Search
 {
-
-    public function __construct()
-    {
-        $this->addHooks();
-    }
-
     public function addHooks()
     {
         // Add a rewrite rule to handle an empty search.

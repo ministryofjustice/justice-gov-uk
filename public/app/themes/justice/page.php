@@ -1,9 +1,14 @@
 <?php
-/**
- *
- * Template name: 3 column (Default)
- * Template Post Type: page
- */
+
+use Roots\WPConfig\Config;
+use MOJ\Justice\Breadcrumbs;
+use MOJ\Justice\Content;
+use MOJ\Justice\Utils;
+
+if (Config::get('FRONTEND_VERSION') === 1) {
+    require get_template_directory() . '/page.v1.php';
+    return;
+}
 
 use MOJ\Justice\PostMeta;
 
@@ -13,60 +18,46 @@ $post_meta = new PostMeta();
 
 ?>
 
-    <main role="main" id="content-wrapper">
-        <div class="container-wrapper">
+<div class="two-sidebars">
+    <div class="two-sidebars__grid">
+        <div class="two-sidebars__sidebar two-sidebars__sidebar--left">
+            <?php Utils::getSidebarMulti('left') ?>
+        </div>
+        <article id="main-page-content" class="two-sidebars__article">
 
-            <?php if ($post_meta->sideHasPanels('left')) { ?>
-                <div id="content-left">
-                    <?php get_sidebar(); ?>
+            <div class="two-sidebars__article-header">
+                <?php get_template_part('template-parts/common/hero', null, [
+                    'title' => get_the_title(),
+                    'breadcrumbs' => (new Breadcrumbs)->getTheBreadcrumbs(),
+                ]); ?>
+
+                <div class="two-sidebars__sidebar two-sidebars__sidebar--mobile">
+                    <?php Utils::getSidebarMulti('right', ['mobile' => true]) ?>
                 </div>
-            <?php } ?>
-
-            <div id="content">
-
-                <?php get_template_part('template-parts/nav/breadcrumbs'); ?>
-
-                <div class="device-only">
-                    <div class="anchor-link anchor-top">
-                        <div class="bar-left"></div>
-                        <a href="#phonenav">Menu ≡</a>
-                        <div class="bar-right"></div>
-                    </div>
-                </div>
-
-                <div class="print-only">
-                    <img src="<?php echo get_template_directory_uri() ?>/dist/img/logo-tudor-crest-inverted.png" alt="" title="">
-                </div>
-
-                <article>
-                    <h1 class="title"><?php the_title(); ?></h1>
-                    <div class="share-this"></div>
-
-                    <!-- PAGE CONTENT -->
-                    <!-- ------------------------------------ -->
-                    <div class="article">
-                        <?php the_content() ?>
-                    </div>
-                    <!-- ------------------------------------ -->
-                    <!-- end/ PAGE CONTENT -->
-
-                    <div class="share-this bottom">
-                        <?php if ($post_meta->getMeta('_show_updated_at')) { ?>
-                            <span class="right">Updated: <?php echo $post_meta->getModifiedAt(); ?></span>
-                        <?php } ?>
-                    </div>
-
-                </article>
             </div>
 
-            <?php if ($post_meta->sideHasPanels('right')) { ?>
-                <div id="content-right">
-                    <?php get_sidebar('right'); ?>
-                </div>
-            <?php } ?>
-            
+            <div class="two-sidebars__article-content">
+                <?php
+
+                // TODO - search-bar-block is left to do.
+                get_template_part('template-parts/common/rich-text', null, [
+                    'content' => Content::getContentWithBlocks(get_the_ID()),
+                ]);
+
+                if ($post_meta->getMeta('_show_updated_at')) :
+                    get_template_part('template-parts/common/updated-date', null, [
+                        'date' => $post_meta->getModifiedAt(),
+                    ]);
+                endif;
+                ?>
+            </div>
+
+        </article>
+        <div class="two-sidebars__sidebar two-sidebars__sidebar--right">
+            <?php Utils::getSidebarMulti('right') ?>
         </div>
-    </main>
+    </div>
+</div>
 
 <?php
 
