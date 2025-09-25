@@ -13,8 +13,6 @@ if (Config::get('FRONTEND_VERSION') === 1) {
 
 get_header();
 
-// TODO fix 404 for empty search queries
-
 ?>
 
 <div class="one-sidebar one-sidebar--left">

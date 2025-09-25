@@ -9,7 +9,7 @@ class Search
     public function addHooks()
     {
         // Add a rewrite rule to handle an empty search.
-        add_action('init', fn() => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
+        add_action('init', fn() => add_rewrite_rule('search/?$', 'index.php?s=', 'top'));
         // Add a rewrite rule to handle the old search urls.
         add_action('template_redirect', [$this, 'redirectOldSearchUrls']);
         // Add a rewrite rule to handle the search string.
@@ -203,7 +203,7 @@ class Search
             $search = $_GET['query'];
         }
 
-        if (!$search) {
+        if (is_null($search)) {
             return;
         }
 
@@ -418,6 +418,12 @@ class Search
         global $paged;
         global $wp_query;
 
+        // Is there a search query?
+        if (empty(get_search_query())) {
+            // No search query, no pagination.
+            return [];
+        }
+
         // Make the pages array
         $pages = [];
         for ($i = 1; $i <= $wp_query->max_num_pages; $i++) {
@@ -566,7 +572,6 @@ class Search
         $query_string = explode('&', $_SERVER['QUERY_STRING'] ?? '');
 
         foreach ($query_string as $query) {
-            error_log($query);
             // Get key and value
             [$key] = explode('=', $query);
 
