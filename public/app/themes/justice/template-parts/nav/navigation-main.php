@@ -21,7 +21,7 @@ if (empty($args['links'])) {
                             'on_click' => $link['on_click'] ?? null,
                             'url' => $link['url'],
                             'label' => $link['label'],
-                            'aria_current' => $link['active'] ? 'page' : null,
+                            'aria_current' => ($link['active'] ?? false) ? 'page' : null,
                         ]
                     )
                     ?>

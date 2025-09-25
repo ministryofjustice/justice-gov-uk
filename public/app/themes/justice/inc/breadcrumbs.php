@@ -12,7 +12,7 @@ class Breadcrumbs
     /**
      * Get the breadcrumbs as an array
      */
-    public function getTheBreadcrumbs(): array | null
+    public static function getTheBreadcrumbs(): array | null
     {
         global $post;
 

@@ -25,7 +25,7 @@ $content_id = 'sidebar-block-content-' . sanitize_title($args['title'] ) . ($arg
 <section class="sidebar-block sidebar-block--search" aria-labelledby="<?= $title_id ?>" role="complementary">
     <div class="sidebar-block__heading-wrapper">
         <h2 class="sidebar-block__heading" id="<?= $title_id ?>">
-            <span class="sidebar-block__heading-text <?= $is_archive ? 'sidebar-block__heading-text--archive' : '' ?>">
+            <span class="sidebar-block__heading-text">
                 <?= esc_html($args['title']) ?>
             </span>
             <button class="sidebar-block__heading-button" aria-controls="<?= $content_id ?>">
@@ -49,7 +49,7 @@ $content_id = 'sidebar-block-content-' . sanitize_title($args['title'] ) . ($arg
                         <div class="sidebar-block__search-filter-field">
                             <?php
                             get_template_part('template-parts/common/selection-input', null, [
-                                'title' => $field['title'],
+                                'title' => $field['title'] ?? null,
                                 'group' => $field['group'],
                                 'type' => $field['type'] ?? 'radio',
                                 'direction' => 'vertical',

@@ -10,18 +10,23 @@
 @use "../components/button/v2-button";
 @use "../components/breadcrumbs/v2-breadcrumbs";
 @use "../components/header/v2-header";
+@use "../components/file-download/v2-file-download";
+@use "../components/footer/v2-footer";
 @use "../components/horizontal-rule/v2-horizontal-rule";
 @use "../components/image/v2-image";
 @use "../components/image-with-text/v2-image-with-text";
 @use "../components/link/v2-link";
 @use "../components/navigation-main/v2-navigation-main";
+@use "../components/pagination/v2-pagination";
 @use "../components/text-input/v2-text-input";
 @use "../components/text-input-form/v2-text-input-form";
 @use "../components/rich-text/v2-rich-text";
 @use "../components/search-bar-block/v2-search-bar-block";
+@use "../components/search-result-card/v2-search-result-card";
+@use "../components/search-result-list/v2-search-result-list";
 @use "../components/selection-input/v2-selection-input";
 @use "../components/sidebar-block/v2-sidebar-block";
-@use "../components/footer/v2-footer";
+
 
 @use "app/debug";
 @use "app/plugins";

@@ -1,0 +1,41 @@
+@use "../v2-mixins.scss" as mixins;
+
+.search-result-card {
+    margin-top: 0;
+
+    &__title {
+        @include mixins.h3;
+
+        margin-top: 0;
+
+        .caption {
+            display: block;
+        }
+
+        .file-download {
+            margin-top: 0;
+        }
+
+        a {
+            font-size: inherit;
+            font-family: inherit;
+            word-break: break-word;
+        }
+        @media screen and (min-width: mixins.$justice-lg) {
+            margin-top: 0;
+        }
+    }
+
+    &__description {
+        @include mixins.spacing('margin', 1, 'top');
+
+        overflow-wrap: break-word;
+    }
+
+    &__url {
+        @include mixins.spacing('margin', 1, 'top');
+        @include mixins.small;
+
+        overflow-wrap: break-word;
+    }
+}

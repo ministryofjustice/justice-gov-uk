@@ -6,6 +6,7 @@ if (empty($args['group'])) {
 }
 
 $defaults = [
+    'title' => null,
     'direction' => null,
     'disabled' => false,
     'error' => false,
@@ -14,7 +15,7 @@ $defaults = [
 
 $args = array_merge($defaults, $args);
 
-$hint_id = $args['hint'] ? 'selection-input-hint-' . sanitize_title($args['title']) : null;
+$hint_id = !empty($args['hint']) ? 'selection-input-hint-' . sanitize_title($args['title']) : null;
 
 ?>
 

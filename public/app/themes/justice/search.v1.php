@@ -35,11 +35,11 @@ $search = new Search();
 
             <div class="search">
 
-                <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount(), 'parent' => get_query_var('parent')]) ?>
+                <?php get_template_part('template-parts/search/search-bar.v1', null, ['result_count' => $search->getResultCount(), 'parent' => get_query_var('parent')]) ?>
 
-                <?php get_template_part('template-parts/search/sort', null, ['search_options' => $search->getSortOptions()]) ?>
+                <?php get_template_part('template-parts/search/sort.v1', null, ['search_options' => $search->getSortOptions()]) ?>
 
-                <?php get_template_part('template-parts/search/pagination') ?>
+                <?php get_template_part('template-parts/search/pagination.v1') ?>
 
                 <div class="results">
 
@@ -50,18 +50,18 @@ $search = new Search();
                             $args = [
                                 'formatted_url' => $search->formattedUrl(get_the_permalink())
                             ];
-                            get_template_part('template-parts/search/content', get_post_type(), $args);
+                            get_template_part('template-parts/search/content.v1', get_post_type(), $args);
                         }
                     }
                     ?>
 
-                    <?php !$search->hasEmptyQuery() && !have_posts() && get_template_part('template-parts/search/no-results'); ?>
+                    <?php !$search->hasEmptyQuery() && !have_posts() && get_template_part('template-parts/search/no-results.v1'); ?>
 
-                    <?php $search->hasEmptyQuery() && get_template_part('template-parts/search/no-query') ?>
+                    <?php $search->hasEmptyQuery() && get_template_part('template-parts/search/no-query.v1') ?>
 
                 </div>
 
-                <?php get_template_part('template-parts/search/pagination') ?>
+                <?php get_template_part('template-parts/search/pagination.v1') ?>
 
                 <div class="device-only">
                     <?php
@@ -70,7 +70,7 @@ $search = new Search();
                      * We shouldn't be echoing the same html twice.
                      */
                     ?>
-                    <?php get_template_part('template-parts/panels/search-filters') ?>
+                    <?php get_template_part('template-parts/panels/search-filters.v1') ?>
                 </div>
             </div>
 

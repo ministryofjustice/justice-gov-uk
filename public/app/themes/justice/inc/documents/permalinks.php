@@ -6,6 +6,9 @@ defined('ABSPATH') || exit;
 
 trait DocumentPermalinks
 {
+    // CPT slug. This is hardcoded in the plugin.
+    const string SLUG = 'document';
+
     public $ajax_previous_slug = '';
 
     public $update_post_slug_field_stage = 0;
@@ -147,7 +150,7 @@ trait DocumentPermalinks
 
         // Map over the post names to create the links.
         $template_args['links'] = array_map(function ($post_name) use ($permalink_structure) {
-            $view_link = str_replace(array("%" . $this->slug .  "%"), $post_name, $permalink_structure);
+            $view_link = str_replace(array("%" . self::SLUG .  "%"), $post_name, $permalink_structure);
 
             return [
                 'post_name' => $post_name,
@@ -190,7 +193,7 @@ trait DocumentPermalinks
 
         // Is the slug a previously used slug for any other document?
         $document = get_posts([
-            'post_type' => $this->slug,
+            'post_type' => self::SLUG,
             'posts_per_page' => 1,
             'post_status' => array_keys($wp_post_statuses), // Check all post statuses.
             'exclude' => [$post_id], // Exclude the current post.
@@ -249,7 +252,7 @@ trait DocumentPermalinks
         global $wp_post_statuses;
 
         $query_args = [
-            'post_type' => $this->slug,
+            'post_type' => self::SLUG,
             'posts_per_page' => 1,
             'post_status' => array_keys($wp_post_statuses), // Check all post statuses.
             'include' => [$post_id], // Exclude the current post.
@@ -336,7 +339,7 @@ trait DocumentPermalinks
         }
 
         $document = get_posts([
-            'post_type' => $this->slug,
+            'post_type' => self::SLUG,
             'posts_per_page' => 1,
             'post_status' => ['publish', 'private'],
             'meta_query' => [

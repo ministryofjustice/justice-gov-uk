@@ -540,6 +540,9 @@ $iconSizes: (
         @include spacing('margin', 4, 'top');
         line-height: 1.315;
     }
+    .search-bar-block {
+        @include spacing('margin', 4, 'top');
+    }
 
     > h1,
     > h2,

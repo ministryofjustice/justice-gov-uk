@@ -39,7 +39,6 @@ $post_meta = new PostMeta();
             <div class="two-sidebars__article-content">
                 <?php
 
-                // TODO - search-bar-block is left to do.
                 get_template_part('template-parts/common/rich-text', null, [
                     'content' => Content::getContentWithBlocks(get_the_ID()),
                 ]);

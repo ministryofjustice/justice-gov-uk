@@ -2,6 +2,8 @@
 
 namespace MOJ\Justice;
 
+use Roots\WPConfig\Config;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -25,7 +27,12 @@ class BlockEditor
     public function registerBlocks()
     {
         register_block_type('moj/inline-menu', ['render_callback' => [$this, 'inlineMenu']]);
-        register_block_type('moj/search', ['render_callback' => [$this, 'search']]);
+        if (Config::get('FRONTEND_VERSION') === 1) {
+            register_block_type('moj/search', ['render_callback' => [$this, 'searchV1']]);
+        }
+        if (Config::get('FRONTEND_VERSION') === 2) {
+            register_block_type('moj/search', ['render_callback' => [$this, 'search']]);
+        }
     }
 
     /**
@@ -77,7 +84,7 @@ class BlockEditor
      * @return string
      */
 
-    public function search(): string
+    public function searchV1(): string
     {
         $args = [
             'parent' => get_the_ID(),
@@ -86,8 +93,33 @@ class BlockEditor
 
         return sprintf(
             '<div class="search wp-block-moj-search">%s</div>',
-            $this->templatePartToVariable('template-parts/search/search-bar', null, $args)
+            $this->templatePartToVariable('template-parts/search/search-bar.v1', null, $args)
         );
+    }
+
+    public function search(): string
+    {
+        $args = [
+            'parent' => get_the_ID(),
+            'submit' => 'Search'
+        ];
+
+        $args = [
+            'search_form' => [
+                'id' => 'search-bar-main',
+                'action' => '/search',
+                'input' => [
+                    'id' => 'searchbox-top',
+                    'name' => 's',
+                    'label' => Search::getSearchFormLabel(),
+                    'value' => get_search_query(),
+                    'label_hidden' => true,
+                ],
+                'button' => ['text' => 'Search']
+            ]
+        ];
+
+        return $this->templatePartToVariable('template-parts/search/search-bar-block', null, $args);
     }
 
     /**
