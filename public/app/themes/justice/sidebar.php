@@ -11,6 +11,7 @@ if (Config::get('FRONTEND_VERSION') === 1) {
     return;
 }
 
+use MOJ\Justice\NavigationSecondary;
 use MOJ\Justice\PostMeta;
 use MOJ\Justice\Search;
 use MOJ\Justice\Taxonomies;
@@ -19,8 +20,13 @@ $is_mobile = $args['is_mobile'] ?? false;
 
 $post_meta = new PostMeta(\get_the_ID(), $args);
 
-if ($post_meta->hasPanel('menu')) {
-    get_template_part('template-parts/panels/menu');
+// TODO
+if (1 || $post_meta->hasPanel('navigation-secondary')) {
+    get_template_part('template-parts/nav/navigation-secondary', null, [
+        'title' => 'Justice UK',
+        'id' => '#main-page-content',
+        'links' => (new NavigationSecondary)->getCurrentPageNavigation(),
+    ]);
 }
 
 if ($post_meta->hasPanel('search-filters')) {
@@ -39,7 +45,7 @@ if ($post_meta->hasPanel('search-filters')) {
     ];
 
     // Get the field names, so that they can be excluded from the hidden inputs.
-    $field_names = array_map(fn ($field) => $field['group'] ?? '', $fields);
+    $field_names = array_map(fn($field) => $field['group'] ?? '', $fields);
 
     get_template_part('template-parts/panels/search-filters', null, [
         'fields' => $fields,
