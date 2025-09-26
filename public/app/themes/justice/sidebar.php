@@ -20,8 +20,7 @@ $is_mobile = $args['is_mobile'] ?? false;
 
 $post_meta = new PostMeta(\get_the_ID(), $args);
 
-// TODO
-if (1 || $post_meta->hasPanel('navigation-secondary')) {
+if ($post_meta->hasPanel('menu')) {
     get_template_part('template-parts/nav/navigation-secondary', null, [
         'title' => 'Justice UK',
         'id' => '#main-page-content',

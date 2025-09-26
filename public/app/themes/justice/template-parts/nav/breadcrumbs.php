@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 use MOJ\Justice\Breadcrumbs;
 
-$moj_breadcrumbs = (new Breadcrumbs)->getTheBreadcrumbs();
+$moj_breadcrumbs = Breadcrumbs::getTheBreadcrumbs();
 
 if (!$moj_breadcrumbs) {
     return;

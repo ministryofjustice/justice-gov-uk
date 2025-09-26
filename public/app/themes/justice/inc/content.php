@@ -21,7 +21,8 @@ class Content
 
     public function addHooks(): void
     {
-        add_filter('the_content', [$this, 'fixNationalArchiveLinks']);
+        add_filter('the_content', [__CLASS__, 'fixNationalArchiveLinks']);
+        add_filter('wp_kses_allowed_html', [__CLASS__, 'customWpksesPostTags'], 10, 2);
     }
 
     /**
@@ -38,8 +39,7 @@ class Content
      * @param string $content
      * @return string
      */
-
-    public function fixNationalArchiveLinks($content)
+    public static function fixNationalArchiveLinks($content)
     {
 
         if (Config::get('WP_ENVIRONMENT_TYPE') === 'staging') {
@@ -52,6 +52,45 @@ class Content
     }
 
 
+    /**
+     * Customizes the allowed HTML tags for post content.
+     * 
+     * @param array $tags The allowed HTML tags.
+     * @param string $context The context in which the tags are being used.
+     * @return array The modified allowed HTML tags.
+     */
+    public static function customWpksesPostTags($tags, $context)
+    {
+
+        if ('post' === $context) {
+            // Allow the input tag, for 
+            $tags['input'] = array(
+                'id'             => true,
+                'class'          => true,
+                'name'           => true,
+                'type'     => true,
+                'value' => true,
+            );
+
+            // Remove iframe tags to prevent embedding of external content
+            if (isset($tags['iframe'])) {
+                unset($tags['iframe']);
+            }
+        }
+
+        return $tags;
+    }
+
+
+    /**
+     * Retrieves the content of a post with blocks parsed.
+     *
+     * This function ensures that the content is processed with block parsing,
+     * which is necessary for pages that use the block editor.
+     * 
+     * @param int|null $post_id The ID of the post to retrieve content for. If null, uses the current post ID.
+     * @return string The content of the post with blocks parsed.
+     */
     public static function getContentWithBlocks($post_id = null): string
     {
         if (!$post_id) {
