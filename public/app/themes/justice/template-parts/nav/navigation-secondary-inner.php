@@ -42,7 +42,7 @@
                     'article_id' => null, // No article ID for submenus
                     'expanded' => $item['expanded'] ?? false,
                 ]);
-                 ?>
+                ?>
             <?php else : ?>
                 <div class="navigation-secondary__list-item-wrapper">
                     <a class="navigation-secondary__link" role="link"

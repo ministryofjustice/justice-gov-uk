@@ -30,6 +30,11 @@ if (Config::get('FRONTEND_VERSION') === 1) {
     return;
 }
 
+// skip link for main content
+get_template_part('template-parts/nav/skip-link', null, [
+    'article_id' => '#main-page-content',
+]);
+
 ?>
 
 <div class="page-wrapper">
