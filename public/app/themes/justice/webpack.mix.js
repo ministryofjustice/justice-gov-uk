@@ -10,8 +10,8 @@ mix
     .js('src/js/admin/index.js', 'dist/admin.min.js')
     .js('src/js/login.js', 'dist/js/login.min.js')
     /** patch code for CCFW **/
-    .js('src/patch/js/ccfw-cookie-manage.js', 'dist/patch/js/ccfw-cookie-manage.js')
-    .js('src/patch/js/ccfw-frontend.js', 'dist/patch/js/ccfw-frontend.js')
+    .js('src/js/patch/ccfw-cookie-manage.js', 'dist/patch/js/ccfw-cookie-manage.js')
+    .js('src/js/patch/ccfw-frontend.js', 'dist/patch/js/ccfw-frontend.js')
     /** -------------- **/
     .sass('src/sass/v1-app.scss', 'dist/css/app.min.css')
     .sass('src/sass/v2-app.scss', 'dist/css/v2-app.min.css')

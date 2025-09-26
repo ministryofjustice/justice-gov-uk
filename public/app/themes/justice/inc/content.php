@@ -2,11 +2,10 @@
 
 namespace MOJ\Justice;
 
-use Roots\WPConfig\Config;
 use DOMDocument;
-use DOMNode;
 use DOMXPath;
-use WP_Post;
+
+use Roots\WPConfig\Config;
 use MOJ\Justice\BlockEditor;
 use MOJ\Justice\ContentLinks;
 
