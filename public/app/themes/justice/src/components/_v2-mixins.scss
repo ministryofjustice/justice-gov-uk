@@ -1,6 +1,6 @@
 @use "sass:map";
 
-:root {
+@mixin css-vars() {
     // Primary colours
     --justice-primary-black: #212121;
     --justice-primary-white: #fff;

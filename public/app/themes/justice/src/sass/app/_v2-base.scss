@@ -1,6 +1,10 @@
 @charset "UTF-8";
 @use "../../components/v2-mixins" as mixins;
 
+:root {
+    @include mixins.css-vars();
+}
+
 html {
     font-size: 16px;
 }

@@ -6,10 +6,10 @@
 @import "../css/media.queries.css";
 
 // Non-legacy styles.
-@import "../components/core-rich-text/frontend";
-@import "../components/search/frontend";
-@import "../components/simple-definition-list-blocks/frontend";
-@import "../components/to-the-top/frontend.css";
+@import "../components/core-rich-text/core-rich-text";
+@import "../components/search/search";
+@import "../components/simple-definition-list-blocks/simple-definition-list-blocks";
+@import "../components/to-the-top/to-the-top.css";
 
 @import "app/v1-common";
 @import "app/v1-form";
