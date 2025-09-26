@@ -41,7 +41,7 @@ class BlockEditor
      * Useful for use in render_callback functions for blocks.
      */
 
-    public function templatePartToVariable($slug, $name = null, $args = array()): string
+    public static function templatePartToVariable($slug, $name = null, $args = array()): string
     {
         ob_start();
         get_template_part($slug, $name, $args);

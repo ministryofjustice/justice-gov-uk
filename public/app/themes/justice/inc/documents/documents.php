@@ -33,11 +33,21 @@ class Documents
 
     // File extensions to mark as downloadable in S3.
     private array $content_disposition_extensions = [
-        'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
+        'doc',
+        'docx',
+        'pdf',
+        'xls',
+        'xlsx',
+        'zip'
     ];
 
     private array $disallow_in_media_library = [
-        'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
+        'doc',
+        'docx',
+        'pdf',
+        'xls',
+        'xlsx',
+        'zip'
     ];
 
     // Max filesize for wp-document-revisions to stream via php.
@@ -281,24 +291,78 @@ class Documents
             return;
         }
 
+        $document = $this::getDocumentBySourcePath('/' . $wp->request);
+
+        if (!isset($document?->ID)) {
+            return;
+        }
+
+        wp_safe_redirect(get_permalink($document->ID), 301);
+        exit;
+    }
+
+
+    /**
+     * Get a document by the meta key _source_path.
+     *
+     * A helper function to lookup a document by the source path - a meta field set during migration.
+     *
+     * @param string $source_path - this should be the path of the old document, starting with a slash.
+     * @return WP_Post|null
+     */
+
+    public static function getDocumentBySourcePath(string $source_path): ?WP_Post
+    {
         $document = get_posts([
             'post_type' => self::SLUG,
             'posts_per_page' => 1,
             'meta_query' => [
                 [
                     'key' => '_source_path',
-                    'value' => '/' . $wp->request
+                    'value' => $source_path
                 ]
             ],
         ]);
 
-        if (!isset($document[0]?->ID)) {
-            return;
+        return $document[0] ?? null;
+    }
+
+
+    /**
+     * Get the document ID by the URL.
+     *
+     * This function is used to get the document ID by the URL.
+     * It will first try to get the document by the source path - for legacy documents.
+     * If that fails, it will try to get the document by the slug.
+     *
+     * @param ?string $url
+     * @return int|null - Post ID, or 0 on failure.
+     */
+    public static function getDocumentIdByUrl(?string $url): Int
+    {
+        if (!$url || !is_string($url)) {
+            return 0;
         }
 
-        wp_safe_redirect(get_permalink($document[0]->ID), 301);
-        exit;
+        // Get the path from the URL.
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if (!$path) {
+            return 0;
+        }
+
+        // Get the document by the source path - for legacy documents.
+        $document = self::getDocumentBySourcePath($path);
+
+        if ($document?->ID) {
+            return $document->ID;
+        }
+
+        $post_id = url_to_postid($path);
+
+        return self::isDocument($post_id) ? $post_id : 0;
     }
+
 
     /**
      * Add object meta to the S3 object.
@@ -603,18 +667,23 @@ class Documents
             if ($attachment?->ID ?? false) {
                 // Update the $postId variable to the document's attachment ID
                 $post_id = $attachment->ID;
+                error_log('attachment ID: ' . $post_id);
             }
         }
 
         // Otherwise check the db for the saved filesize
         $post_meta = get_post_meta($post_id, '_wp_attachment_metadata', true);
+
         // Prefer the original filesize
         if (!empty($post_meta['filesize']) && is_int($post_meta['filesize'])) {
             $filesize = $post_meta['filesize'];
-        // But if it's offloaded get the size saved by AS3CF
+            // Or, get it it from the full size
+        } else if (!empty($post_meta['sizes']['full']['filesize']) && is_int($post_meta['sizes']['full']['filesize'])) {
+            $filesize = $post_meta['sizes']['full']['filesize'];
+            // But if it's offloaded get the size saved by AS3CF
         } else {
-            $offloadedFilesize = get_post_meta($post_id, 'as3cf_filesize_total', true);
-            $filesize = !empty($offloadedFilesize) && is_int($offloadedFilesize) ? $offloadedFilesize : null;
+            $offloaded_filesize = get_post_meta($post_id, 'as3cf_filesize_total', true);
+            $filesize = !empty($offloaded_filesize) && is_int($offloaded_filesize) ? $offloaded_filesize : null;
         }
         return size_format($filesize);
     }

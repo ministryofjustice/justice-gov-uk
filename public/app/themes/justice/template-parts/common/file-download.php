@@ -8,8 +8,8 @@ $defaults = [
 
 $args = array_merge($defaults, $args);
 
-printf('<a class="file-download" href="%s"', esc_url($args['link']));
-printf('<i class="file-download__icon icon-%s--em" aria-hidden="true"></i>', esc_attr($args['format']));
+printf('<a class="file-download" href="%s">', esc_url($args['url']));
+printf('<i class="file-download__icon icon-%s--em" aria-hidden="true"></i>', strtolower(esc_attr($args['format'])));
 print '<span class="file-download__prefix visually-hidden">Download</span>';
 print '<span class="file-download__text">';
 
@@ -28,9 +28,3 @@ if ($args['format']) {
 
 print '</span>';
 print '</a>';
-        
-// TODO!
-//     <!-- // {# Keep the following HTML comment, it assists in removing file details that an editor has input into the content editor  #} -->
-//     <!-- // {# It is used to identify the end this component, subsequently we can safely remove a duplicate string of "(PDF)". #} -->
-//     <!-- /.file-download -->
-// </a>

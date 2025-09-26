@@ -7,6 +7,7 @@ if (Config::get('FRONTEND_VERSION') === 1) {
     return;
 }
 
+use MOJ\Justice\ContentLinks;
 use MOJ\Justice\PostMeta;
 
 $post_meta = new PostMeta(\get_the_ID(), $args);
@@ -29,7 +30,19 @@ if ($post_meta->hasPanel('related')) {
     get_template_part('template-parts/panels/list', null, [
         'title' => 'Related pages',
         // TODO - fortify the links with file properties.
-        'links' => $post_meta->getMeta('_panel_related_entries'),
+        'links' => array_map(
+            function ($entry) {
+                $args =  ContentLinks::getLinkParams(
+                    $entry['url'],
+                    $entry['label'] ?? null,
+                    $entry['id'] ?? null,
+                    $entry['target'] ?? null
+                );
+
+                return [...$args, ...$entry];
+            },
+            $post_meta->getMeta('_panel_related_entries')
+        ),
         'is_mobile' => $is_mobile,
     ]);
 }

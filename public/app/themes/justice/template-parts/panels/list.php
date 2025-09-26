@@ -25,13 +25,7 @@ $content_id = 'sidebar-block-content-' . sanitize_title($args['title'] ) . ($is_
             <?php foreach ($args['links'] as $link): ?>
                 <li>
                     <?php if (isset($link['format'])): ?>
-                        <!-- {% include '@components/file-download/file-download.html.twig' with {
-                            format: link.format,
-                            link: link.link,
-                            filesize: link.filesize,
-                            filename: link.filename,
-                            language: link.language,
-                        } %} -->
+                        <?php get_template_part('template-parts/common/file-download', null, $link); ?>
                     <?php else: ?>
                         <?php get_template_part('template-parts/common/link', null, $link); ?>
                     <?php endif; ?>

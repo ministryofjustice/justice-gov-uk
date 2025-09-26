@@ -10,7 +10,7 @@
                     'filename' => $args['title'],
                     'language' => $args['language'] ?? null,
                     'format' => $args['format'] ?? null,
-                    'link' => $args['url'],
+                    'url' => $args['url'],
                     'filesize' => $args['filesize'] ?? null,
                 ]);
 

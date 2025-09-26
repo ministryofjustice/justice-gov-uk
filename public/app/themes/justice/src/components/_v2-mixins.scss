@@ -316,7 +316,7 @@ $iconSizes: (
             @each $icon, $ext in $iconTypes {
                 &-#{$icon}--#{$size} {
                     display: block;
-                    background-image: url(/src/assets/icons/#{$icon}.#{$ext});
+                    background-image: url(../img/icon/#{$icon}.#{$ext});
                     background-repeat: no-repeat;
                     height: $sizeValue;
                     width: $sizeValue;

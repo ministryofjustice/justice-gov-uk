@@ -1,7 +1,6 @@
 <?php
 
 use MOJ\Justice\Breadcrumbs;
-use MOJ\Justice\Content;
 use MOJ\Justice\PostMeta;
 use MOJ\Justice\Utils;
 
@@ -28,9 +27,13 @@ $post_meta = new PostMeta();
 
                 <?php
 
-                get_template_part('template-parts/common/rich-text', null, [
-                    'content' => Content::getContentWithBlocks(get_the_ID()),
-                ]);
+                while (have_posts()) {
+                    the_post();
+
+                    get_template_part('template-parts/common/rich-text', null, [
+                        'content' => apply_filters('the_content', get_the_content())
+                    ]);
+                }
 
                 if ($post_meta->getMeta('_show_updated_at')) :
                     get_template_part('template-parts/common/updated-date', null, [

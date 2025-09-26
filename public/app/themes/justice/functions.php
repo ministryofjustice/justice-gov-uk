@@ -21,6 +21,7 @@ require_once 'inc/breadcrumbs.php';
 require_once 'inc/commands.php';
 require_once 'inc/content-quality/commands.php';
 require_once 'inc/content-quality/content-quality.php';
+require_once 'inc/content-links.php';
 require_once 'inc/content.php';
 require_once 'inc/core.php';
 require_once 'inc/debug.php';

@@ -25,7 +25,7 @@ $args = array_merge($defaults, $args);
     echo esc_html($args['label']);
 
     if ($args['new_tab']) {
-        sprintf('<span class="link__new-tab-suffix %s"> (opens in a new tab)</span>', 
+        printf('<span class="link__new-tab-suffix %s"> (opens in a new tab)</span>', 
             $args['new_tab_visually_hidden'] ? 'visually-hidden' : ''
         );
     }

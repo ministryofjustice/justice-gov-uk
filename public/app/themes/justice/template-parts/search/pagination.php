@@ -44,12 +44,12 @@ $args = array_merge($defaults, $args);
                                    aria-current="page">
                                     <?= esc_html($page['title']) ?>
                                 </a>
-                            <?php elseif (empty($page['link'])) : ?>
+                            <?php elseif (empty($page['url'])) : ?>
                                 <a class="pagination__link disabled" role="link" aria-disabled="true">
                                     <?= esc_html($page['title']) ?>
                                 </a>
                             <?php else: ?>
-                                <a class="pagination__link" href="<?= esc_url($page['link']) ?>"><?= esc_html($page['title']) ?></a>
+                                <a class="pagination__link" href="<?= esc_url($page['url']) ?>"><?= esc_html($page['title']) ?></a>
                             <?php endif; ?>
 
                         </li>

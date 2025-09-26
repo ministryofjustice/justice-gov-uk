@@ -8,6 +8,8 @@ trait DocumentPermalinks
 {
     // CPT slug. This is hardcoded in the plugin.
     const string SLUG = 'document';
+    // Hardcoded document slug. We don't want this to be changed by the user.
+    const string DOCUMENT_SLUG = 'documents';
 
     public $ajax_previous_slug = '';
 
@@ -333,7 +335,7 @@ trait DocumentPermalinks
         if (empty($path_parts['extension']) ||
             empty($path_parts['filename']) ||
             $path_parts['extension'] === 'php' ||
-            end($dirname_parts) !== $this->document_slug
+            end($dirname_parts) !== self::DOCUMENT_SLUG
         ) {
             return;
         }

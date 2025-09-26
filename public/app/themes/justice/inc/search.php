@@ -428,7 +428,7 @@ class Search
         $pages = [];
         for ($i = 1; $i <= $wp_query->max_num_pages; $i++) {
             $pages[] = [
-                'link' => get_pagenum_link($i),
+                'url' => get_pagenum_link($i),
                 'title' => $i,
                 'current' => $i === (int) $paged,
             ];
