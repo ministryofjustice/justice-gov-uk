@@ -4,6 +4,7 @@ namespace MOJ\Justice;
 
 use WP_Error;
 use Roots\WPConfig\Config;
+use MOJ\ClusterHelper;
 
 /**
  * Add a little security for WordPress
@@ -57,6 +58,11 @@ class Security
             // Push the loopback URL host to known_hosts.
             array_push($this->known_hosts, parse_url($loopback_url, PHP_URL_HOST));
         }
+
+        // Push the Nginx hosts to known_hosts.
+        $nginx_urls = ClusterHelper::getNginxHosts('hosts');
+        $nginx_hosts = array_map(fn ($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
+        array_push($this->known_hosts, ...$nginx_hosts);
     }
 
     /**

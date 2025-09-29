@@ -58,7 +58,7 @@ class ClusterHelper
      *               - If $format is invalid, it defaults to 'full'.
      * If the option does not exist or is not an array, it returns an empty array.
      */
-    public function getNginxHosts($format = 'full'): array
+    public static function getNginxHosts($format = 'full'): array
     {
         // Validate the format parameter
         if (!in_array($format, ['full', 'hosts'])) {
@@ -66,7 +66,7 @@ class ClusterHelper
         }
 
         // Get the current nginx hosts from the option
-        $nginx_hosts_string = get_option($this::OPTION_KEY, '');
+        $nginx_hosts_string = get_option(self::OPTION_KEY, '');
         $nginx_hosts = maybe_unserialize($nginx_hosts_string);
 
         // Ensure it's an array
