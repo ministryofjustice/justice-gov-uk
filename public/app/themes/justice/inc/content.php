@@ -31,8 +31,6 @@ class Content
         add_filter('the_content', [__CLASS__, 'fixNationalArchiveLinks']);
         add_filter('wp_kses_allowed_html', [__CLASS__, 'customWpksesPostTags'], 10, 2);
 
-        // add_filter( 'render_block', [__CLASS__, 'filterBlock'], 1, 3 );
-
         add_action('render_block_core/list', [$this, 'renderLinks'], 10, 2);
         add_action('render_block_core/paragraph', [$this, 'renderLinks'], 10, 2);
         add_action('render_block_core/table', [$this, 'renderLinks'], 10, 2);
