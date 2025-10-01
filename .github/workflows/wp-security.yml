@@ -1,0 +1,38 @@
+name: "WP Plugins vulnerability and Virus scanning"
+
+on:
+  pull_request:
+    branches: [ "main", "develop", "frontend-rework" ]
+  schedule:
+    - cron: '22 8 * * *' # Every day at 08:22 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wp-scanner:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      # Delete wp-cli.yml, since the path will be incorrect for this workflow
+      - name: Delete wp-cli.yml
+        run: |
+          rm -f wp-cli.yml
+      
+      - name: WordPress Scanner
+        uses: 10up/wp-scanner-action@75371fe927396bd16da76de26884d9b777e92b0d # 1.0.1
+        with:
+          content_dir: './public/app'
+          wp_core_version: '6.7.3'
+          composer_build: 'true'
+        env:
+          COMPOSER_AUTH: '{ "http-basic": { "www.relevanssi.com": { "username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}" } } }'
+
