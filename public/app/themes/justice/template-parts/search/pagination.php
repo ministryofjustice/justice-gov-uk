@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $defaults = [
     'previous_url' => null,
@@ -13,12 +13,12 @@ $args = array_merge($defaults, $args);
 <nav id="pagination" class="pagination" aria-label="pagination">
     <ul class="pagination__list">
         <li class="pagination__link-wrapper pagination__link-wrapper--previous">
-            <?php if ($args['previous_url']): ?>
+            <?php if ($args['previous_url']) : ?>
                 <a class="pagination__link pagination__link--previous" href="<?= esc_url($args['previous_url']) ?>">
                     <span class="pagination__link-arrow" aria-hidden="true">«</span>
                     <span class="pagination__link-text">Previous</span>
                 </a>
-            <?php else: ?>
+            <?php else : ?>
                 <a class="pagination__link pagination__link--previous disabled" role="link" aria-disabled="true">
                     <span class="pagination__link-arrow" aria-hidden="true">«</span>
                     <span class="pagination__link-text">Previous</span></a>
@@ -27,19 +27,17 @@ $args = array_merge($defaults, $args);
 
         <li class="pagination__link-wrapper">
             <ul class="pagination__list pagination__sublist">
-                <?php if (sizeof($args['pages']) < 1): ?>
-
+                <?php if (sizeof($args['pages']) < 1) : ?>
                     <li class="pagination__link-wrapper">
                         <a class="pagination__link disabled" role="link" aria-disabled="true"
                            aria-current="page">1</a>
                     </li>
 
-                <?php else: ?>
-
-                    <?php foreach ($args['pages'] as $page): ?>
+                <?php else : ?>
+                    <?php foreach ($args['pages'] as $page) : ?>
                         <li class="pagination__link-wrapper">
 
-                            <?php if($page['current'] ?? false): ?>
+                            <?php if ($page['current'] ?? false) : ?>
                                 <a class="pagination__link disabled" role="link" aria-disabled="true"
                                    aria-current="page">
                                     <?= esc_html($page['title']) ?>
@@ -48,7 +46,7 @@ $args = array_merge($defaults, $args);
                                 <a class="pagination__link disabled" role="link" aria-disabled="true">
                                     <?= esc_html($page['title']) ?>
                                 </a>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <a class="pagination__link" href="<?= esc_url($page['url']) ?>"><?= esc_html($page['title']) ?></a>
                             <?php endif; ?>
 
@@ -60,12 +58,12 @@ $args = array_merge($defaults, $args);
         </li>
 
         <li class="pagination__link-wrapper pagination__link-wrapper--next">
-            <?php if ($args['next_url']): ?>
+            <?php if ($args['next_url']) : ?>
                 <a class="pagination__link pagination__link--next" href="<?= esc_url($args['next_url']) ?>">
                     <span class="pagination__link-text">Next</span>
                     <span class="pagination__link-arrow" aria-hidden="true">»</span>
                 </a>
-            <?php else: ?>
+            <?php else : ?>
                 <a class="pagination__link pagination__link--next disabled" role="link" aria-disabled="true">
                     <span class="pagination__link-text">Next</span>
                     <span class="pagination__link-arrow" aria-hidden="true">»</span>

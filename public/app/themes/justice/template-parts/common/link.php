@@ -1,6 +1,6 @@
 <?php
 
-if (empty($args['url']) ) {
+if (empty($args['url'])) {
     return;
 }
 
@@ -20,13 +20,14 @@ $args = array_merge($defaults, $args);
     <?= $args['new_tab'] ? ' target="_blank" rel="noreferrer noopener"' : '' ?>
     <?= $args['on_click'] ? " onclick='" . esc_attr($args['on_click']) . "'" : '' ?>
     <?= $args['aria_current'] ? ' aria-current="' . esc_attr($args['aria_current']) . '"' : '' ?>
-><?php 
+><?php
     // Use php tags immediately inside the a tag, to avoid formatting issues.
     echo esc_html($args['label']);
 
-    if ($args['new_tab']) {
-        printf('<span class="link__new-tab-suffix %s"> (opens in a new tab)</span>', 
-            $args['new_tab_visually_hidden'] ? 'visually-hidden' : ''
-        );
-    }
-  ?></a>
+if ($args['new_tab']) {
+    printf(
+        '<span class="link__new-tab-suffix %s"> (opens in a new tab)</span>',
+        $args['new_tab_visually_hidden'] ? 'visually-hidden' : ''
+    );
+}
+?></a>

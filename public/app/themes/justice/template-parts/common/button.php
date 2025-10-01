@@ -1,6 +1,6 @@
 <?php
 
-if (empty($args['type']) || empty($args['variant']) || empty($args['button_text']) ) {
+if (empty($args['type']) || empty($args['variant']) || empty($args['button_text'])) {
     return;
 }
 

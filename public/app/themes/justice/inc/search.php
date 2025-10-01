@@ -285,11 +285,11 @@ class Search
 
     /**
      * Get did you mean
-     * 
+     *
      * This function uses Relevanssi's premium feature to generate a suggestion for the search term.
      * If no suggestion is found, it returns true.
-     * 
-     * @return array|true An array containing the suggestion URL and term, 
+     *
+     * @return array|true An array containing the suggestion URL and term,
      *   or true if the search term is correct, or false if no suggestion is found.
      */
     public static function getDidYouMean(): array|bool
@@ -318,7 +318,7 @@ class Search
      *
      * This function returns an array of form values to be used in the search form or filter.
      * It is useful for getting values for hidden inputs.
-     * 
+     *
      * @param array $exclude An array of form fields to exclude from the returned values.
      * @return array An array of form values, each with a name and value.
      */

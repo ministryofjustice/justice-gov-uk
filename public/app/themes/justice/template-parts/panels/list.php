@@ -5,8 +5,8 @@ defined('ABSPATH') || exit;
 $is_mobile = $args['is_mobile'] ?? false;
 $is_archive = $args['is_archive'] ?? false;
 
-$title_id = 'sidebar-block-title-' . sanitize_title($args['title'] ) . ($is_mobile ? '-mobile' : '');
-$content_id = 'sidebar-block-content-' . sanitize_title($args['title'] ) . ($is_mobile ? '-mobile' : '');
+$title_id = 'sidebar-block-title-' . sanitize_title($args['title']) . ($is_mobile ? '-mobile' : '');
+$content_id = 'sidebar-block-content-' . sanitize_title($args['title']) . ($is_mobile ? '-mobile' : '');
 
 ?>
 
@@ -22,11 +22,11 @@ $content_id = 'sidebar-block-content-' . sanitize_title($args['title'] ) . ($is_
     <div id="<?= $content_id ?>" class="sidebar-block__content">
 
         <ul class="sidebar-block__list">
-            <?php foreach ($args['links'] as $link): ?>
+            <?php foreach ($args['links'] as $link) : ?>
                 <li>
-                    <?php if (isset($link['format'])): ?>
+                    <?php if (isset($link['format'])) : ?>
                         <?php get_template_part('template-parts/common/file-download', null, $link); ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <?php get_template_part('template-parts/common/link', null, $link); ?>
                     <?php endif; ?>
                 </li>

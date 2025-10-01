@@ -55,7 +55,7 @@
     <?php endforeach; ?>
 
     <?php
-    // Close the unordered list that is opened at the start of the macro. 
+    // Close the unordered list that is opened at the start of the macro.
     print('</ul>');
     ?>
 <?php endif;

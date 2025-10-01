@@ -1,16 +1,16 @@
 <?php
 
-if(empty($args['image']['url'])) {
+if (empty($args['image']['url'])) {
     return;
 }
 
 // If we have a title, ensure we have a tag and text
-if(!empty($args['title']) && (!isset($args['title']['tag']) || !isset($args['title']['text']))) {
+if (!empty($args['title']) && (!isset($args['title']['tag']) || !isset($args['title']['text']))) {
     return;
 }
 
 $defaults = [
-    'direction' => 'left', 
+    'direction' => 'left',
 ];
 
 $args = array_merge($defaults, $args);
@@ -30,13 +30,13 @@ $args = array_merge($defaults, $args);
 
     <div class="image-with-text__content">
 
-        <?php if (!empty($args['title'])): ?>
+        <?php if (!empty($args['title'])) : ?>
             <div class="image-with-text__title">
 
                 <?php printf('<%s>', esc_attr($args['title']['tag'])); ?>
-                    <?php if (!empty($args['title']['url'])): ?>
+                    <?php if (!empty($args['title']['url'])) : ?>
                         <a href={{ title.url }}><?= esc_html($args['title']['text']) ?></a>
-                    <?php else: ?>
+                    <?php else : ?>
                         <?= esc_html($args['title']['text']) ?>
                     <?php endif; ?>
                 <?php printf('</%s>', esc_attr($args['title']['tag'])); ?>

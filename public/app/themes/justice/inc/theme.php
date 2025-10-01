@@ -26,7 +26,7 @@ class Theme
     /**
      * If there is a query string for frontend_version  then set a cookie so that the user
      * persists with the new theme version.
-     * 
+     *
      * @return void
      */
     public function setFrontendVersionCookie(): void

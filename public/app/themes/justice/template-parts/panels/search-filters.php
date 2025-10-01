@@ -2,8 +2,8 @@
 
 defined('ABSPATH') || exit;
 
-if(empty($args['fields'])) {
-   return;
+if (empty($args['fields'])) {
+    return;
 }
 
 $defaults = [
@@ -17,8 +17,8 @@ $defaults = [
 
 $args = array_merge($defaults, $args);
 
-$title_id = 'sidebar-block-title-' . sanitize_title($args['title'] ) . ($args['is_mobile'] ? '-mobile' : '');
-$content_id = 'sidebar-block-content-' . sanitize_title($args['title'] ) . ($args['is_mobile'] ? '-mobile' : '');
+$title_id = 'sidebar-block-title-' . sanitize_title($args['title']) . ($args['is_mobile'] ? '-mobile' : '');
+$content_id = 'sidebar-block-content-' . sanitize_title($args['title']) . ($args['is_mobile'] ? '-mobile' : '');
 
 ?>
 
@@ -45,7 +45,7 @@ $content_id = 'sidebar-block-content-' . sanitize_title($args['title'] ) . ($arg
             <div class="sidebar-block__search-filter-fields">
 
                 <?php foreach ($args['fields'] as $field) : ?>
-                    <?php if( !empty($field['options'] )) : ?>
+                    <?php if (!empty($field['options'])) : ?>
                         <div class="sidebar-block__search-filter-field">
                             <?php
                             get_template_part('template-parts/common/selection-input', null, [

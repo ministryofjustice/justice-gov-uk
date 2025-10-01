@@ -79,7 +79,6 @@ class Content
         $file_download_template = 'template-parts/common/file-download';
 
         foreach ($links as $link) {
-
             $args = ContentLinks::getLinkParamsFromNode($link);
 
             $template = !empty($args['format']) ? $file_download_template : $link_template;
@@ -140,7 +139,7 @@ class Content
      * and to "row" for table header cells in the table body.
      *
      * @param string $block_content The content of the block to be processed
-     * 
+     *
      */
     public function renderTables(string $block_content, $block): string
     {
@@ -201,7 +200,7 @@ class Content
 
     /**
      * Customizes the allowed HTML tags for post content.
-     * 
+     *
      * @param array $tags The allowed HTML tags.
      * @param string $context The context in which the tags are being used.
      * @return array The modified allowed HTML tags.
@@ -210,7 +209,7 @@ class Content
     {
 
         if ('post' === $context) {
-            // Allow the input tag, for 
+            // Allow the input tag, for
             $tags['input'] = array(
                 'id'             => true,
                 'class'          => true,

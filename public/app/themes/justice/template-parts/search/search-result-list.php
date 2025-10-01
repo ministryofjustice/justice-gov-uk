@@ -1,7 +1,7 @@
 <div class="search-result-list">
-    <?php if (!empty($args['cards'])): ?>
+    <?php if (!empty($args['cards'])) : ?>
         <ol class="search-result-list__list">
-            <?php foreach ($args['cards'] as $card): ?>
+            <?php foreach ($args['cards'] as $card) : ?>
                 <li class="search-result-list__element">
                     <?php
                     get_template_part('template-parts/search/search-result-card', null, [
@@ -18,7 +18,7 @@
                 </li>
             <?php endforeach; ?>
         </ol>
-    <?php else: ?>
+    <?php else : ?>
         <div class="search-result-list__no-results">
             <?php
 

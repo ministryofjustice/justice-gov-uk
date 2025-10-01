@@ -18,7 +18,7 @@ $args = array_merge($defaults, $args);
     <div class="search-bar-block__wrapper">
 
         <div class="search-bar-block__search">
-            <?php get_template_part('template-parts/common/text-input-form', null,  $args['search_form']); ?>
+            <?php get_template_part('template-parts/common/text-input-form', null, $args['search_form']); ?>
         </div>
 
         <?php if ($args['result_count']) : ?>

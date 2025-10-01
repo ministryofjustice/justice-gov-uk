@@ -23,7 +23,7 @@ use MOJ\Justice\Header;
 
 <?php
 
-wp_body_open(); 
+wp_body_open();
 
 if (Config::get('FRONTEND_VERSION') === 1) {
     require get_template_directory() . '/header.v1.php';

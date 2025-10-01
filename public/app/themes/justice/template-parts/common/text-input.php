@@ -1,7 +1,6 @@
 <?php
 
-if (
-    empty($args['id']) ||
+if (empty($args['id']) ||
     empty($args['name']) ||
     empty($args['label'])
 ) {

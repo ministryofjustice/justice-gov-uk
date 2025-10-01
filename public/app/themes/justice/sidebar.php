@@ -29,7 +29,6 @@ if ($post_meta->hasPanel('menu')) {
 }
 
 if ($post_meta->hasPanel('search-filters')) {
-
     $fields = Taxonomies::getTaxonomiesForFilter();
     $fields[] = [
         'group' => 'post_types',

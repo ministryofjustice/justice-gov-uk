@@ -26,7 +26,7 @@ class ContentLinks
         // Use regex to check if the URL is absolute, does it start with 'http', 'https' or '//'
         $is_absolute_url = preg_match('/^(https?:\/\/|\/\/)/', $url);
 
-        if(!$is_absolute_url) {
+        if (!$is_absolute_url) {
             // If it's not an absolute URL, we assume it's internal
             return false;
         }
