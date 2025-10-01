@@ -41,6 +41,7 @@ Ise
 Kendal
 Kingsway
 Laganside
+Leyland
 Llanelli
 Llangefni
 Llundain
@@ -57,6 +58,7 @@ Pontypridd
 Popham
 Prestatyn
 Redditch
+Reedley
 Reigate
 Rhyl
 Romford
@@ -95,6 +97,7 @@ Wycombe
 Yeovil
 
 NAMES
+Beddoe
 Folami
 Linford
 Shewan
@@ -117,9 +120,11 @@ Fegans
 Garnier
 Gethin
 Halimi
+Hadkinson
 Higgs
 Hillman
 Holtby
+Isah
 Jennison
 Kearney
 Kentigern
@@ -135,6 +140,7 @@ Minchin
 Newlove
 Norgrove
 O’Mahony
+Ouseley
 Portman
 Prehaye
 Purdie
@@ -164,6 +170,7 @@ ADR
 AIT
 AIT's
 AOS
+AoS
 ASBI
 ATEI
 AVH
@@ -173,6 +180,7 @@ BAILII
 BASW
 BFPO
 BPC
+BPCs
 BPP
 BSB
 BSB’s
@@ -201,6 +209,7 @@ CMA’s
 CMCs
 CMC
 CMH
+CMP
 CMR
 CMS
 CNBC
@@ -217,6 +226,8 @@ CTG
 CTSC
 DAC
 DAPPs
+DAPO
+DAPOs
 DCO
 DCP
 DCP’s
@@ -248,6 +259,7 @@ EWCA
 EWHC
 EWFC
 FCMH
+FDAC
 FGM
 FGMPO
 FGMPOs
@@ -314,6 +326,7 @@ ISDN
 ITV
 JCSI
 JW
+KBD
 KCB
 LA's
 LAA
@@ -344,18 +357,26 @@ NIA
 NIHL
 NHS
 NHSLA
+NLR
+NLRs
+NMO
 NOA
 NOC
 NOMS
+NSIP
+NSIPs
+NSPCC
 NVC
 NYAS
 OCMC
 OCON
 OEP
 OFT’s
+OIC
 OPG
 OPSI
 PAPs
+PBA
 PCOL
 PDA
 PDs
@@ -392,6 +413,8 @@ SIAC
 SIF
 SJE
 SJE’s
+SLAPP
+SLAPPs
 SMI
 SMS
 SPIP
@@ -408,6 +431,7 @@ TeCSA
 TNA
 TPIM
 TRO
+TZ
 UNECE
 uk
 UKCP
@@ -420,6 +444,7 @@ UTIAC
 VCF
 VWF
 WFPO
+WIP
 www
 
 BRANDS
@@ -430,6 +455,7 @@ askCUE
 Cafcass
 Carecraft
 CopyDirect
+CourtServe
 DirectGov
 Esure
 Europaea
@@ -449,6 +475,8 @@ moneyclaim-legal
 MoneyGram
 MyHMCTS
 NAGALRO
+Reunite
+Relx
 Societas
 Squiz
 TheCityUK
@@ -465,12 +493,14 @@ anaw
 Annexe
 anonymised
 Anonymisation
+anonymisation
 asc
 blocktextgraph
 bonis
 bona
 bono
 causa
+cesser
 clarificatory
 Commonhold
 Compensator’s
@@ -520,6 +550,8 @@ intervener’s
 Kings’s
 licensor
 litem
+Longstop
+longstop
 memoranda
 minimis
 mis-statement
@@ -532,6 +564,7 @@ offeror’s
 Orthoptist
 Orthoptists
 orthotists
+praecipe
 personam
 psychiatrically
 pre-action
@@ -546,6 +579,9 @@ re-issue
 repaginated
 reoffending
 repos
+respondendum
+Reviewal
+reviewal
 roundtable
 seised
 sequestrari
@@ -553,8 +589,10 @@ servient
 sequestrator
 shorthold
 Stannaries
+subjiciendum
 subparagraphs
 subrogated
+testificandum
 themself
 tipstaff
 tipstaff's
@@ -613,6 +651,7 @@ utmb
 utmc
 utmz
 WCAG
+webp
 word-processing
 XHTML
 xls
