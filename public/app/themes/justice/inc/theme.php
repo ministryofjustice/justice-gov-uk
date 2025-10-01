@@ -52,7 +52,7 @@ class Theme
      *
      * If the user does not have a frontend_version cookie set, then set it based on the
      * FRONTEND_ROLLOUT_PERCENTAGE setting.
-     * 
+     *
      * @return void
      */
     public static function rolloutFrontendVersionCookie(): void
@@ -66,7 +66,7 @@ class Theme
         $permalink = get_permalink();
 
         // If we are not on a page with a permalink, do nothing.
-        if($permalink === false) {
+        if ($permalink === false) {
             return;
         }
 
