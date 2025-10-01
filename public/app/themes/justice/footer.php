@@ -14,28 +14,28 @@ if (Config::get('FRONTEND_VERSION') === 1) {
                 <div class="footer__container">
                     <ul class="footer__links">
                         <li class="footer__link">
-                            <a class="link" href="<?php home_url('/help/accessibility'); ?>">Accessibility</a>
+                            <a class="link" href="<?= home_url('/help/accessibility'); ?>">Accessibility</a>
                         </li>
                         <li class="footer__link">
-                            <a class="link" href="<?php home_url('/privacy/cookies'); ?>">Cookies</a>
+                            <a class="link" href="<?= home_url('/privacy/cookies'); ?>">Cookies</a>
                         </li>
                         <li class="footer__link">
                             <a class="link" href="https://www.gov.uk/government/organisations/ministry-of-justice">Contacts</a>
                         </li>
                         <li class="footer__link">
-                            <a class="link" href="<?php home_url('/copyright'); ?>">Copyright</a>
+                            <a class="link" href="<?= home_url('/copyright'); ?>">Copyright</a>
                         </li>
                         <li class="footer__link">
-                            <a class="link" href="<?php home_url('/help'); ?>">Help</a>
+                            <a class="link" href="<?= home_url('/help'); ?>">Help</a>
                         </li>
                         <li class="footer__link">
-                            <a class="link" href="<?php home_url('/privacy'); ?>">Privacy</a>
+                            <a class="link" href="<?= home_url('/privacy'); ?>">Privacy</a>
                         </li>
                         <li class="footer__link">
-                            <a class="link" href="<?php home_url('/ministry-of-justice-webchats'); ?>">Webchats</a>
+                            <a class="link" href="<?= home_url('/ministry-of-justice-webchats'); ?>">Webchats</a>
                         </li>
                         <li class="footer__link">
-                            <a class="link" href="<?php home_url('/website-queries'); ?>">Website queries</a>
+                            <a class="link" href="<?= home_url('/website-queries'); ?>">Website queries</a>
                         </li>
                     </ul>
                     <div class="footer__details">
