@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+defined('ABSPATH') || exit;
 
 if (empty($args['article_id'])) {
     return;

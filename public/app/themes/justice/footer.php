@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+defined('ABSPATH') || exit;
 
 use Roots\WPConfig\Config;
 

@@ -1,5 +1,7 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 use MOJ\Justice\Breadcrumbs;
 use MOJ\Justice\PostMeta;
 use MOJ\Justice\Utils;
@@ -10,7 +12,7 @@ $post_meta = new PostMeta();
 
 <div class="one-sidebar one-sidebar--right">
     <div class="one-sidebar__grid">
-        <article id="main-page-content" class="one-sidebar__article one-sidebar__article--homepage">
+        <article id="main-page-content" class="one-sidebar__article">
 
             <div class="one-sidebar__article-header">
                 <?php get_template_part('template-parts/common/hero', null, [

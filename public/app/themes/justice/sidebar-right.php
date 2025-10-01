@@ -1,5 +1,7 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 use Roots\WPConfig\Config;
 
 if (Config::get('FRONTEND_VERSION') === 1) {

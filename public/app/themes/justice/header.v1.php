@@ -1,3 +1,8 @@
+<?php
+
+defined('ABSPATH') || exit;
+
+?>
 <div id="header-wrapper">
     <div class="container-wrapper">
         <div id="header">

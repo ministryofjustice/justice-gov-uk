@@ -1,9 +1,6 @@
 <?php
-/**
- *
- * Template name: 3 column (Default)
- * Template Post Type: page
- */
+
+defined('ABSPATH') || exit;
 
 use MOJ\Justice\PostMeta;
 

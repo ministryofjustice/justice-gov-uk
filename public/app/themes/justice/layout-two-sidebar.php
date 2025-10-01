@@ -1,7 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 use MOJ\Justice\Breadcrumbs;
-use MOJ\Justice\Content;
 use MOJ\Justice\PostMeta;
 use MOJ\Justice\Utils;
 

@@ -1,8 +1,6 @@
-<?php
+<?php 
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined('ABSPATH') || exit;
 
 use MOJ\Justice\Breadcrumbs;
 

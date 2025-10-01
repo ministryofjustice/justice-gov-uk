@@ -1,20 +1,21 @@
 <?php
 
+/**
+ *
+ * Template name: Home
+ * Template Post Type: page
+ */
+
+defined('ABSPATH') || exit;
+
 use Roots\WPConfig\Config;
-use MOJ\Justice\Utils;
 
 if (Config::get('FRONTEND_VERSION') === 1) {
     require get_template_directory() . '/page_home.v1.php';
     return;
 }
 
-// Add skip link here, or to header?
-
-/**
- *
- * Template name: Home
- * Template Post Type: page
- */
+use MOJ\Justice\Utils;
 
 get_header();
 

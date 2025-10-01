@@ -1,6 +1,9 @@
-<?php
+<?php 
+
+defined('ABSPATH') || exit;
 
 ?>
+
 <article class="search-result-card">
     <hgroup class="search-result-card__title-with-date">
         <h1 class="search-result-card__title">

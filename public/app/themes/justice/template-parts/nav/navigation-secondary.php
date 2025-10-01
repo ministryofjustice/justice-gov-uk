@@ -1,3 +1,8 @@
+<?php 
+
+defined('ABSPATH') || exit;
+
+?>
 <div class="navigation-secondary">
     <div class="navigation-secondary__button-wrapper">
         <button class="navigation-secondary__button navigation-secondary__button--nav" aria-expanded="false"

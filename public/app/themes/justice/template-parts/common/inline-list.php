@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+defined('ABSPATH') || exit;
 
 /**
  * Inline list template part.

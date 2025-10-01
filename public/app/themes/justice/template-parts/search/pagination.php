@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+defined('ABSPATH') || exit;
 
 $defaults = [
     'previous_url' => null,

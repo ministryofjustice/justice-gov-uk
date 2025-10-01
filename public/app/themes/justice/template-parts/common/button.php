@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+defined('ABSPATH') || exit;
 
 if (empty($args['type']) || empty($args['variant']) || empty($args['button_text'])) {
     return;

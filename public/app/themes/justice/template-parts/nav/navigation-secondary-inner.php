@@ -1,3 +1,8 @@
+<?php 
+
+defined('ABSPATH') || exit;
+
+?>
 <?php if (!empty($args['items'])) : ?>
     <?php if (0 === ($args['menu_level'])) : ?>
         <?php print('<ul class="navigation-secondary__list">'); ?>

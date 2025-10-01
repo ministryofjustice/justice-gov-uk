@@ -1,4 +1,6 @@
-<?php
+<?php 
+
+defined('ABSPATH') || exit;
 
 if (empty($args['id']) ||
     empty($args['name']) ||

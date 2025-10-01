@@ -1,3 +1,9 @@
+<?php 
+
+defined('ABSPATH') || exit;
+
+?>
+
 <div class="device-only">
 
     <div class="anchor-link">

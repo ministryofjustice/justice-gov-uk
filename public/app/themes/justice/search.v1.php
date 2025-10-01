@@ -1,5 +1,7 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 use MOJ\Justice\Search;
 
 get_header();

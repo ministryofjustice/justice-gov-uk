@@ -1,5 +1,6 @@
-<?php
+<?php 
 
+defined('ABSPATH') || exit;
 
 if (empty($args['group'])) {
     return;

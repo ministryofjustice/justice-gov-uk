@@ -1,9 +1,8 @@
 <?php
 
-if (!defined('ABSPATH')) {
-    exit;
-}
-use Roots\WPConfig\Config;
+
+defined('ABSPATH') || exit;
+
 use MOJ\Justice\PostMeta;
 
 $post_meta = new PostMeta(\get_the_ID(), $args);

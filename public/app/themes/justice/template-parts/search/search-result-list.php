@@ -1,3 +1,9 @@
+<?php 
+
+defined('ABSPATH') || exit;
+
+?>
+
 <div class="search-result-list">
     <?php if (!empty($args['cards'])) : ?>
         <ol class="search-result-list__list">

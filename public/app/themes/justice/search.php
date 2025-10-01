@@ -1,15 +1,18 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 use Roots\WPConfig\Config;
-use MOJ\Justice\Breadcrumbs;
-use MOJ\Justice\Documents;
-use MOJ\Justice\Search;
-use MOJ\Justice\Utils;
 
 if (Config::get('FRONTEND_VERSION') === 1) {
     require get_template_directory() . '/search.v1.php';
     return;
 }
+
+use MOJ\Justice\Breadcrumbs;
+use MOJ\Justice\Documents;
+use MOJ\Justice\Search;
+use MOJ\Justice\Utils;
 
 get_header();
 

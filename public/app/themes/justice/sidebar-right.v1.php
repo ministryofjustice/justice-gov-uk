@@ -1,5 +1,7 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 use MOJ\Justice\PostMeta;
 
 $post_meta = new PostMeta(\get_the_ID(), $args);
