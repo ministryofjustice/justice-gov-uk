@@ -75,6 +75,8 @@ new Justice\Theme();
 $block_editor = new Justice\BlockEditor();
 $block_editor->addHooks();
 
+(new Justice\NavigationSecondary())->addHooks();
+
 $post_meta = new Justice\PostMeta();
 $post_meta->addHooks();
 

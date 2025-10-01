@@ -20,16 +20,10 @@ class NavigationSecondary
      */
     public function addHooks(): void
     {
-        // Clear the cached menu items when a post is saved.
-        add_action('save_post_page', function ($post_id) {
-            // If the post is a revision, return early.
-            if (wp_is_post_revision($post_id)) {
-                return;
-            }
-            // Clear the cache for the secondary navigation items.
-            delete_transient(self::CACHE_KEY);
-        });
-    
+        // Clear the cached menu when a post is saved or a revision is published.
+        add_action('wp_after_insert_post', fn() => delete_transient(self::CACHE_KEY));
+        add_action('revisionary_revision_published', fn() => delete_transient(self::CACHE_KEY));
+
         // Prevent the procedure-rules page slug being edited - it's a seed page for the secondary navigation.
         add_filter('wp_unique_post_slug', function ($slug, $post_ID, $post_status, $post_type) {
             if ($post_type === 'page' && $post_ID === get_page_by_path('courts/procedure-rules')->ID) {
@@ -37,6 +31,10 @@ class NavigationSecondary
             }
             return $slug;
         }, 10, 4);
+
+        add_action('delete_transient_' . self::CACHE_KEY, function () {
+            error_log('Secondary navigation cache cleared');
+        });
     }
 
 
@@ -77,7 +75,6 @@ class NavigationSecondary
     {
         // Get the items from the cache.
         $items = get_transient(self::CACHE_KEY);
-        $items = false;
 
         // If the items are cached, return them.
         if ($items !== false) {
