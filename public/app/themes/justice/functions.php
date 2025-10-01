@@ -43,6 +43,7 @@ require_once 'inc/sitemap.php';
 require_once 'inc/taxonomies.php';
 require_once 'inc/theme-assets.php';
 require_once 'inc/theme.php';
+require_once 'inc/updates.php';
 require_once 'inc/utils.php';
 
 if (getenv('WP_ENV') === 'development') {
