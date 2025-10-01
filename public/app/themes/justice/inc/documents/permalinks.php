@@ -7,9 +7,9 @@ defined('ABSPATH') || exit;
 trait DocumentPermalinks
 {
     // CPT slug. This is hardcoded in the plugin.
-    const string SLUG = 'document';
+    const SLUG = 'document';
     // Hardcoded document slug. We don't want this to be changed by the user.
-    const string DOCUMENT_SLUG = 'documents';
+    const DOCUMENT_SLUG = 'documents';
 
     public $ajax_previous_slug = '';
 

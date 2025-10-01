@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 trait DocumentFilters
 {
     // CPT slug. This is hardcoded in the plugin.
-    const string SLUG = 'document';
+    const SLUG = 'document';
 
     /**
      * @var array $FILTERS The filters to add to the documents admin screen.
