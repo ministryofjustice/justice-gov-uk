@@ -1,9 +1,5 @@
 <?php
 
-/**
- * The template for displaying a generic page
- */
-
 defined('ABSPATH') || exit;
 
 use Roots\WPConfig\Config;
