@@ -33,6 +33,8 @@ class Core
         add_filter('pre_http_request', [$this, 'handleLoopbackRequests'], 10, 3);
         // Remove Available Tools from the admin menu.
         add_action('admin_menu', [$this, 'removeSubmenus']);
+        // Remove all body classes set by WordPress - if we need to add any, use a priority > 20.
+        add_filter('body_class', '__return_empty_array', 20);
     }
 
     /**
