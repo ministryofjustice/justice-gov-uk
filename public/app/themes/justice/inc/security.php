@@ -3,6 +3,8 @@
 namespace MOJ\Justice;
 
 use WP_Error;
+use Roots\WPConfig\Config;
+use MOJ\ClusterHelper;
 
 /**
  * Add a little security for WordPress
@@ -12,6 +14,18 @@ class Security
 
     private $wp_version;
     private $hashed_wp_version;
+
+    /**
+     * A list of known hosts.
+     */
+    private array $known_hosts = [
+        'api.deliciousbrains.com'
+    ];
+
+    /**
+     * The application host e.g. intranet.docker or intranet.justice.gov.uk
+     */
+    private string $home_host;
 
     /**
      * Set properties and run actions.
@@ -24,7 +38,31 @@ class Security
         // This way a we get a unique hash per WP version but it's not reversible.
         $this->hashed_wp_version = substr(hash('sha256', $this->wp_version . AUTH_SALT), 0, 6);
 
+        $this->home_host = parse_url(get_home_url(), PHP_URL_HOST);
+
         $this->actions();
+
+        // Push the application host to known_hosts.
+        array_push($this->known_hosts, $this->home_host);
+
+        // Push the S3 bucket host to known_hosts.
+        if ($s3_bucket = env('AWS_S3_BUCKET')) {
+            array_push($this->known_hosts, $s3_bucket . ".s3.eu-west-2.amazonaws.com");
+        }
+
+        if ($custom_s3_host = env('AWS_S3_CUSTOM_HOST')) {
+            array_push($this->known_hosts, $custom_s3_host);
+        }
+
+        if ($loopback_url = Config::get('WP_LOOPBACK')) {
+            // Push the loopback URL host to known_hosts.
+            array_push($this->known_hosts, parse_url($loopback_url, PHP_URL_HOST));
+        }
+
+        // Push the Nginx hosts to known_hosts.
+        $nginx_urls = ClusterHelper::getNginxHosts('hosts');
+        $nginx_hosts = array_map(fn ($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
+        array_push($this->known_hosts, ...$nginx_hosts);
     }
 
     /**
@@ -61,6 +99,9 @@ class Security
         add_action('template_redirect', [$this, 'disableAuthorPages'], 1);
         // Remove the "View" link from user admin screen, since these will 404.
         add_filter('user_row_actions', [$this, 'removeViewLinkOnUsersScreen'], 100);
+
+        // Log requests to unknown hosts.
+        add_filter('pre_http_request', [$this, 'logUnknownHostRequests'], 20, 3);
     }
 
     /**
@@ -179,5 +220,26 @@ class Security
             unset($actions['view']);
         }
         return $actions;
+    }
+
+
+    /**
+     * Log the urls of requests to unknown hosts.
+     *
+     * This could be useful in identifying requests to malicious URLs.
+     *
+     * @param false|array|\WP_Error $response
+     * @param array $parsed_args
+     * @param string $url
+     * @return false|array|\WP_Error
+     */
+    public function logUnknownHostRequests(false|array|\WP_Error $response, array $parsed_args, string $url): false|array|\WP_Error
+    {
+        if (!in_array(parse_url($url, PHP_URL_HOST), $this->known_hosts)) {
+            // Log the request url.
+            error_log('pre_http_request url: ' . $url);
+        }
+
+        return $response;
     }
 }
