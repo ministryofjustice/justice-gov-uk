@@ -2,6 +2,8 @@
 
 namespace MOJ\Justice;
 
+use Roots\WPConfig\Config;
+
 defined('ABSPATH') || exit;
 
 /**
@@ -17,7 +19,9 @@ class Theme
 
     public function addHooks(): void
     {
-        add_action('init', [$this, 'setFrontendVersionCookie']);
+        add_action('template_redirect', [$this, 'setFrontendVersionCookieFromQuery'], 1);
+        add_action('template_redirect', [$this, 'rolloutFrontendVersionCookie'], 2);
+
         add_action('after_setup_theme', [$this, 'addThemeSupport']);
         add_filter('site_transient_update_themes', [$this, 'disableThemeUpdateNotification']);
     }
@@ -29,18 +33,66 @@ class Theme
      *
      * @return void
      */
-    public function setFrontendVersionCookie(): void
+    public static function setFrontendVersionCookieFromQuery(): void
     {
         if (empty($_GET['frontend_version']) || !in_array($_GET['frontend_version'], ['1', '2'], true)) {
             return;
         }
 
         $https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
-        setcookie('justice_theme_version', $_GET['frontend_version'], 0, COOKIEPATH, COOKIE_DOMAIN, $https, true);
+        setcookie('frontend_version', $_GET['frontend_version'], 0, COOKIEPATH, COOKIE_DOMAIN, $https, true);
 
         // Redirect to the homepage.
         wp_redirect('/');
         exit;
+    }
+
+    /**
+     * Rollout the frontend version cookie.
+     *
+     * If the user does not have a frontend_version cookie set, then set it based on the
+     * FRONTEND_ROLLOUT_PERCENTAGE setting.
+     * 
+     * @return void
+     */
+    public static function rolloutFrontendVersionCookie(): void
+    {
+        // If the cookie is already set, do nothing.
+        if (isset($_COOKIE['frontend_version'])) {
+            return;
+        }
+
+        // Get the permalink, if we do set a cookie, we will redirect to this page.
+        $permalink = get_permalink();
+
+        // If we are not on a page with a permalink, do nothing.
+        if($permalink === false) {
+            return;
+        }
+
+        // Get the HTTPS status.
+        $https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+
+        // If the user is logged in, set the cookie to version 2, show all admins and editors the new version.
+        if (is_user_logged_in()) {
+            setcookie('frontend_version', '2', 0, COOKIEPATH, COOKIE_DOMAIN, $https, true);
+            return;
+        }
+
+        // If the user is not logged in, work out the version, based on the rollout percentage.
+        $rollout_percentage = Config::get('FRONTEND_ROLLOUT_PERCENTAGE');
+
+        if (mt_rand(1, 100) <= $rollout_percentage) {
+            $version = 2;
+        } else {
+            $version = 1;
+        }
+
+        // Set the cookie...
+        setcookie('frontend_version', (string) $version, 0, COOKIEPATH, COOKIE_DOMAIN, $https, true);
+
+        // Redirect to the page with a query so that the response is not cached by nginx.
+        wp_redirect($permalink . '?redirected');
     }
 
 

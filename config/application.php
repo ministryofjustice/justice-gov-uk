@@ -202,15 +202,17 @@ if (file_exists(__DIR__ . '/wp-offload-media.php')) {
  * Frontend upgrade settings
  */
 
+Config::define('FRONTEND_ROLLOUT_PERCENTAGE', (int) env('FRONTEND_ROLLOUT_PERCENTAGE') ?: 0);
+
 switch (true) {
-    case in_array(env('FRONTEND_VERSION'), ['1', '2'], true):
-        Config::define('FRONTEND_VERSION', (int) env('FRONTEND_VERSION'));
+    case in_array(env('FRONTEND_VERSION_OVERRIDE'), ['1', '2'], true):
+        Config::define('FRONTEND_VERSION', (int) env('FRONTEND_VERSION_OVERRIDE'));
         break;
-    case isset($_COOKIE['justice_theme_version']) && in_array($_COOKIE['justice_theme_version'], ['1', '2'], true):
-        Config::define('FRONTEND_VERSION', (int) $_COOKIE['justice_theme_version']);
+    case isset($_COOKIE['frontend_version']) && in_array($_COOKIE['frontend_version'], ['1', '2'], true):
+        Config::define('FRONTEND_VERSION', (int) $_COOKIE['frontend_version']);
         break;
     default:
-        Config::define('FRONTEND_VERSION', 1);
+        Config::define('FRONTEND_VERSION', (int) env('FRONTEND_VERSION_DEFAULT') ?: 1);
         break;
 }
 
