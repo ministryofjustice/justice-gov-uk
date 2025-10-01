@@ -2,7 +2,7 @@ name: "WP Plugins vulnerability and Virus scanning"
 
 on:
   pull_request:
-    branches: [ "main", "develop", "frontend-rework" ]
+    branches: [ "main" ]
   schedule:
     - cron: '22 8 * * *' # Every day at 08:22 UTC
   workflow_dispatch:
