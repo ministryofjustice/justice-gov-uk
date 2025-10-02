@@ -1,5 +1,36 @@
 <?php
 
+/*
+ * A hero component that can also display breadcrumbs and an eyebrow heading, optionally
+ *
+ * Available variables:
+ *  - title: string The page title (h1)
+ * - eyebrow_text: string An eyebrow heading (optional)
+ * - breadcrumbs: array An array of links to be displayed in the breadcrumb component (optional)
+ *   - url: string The url for the link
+ *   - label: string The label for the link
+ *
+ * Example usage:
+ *   get_template_part('template-parts/common/hero', null, [
+ *     'eyebrow_text' => 'Procedure rules',
+ *     'title' => 'Family procedure rules',
+ *     'breadcrumbs' => [
+ *       [
+ *         'url' => '#',
+ *         'label' => 'Home',
+ *       ],
+ *       [
+ *         'url' => '#',
+ *         'label' => 'Procedure rules',
+ *       ],
+ *       [
+ *         'url' => '#',
+ *         'label' => 'Family',
+ *       ],
+ *     ],
+ *   ]);
+ */
+
 defined('ABSPATH') || exit;
 
 $defaults = [

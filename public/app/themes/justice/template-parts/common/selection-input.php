@@ -1,5 +1,45 @@
 <?php
 
+/*
+ *  A selection input element for use in forms
+ *
+ * Available variables:
+ * - title: string A label describing the element
+ * - direction: 'horizontal'|'vertical' Should the elements be vertical or inline
+ * - disabled: boolean True if the input should be disabled
+ * - error: boolean True if there's an error state
+ * - error_text: string The text to be displayed if there's an error
+ * - group: string The name of the input group
+ * - options: array A list of options
+ *     - label: string The label to be displayed
+ *     - value: string The option value, used in form submission
+ *     - checked: boolean True if the option should be checked by default
+ * - hint: string A hint to add extra context to the field
+
+ * Example usage:
+ *   get_template_part('template-parts/common/selection-input', null, [
+ *     'title' => 'Section',
+ *     'direction' => 'vertical',
+ *     'disabled' => false,
+ *     'error' => false,
+ *     'error_text' => '',
+ *     'group' => 'section',
+ *     'options' => [
+ *       [
+ *         'label' => 'Courts',
+ *         'value' => 'courts',
+ *         'checked' => true,
+ *       ],
+ *       [
+ *         'label' => 'Publications',
+ *         'value' => 'publications',
+ *         'checked' => true,
+ *       ],
+ *     ],
+ *     'hint' => 'Select one or more sections',
+ *   ]);
+ */
+
 defined('ABSPATH') || exit;
 
 if (empty($args['group'])) {
@@ -9,6 +49,7 @@ if (empty($args['group'])) {
 $defaults = [
     'title' => null,
     'direction' => null,
+    'type' => null,
     'disabled' => false,
     'error' => false,
     'error_text' => '',
@@ -29,7 +70,7 @@ $hint_id = !empty($args['hint']) ? 'selection-input-hint-' . sanitize_title($arg
             </legend>
         <?php endif; ?>
 
-        <?php if ($error) : ?>
+        <?php if ($args['error']) : ?>
             <p class="selection-input__error-text"><?= esc_html($args['error_text']) ?></p>
         <?php endif; ?>
 

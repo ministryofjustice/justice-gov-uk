@@ -1,5 +1,34 @@
 <?php
 
+/*
+ * A pager for lists of results, e.g. search
+ *
+ * Available variables:
+ * - previous_url: string The url to go back a page
+ * - next_url: string The url to go forwards
+ * - pages: array An array of page links to be displayed
+ *     - title: string The title of the page (usually a number)
+ *     - url: string The link to go to that page
+ *     - current: boolean Whether this is the current page
+ *
+ * Example:
+ *   get_template_part('template-parts/search/pagination', null, [
+ *     'previous_url' => '#',
+ *     'next_url' => '#',
+ *     'pages' => [
+ *       [
+ *         'title' => '1',
+ *         'url' => '#',
+ *         'current' => true,
+ *       ],
+ *       [
+ *         'title' => '2',
+ *         'url' => '#',
+ *       ],
+ *    ]
+ *  ]);
+ */
+
 defined('ABSPATH') || exit;
 
 $defaults = [

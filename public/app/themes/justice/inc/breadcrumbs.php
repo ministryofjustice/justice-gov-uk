@@ -66,7 +66,7 @@ class Breadcrumbs
         $breadcrumbs[] = [
             'label' => $post_meta->getShortTitle(),
             'url' => $is_search_with_parent ? get_the_permalink() : null,
-            'last' => $is_search_with_parent ? false : true
+            'last' => $is_search_with_parent ? false : true  // Last property is not necessary for frontend version 2.
         ];
 
         // Maybe append search page.
@@ -74,7 +74,7 @@ class Breadcrumbs
             $breadcrumbs[] = [
                 'label' => 'Search',
                 'url' => null,
-                'last' => true
+                'last' => true // Last property is not necessary for frontend version 2.
             ];
         }
 

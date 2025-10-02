@@ -158,7 +158,7 @@ class ContentLinks
             'id' => $id,
             'format' => strtoupper($format),
             'filesize' => Documents::getFormattedFilesize($post_id),
-            'filename' => $label,
+            'label' => $label,
             'url' => $url,
             'language' => null,
         ];

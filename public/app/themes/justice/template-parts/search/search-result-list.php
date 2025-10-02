@@ -1,5 +1,56 @@
 <?php
 
+// A list of search result cards
+
+// Available variables:
+//     - cards: array An array of search results
+//         - title: string The page title
+//         - url: string The link to the page
+//         - description: string A short description of the page
+//         - date: string The publication date
+// example:
+//     {% include '@components/search-result-list/search-result-list.html.twig' with {
+//         cards: [
+//             {
+//                 title: 'Civil - Civil Procedure Rules',
+//                 url: 'https://www.justice.gov.uk/courts/procedure-rules/civil',
+//                 date: '26 February 2019',
+//                 description: '…testing a new bill of costs, Precedent AA, to reflect the costs"
+//             }
+//         ]
+//     }%}
+
+/*
+ * A list of search result cards
+ *
+ * Available variables:
+ * - cards: array An array of search results
+ *     - title: string The page title
+ *     - url: string The link to the page
+ *     - description: string A short description of the page (html allowed)
+ *     - date: string The publication date
+ *     - is_document: boolean Whether the result is a document (for download link)
+ *     - format: string The file format (if is_document is true)
+ *     - filesize: string The file size (if is_document is true)
+ *     - language: string The language of the document (optional)
+ *
+ * Example usage:
+ *   get_template_part('template-parts/search/search-result-list', null, [
+ *     'cards' => [
+ *       [
+ *         'title' => 'Civil - Civil Procedure Rules',
+ *         'url' => 'https://www.justice.gov.uk/courts/procedure-rules/civil',
+ *         'date' => '26 February 2019',
+ *         'description' => '…testing a new bill of costs, Precedent AA, to reflect the costs',
+ *         'is_document' => true,
+ *         'format' => 'PDF',
+ *         'filesize' => '1.2 MB',
+ *       ],
+ *       ...
+ *     ]
+ *   ]);
+ */
+
 defined('ABSPATH') || exit;
 
 ?>

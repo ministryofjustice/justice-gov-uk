@@ -1,5 +1,34 @@
 <?php
 
+/*
+ * The main navigation for the site
+ *
+ * Available variables:
+ *  - links: array An array of links to be displayed
+ *    - new_tab: boolean Whether the link will open in a new tab
+ *    - on_click: string A js function to run on click
+ *    - active: boolean Whether the user is currently on the linked page
+ *    - url: string The url for the link
+ *    - label: string The label for the link
+ *
+ * Example usage:
+ *   get_template_part('template-parts/nav/navigation-main', null, [
+ *     'links' => [
+ *       [
+ *         'new_tab' => true,
+ *         'on_click' => 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "/offenders" });',
+ *         'active' => true,
+ *         'url' => 'https://google.com',
+ *         'label' => 'Click here'
+ *       ],
+ *       [
+ *         'url' => '#',
+ *         'label' => 'Click here'
+ *       ]
+ *     ]
+ *   ]);
+ */
+
 defined('ABSPATH') || exit;
 
 if (empty($args['links'])) {
@@ -18,7 +47,7 @@ if (empty($args['links'])) {
                         'template-parts/common/link',
                         null,
                         [
-                            'new_tab' => $link['newTab'] ?? false,
+                            'new_tab' => $link['new_tab'] ?? false,
                             'new_tab_visually_hidden' => $link['new_tab_visually_hidden'] ?? true,
                             'on_click' => $link['on_click'] ?? null,
                             'url' => $link['url'],

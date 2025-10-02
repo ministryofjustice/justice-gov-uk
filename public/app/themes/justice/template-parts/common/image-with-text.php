@@ -1,5 +1,35 @@
 <?php
 
+/*
+ * A component to display an image next to some text
+ *
+ * Available variables:
+ * - direction: string (left|right) Which side should the image be on
+ * - title: array An array with 'text', 'tag', and optionally 'url'
+ *   - text: string The title text
+ *   - tag: string The HTML tag for the title (defaults to h2)
+ *   - url: string (optional) Make the title a link
+ * - content: string The text content
+ * - image: array An array with 'url', 'alt', 'srcset', and 'sizes'
+ *   - url: string The url for the image
+ *   - alt: string The alt text for the image
+ *
+ * Example usage:
+ *   get_template_part('template-parts/common/image-with-text', null, [
+ *     'direction' => 'left',
+ *     'title' => [
+ *         'text' => 'Welcome',
+ *         'tag' => 'h1',
+ *         'url' => '#',
+ *     ],
+ *     'content' => 'Lorem ipsum',
+ *     'image' => [
+ *         'url' => '#',
+ *         'alt' => 'A sunset',
+ *     ],
+ *   ]);
+ */
+
 defined('ABSPATH') || exit;
 
 if (empty($args['image']['url'])) {
