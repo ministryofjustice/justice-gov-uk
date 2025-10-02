@@ -62,6 +62,12 @@ class Theme
             return;
         }
 
+        $user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        if (preg_match('/bot|crawl|slurp|spider/i', $user_agent)) {
+            // If the user agent is a bot, do not set the cookie.
+            return;
+        }
+
         // Get the permalink, if we do set a cookie, we will redirect to this page.
         $permalink = get_permalink();
 
