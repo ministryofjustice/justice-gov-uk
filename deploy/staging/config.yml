@@ -15,4 +15,4 @@ data:
   # Default version of the frontend during rollout.
   FRONTEND_VERSION_DEFAULT: "1"
   # Percentage of users that will see the new version of the frontend.
-  FRONTEND_ROLLOUT_PERCENTAGE: "0"
+  FRONTEND_ROLLOUT_PERCENTAGE: "50"

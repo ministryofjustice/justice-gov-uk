@@ -88,7 +88,7 @@ class Theme
         // If the user is not logged in, work out the version, based on the rollout percentage.
         $rollout_percentage = Config::get('FRONTEND_ROLLOUT_PERCENTAGE');
 
-        if (mt_rand(1, 100) <= $rollout_percentage) {
+        if (rand(1, 100) <= $rollout_percentage) {
             $version = 2;
         } else {
             $version = 1;

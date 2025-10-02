@@ -193,7 +193,11 @@ class Stories
 
 new Stories();
 
-defined('IN_STORIES') || exit; // Ensure this file is only run in the context of the stories environment
+if(!defined('IN_STORIES')) {
+    // Redirect to the site homepage
+    header('Location: /');
+    exit;
+}
 
 ?><!DOCTYPE html>
 <html lang="en-GB">
