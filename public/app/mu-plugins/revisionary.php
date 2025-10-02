@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Filter PublishPress Revisions (formerly Revisionary) options 
+ * Filter PublishPress Revisions (formerly Revisionary) options
  * to disable custom role capabilities.
  * This can't be in the theme directory because that's loaded too late.
  */
