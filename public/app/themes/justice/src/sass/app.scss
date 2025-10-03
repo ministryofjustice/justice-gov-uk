@@ -15,3 +15,5 @@
 .rvy_preview_msgspan {
   background-color: #373737 !important;
 }
+
+@media print { #wpadminbar { display:none; } }
