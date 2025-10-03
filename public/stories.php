@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Render the frontend stories for the Justice UK theme.
+ *
+ * This renders a single page that contains all the components and their stories.
+ * It is used for development and testing purposes, and is not accessible in production.
+ * For local, development, and staging environments, visit /stories.php
+ *
+ * Since we need to declare functions in the global namespace,
+ * disable the PSR-1 rule that requires a namespace declaration.
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ */
+
 // Unlike WordPress theme files, let's exit if ABSPATH *is* defined.
 defined('ABSPATH') && exit;
 
