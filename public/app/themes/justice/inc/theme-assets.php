@@ -2,6 +2,8 @@
 
 namespace MOJ\Justice;
 
+use Roots\WPConfig\Config;
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -12,13 +14,12 @@ if (!defined('ABSPATH')) {
 
 class ThemeAssets
 {
-
     public function __construct()
     {
         $this->addHooks();
     }
 
-    public function addHooks() : void
+    public function addHooks(): void
     {
         add_action('wp_enqueue_scripts', [$this, 'loadStyles']);
         add_action('wp_enqueue_scripts', [$this, 'loadScripts']);
@@ -33,7 +34,13 @@ class ThemeAssets
 
     public function loadStyles(): void
     {
-        wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css', [], 1.1);
+        if (Config::get('FRONTEND_VERSION') === 1) {
+            wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css', [], 1.1);
+        }
+
+        if (Config::get('FRONTEND_VERSION') === 2) {
+            wp_enqueue_style('v2-justice-styles', get_template_directory_uri() . '/dist/css/v2-app.min.css', [], 2.0);
+        }
     }
 
     /**
@@ -47,8 +54,15 @@ class ThemeAssets
 
     public function loadScripts(): void
     {
-
+        $handle = 'moj-justice-app';
         $script_asset_path = get_template_directory() . "/dist/php/app.min.asset.php";
+        $script_uri = get_template_directory_uri() . '/dist/app.min.js';
+        
+        if (Config::get('FRONTEND_VERSION') === 2) {
+            $handle = 'v2-moj-justice-app';
+            $script_asset_path = get_template_directory() . "/dist/php/v2-app.min.asset.php";
+            $script_uri = get_template_directory_uri() . '/dist/v2-app.min.js';
+        }
 
         if (!file_exists($script_asset_path)) {
             throw new \Error(
@@ -58,13 +72,13 @@ class ThemeAssets
 
         $script_asset = require($script_asset_path);
         wp_register_script(
-            'moj-justice-app',
-            get_template_directory_uri() . '/dist/app.min.js',
+            $handle,
+            $script_uri,
             $script_asset['dependencies'],
             $script_asset['version']
         );
 
-        wp_enqueue_script('moj-justice-app');
+        wp_enqueue_script($handle);
     }
 
     /**
@@ -81,7 +95,7 @@ class ThemeAssets
 
             if ($script->deps) {
                 // Check whether the script has any dependencies
-                $script->deps = array_diff($script->deps, array( 'jquery-migrate' ));
+                $script->deps = array_diff($script->deps, array('jquery-migrate'));
             }
         }
     }

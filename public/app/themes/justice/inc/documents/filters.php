@@ -12,6 +12,8 @@ if (!defined('ABSPATH')) {
 
 trait DocumentFilters
 {
+    // CPT slug. This is hardcoded in the plugin.
+    const SLUG = 'document';
 
     /**
      * @var array $FILTERS The filters to add to the documents admin screen.
@@ -54,7 +56,7 @@ trait DocumentFilters
     public function addFilteringDropdown(): void
     {
         // We are not on the document post type.
-        if (!isset($_GET['post_type']) || $_GET['post_type'] !== $this->slug) {
+        if (!isset($_GET['post_type']) || $_GET['post_type'] !== self::SLUG) {
             return;
         }
 
@@ -84,7 +86,7 @@ trait DocumentFilters
 
         // We are not on admin page for the document post type.
         if (!isset($_GET['post_type'])
-            || $_GET['post_type'] !== $this->slug
+            || $_GET['post_type'] !== self::SLUG
             || !is_admin()
             || $pagenow !== 'edit.php'
             || !$query->is_main_query()

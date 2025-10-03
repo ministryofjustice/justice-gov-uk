@@ -114,7 +114,7 @@ class Taxonomies
      * @return array
      */
 
-    public function getTaxonomiesForFilter(): array
+    public static function getTaxonomiesForFilterV1(): array
     {
         // Get all taxonomies.
         $taxonomies = get_object_taxonomies('page', 'objects');
@@ -132,6 +132,34 @@ class Taxonomies
                     'name' => $term->name,
                     'slug' => $term->slug,
                     'selected' => isset($_GET[$taxonomy->name]) && $_GET[$taxonomy->name] === $term->slug,
+                ],
+                get_terms([
+                    'taxonomy'   =>  $taxonomy->name,
+                    'hide_empty' => false,
+                ])
+            ),
+        ], $taxonomies);
+    }
+
+    public static function getTaxonomiesForFilter(): array
+    {
+        // Get all taxonomies.
+        $taxonomies = get_object_taxonomies('page', 'objects');
+
+        // Filter out post_tag.
+        $taxonomies = array_filter($taxonomies, fn ($taxonomy) =>  $taxonomy->name !== 'post_tag');
+
+        // Map over the taxonomies and return an object with the name, label and terms.
+        return array_map(fn ($taxonomy) => [
+            'group' => $taxonomy->name,
+            'title' => $taxonomy->labels->singular_name,
+            'type' => 'radio',
+            // Map over the terms here and return an object with the name, slug and selected.
+            'options' => array_map(
+                fn ($term) => [
+                    'label' => $term->name,
+                    'value' => $term->slug,
+                    'checked' => isset($_GET[$taxonomy->name]) && $_GET[$taxonomy->name] === $term->slug,
                 ],
                 get_terms([
                     'taxonomy'   =>  $taxonomy->name,

@@ -1,43 +1,105 @@
 <?php
 
+/*
+ * A pager for lists of results, e.g. search
+ *
+ * Available variables:
+ * - previous_url: string The url to go back a page
+ * - next_url: string The url to go forwards
+ * - pages: array An array of page links to be displayed
+ *     - title: string The title of the page (usually a number)
+ *     - url: string The link to go to that page
+ *     - current: boolean Whether this is the current page
+ *
+ * Example:
+ *   get_template_part('template-parts/search/pagination', null, [
+ *     'previous_url' => '#',
+ *     'next_url' => '#',
+ *     'pages' => [
+ *       [
+ *         'title' => '1',
+ *         'url' => '#',
+ *         'current' => true,
+ *       ],
+ *       [
+ *         'title' => '2',
+ *         'url' => '#',
+ *       ],
+ *    ]
+ *  ]);
+ */
+
 defined('ABSPATH') || exit;
 
-if (!have_posts()) {
-    return;
-}
+$defaults = [
+    'previous_url' => null,
+    'next_url' => null,
+    'pages' => [],
+];
 
-global $wp_query;
+$args = array_merge($defaults, $args);
 
 ?>
 
-<div class="nav">
+<nav id="pagination" class="pagination" aria-label="pagination">
+    <ul class="pagination__list">
+        <li class="pagination__link-wrapper pagination__link-wrapper--previous">
+            <?php if ($args['previous_url']) : ?>
+                <a class="pagination__link pagination__link--previous" href="<?= esc_url($args['previous_url']) ?>">
+                    <span class="pagination__link-arrow" aria-hidden="true">«</span>
+                    <span class="pagination__link-text">Previous</span>
+                </a>
+            <?php else : ?>
+                <a class="pagination__link pagination__link--previous disabled" role="link" aria-disabled="true">
+                    <span class="pagination__link-arrow" aria-hidden="true">«</span>
+                    <span class="pagination__link-text">Previous</span></a>
+            <?php endif; ?>
+        </li>
 
-    <span class="prev">
-        <?php if ($wp_query->query_vars['paged'] > 1) : ?>
-            <a href="<?= get_previous_posts_page_link(); ?>">« Previous</a>
-        <?php else : ?>
-            « Previous
-        <?php endif; ?>
-    </span>
+        <li class="pagination__link-wrapper">
+            <ul class="pagination__list pagination__sublist">
+                <?php if (sizeof($args['pages']) < 1) : ?>
+                    <li class="pagination__link-wrapper">
+                        <a class="pagination__link disabled" role="link" aria-disabled="true"
+                           aria-current="page">1</a>
+                    </li>
 
-    <ul>
-        <?php for ($i = 1; $i <= min(5, $wp_query->max_num_pages); $i++) : ?>
-            <li <?php echo $i === $wp_query->query_vars['paged'] ? 'class="selected"' : ''; ?>>
-                <?php if ($i === $wp_query->query_vars['paged']) : ?>
-                    <span><?php echo $i; ?></span>
                 <?php else : ?>
-                    <a href="<?php echo get_pagenum_link($i); ?>"><?php echo $i; ?></a>
+                    <?php foreach ($args['pages'] as $page) : ?>
+                        <li class="pagination__link-wrapper">
+
+                            <?php if ($page['current'] ?? false) : ?>
+                                <a class="pagination__link disabled" role="link" aria-disabled="true"
+                                   aria-current="page">
+                                    <?= esc_html($page['title']) ?>
+                                </a>
+                            <?php elseif (empty($page['url'])) : ?>
+                                <a class="pagination__link disabled" role="link" aria-disabled="true">
+                                    <?= esc_html($page['title']) ?>
+                                </a>
+                            <?php else : ?>
+                                <a class="pagination__link" href="<?= esc_url($page['url']) ?>"><?= esc_html($page['title']) ?></a>
+                            <?php endif; ?>
+
+                        </li>
+                    <?php endforeach; ?>
+
                 <?php endif; ?>
-            </li>
-        <?php endfor; ?>
+            </ul>
+        </li>
+
+        <li class="pagination__link-wrapper pagination__link-wrapper--next">
+            <?php if ($args['next_url']) : ?>
+                <a class="pagination__link pagination__link--next" href="<?= esc_url($args['next_url']) ?>">
+                    <span class="pagination__link-text">Next</span>
+                    <span class="pagination__link-arrow" aria-hidden="true">»</span>
+                </a>
+            <?php else : ?>
+                <a class="pagination__link pagination__link--next disabled" role="link" aria-disabled="true">
+                    <span class="pagination__link-text">Next</span>
+                    <span class="pagination__link-arrow" aria-hidden="true">»</span>
+                </a>
+            <?php endif; ?>
+        </li>
     </ul>
-
-    <span class="next">
-        <?php if ($wp_query->max_num_pages > $wp_query->query_vars['paged']) : ?>
-            <a href="<?= get_next_posts_page_link(); ?>">Next »</a>
-        <?php else : ?>
-            Next »
-        <?php endif; ?>
-    </span>
-
-</div>
+</nav>

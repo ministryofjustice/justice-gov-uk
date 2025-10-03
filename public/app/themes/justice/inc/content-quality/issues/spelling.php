@@ -248,9 +248,6 @@ final class ContentQualityIssueSpelling extends ContentQualityIssue
      */
     public function getSpellingIssuesFromContent(string $content, array $allowed_words): array
     {
-
-        error_log('getSpellingIssuesFromContent called');
-
         if (empty($content)) {
             return [];
         }

@@ -1,0 +1,700 @@
+@use "sass:map";
+
+@mixin css-vars() {
+    // Primary colours
+    --justice-primary-black: #212121;
+    --justice-primary-white: #fff;
+    --justice-primary-grey: #d7d7d7;
+
+    // Secondary colours
+    --justice-secondary-grey: #7e7e74;
+    --justice-secondary-dark-grey: #5c5c54; 
+    --justice-secondary-blue: #5F789B;
+    --justice-secondary-light-blue: #6c8ab2;
+    --justice-secondary-grey-blue: #eff0f2;
+
+    // Links
+    --justice-link: #1d70b8;
+    --justice-link-hover: #003078;
+    --justice-link-visited: #4c2c92;
+    --justice-link-active: #0b0c0c;
+
+    // Borders
+    --justice-border: #b1b4b6;
+    --justice-border-input: #0b0c0c    ;
+
+    //States
+    --justice-error: #d4351c;
+    --justice-success: #00703c;
+    // Accessible colours from the GDS https://design-system.service.gov.uk/styles/colour/
+    --gds-yellow: #fd0;
+    --gds-black: #000;
+
+    // Typography
+    --body-font: 'Arial', sans-serif;
+    --body-font-normal: 400;
+    --body-font-bold: 700;
+
+    --heading-font: 'Georgia', serif;
+    --heading-font-normal: 400;
+    --heading-font-bold: 700; // Use a medium bold as 700 doesn't work well with the heading font.
+}
+
+// Minimum screen sizes
+$justice-md: 768px;
+$justice-lg: 1024px;
+
+// Grid settings
+$gap-mobile: 1rem;
+$gap: 1.5rem;
+$gutter-mobile: 1rem;
+$gutter: 3rem;
+$max-width: 75rem;
+
+// Spacing https://design-system.service.gov.uk/styles/spacing/
+$spacing-units-mobile: (
+    0: 0,
+    1: 0.313rem,
+    2: 0.625rem,
+    3: 0.938rem,
+    4: 0.938rem,
+    5: 0.938rem,
+    6: 1.25rem,
+    7: 1.563rem,
+    8: 1.875rem,
+    9: 2.5rem,
+);
+
+$spacing-units-desktop: (
+    0: 0,
+    1: 0.313rem,
+    2: 0.625rem,
+    3: 0.938rem,
+    4: 1.25rem,
+    5: 1.563rem,
+    6: 1.875rem,
+    7: 2.5rem,
+    8: 3.125rem,
+    9: 3.75rem,
+);
+
+@mixin container() {
+    margin: 0 auto;
+    padding: 0 $gutter-mobile;
+    max-width: calc(100% - (2 * $gutter-mobile));
+    @media screen and (min-width: $justice-lg) {
+        padding: 0 $gutter;
+        max-width: calc($max-width - (2 * $gutter));
+    }
+}
+
+@mixin grid() {
+    display: grid;
+    grid-template-columns: repeat(4, [col-start] 1fr);
+    column-gap: $gap-mobile;
+    width: 100%;
+    @media screen and (min-width: $justice-lg) {
+        grid-template-columns: repeat(12, [col-start] 1fr);
+        column-gap: $gap;
+    }
+}
+
+@mixin grid-row($start: 1, $end: 4) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    grid-column: #{$start}/ span #{$end};
+}
+
+/// Calculates margin or padding according to the spacing scales above
+///
+/// @param {string ('margin'|'padding')} $type
+///   The type of spacing
+/// @param {integer (unitless)} $unit
+///   The spacing unit
+/// @param {string ('top'| 'bottom' | 'right' | 'left')} $direction
+///   The spacing direction
+
+@mixin spacing($type: 'margin', $unit: 1, $direction: 'all') {
+    @if ($direction != 'all') {
+        #{$type}-#{$direction}: map.get($spacing-units-mobile, $unit);
+        @media screen and (min-width: $justice-lg) {
+            #{$type}-#{$direction}: map.get($spacing-units-desktop, $unit);
+        }
+    }
+    @else {
+        #{$type}: map.get($spacing-units-mobile, $unit);
+        @media screen and (min-width: $justice-lg) {
+            #{$type}: map.get($spacing-units-desktop, $unit);
+        }
+    }
+
+}
+
+// Headings https://design-system.service.gov.uk/styles/type-scale/
+// Use map-get instead of the spacing function here otherwise it's harder to override per component due to css specificity
+@mixin h1 {
+    margin-top: map.get($spacing-units-mobile, 8);
+    margin-bottom: 0;
+    font-size: 2rem;
+    line-height: 2.188rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-primary--black);
+    .caption {
+        @include caption('h1');
+    }
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map.get($spacing-units-desktop, 8);
+        font-size: 3rem;
+        line-height: 3.125rem;
+    }
+}
+
+@mixin h2 {
+    margin-top: map.get($spacing-units-mobile, 6);
+    margin-bottom: 0;
+    font-size: 1.688rem;
+    line-height: 1.875rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-primary-black);
+    .caption {
+        @include caption('h2');
+    }
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map.get($spacing-units-desktop, 6);
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+    }
+}
+
+@mixin h3 {
+    margin-top: map.get($spacing-units-mobile, 4);
+    margin-bottom: 0;
+    font-size: 1.313rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+    .caption {
+        @include caption('h3');
+    }
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map.get($spacing-units-desktop, 4);
+        font-size: 1.625rem;
+        line-height: 1.875rem;
+    }
+}
+
+@mixin h4 {
+    margin-top: map.get($spacing-units-mobile, 4);
+    margin-bottom: 0;
+    font-size: 1.25rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map.get($spacing-units-desktop, 4);
+        font-size: 1.375rem;
+        line-height: 1.875rem;
+    }
+}
+
+@mixin h5 {
+    margin-top: map.get($spacing-units-mobile, 4);
+    margin-bottom: 0;
+    font-size: 1.188rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-bold);
+    color: var(--justice-primary-black);
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map.get($spacing-units-desktop, 4);
+        font-size: 1.188rem;
+        line-height: 1.875rem;
+    }
+
+}
+
+@mixin h6 {
+    margin-top: map.get($spacing-units-mobile, 4);
+    margin-bottom: 0;
+    font-size: 1.188rem;
+    line-height: 1.563rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-primary-black);
+    @media screen and (min-width: $justice-lg) {
+        margin-top: map.get($spacing-units-desktop, 4);
+        font-size: 1.188rem;
+        line-height: 1.875rem;
+    }
+}
+
+@mixin panel-title {
+    font-size: 1.188rem;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-primary-white);
+    line-height: 1.875rem;
+}
+
+@mixin body {
+    // Don't set margins on body as it's so often used in components it's easier to do case by case
+    font-size: 1rem;
+    font-family: var(--body-font);
+    font-weight: var(--body-font-normal);
+    color: var(--justice-primary-black);
+    line-height: 1.315;
+}
+
+@mixin small {
+    @include body;
+    font-weight: var(--body-font-bold);
+    color: var(--justice-secondary-blue);
+    font-size: 1rem;
+}
+
+// Heading caption https://design-system.service.gov.uk/styles/headings/#headings-with-captions
+@mixin caption ($tag) {
+    display: block;
+    font-family: var(--heading-font);
+    font-weight: var(--heading-font-normal);
+    color: var(--justice-secondary-dark-grey);
+    @if ($tag == 'h1') {
+        font-size: 1.125rem;
+        line-height: 1.11;
+        @media screen and (min-width: $justice-lg) {
+            font-size: 1.6875rem;
+        }
+    }
+    @if ($tag == 'h2') {
+        font-size: 1.125rem;
+        line-height: 1.11;
+        @media screen and (min-width: $justice-lg) {
+            font-size: 1.5rem;
+            line-height: 1.25;
+        }
+    }
+    @if ($tag == 'h3') {
+        font-size: 1rem;
+        line-height: 1.25;
+        @media screen and (min-width: $justice-lg) {
+            font-size: 1.1875rem;
+            line-height: 1.32;
+        }
+    }
+}
+
+// Icons
+$iconTypes: (
+    'doc': 'png',
+    'docx': 'png',
+    'pdf': 'png',
+    'ppt': 'png',
+    'winzip': 'gif',
+    'xls': 'png',
+    'xlsx': 'png',
+    'zip': 'gif',
+
+);
+
+$iconSizes: (
+    'em': 1em, // For inline icons only
+    'xs': 1rem, // For decorative icons only i.e. those with aria-hidden="true"
+    'sm': 1.5rem, // The smallest icon must be at least 24px x 24px to meet WCAG 2.2 AA when used in a link
+    'md': 3rem,
+    'lg': 6rem
+);
+
+@mixin icons() {
+    .icon {
+        @each $size, $sizeValue in $iconSizes {
+            @each $icon, $ext in $iconTypes {
+                &-#{$icon}--#{$size} {
+                    display: block;
+                    background-image: url(../img/icon/#{$icon}.#{$ext});
+                    background-repeat: no-repeat;
+                    height: $sizeValue;
+                    width: $sizeValue;
+                    background-size: $sizeValue;
+                }
+            }
+        }
+    }
+}
+
+@mixin link($type: 'dark', $context: 'default') {
+    @include body;
+    outline: none;
+    color: var(--justice-primary-black);
+    &:not(.disabled) {
+        color: var(--justice-link);
+        &:hover {
+            color: var(--justice-link-hover);
+            text-decoration-thickness: max(3px, .1875rem, .12em);
+        }
+        &:visited {
+            color: var(--justice-link-visited);
+        }
+        &:active {
+            color: var(--justice-link-active);
+        }
+        &:focus-visible:not(:active,:hover) {
+            outline: 3px solid transparent;
+            background-color: var(--gds-yellow);
+            box-shadow: 0 -2px var(--gds-yellow), 0 4px var(--gds-black);
+            color: var(--gds-black);
+            text-decoration: none;
+        }
+        @if ($type == 'light') {
+            color: var(--justice-primary-white);
+            &:hover,
+            &:visited,
+            &:active {
+                color: var(--justice-primary-white);
+            }
+        }
+        @if ($context == 'menu') {
+            font-family: var(--body-font);
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+                outline: none;
+            }
+            &:focus:not(:active):not(:hover) {
+                outline: none;
+                box-shadow: none;
+            }
+        }
+    }
+    @media print {
+        // On print hide the ' (opens in a new tab)' suffix
+        .link__new-tab-suffix {
+            display: none;
+        }
+    }
+}
+
+@mixin button($type: 'primary') {
+    @include spacing('padding', 1);
+    @include body;
+    display: flex;
+    background-color: var(--justice-secondary-dark-grey);
+    color: var(--justice-primary-white);
+    border: 0;
+    height: 100%;
+    width: fit-content;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: top;
+    outline: none;
+    &:hover:not(:disabled) {
+        background-color: var(--justice-primary-grey);
+        color: var(--justice-primary-black);
+    }
+
+    &:focus-visible:not(:active, :hover, :disabled) {
+            color: var(--gds-black);
+            background-color: var(--gds-yellow);
+            box-shadow: inset 0 -4px 0 var(--gds-black);
+    }
+
+    &:disabled {
+        @include disabled;
+    }
+
+    @if $type == 'dark' {
+        background-color: var(--justice-primary-black);
+        color: var(--justice-primary-white);
+        &:hover:not(:disabled) {
+            background-color: var(--justice-primary-black);
+            color: var(--justice-primary-white);
+            text-decoration: underline;
+        }
+    }
+    @if $type == 'light' {
+        background-color: var(--justice-primary-white);
+        color: var(--justice-primary-black);
+        &:hover(:not(:disabled)) {
+            background-color: var(--justice-primary-grey);
+        }
+    }
+}
+
+// Use to add a simple focus ring to link or button elements
+@mixin focus-outline {
+    &:focus-visible:not(:active):not(:hover), &:focus-within {
+        outline: 3px solid var(--gds-yellow);
+        outline-offset: 0;
+        box-shadow: inset 0 0 0 2px;
+        background-color: transparent;
+    }
+}
+
+@mixin error-highlight {
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        border-left: 4px solid var(--justice-error);
+        left: -1rem;
+        height: 100%;
+    }
+}
+
+// Add to all disabled elements, e.g. in a text input this would include the label, input field and description
+// Although this doesn't meet contrast requirements this is allowed provided that the element is semantically labelled as disabled.
+@mixin disabled {
+   opacity: 0.5;
+   cursor: default;
+}
+
+@mixin ul-list {
+    @include spacing('margin', 4, 'top');
+    list-style: disc;
+    padding-left: 1.5rem;
+    li {
+        padding-left: 1.5rem;
+    }
+}
+
+@mixin ol-list {
+    @include spacing('margin', 4, 'top');
+    list-style: decimal;
+    padding: 0 0 0 1.5rem;
+    li {
+        padding-left: 1.5rem;
+    }
+}
+
+@mixin table {
+    @include spacing('margin', 4, 'top');
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
+    @include body;
+    thead {
+        border-bottom: 3px solid var(--justice-primary-black);
+        tr, th {
+            border: 1px solid var(--justice-border);
+        }
+        th {
+            background: var(--justice-primary-grey);
+            font-weight: var(--body-font-bold);
+        }
+    }
+    tbody {
+        tr, td {
+            border: 1px solid var(--justice-border);
+        }
+        td {
+            @include spacing('padding', 1);
+        }
+    }
+    .file-download {
+        margin-top: 0;
+    }
+}
+// TODO: review default classes when implemented with Wordpress.
+//  For user created content. They can use:
+// Paragraphs - can be bold, italic or links and can be aligned. Can have footnotes, anchors, colour highlights + more
+// Definition lists
+// Headings (all)
+// Image
+// Lists
+// Inline menu - child pages
+// To the top
+// Search - child pages
+//
+@mixin rich-text {
+    @include body;
+    overflow-wrap: break-word;
+
+    ul:not(.navigation-sections__list) {
+        @include ul-list;
+    }
+    ol {
+        @include ol-list;
+    }
+    table {
+        @include table;
+    }
+    figure {
+        margin: 0;
+        @include spacing('margin', 4, 'top');
+        position: relative;
+        > table {
+            margin-top: 0;
+        }
+    }
+    a, .link {
+        @include link;
+    }
+    p {
+        @include spacing('margin', 4, 'top');
+        line-height: 1.315;
+    }
+    .search-bar-block {
+        @include spacing('margin', 4, 'top');
+    }
+
+    > h1,
+    > h2,
+    > h3,
+    > h4,
+    > h5,
+    > h6 {
+        > a, .link {
+            font-size: inherit;
+            font-family: inherit;
+        }
+    }
+
+    > p,
+    > h1,
+    > h2,
+    > h3,
+    > h4,
+    > h5,
+    > h6,
+    > ul,
+    > ol {
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    @media print {
+        // On print, append the URL to external links.
+        .link--external::after {
+            content: " (" attr(href) ")";
+            font-size: 0.8em;
+            word-break: break-word;
+        }
+    }
+}
+
+// From GDS https://design-system.service.gov.uk/styles/layout/
+@mixin visually-hidden($important: true) {
+    position: absolute if($important, !important, null);
+
+    // Absolute positioning has the unintended consequence of removing any
+    // whitespace surrounding visually hidden text from the accessibility tree.
+    // Insert a space character before and after visually hidden text to separate
+    // it from any visible text surrounding it.
+    &::before {
+        content: "\00a0";
+    }
+
+    &::after {
+        content: "\00a0";
+    }
+
+    width: 1px if($important, !important, null);
+    height: 1px if($important, !important, null);
+    // If margin is set to a negative value it can cause text to be announced in
+    // the wrong order in VoiceOver for OSX
+    margin: 0 if($important, !important, null);
+    padding: 0 if($important, !important, null);
+
+    overflow: hidden if($important, !important, null);
+    clip: rect(0 0 0 0) if($important, !important, null);
+    clip-path: inset(50%) if($important, !important, null);
+
+    border: 0 if($important, !important, null);
+
+    // For long content, line feeds are not interpreted as spaces and small width
+    // causes content to wrap 1 word per line:
+    // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+    white-space: nowrap if($important, !important, null);
+
+    // Prevent users from selecting or copying visually-hidden text. This prevents
+    // a user unintentionally copying more text than they intended and needing to
+    // manually trim it down again.
+    user-select: none;
+}
+
+$opposite-directions: (
+    'top': 'bottom',
+    'right': 'left',
+    'bottom': 'top',
+    'left': 'right'
+);
+
+/// Creates a triangle (see https://css-tricks.com/snippets/sass/css-triangle-mixin)
+///
+/// @param {string ('top'|'right'|'bottom'|'left')} $direction
+///   The direction that the triangle should point
+/// @param {string} $color
+///   The color of the triangle
+/// @param {integer (rem)} $size
+///   The height and width of the triangle
+@mixin triangle($direction, $color: inherit, $size: 1rem) {
+    content: '';
+    width: 0;
+    height: 0;
+    border-#{map.get($opposite-directions, $direction)}: ($size * 2) solid $color;
+    @if $direction == top or $direction == bottom {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;
+        border-#{$direction}: unset;
+    }
+    @else if $direction == right or $direction == bottom {
+        border-bottom: $size solid transparent;
+        border-top:  $size solid transparent;
+        border-#{$direction}: unset;
+    }
+}
+
+/// Creates an arrow button when applied to an element that can have a pseudo element
+///
+/// @param {string} $color
+///   The color of the triangle
+/// @param {integer (rem)} $size
+///   The height and width of the triangle
+@mixin arrow-button($color: 'dark', $size: 0.45rem) {
+    $baseColor: var(--justice-primary-white);
+
+    @if $color == 'dark' {
+        @include button('light');
+        $baseColor: var(--justice-primary-black);
+    }
+    @else {
+        @include button('dark');
+    }
+    background-color: transparent;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    &::after {
+        display: block;
+        @include triangle('bottom', $baseColor, $size);
+    }
+    &:hover {
+        background-color: transparent;
+    }
+    &:focus-visible:not(:active, :hover) {
+        &:after {
+            @include triangle('bottom', var(--gds-black), $size);
+        }
+    }
+    &[aria-expanded="true"] {
+        &::after {
+            @include triangle('top', $baseColor, $size);
+        }
+        &:focus-visible:not(:active, :hover) {
+            &:after {
+                @include triangle('top', var(--gds-black), $size);
+            }
+        }
+    }
+}

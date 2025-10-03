@@ -1,0 +1,93 @@
+@use '../v2-mixins.scss' as mixins;
+
+.header {
+    @include mixins.spacing('padding', 2, 'top');
+
+    background-color: var(--justice-primary-black);
+
+    &__container {
+        @include mixins.container;
+
+        display: flex;
+        flex-direction: column;
+        @media screen and (min-width: mixins.$justice-lg) {
+            @include mixins.spacing('margin', 1, 'bottom');
+
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    &__home {
+        @include mixins.focus-outline;
+        @include mixins.spacing('margin', 3, 'bottom');
+
+        color: transparent;
+    }
+
+    &__brand {
+        display: flex;
+        width: fit-content;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    &__logo,
+    &__logotype {
+        margin-right: 0.075rem;
+        @media screen and (min-width: mixins.$justice-md) {
+            margin-right: 0.1rem;
+        }
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    
+    &__logo {
+        width: 3rem;
+        height: 3rem;
+
+        @media screen and (min-width: mixins.$justice-md) {
+            width: 3.75rem;
+            height: 3.75rem;
+        }
+
+        background-image: url('../img/moj-short-logo.svg');
+    }
+    
+    &__logotype {
+        margin-top: 0.075rem;
+        height: 2.15625rem;
+        width: 6.65625rem;
+        
+        @media screen and (min-width: mixins.$justice-md) {
+            margin-top: 0.1rem;
+            height: 2.875rem;
+            width: 8.875rem; // (306 / 100) * 2.875
+        }
+
+        background-image: url('../img/moj-short-logotype.png');  
+        @media (min-resolution: 1.25x) {
+            background-image: url('../img/moj-short-logotype-@2x.png');
+        }
+        @media (min-resolution: 2.25x) {
+            background-image: url('../img/moj-short-logotype-@4x.png');
+        }
+    }
+
+    &__search {
+        @include mixins.spacing('margin', 1, 'bottom');
+
+        @media screen and (min-width: mixins.$justice-lg) {
+            margin-bottom: 0;
+        }
+
+        input[type='text'] {
+            width: 100%;
+            @media screen and (min-width: mixins.$justice-lg) {
+                width: 15rem;
+            }
+        }
+    }
+}

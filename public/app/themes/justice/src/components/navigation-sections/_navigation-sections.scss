@@ -1,0 +1,37 @@
+@use '../v2-mixins' as mixins;
+
+.navigation-sections {
+    @include mixins.spacing('margin', 4, 'top');
+
+    display: block;
+    max-width: 100%;
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
+        align-items: baseline;
+        gap: 0.5rem;
+        @media screen and (min-width: mixins.$justice-md) {
+            grid-template-columns: repeat(auto-fit, minmax(16%, 1fr));
+        }
+    }
+
+    &__list-item {
+        @include mixins.spacing('padding', 1);
+
+        position: relative;
+        display: flex;
+        justify-content: center;
+        border: 1px solid var(--justice-border);
+
+        a {
+            @include mixins.link;
+
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+            }
+        }
+    }
+}

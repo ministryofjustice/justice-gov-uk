@@ -1,7 +1,36 @@
-@import "../components/core-list/editor";
-@import "../components/core-rich-text/editor";
-@import "../components/search/editor";
-@import "../components/simple-definition-list-blocks/editor";
+@use "sass:meta";
+@use "../components/v2-mixins" as mixins;
+@use "../components/core-rich-text/editor";
+
+.editor-styles-wrapper {
+  @include mixins.css-vars();
+
+  .visually-hidden {
+    @include mixins.visually-hidden;
+  }
+
+  @include meta.load-css("../components/button/editor");
+  @include meta.load-css("../components/core-list/editor");
+  @include meta.load-css("../components/inline-list/editor");
+  @include meta.load-css("../components/search-bar-block/editor");
+  @include meta.load-css("../components/simple-definition-list-blocks/editor");
+  @include meta.load-css("../components/text-input-form/editor");
+  @include meta.load-css("../components/text-input/editor");
+  @include meta.load-css("../components/to-the-top/editor");
+
+  // Style the core/footnotes block.
+  .wp-block-footnotes {
+    .rich-text + a {
+      // Hide the unicode character ↩︎.
+      color: transparent;
+      &:before {
+        // Show text.
+        content: "Back to text";
+        color: #0073aa;
+      }
+    }
+  }
+}
 
 // Triple the height of the suggestion list for the combobox component
 .components-form-token-field__suggestions-list {
@@ -11,25 +40,12 @@
 // Hide the colour and typography panels.
 div.color-block-support-panel,
 div.typography-block-support-panel {
-    display: none;
+  display: none;
 }
 
 // Remove Relevanssi Premium link from the top bar.
 .edit-post-header__settings {
   .components-button[aria-label="Relevanssi Premium"] {
     display: none;
-  }
-}
-
-// Style the core/footnotes block.
-.wp-block-footnotes {
-  .rich-text + a {
-    // Hide the unicode character ↩︎.
-    color: transparent;
-    &:before { 
-      // Show text.
-      content: 'Back to text';
-      color: #0073aa;
-    }
   }
 }

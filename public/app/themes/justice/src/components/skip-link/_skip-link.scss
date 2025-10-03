@@ -1,0 +1,16 @@
+@use '../v2-mixins.scss' as mixins;
+
+.skip-link {
+    @include mixins.spacing('padding', 4);
+
+    background-color: var(--gds-yellow);
+    position: absolute;
+
+    &:not(:active, :focus-within) {
+        @include mixins.visually-hidden;
+    }
+
+    a {
+        @include mixins.link('dark');
+    }
+}

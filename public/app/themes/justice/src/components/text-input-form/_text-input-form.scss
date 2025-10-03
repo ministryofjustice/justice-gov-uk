@@ -1,0 +1,50 @@
+.text-input-form {
+    display: flex;
+    width: 100%;
+
+    &__button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border-left: 2px solid (var(--justice-border-input));
+
+        input[type='submit'] {
+            width: fit-content;
+
+            &:focus-visible:not(:active, :hover, :disabled) {
+                box-shadow: none;
+            }
+        }
+    }
+
+    &__wrapper {
+        display: flex;
+        position: relative;
+        width: 100%;
+        border: 2px solid var(--justice-border-input);
+        background: var(--justice-primary-white);
+
+        &:focus-within {
+            input[type='submit']:not(:active, :hover) {
+                border-left: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    &__input {
+        width: 100%;
+        height: 100%;
+
+        .text-input {
+            align-items: unset;
+
+            input {
+                border: none;
+                padding-right: 4.4rem;
+            }
+        }
+    }
+}

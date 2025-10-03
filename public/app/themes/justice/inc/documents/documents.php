@@ -22,28 +22,38 @@ require_once 'permalinks.php';
 class Documents
 {
 
+    // CPT slug. This is hardcoded in the plugin.
+    const SLUG = 'document';
+    // Hardcoded document slug. We don't want this to be changed by the user.
+    const DOCUMENT_SLUG = 'documents';
+
     use DocumentColumns;
     use DocumentFilters;
     use DocumentPermalinks;
 
     // File extensions to mark as downloadable in S3.
     private array $content_disposition_extensions = [
-        'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
+        'doc',
+        'docx',
+        'pdf',
+        'xls',
+        'xlsx',
+        'zip'
     ];
 
     private array $disallow_in_media_library = [
-        'doc', 'docx', 'pdf', 'xls', 'xlsx', 'zip'
+        'doc',
+        'docx',
+        'pdf',
+        'xls',
+        'xlsx',
+        'zip'
     ];
 
     // Max filesize for wp-document-revisions to stream via php.
     private int|float $php_stream_limit = 15 * 1024 * 1024; // 15MB
     private int|float $default_upload_limit = 64 * 1024 * 1024; // 64MB
     private int|float $document_upload_limit = 256 * 1024 * 1024; // 256MB
-
-    // CPT slug. This is hardcoded in the plugin.
-    public string $slug = 'document';
-    // Hardcoded document slug. We don't want this to be changed by the user.
-    public string $document_slug = 'documents';
 
     // Is the wordpress-importer plugin running?
     private bool $is_importing = false;
@@ -70,7 +80,7 @@ class Documents
     public function addHooks(): void
     {
         // Set default plugin options.
-        add_filter('document_slug', fn() => $this->document_slug);
+        add_filter('document_slug', fn() => self::DOCUMENT_SLUG);
         add_filter('option_document_link_date', '__return_true');
         add_filter('default_option_document_link_date', '__return_true');
         // Importing.
@@ -101,8 +111,8 @@ class Documents
         // Limits on uploads. * Affects documents & non-documents.
         add_filter('upload_size_limit', [$this, 'setUploadSizeLimit'], 10, 3);
 
-        add_filter('manage_' . $this->slug . '_posts_columns', [$this, 'addColumns']);
-        add_filter('manage_' . $this->slug . '_posts_custom_column', [$this, 'addColumnContent'], null, 2);
+        add_filter('manage_' . self::SLUG . '_posts_columns', [$this, 'addColumns']);
+        add_filter('manage_' . self::SLUG . '_posts_custom_column', [$this, 'addColumnContent'], null, 2);
 
         // Hide legacy redirects from users with the Editor capability
         add_action('pre_get_posts', [$this, 'redirectAdminFilter'], 10, 2);
@@ -126,7 +136,7 @@ class Documents
 
     public function hideEditor(): void
     {
-        remove_post_type_support($this->slug, 'editor');
+        remove_post_type_support(self::SLUG, 'editor');
     }
 
     /**
@@ -153,17 +163,17 @@ class Documents
      * @return bool
      */
 
-    public function isDocument(int|WP_Post|null $post): bool
+    public static function isDocument(int|WP_Post|null $post): bool
     {
         if ($post === null) {
             return false;
         }
 
         if (isset($post->post_type)) {
-            return $post->post_type === $this->slug;
+            return $post->post_type === self::SLUG;
         }
 
-        return get_post_type($post) === $this->slug;
+        return get_post_type($post) === self::SLUG;
     }
 
     /**
@@ -281,24 +291,78 @@ class Documents
             return;
         }
 
+        $document = $this::getDocumentBySourcePath('/' . $wp->request);
+
+        if (!isset($document?->ID)) {
+            return;
+        }
+
+        wp_safe_redirect(get_permalink($document->ID), 301);
+        exit;
+    }
+
+
+    /**
+     * Get a document by the meta key _source_path.
+     *
+     * A helper function to lookup a document by the source path - a meta field set during migration.
+     *
+     * @param string $source_path - this should be the path of the old document, starting with a slash.
+     * @return WP_Post|null
+     */
+
+    public static function getDocumentBySourcePath(string $source_path): ?WP_Post
+    {
         $document = get_posts([
-            'post_type' => $this->slug,
+            'post_type' => self::SLUG,
             'posts_per_page' => 1,
             'meta_query' => [
                 [
                     'key' => '_source_path',
-                    'value' => '/' . $wp->request
+                    'value' => $source_path
                 ]
             ],
         ]);
 
-        if (!isset($document[0]?->ID)) {
-            return;
+        return $document[0] ?? null;
+    }
+
+
+    /**
+     * Get the document ID by the URL.
+     *
+     * This function is used to get the document ID by the URL.
+     * It will first try to get the document by the source path - for legacy documents.
+     * If that fails, it will try to get the document by the slug.
+     *
+     * @param ?string $url
+     * @return int|null - Post ID, or 0 on failure.
+     */
+    public static function getDocumentIdByUrl(?string $url): Int
+    {
+        if (!$url || !is_string($url)) {
+            return 0;
         }
 
-        wp_safe_redirect(get_permalink($document[0]->ID), 301);
-        exit;
+        // Get the path from the URL.
+        $path = parse_url($url, PHP_URL_PATH);
+
+        if (!$path) {
+            return 0;
+        }
+
+        // Get the document by the source path - for legacy documents.
+        $document = self::getDocumentBySourcePath($path);
+
+        if ($document?->ID) {
+            return $document->ID;
+        }
+
+        $post_id = url_to_postid($path);
+
+        return self::isDocument($post_id) ? $post_id : 0;
     }
+
 
     /**
      * Add object meta to the S3 object.
@@ -369,7 +433,7 @@ class Documents
 
     public function addMetaBoxes(): void
     {
-        add_meta_box('page', 'Document Attributes', [$this, 'metaBoxContent'], $this->slug, 'side');
+        add_meta_box('page', 'Document Attributes', [$this, 'metaBoxContent'], self::SLUG, 'side');
     }
 
     /**
@@ -440,7 +504,7 @@ class Documents
 
         foreach ($rules as $key => $value) {
             // If starts with documents/ then prefix with a  pattern to match any page slug.
-            if (str_starts_with($key, $this->document_slug . '/')) {
+            if (str_starts_with($key, self::DOCUMENT_SLUG . '/')) {
                 $new_key = '.*\/' . $key;
                 $new_rules[$new_key] = $value;
             }
@@ -470,7 +534,7 @@ class Documents
 
     public function isInvalidSlug(bool $is_invalid_slug, string $slug = ''): bool
     {
-        if (in_array($slug, [$this->slug, $this->document_slug])) {
+        if (in_array($slug, [self::SLUG, self::DOCUMENT_SLUG])) {
             return true;
         }
         return $is_invalid_slug;
@@ -487,7 +551,7 @@ class Documents
         $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
 
         // We're not uploading a document.
-        if ($this->slug !== $post_type) {
+        if (self::SLUG !== $post_type) {
             echo sprintf(
                 '<p>Are you uploading file types: %1$s etc. ? Try to <a href="%2$s">add document</a> instead.</p>',
                 join(', ', $this->disallow_in_media_library),
@@ -514,7 +578,7 @@ class Documents
         $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
 
         // We're uploading a document.
-        if ($this->slug === $post_type) {
+        if (self::SLUG === $post_type) {
             return $mime_types;
         }
 
@@ -542,7 +606,7 @@ class Documents
         $post_type = isset($_REQUEST['post_id']) ? get_post_type($_REQUEST['post_id']) : null;
 
         return match ($post_type) {
-            $this->slug => min($size, $this->document_upload_limit),
+            self::SLUG => min($size, $this->document_upload_limit),
             default => min($size, $this->default_upload_limit)
         };
     }
@@ -582,5 +646,45 @@ class Documents
         if (!current_user_can('administrator')) {
             remove_submenu_page('edit.php?post_type=document', 'wpdr_validate');
         }
+    }
+
+    /**
+     * Returns the formatted filesize from any post_id to display in the file-download component
+     *
+     * @param int $post_id The ID of the attachment post
+     * @return string|null The formatted filesize (to the largest byte unit)
+     */
+    public static function getFormattedFilesize(int $post_id): string|null
+    {
+        $filesize = null;
+
+        // Init a WP_Document_Revisions class so that we can use document specific functions
+        $document = new \WP_Document_Revisions;
+
+        // If this is a document (from wp-document-revisions) get the attachment ID and set the $postId to that
+        if (self::isDocument($post_id)) {
+            $attachment = $document->get_document($post_id);
+            if ($attachment?->ID ?? false) {
+                // Update the $postId variable to the document's attachment ID
+                $post_id = $attachment->ID;
+                error_log('attachment ID: ' . $post_id);
+            }
+        }
+
+        // Otherwise check the db for the saved filesize
+        $post_meta = get_post_meta($post_id, '_wp_attachment_metadata', true);
+
+        // Prefer the original filesize
+        if (!empty($post_meta['filesize']) && is_int($post_meta['filesize'])) {
+            $filesize = $post_meta['filesize'];
+            // Or, get it it from the full size
+        } else if (!empty($post_meta['sizes']['full']['filesize']) && is_int($post_meta['sizes']['full']['filesize'])) {
+            $filesize = $post_meta['sizes']['full']['filesize'];
+            // But if it's offloaded get the size saved by AS3CF
+        } else {
+            $offloaded_filesize = get_post_meta($post_id, 'as3cf_filesize_total', true);
+            $filesize = !empty($offloaded_filesize) && is_int($offloaded_filesize) ? $offloaded_filesize : null;
+        }
+        return size_format($filesize);
     }
 }

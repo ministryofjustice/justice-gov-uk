@@ -10,7 +10,6 @@ require 'constants.php';
 
 class PostMeta
 {
-
     protected int | false $post_id = 0;
     protected array | null $panels_in = null;
 
@@ -171,5 +170,50 @@ class PostMeta
         $meta_data['modified'] = $this->getModifiedAt(get_the_ID(), 'Y-m-d');
 
         get_template_part('template-parts/head/meta', null, $meta_data);
+    }
+
+
+    public static function getArchiveLinks(): array
+    {
+        return [
+            [
+                'url' => 'https://webarchive.nationalarchives.gov.uk/*/http://www.justice.gov.uk/index.htm',
+                'label' => 'Ministry of Justice archived websites (2007 to 2012)'
+            ],
+            [
+                'url' => 'https://webarchive.nationalarchives.gov.uk/ukgwa/timeline/https:/www.justice.gov.uk/courts/procedure-rules',
+                'label' => 'Ministry of Justice archived websites (2012 to present day)'
+            ]
+        ];
+    }
+
+    public static function getPopularLinks(): array
+    {
+        return [
+            [
+                'url' => home_url('/courts/procedure-rules'),
+                'label' => 'Procedure rules'
+            ],
+            [
+                'url' => 'https://www.gov.uk/government/collections/royal-courts-of-justice-and-rolls-building-daily-court-lists',
+                'label' => 'Daily court lists'
+            ],
+            [
+                'url' => 'https://www.gov.uk/government/collections/prisons-in-england-and-wales',
+                'label' => 'Prison finder'
+            ],
+            [
+                'url' => 'https://www.gov.uk/courts/crown-court',
+                'label' => 'XHIBIT daily court status'
+            ],
+            [
+                'url' => 'https://www.gov.uk/guidance/prison-service-instructions-psis',
+                'label' => 'Prison service instructions (PSIs)'
+            ],
+            [
+                'url' => 'https://www.gov.uk/guidance/probation-instructions-pis',
+                'label' => 'Probation Instructions'
+            ]
+        ];
     }
 }

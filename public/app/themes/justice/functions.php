@@ -21,6 +21,7 @@ require_once 'inc/breadcrumbs.php';
 require_once 'inc/commands.php';
 require_once 'inc/content-quality/commands.php';
 require_once 'inc/content-quality/content-quality.php';
+require_once 'inc/content-links.php';
 require_once 'inc/content.php';
 require_once 'inc/core.php';
 require_once 'inc/debug.php';
@@ -29,8 +30,10 @@ require_once 'inc/disable-posts.php';
 require_once 'inc/documents/documents.php';
 require_once 'inc/dynamic-menu.php';
 require_once 'inc/errors.php';
+require_once 'inc/header.php';
 require_once 'inc/layout.php';
 require_once 'inc/mail.php';
+require_once 'inc/navigation-secondary.php';
 require_once 'inc/nginx-cache.php';
 require_once 'inc/plugin-hacks.php';
 require_once 'inc/post-meta/post-meta.php';
@@ -63,7 +66,6 @@ new Justice\Layout();
 new Justice\NginxCache();
 new Justice\Posts();
 new Justice\Redirects();
-new Justice\Search();
 new Justice\Security();
 new Justice\SimpleGutenFields();
 new Justice\SimpleDefinitionsListBlocks();
@@ -74,8 +76,12 @@ new Justice\Theme();
 $block_editor = new Justice\BlockEditor();
 $block_editor->addHooks();
 
+(new Justice\NavigationSecondary())->addHooks();
+
 $post_meta = new Justice\PostMeta();
 $post_meta->addHooks();
+
+(new Justice\Search())->addHooks();
 
 $taxonomies = new Justice\Taxonomies();
 $taxonomies->addHooks();

@@ -1,12 +1,10 @@
 <?php
 
-if (!defined('ABSPATH')) {
-    exit;
-}
+defined('ABSPATH') || exit;
 
 use MOJ\Justice\Breadcrumbs;
 
-$moj_breadcrumbs = (new Breadcrumbs)->getTheBreadcrumbs();
+$moj_breadcrumbs = Breadcrumbs::getTheBreadcrumbs();
 
 if (!$moj_breadcrumbs) {
     return;
@@ -18,9 +16,9 @@ if (!$moj_breadcrumbs) {
     <?php foreach ($moj_breadcrumbs as $breadcrumb) { ?>
         <li>
             <?php if ($breadcrumb['url']) { ?>
-                <a href="<?php echo $breadcrumb['url']; ?>"><?php echo $breadcrumb['title']; ?></a>
+                <a href="<?php echo $breadcrumb['url']; ?>"><?php echo $breadcrumb['label']; ?></a>
             <?php } else { ?>
-                <?php echo $breadcrumb['title']; ?>
+                <?php echo $breadcrumb['label']; ?>
             <?php } ?>
         </li>
 

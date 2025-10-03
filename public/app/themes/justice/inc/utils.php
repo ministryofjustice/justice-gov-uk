@@ -52,4 +52,31 @@ class Utils
         }
         return null;
     }
+
+    /**
+     * Get the sidebar template part with the specified name and arguments.
+     *
+     * This is the same as WordPress's get_sidebar function, but allows for the
+     * same sidebar to be used multiple times.
+     *
+     * @param string|null $name The name of the sidebar to get.
+     * @param array $args The arguments to pass to the sidebar template part.
+     * @return bool|void Returns false if the sidebar template part is not found, otherwise
+     */
+    public static function getSidebarMulti($name = null, $args = array())
+    {
+        do_action('get_sidebar', $name, $args);
+
+        $templates = array();
+        $name      = (string) $name;
+        if ('' !== $name) {
+            $templates[] = "sidebar-{$name}.php";
+        }
+
+        $templates[] = 'sidebar.php';
+
+        if (! locate_template($templates, true, false, $args)) {
+            return false;
+        }
+    }
 }

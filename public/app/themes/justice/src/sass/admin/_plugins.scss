@@ -1,0 +1,90 @@
+// Styling for the PublishPress Revisions plugin
+
+// Hide the upsell menu link
+.toplevel_page_revisionary-q {
+  a[href="admin.php?page=revisionary-pro"],
+  a[href="https://publishpress.com/links/revisions-menu"]
+  {
+    display: none !important;
+  }
+}
+// Hide the upsell banner on the listing pages
+.pp-version-notice-bold-purple {
+  display: none;
+}
+// Hide banner requesting reviews
+.revisionary-wp-reviews-notice {
+  display: none;
+}
+// Use Wordpress colours as the module defaults aren't accessible
+.pressshack-admin-wrapper {
+  a {
+    color: #2271b1 !important;
+    &:hover {
+      color: #135e96 !important;
+    }
+    &:focus {
+      color: #043959 !important;
+    }
+  }
+}
+// Hide the upsell and support banner on the side of the settings
+.pressshack-admin-wrapper {
+  .inner-sidebar {
+    display: none;
+  }
+  footer {
+    display: none;
+  }
+  .ppseries-settings-body-content {
+    width: 100% !important;
+  }
+}
+
+// Styling for the Tree View plugin
+
+// Hide the promo banner
+div.cms_tpv_promo_above_wrapper {
+  display: none !important;
+}
+
+// Styling the Profile update page.
+
+// Hide form fields for editors.
+body.profile-php:not(.admin-role-administrator) {
+  .user-url-wrap,
+  .user-description-wrap,
+  .application-passwords,
+  .tool-box // Feed secrets
+  {
+    display: none;
+  }
+}
+
+// Styling the document edit page.
+
+// Hide the Custom Fields from the document edit page.
+body.post-type-document:not(.admin-role-administrator) {
+  // Screen options checkbox.
+  #screen-meta label[for="postcustom-hide"] {
+    display: none;
+  }
+  // Custom meta box.
+  #postcustom {
+    display: none;
+  }
+}
+
+// Styling the Redirect edit page.
+
+// Hide the Custom Fields from the redirect edit page.
+body.post-type-redirect_rule:not(.admin-role-administrator) {
+  // Screen options checkbox.
+  #screen-meta label[for="slugdiv-hide"] {
+    display: none;
+  }
+  // Slug meta box.
+  #slugdiv {
+    display: none;
+  }
+}

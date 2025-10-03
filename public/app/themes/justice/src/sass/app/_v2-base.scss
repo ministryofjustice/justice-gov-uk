@@ -1,0 +1,55 @@
+@charset "UTF-8";
+@use "../../components/v2-mixins" as mixins;
+
+:root {
+    @include mixins.css-vars();
+}
+
+html {
+    font-size: 16px;
+}
+html, body {
+    height: 100%;
+}
+
+body, p {
+    @include mixins.body;
+    margin: 0;
+}
+
+h1, .h1 {
+    @include mixins.h1;
+}
+
+h2, .h2 {
+    @include mixins.h2;
+}
+
+h3, .h3 {
+    @include mixins.h3;
+}
+
+h4, .h4 {
+    @include mixins.h4;
+}
+
+h5, .h5 {
+    @include mixins.h5;
+}
+
+h6, .h6 {
+    @include mixins.h6;
+}
+
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-indent: 0;
+}
+
+.visually-hidden {
+    @include mixins.visually-hidden;
+}
+
+@include mixins.icons;
