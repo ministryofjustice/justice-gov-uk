@@ -4,15 +4,6 @@ defined('IN_STORIES') || exit;
 
 $component = [
     'title' => 'Components/Button',
-    'parameters'=> [
-        'layout'=> 'centered',
-    ],
-    'argTypes' => [
-        'variant'=> [
-            'options' => ['primary', 'dark', 'light'],
-            'control' => [ 'type' => 'radio' ],
-        ],
-    ],
     'stories' => []
 ];
 

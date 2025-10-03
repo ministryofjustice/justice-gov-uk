@@ -4,9 +4,6 @@ defined('IN_STORIES') || exit;
 
 $component = [
     'title' => 'Components/Header',
-    'parameters' => [
-        'layout' => 'fullscreen',
-    ],
     'stories' => []
 ];
 
