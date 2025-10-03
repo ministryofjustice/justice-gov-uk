@@ -21,6 +21,7 @@ class Stories
         'common/header',
         'common/footer',
         'nav/navigation-secondary',
+        'nav/navigation-sections',
         'common/file-download',
         'common/hero',
         'common/horizontal-rule',

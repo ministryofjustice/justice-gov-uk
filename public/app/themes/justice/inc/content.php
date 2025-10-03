@@ -31,11 +31,13 @@ class Content
         add_filter('the_content', [__CLASS__, 'fixNationalArchiveLinks']);
         add_filter('wp_kses_allowed_html', [__CLASS__, 'customWpksesPostTags'], 10, 2);
 
-        add_action('render_block_core/list', [$this, 'renderLinks'], 10, 2);
+        add_action('render_block_core/list-item', [$this, 'renderLinks'], 10, 2);
         add_action('render_block_core/paragraph', [$this, 'renderLinks'], 10, 2);
         add_action('render_block_core/table', [$this, 'renderLinks'], 10, 2);
 
         add_action('render_block_core/table', [$this, 'renderTables'], 10, 2);
+
+        add_action('render_block_core/list', [$this, 'renderNavigationSection'], 15, 2);
     }
 
     /**
@@ -57,6 +59,7 @@ class Content
         // Remove the XML declaration that was added
         $doc->removeChild($doc->firstChild);
     }
+
 
     public function renderLinks($block_content, $block)
     {
@@ -130,7 +133,6 @@ class Content
     }
 
 
-
     /**
      * Adds the correct scopes to table headers
      *
@@ -167,6 +169,62 @@ class Content
         }
 
         return $doc->saveHTML();
+    }
+
+
+    /**
+     * Renders the navigation section block.
+     *
+     * This function processes the block content to extract links from list items
+     * and renders them using a template part.
+     *
+     * @param string $block_content The content of the block to be processed
+     * @param array $block The block data
+     * @return string The rendered HTML for the navigation section
+     */
+    public function renderNavigationSection($block_content, $block)
+    {
+        if (!in_the_loop() || !is_main_query() || (!is_single() && !is_page())) {
+            return $block_content;
+        }
+        
+        if (($block['attrs']['className'] ?? '') !== 'is-style-pag-nav') {
+            return $block_content;
+        }
+
+        $links = array_map([__class__, 'getLinkFroListItemBlock'], $block['innerBlocks']);
+
+        return BlockEditor::templatePartToVariable('template-parts/nav/navigation-sections', null, [
+            'links' => $links
+        ]);
+    }
+
+
+    /**
+     * Extracts the link and label from a list item block.
+     *
+     * This function uses a regular expression to find the link and label within the block's inner HTML.
+     * It returns an associative array with 'url' and 'label' keys if successful, or null if not.
+     *
+     * @param array $block The block data
+     * @return array|null An associative array with 'url' and 'label', or null if not a list item block
+     */
+    public static function getLinkFroListItemBlock($block)
+    {
+        if ('core/list-item' !== $block['blockName']) {
+            return null; // Not a list item block
+        }
+
+        preg_match('/<a href="([^"]+)">([^<]+)<\/a>/', $block['innerHTML'], $matches);
+
+        if (count($matches) !== 3) {
+            return null; // Skip if the regex did not match
+        }
+
+        return [
+            'url' => $matches[1],
+            'label' => $matches[2],
+        ];
     }
 
     /**
