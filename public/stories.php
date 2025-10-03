@@ -82,7 +82,8 @@ class Stories
                     try {
                         require $file;
                     } catch (Exception $e) {
-                        echo "Error loading template part: " . $e->getMessage();
+                        echo "Error loading template part {$slug}. The error has been logged.";
+                        error_log($e->getMessage());
                     }
                 } else {
                     echo "Template part {$slug} not found.";
@@ -95,9 +96,9 @@ class Stories
 
     /**
      * Approximate WordPress escaping functions
-     * 
+     *
      * Required for the template parts to run without WordPress.
-     * 
+     *
      * @return void
      */
     public static function approximateEscapingFunctions()
@@ -193,13 +194,14 @@ class Stories
 
 new Stories();
 
-if(!defined('IN_STORIES')) {
+if (!defined('IN_STORIES')) {
     // Redirect to the site homepage
     header('Location: /');
     exit;
 }
 
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="en-GB">
 
 <head>
@@ -230,7 +232,7 @@ if(!defined('IN_STORIES')) {
 
         @media screen and (min-width: 1024px) {
             .story-wrapper--sidebar {
-            /* On large screen */
+                /* On large screen */
                 max-width: 400px;
             }
         }
@@ -242,29 +244,24 @@ if(!defined('IN_STORIES')) {
     <h1>Justice UK Components</h1>
 
     <?php foreach (Stories::getComponents() as $slug => $component) : ?>
-
         <div class="component-wrapper">
 
             <h2><?= $component['title'] ?></h2>
 
             <?php foreach ($component['stories'] as $name => $args) : ?>
-
                 <h3><?= $name ?></h3>
 
                 <div class="story-wrapper story-wrapper--<?= esc_attr($component['layout'] ?? '') ?>">
 
                     <?php if ($args['decorator'] ?? false) : ?>
-
                         <?php
                         $decorator_parts = explode('__Story__', $args['decorator']);
                         unset($args['decorator']); // Remove decorator from args to avoid passing it to the
                         foreach ($decorator_parts as $i => $part) {
-
                             if ($i) {
                                 get_template_part('template-parts/' . $slug, null, $args);
                             }
                             echo $part;
-
                         }
                         ?>
 
@@ -284,4 +281,5 @@ if(!defined('IN_STORIES')) {
 
     <script src="/app/themes/justice/dist/v2-app.min.js"></script>
 </body>
+
 </html>
