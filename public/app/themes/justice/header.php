@@ -47,19 +47,16 @@
             $menu_items = [
                 [
                     'title' => 'Courts',
-                    'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
-                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Courts', page_location: '" . home_url('/courts') . "' });"
+                    'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service'
                 ],
                 [
                     'title' => 'Procedure rules',
                     'url' => home_url('/courts/procedure-rules'),
-                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules')),
-                    'onclick' => null
+                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules'))
                 ],
                 [
                     'title' => 'Offenders',
-                    'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
-                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Offenders', page_location: '" . home_url('/offenders') . "' });"
+                    'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service'
                 ]
             ];
             ?>
