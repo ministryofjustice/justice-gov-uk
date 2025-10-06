@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!--[if IE 7]>
-<html class="ie ie7" <?php language_attributes(); ?>>
+<html class="ie ie7" <?php language_attributes(); MOJ\Justice\Security::safeLocalizeScript(); ?>>
 <![endif]-->
 <!--[if IE 8]>
-<html class="ie ie8" <?php language_attributes(); ?>>
+<html class="ie ie8" <?php language_attributes(); MOJ\Justice\Security::safeLocalizeScript(); ?>>
 <![endif]-->
 <!--[if !(IE 7) & !(IE 8)]><!-->
-<html <?php language_attributes(); ?>>
+<html <?php language_attributes(); MOJ\Justice\Security::safeLocalizeScript(); ?>>
 <!--<![endif]-->
 <head>
     <meta charset="<?php bloginfo('charset'); ?>"/>
@@ -64,7 +64,7 @@
                 <ul class="menu-top">
                     <?php foreach ($menu_items as $item) : ?>
                         <li <?php echo !empty($item['active']) ? 'class="active"' : '' ?>>
-                            <a href="<?php echo $item['url']; ?>" onclick="<?= $item['onclick'] ?? '' ?>">
+                            <a href="<?php echo $item['url']; ?>" >
                                 <?= $item['title'] ?>
                             </a>
                             <div class="finish"></div>
