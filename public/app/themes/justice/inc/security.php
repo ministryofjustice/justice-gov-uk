@@ -61,7 +61,7 @@ class Security
 
         // Push the Nginx hosts to known_hosts.
         $nginx_urls = ClusterHelper::getNginxHosts('hosts');
-        $nginx_hosts = array_map(fn ($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
+        $nginx_hosts = array_map(fn($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
         array_push($this->known_hosts, ...$nginx_hosts);
     }
 
@@ -102,6 +102,29 @@ class Security
 
         // Log requests to unknown hosts.
         add_filter('pre_http_request', [$this, 'logUnknownHostRequests'], 20, 3);
+
+        // Remove the inline script that WordPress adds to the head for post previews.
+        // This is because we use a CSP to block inline scripts.
+        // The functionality has been replicated in the app.js file.
+        remove_action('wp_head', 'wp_post_preview_js', 1);
+
+        // Since we removed the inline script for post previews,
+        // we need to add the post ID to the HTML tag for the app.js to use.
+        add_filter('moj_safe_localization_data', function ($data) {
+            global $post;
+
+            if (! is_preview() || empty($post)) {
+                return $data;
+            }
+
+            $data['preview-post-id'] = get_the_ID() ?: 0;
+            return $data;
+        });
+
+        // PublishPress Revisions (formerly called Revisionary) uses inline scripts
+        // to fix the revision preview in the admin bar. Remove the inline script
+        // because it violates the CSP.
+        add_filter('revisionary_admin_bar_absolute', '__return_false');
     }
 
     /**
@@ -241,5 +264,23 @@ class Security
         }
 
         return $response;
+    }
+
+
+    /**
+     * Safely localize a script by adding data attributes to the html tag.
+     *
+     * Similar to `wp_localize_script`, but it does not use a <script> tag, it adds data attributes to the html tag.
+     * This is useful for passing data to the app.js script without violating the Content Security Policy (CSP).
+     *
+     * @return void
+     */
+    public static function safeLocalizeScript(): void
+    {
+        $data = apply_filters('moj_safe_localization_data', []);
+
+        foreach ($data as $key => $value) {
+            echo sprintf(' data-%s="%s"', esc_attr($key), esc_attr($value));
+        }
     }
 }

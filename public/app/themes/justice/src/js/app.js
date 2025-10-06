@@ -32,3 +32,30 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+/**
+ * This script is used to handle post previews in WordPress.
+ *
+ * It's the equivalent of the inline script that WordPress adds to the head for post previews.
+ * But, WordPress's inline script is blocked by our Content Security Policy (CSP),
+ * and replicating it this way is more secure.
+ *
+ * See wp-includes/functions.php wp_post_preview_js
+ */
+(function () {
+  if (!document.documentElement.dataset.previewPostId) {
+    return;
+  }
+
+  const query = document.location.search;
+
+  if (query && query.indexOf("preview=true") !== -1) {
+    window.name =
+      "wp-preview-" + document.documentElement.dataset.previewPostId;
+  }
+
+  if (window.addEventListener) {
+    window.addEventListener("pagehide", function () {
+      window.name = "";
+    });
+  }
+})();
