@@ -39,13 +39,13 @@ class Core
         // Remove inline css blocks...
 
         // Dequeue the core block styles in the footer.
-        add_action('wp_footer', fn () => wp_dequeue_style('core-block-supports') );
+        add_action('wp_footer', fn () => wp_dequeue_style('core-block-supports'));
         // Remove the global styles that are added by WordPress.
-        remove_action( 'wp_enqueue_scripts', 'wp_enqueue_global_styles' );
+        remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
         // Remove auto-sizes style that's been added by WordPress.
         add_filter('wp_img_tag_add_auto_sizes', '__return_false');
         // Remove the classic theme styles.
-        add_action( 'wp_enqueue_scripts', fn() => wp_dequeue_style( 'classic-theme-styles' ), 20 );
+        add_action('wp_enqueue_scripts', fn() => wp_dequeue_style('classic-theme-styles'), 20);
 
         // Remove inline script blocks...
 
@@ -57,7 +57,7 @@ class Core
 
         // Remove the emoji detection script.
         add_action('admin_print_scripts', function () {
-            remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+            remove_action('admin_print_scripts', 'print_emoji_detection_script');
         }, 1);
     }
 
@@ -151,11 +151,11 @@ class Core
      * @param array $args
      * @return string
      */
-    public static function replaceGravatar ($_avatar, $_id_or_email, $args) : string {
+    public static function replaceGravatar($_avatar, $_id_or_email, $args) : string
+    {
         $width = isset($args['width']) && is_int($args['width']) ? $args['width'] : 26;
         $height = isset($args['height']) && is_int($args['height']) ? $args['height'] : 26;
 
         return sprintf('<img class="avatar avatar-26 photo" width="%d" height="%d" src="/app/themes/justice/dist/img/avatar.jpg" />', $width, $height);
     }
-
 }

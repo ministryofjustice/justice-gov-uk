@@ -148,7 +148,7 @@ final class ContentQualityIssueExternalResource extends ContentQualityIssue
 
     /**
      * Get external resources from content.
-     * 
+     *
      * @param string $content The content to check.
      * @return array An array of external URLs found in the content.
      */

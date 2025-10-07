@@ -37,4 +37,3 @@ if (class_exists('PPVersionNotices\Module\TopNotice\Module')) {
         return $settings;
     }, 99);
 }
-
