@@ -152,7 +152,6 @@ class Security
     {
         unset($headers['X-Pingback']);
 
-        $headers['X-Powered-By'] = 'Justice Digital';
         return $headers;
     }
 
