@@ -49,7 +49,6 @@ class Core
 
         // Remove inline script blocks...
 
-
         // Remove the customizer script.
         add_action('add_admin_bar_menus', function () {
             remove_action('admin_bar_menu', 'wp_admin_bar_customize_menu', 40);
