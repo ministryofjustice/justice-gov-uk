@@ -231,6 +231,7 @@ FROM base-nginx AS build-nginx
 COPY deploy/config/php-fpm.conf      /etc/nginx/php-fpm.conf
 COPY deploy/config/php-fpm-auth.conf /etc/nginx/php-fpm-auth.conf
 COPY deploy/config/auth-request.conf /etc/nginx/auth-request.conf
+COPY deploy/config/headers.conf      /etc/nginx/headers.conf
 COPY deploy/config/redirects.conf    /etc/nginx/redirects.conf
 COPY deploy/config/server.conf       /etc/nginx/conf.d/default.conf
 

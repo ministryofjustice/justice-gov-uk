@@ -209,3 +209,15 @@ If your cursor is on a list item, the first click will select the list block, th
 1. In the list that appears click on the **Copy all blocks** option, then use paste to copy the blocks over.
 1. If you just want to copy some of a page's blocks, click and drag to highlight the required blocks and copy and paste in the new location.
 1. Alternatively, if you are familiar with HTML you can copy and paste that directly if that's easier. Click on the three dots in the upper right corner and select **Code editor** from the menu.
+
+### What does "This image from an external website, and will not be displayed correctly" mean?
+
+This error is shown when an image from another website is embedded into a page.
+
+If the image in question is required:
+
+1. First add the image to the Media Library.
+1. Add alt text to describe the image.
+1. Copy the image URL and use that in the page content.
+
+If the image is not necessary, or has been inserted accidentally, then it is safe to delete the image and save the page.

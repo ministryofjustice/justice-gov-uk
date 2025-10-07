@@ -11,7 +11,6 @@ Config::define('WP_DEBUG', true);
 Config::define('WP_DEBUG_DISPLAY', true);
 Config::define('WP_DEBUG_LOG', '/dev/stderr');
 Config::define('WP_DISABLE_FATAL_ERROR_HANDLER', true);
-Config::define('SCRIPT_DEBUG', true);
 Config::define('DISALLOW_INDEXING', true);
 
 if (env('WP_OFFLOAD_MEDIA_PRESET')) {

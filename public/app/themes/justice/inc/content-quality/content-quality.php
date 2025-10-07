@@ -16,6 +16,7 @@ require_once 'issues/anchor.php';
 require_once 'issues/email-href.php';
 require_once 'issues/email-text.php';
 require_once 'issues/empty-heading.php';
+require_once 'issues/external-resource.php';
 require_once 'issues/incomplete-thead.php';
 require_once 'issues/spelling.php';
 require_once 'issues/thead.php';
@@ -78,6 +79,7 @@ class ContentQuality
         new ContentQualityIssueEmailHref();
         new ContentQualityIssueEmailText();
         new ContentQualityIssueEmptyHeading();
+        new ContentQualityIssueExternalResource();
         new ContentQualityIssueIncompleteThead();
         new ContentQualityIssueSpelling();
         new ContentQualityIssueThead();
