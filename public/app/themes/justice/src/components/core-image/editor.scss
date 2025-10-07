@@ -1,0 +1,6 @@
+img {
+    border: 3px solid tomato;
+    &::before {
+        content: 'This image from an external website will and not be displayed correctly. See HowTo Admin - Block Editor Q & A.'
+    }
+}
