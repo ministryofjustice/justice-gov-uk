@@ -67,7 +67,7 @@ MOJ\Justice\Security::safeLocalizeScript(); ?>>
                 <ul class="menu-top">
                     <?php foreach ($menu_items as $item) : ?>
                         <li <?php echo !empty($item['active']) ? 'class="active"' : '' ?>>
-                            <a href="<?php echo $item['url']; ?>" >
+                            <a href="<?= esc_url($item['url']); ?>" >
                                 <?= $item['title'] ?>
                             </a>
                             <div class="finish"></div>
