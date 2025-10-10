@@ -61,7 +61,7 @@ class Security
 
         // Push the Nginx hosts to known_hosts.
         $nginx_urls = ClusterHelper::getNginxHosts('hosts');
-        $nginx_hosts = array_map(fn ($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
+        $nginx_hosts = array_map(fn($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
         array_push($this->known_hosts, ...$nginx_hosts);
     }
 
@@ -79,6 +79,9 @@ class Security
         add_filter('xmlrpc_enabled', '__return_false');
         add_filter('wp_headers', [$this, 'headerMods']);
         add_filter('auth_cookie_expiration', [$this, 'setLoginPeriod'], 10, 0);
+
+        // Prevent username enumeration via the login error message.
+        add_filter('login_errors', [__class__, 'secureLoginErrors']);
 
         // Remove emoji support.
         remove_action('wp_head', 'print_emoji_detection_script', 7);
@@ -144,6 +147,28 @@ class Security
     public function setLoginPeriod(): float|int
     {
         return 7 * DAY_IN_SECONDS; // Cookies set to expire in 7 days.
+    }
+
+    /**
+     * Prevent username enumeration via the login error message.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/login_errors/
+     *
+     * @param string $error
+     * @return string
+     */
+    public static function secureLoginErrors(string $error): string
+    {
+        // Add a random delay between 20ms to 200ms to hinder timing attacks.
+        usleep(random_int(20000, 200000));
+
+        // Send error to Sentry.
+        $sanitized_error = wp_strip_all_tags($error);
+        $severity = class_exists('Sentry\Severity') ? \Sentry\Severity::info() : null;
+        do_action('sentry/captureMessage', 'Login error: ' . $sanitized_error, $severity);
+
+        // Generic error message regardless of the actual error.
+        return 'The login information you entered is incorrect. Please check your username and password.';
     }
 
     /**
