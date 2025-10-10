@@ -83,6 +83,12 @@ class Security
         // Prevent username enumeration via the login error message.
         add_filter('login_errors', [__class__, 'secureLoginErrors']);
 
+        // Prevent username enumeration via the lost password error message.
+        add_filter('lostpassword_errors', [__class__, 'secureLostpasswordErrors'], 20, 0);
+
+        // Filter the password reset confirm text.
+        add_filter('gettext', [$this, 'filterPasswordResetConfirmText'], 10, 3);
+
         // Remove emoji support.
         remove_action('wp_head', 'print_emoji_detection_script', 7);
         remove_action('wp_print_styles', 'print_emoji_styles');
@@ -157,18 +163,55 @@ class Security
      * @param string $error
      * @return string
      */
-    public static function secureLoginErrors(string $error): string
+    public static function secureLoginErrors(string $errors): string
     {
         // Add a random delay between 20ms to 200ms to hinder timing attacks.
         usleep(random_int(20000, 200000));
 
         // Send error to Sentry, so that we can assist in debugging genuine login issues.
-        $sanitized_error = wp_strip_all_tags($error);
+        $sanitized_errors = wp_strip_all_tags($errors);
         $severity = class_exists('Sentry\Severity') ? \Sentry\Severity::info() : null;
-        do_action('sentry/captureMessage', 'Login error: ' . $sanitized_error, $severity);
+        do_action('sentry/captureMessage', 'Login error: ' . $sanitized_errors, $severity);
 
         // Generic error message regardless of the actual error.
         return 'The login information you entered is incorrect. Please check your username and password.';
+    }
+
+    /**
+     * Prevent username enumeration via the lost password error message.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/lostpassword_errors/
+     * 
+     * @return void
+     */
+    public static function secureLostpasswordErrors(): void
+    {
+        // Add a random delay between 20ms to 200ms to hinder timing attacks.
+        usleep(random_int(20000, 200000));
+
+        // Always do the same redirect, regardless of the actual error.
+        wp_safe_redirect( 'wp-login.php?checkemail=confirm' );
+        exit;
+    }
+
+    /**
+     * Filter the password reset confirm text.
+     *
+     * Since all password resets will see the same message, then update it to avoid confusion.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/gettext/
+     *
+     * @param string $translated_text
+     * @param string $text
+     * @param string $domain
+     * @return string
+     */
+    public function filterPasswordResetConfirmText(string $translated_text, string $text, string $domain): string
+    {
+        if ($text === 'Check your email for the confirmation link, then visit the <a href="%s">login page</a>.' && $domain === 'default') {
+            $translated_text = 'If you entered a valid email address or username, you will receive an email with a link to reset your password.';
+        }
+        return $translated_text;
     }
 
     /**
