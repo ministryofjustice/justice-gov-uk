@@ -61,7 +61,7 @@ class Security
 
         // Push the Nginx hosts to known_hosts.
         $nginx_urls = ClusterHelper::getNginxHosts('hosts');
-        $nginx_hosts = array_map(fn($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
+        $nginx_hosts = array_map(fn ($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
         array_push($this->known_hosts, ...$nginx_hosts);
     }
 
