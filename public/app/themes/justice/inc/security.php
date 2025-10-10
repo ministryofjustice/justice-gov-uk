@@ -206,7 +206,8 @@ class Security
             return new WP_Error(
                 'rest_not_logged_in',
                 __('You are not currently logged in.'),
-                array('status' => 401)
+                // Return 403, since 401 can result in a redirect loop to Entra. 
+                array('status' => 403)
             );
         }
 
