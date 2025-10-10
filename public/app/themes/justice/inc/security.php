@@ -162,7 +162,7 @@ class Security
         // Add a random delay between 20ms to 200ms to hinder timing attacks.
         usleep(random_int(20000, 200000));
 
-        // Send error to Sentry.
+        // Send error to Sentry, so that we can assist in debugging genuine login issues.
         $sanitized_error = wp_strip_all_tags($error);
         $severity = class_exists('Sentry\Severity') ? \Sentry\Severity::info() : null;
         do_action('sentry/captureMessage', 'Login error: ' . $sanitized_error, $severity);
