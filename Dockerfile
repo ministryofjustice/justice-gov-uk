@@ -1,4 +1,4 @@
-ARG version_nginx=1.26.2
+ARG version_nginx=1.26.3
 
 FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 
@@ -55,12 +55,12 @@ SHELL ["/bin/ash", "-exo", "pipefail", "-c"]
 
 RUN apk update \
     && apk add linux-headers openssl-dev pcre2-dev zlib-dev openssl abuild \
-               musl-dev libxslt libxml2-utils make mercurial gcc unzip git \
+               musl-dev libxslt libxml2-utils make gcc unzip git \
                xz g++ coreutils \
     # allow abuild as a root user \
     && printf "#!/bin/sh\\nSETFATTR=true /usr/bin/abuild -F \"\$@\"\\n" > /usr/local/bin/abuild \
     && chmod +x /usr/local/bin/abuild \
-    && hg clone -r ${NGINX_VERSION}-${PKG_RELEASE} https://hg.nginx.org/pkg-oss/ \
+    && git clone --branch ${NGINX_VERSION}-${PKG_RELEASE} https://github.com/nginx/pkg-oss.git pkg-oss \
     && cd pkg-oss \
     && mkdir /tmp/packages && \
     /pkg-oss/build_module.sh -v $NGINX_VERSION -f -y -o /tmp/packages -n cachepurge https://github.com/nginx-modules/ngx_cache_purge/archive/2.5.3.tar.gz; \

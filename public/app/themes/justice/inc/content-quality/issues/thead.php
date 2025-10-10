@@ -83,8 +83,6 @@ final class ContentQualityIssueThead extends ContentQualityIssue
         $query = "
             SELECT 
                 ID,
-                post_title,
-                post_status,
                 ( CHAR_LENGTH(post_content) - CHAR_LENGTH( REPLACE ( post_content, '<table', SPACE(LENGTH('<table')-1) ) ) ) -
                 ( CHAR_LENGTH(post_content) - CHAR_LENGTH( REPLACE ( post_content, '<thead', SPACE(LENGTH('<thead')-1) ) ) ) AS tables_without_thead
             FROM {$wpdb->posts} AS p
@@ -96,10 +94,7 @@ final class ContentQualityIssueThead extends ContentQualityIssue
                 options.option_value IS NULL AND
                 post_type = 'page' AND
                 post_status IN ('publish', 'private', 'draft') AND
-                (postmeta.meta_value IS NULL OR postmeta.meta_value = '0') AND
-                post_content LIKE '%<table%' AND
-                CHAR_LENGTH(post_content) - CHAR_LENGTH( REPLACE ( post_content, '<table', SPACE(LENGTH('<table')-1)) ) > 
-                CHAR_LENGTH(post_content) - CHAR_LENGTH( REPLACE ( post_content, '<thead', SPACE(LENGTH('<thead')-1)) )
+                (postmeta.meta_value IS NULL OR postmeta.meta_value = '0')
         ";
 
         foreach ($wpdb->get_results($query) as $page) :
@@ -137,7 +132,7 @@ final class ContentQualityIssueThead extends ContentQualityIssue
 
         // If the issue is 'queued', then append the appropriate message.
         if ('queued' === $this->pages_with_issue[$post_id]) {
-            $issues[] = __('The page is queued for heading without content issues.', 'justice');
+            $issues[] = __('The page is queued for table without a header issues.', 'justice');
             return $issues;
         }
 
