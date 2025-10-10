@@ -181,7 +181,7 @@ class Security
      * Prevent username enumeration via the lost password error message.
      *
      * @see https://developer.wordpress.org/reference/hooks/lostpassword_errors/
-     * 
+     *
      * @return void
      */
     public static function secureLostpasswordErrors(): void
@@ -190,7 +190,7 @@ class Security
         usleep(random_int(20000, 200000));
 
         // Always do the same redirect, regardless of the actual error.
-        wp_safe_redirect( 'wp-login.php?checkemail=confirm' );
+        wp_safe_redirect('wp-login.php?checkemail=confirm');
         exit;
     }
 
@@ -249,7 +249,7 @@ class Security
             return new WP_Error(
                 'rest_not_logged_in',
                 __('You are not currently logged in.'),
-                // Return 403, since 401 can result in a redirect loop to Entra. 
+                // Return 403, since 401 can result in a redirect loop to Entra.
                 array('status' => 403)
             );
         }
