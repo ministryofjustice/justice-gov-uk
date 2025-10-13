@@ -1,0 +1,11 @@
+@use '../v2-mixins.scss' as mixins;
+
+.hero {
+    &__breadcrumbs {
+        @include mixins.spacing('margin', 4, 'bottom');
+    }
+
+    &__title {
+        @include mixins.spacing('margin', 0, 'top');
+    }
+}

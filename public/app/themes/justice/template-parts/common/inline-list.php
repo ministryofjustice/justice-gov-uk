@@ -1,5 +1,7 @@
 <?php
 
+defined('ABSPATH') || exit;
+
 /**
  * Inline list template part.
  * Pass an array of entries to this template part to render them as an inline list.

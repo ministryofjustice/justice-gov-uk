@@ -1,0 +1,58 @@
+@use '../v2-mixins.scss' as mixins;
+
+.pagination {
+    $this: &;
+
+    @include mixins.spacing('margin', 8, 'top');
+
+    display: flex;
+    justify-content: center;
+
+    &__list {
+        @include mixins.spacing('margin', 9, 'left');
+        @include mixins.spacing('margin', 9, 'right');
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    &__link {
+        @include mixins.link;
+        @include mixins.spacing('padding', 1, 'left');
+        @include mixins.spacing('padding', 1, 'right');
+
+        display: flex;
+        justify-content: center;
+        min-width: 1.5rem;
+        min-height: 1.5rem;
+
+        &--previous {
+            #{$this}__link-text {
+                @include mixins.spacing('padding', 1, 'left');
+            }
+        }
+
+        &--next {
+            #{$this}__link-text {
+                @include mixins.spacing('padding', 1, 'right');
+            }
+        }
+    }
+
+    &__link.disabled {
+        @include mixins.disabled;
+
+        color: var(--justice-primary-black);
+
+        &:hover {
+            color: var(--justice-primary-black);
+        }
+    }
+
+    &__link-text {
+        @media screen and (width <= calc(mixins.$justice-lg - 1px)) {
+            @include mixins.visually-hidden;
+        }
+    }
+}

@@ -1,0 +1,19 @@
+@use '../v2-mixins.scss' as mixins;
+
+.horizontal-rule {
+    display: none;
+    @media screen and (min-width: mixins.$justice-lg) {
+        display: block;
+
+        &:not(&--full-width) {
+            @include mixins.container;
+        }
+
+        &__hr {
+            @include mixins.spacing('margin', 8, 'top');
+
+            margin-bottom: 0;
+            width: 100%;
+        }
+    }
+}

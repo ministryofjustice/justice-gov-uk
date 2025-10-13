@@ -1,85 +1,97 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+use Roots\WPConfig\Config;
+
+if (Config::get('FRONTEND_VERSION') === 1) {
+    require get_template_directory() . '/search.v1.php';
+    return;
+}
+
+use MOJ\Justice\Breadcrumbs;
+use MOJ\Justice\Documents;
 use MOJ\Justice\Search;
+use MOJ\Justice\Utils;
 
 get_header();
 
-$search = new Search();
-
 ?>
 
-<main role="main" id="content-wrapper">
+<div class="one-sidebar one-sidebar--left">
+    <div class="one-sidebar__grid">
 
-    <article class="container-wrapper">
-
-        <div id="content-left">
-            <h1 class="title">Search</h1>
-            <?php get_sidebar('left', ['panels_in' => ['search-filters']]); ?>
+        <div class="one-sidebar__sidebar">
+            <?php Utils::getSidebarMulti('left', ['panels_in' => ['search-filters']]); ?>
         </div>
 
-        <div id="content">
+        <article id="main-page-content" class="one-sidebar__article">
+            <div class="one-sidebar__article-header">
 
-            <?php get_template_part('template-parts/nav/breadcrumbs'); ?>
+                <?php get_template_part('template-parts/common/hero', null, [
+                    'title' => Search::getSearchPageTitle(),
+                    'breadcrumbs' => Breadcrumbs::getTheBreadcrumbs(),
+                ]); ?>
 
-            <div class="device-only">
-                <div class="anchor-link anchor-top">
-                    <div class="bar-left"></div>
-                    <a href="#phonenav">Menu ≡</a>
-                    <div class="bar-right"></div>
+                <div class="one-sidebar__sidebar one-sidebar__sidebar--mobile">
+                    <?php Utils::getSidebarMulti('left', ['is_mobile' => true, 'panels_in' => ['search-filters']]); ?>
                 </div>
+
             </div>
 
-            <div class="print-only">
-                <img src="<?php echo get_template_directory_uri() ?>/dist/img/logo-tudor-crest-inverted.png" alt="" title="">
-            </div>
+            <div class="one-sidebar__article-content">
 
-            <div class="search">
+                <?php
 
-                <?php get_template_part('template-parts/search/search-bar', null, ['result_count' => $search->getResultCount(), 'parent' => get_query_var('parent')]) ?>
+                get_template_part('template-parts/search/search-bar-block', null, [
+                    'search_form' => [
+                        'id' => 'search-bar-main',
+                        'action' => '/search',
+                        'input' => [
+                            'id' => 'searchbox-top',
+                            'name' => 's',
+                            'label' => Search::getSearchFormLabel(),
+                            'value' => get_search_query(),
+                            'label_hidden' => true,
+                        ],
+                        'hidden_inputs' => Search::getFormValues(['s', 'orderby']),
+                        'button' => ['text' => 'Search']
+                    ],
+                    'result_count' => Search::getResultCount(),
+                    'filters' => Search::getSortOptions(),
+                    'did_you_mean' => Search::getDidYouMean(),
+                ]);
 
-                <?php get_template_part('template-parts/search/sort', null, ['search_options' => $search->getSortOptions()]) ?>
+                $results = [];
 
-                <?php get_template_part('template-parts/search/pagination') ?>
-
-                <div class="results">
-
-                    <?php
-                    if (!$search->hasEmptyQuery() && have_posts()) {
-                        while (have_posts()) {
-                            the_post();
-                            $args = [
-                                'formatted_url' => $search->formattedUrl(get_the_permalink())
-                            ];
-                            get_template_part('template-parts/search/content', get_post_type(), $args);
-                        }
+                if (!empty(get_search_query()) && have_posts()) {
+                    while (have_posts()) {
+                        the_post();
+                        $url = get_the_permalink();
+                        $results[] = [
+                            'title' => get_the_title(),
+                            'url' => $url,
+                            'date' => get_the_date('j F Y'),
+                            'description' => apply_filters('the_excerpt', get_the_excerpt()),
+                            'is_document' => Documents::isDocument(get_the_ID()),
+                            'filesize' => Documents::getFormattedFilesize(get_the_ID()),
+                            'format' => pathinfo($url, PATHINFO_EXTENSION),
+                        ];
                     }
-                    ?>
+                }
 
-                    <?php !$search->hasEmptyQuery() && !have_posts() && get_template_part('template-parts/search/no-results'); ?>
+                get_template_part('template-parts/search/search-result-list', null, [
+                    'cards' => $results,
+                    'query' => get_search_query(),
+                ]);
 
-                    <?php $search->hasEmptyQuery() && get_template_part('template-parts/search/no-query') ?>
+                get_template_part('template-parts/search/pagination', null, Search::getPaginationArgs()); ?>
 
-                </div>
-
-                <?php get_template_part('template-parts/search/pagination') ?>
-
-                <div class="device-only">
-                    <?php
-                    /*
-                     * TODO. This could be improved with media queries.
-                     * We shouldn't be echoing the same html twice.
-                     */
-                    ?>
-                    <?php get_template_part('template-parts/panels/search-filters') ?>
-                </div>
             </div>
+        </article>
 
-        </div>
-
-        <div id="content-right"></div>
-
-    </article>
-</main>
+    </div>
+</div>
 
 <?php
 

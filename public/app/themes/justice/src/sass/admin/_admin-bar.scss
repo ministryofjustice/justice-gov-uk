@@ -1,0 +1,15 @@
+/**
+ * Override the admin-bar logo
+ */
+div#wpadminbar #wp-admin-bar-wp-logo {
+  > .ab-item .ab-icon {
+    &:before {
+      background-image: url('../img/moj-logo-crest-white.svg');
+      background-position: 0 0;
+      background-size: cover;
+      color: rgba(0, 0, 0, 0);
+    }
+  }
+}
+
+@media print { #wpadminbar { display:none; } }

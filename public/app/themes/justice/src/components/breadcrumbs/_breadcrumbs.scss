@@ -1,0 +1,26 @@
+@use "../v2-mixins.scss" as mixins;
+
+.breadcrumbs {
+    &__list {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        row-gap: 0.313rem;
+    }
+
+    &__item {
+        a {
+            @include mixins.link;
+        }
+
+        &:not(&:last-child) {
+            &::after {
+                @include mixins.spacing('margin', 1, 'left');
+                @include mixins.spacing('margin', 1, 'right');
+
+                content: '\00BB';
+                color: var(--justice-primary-grey);
+            }
+        }
+    }
+}

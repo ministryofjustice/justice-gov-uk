@@ -6,16 +6,10 @@ defined('ABSPATH') || exit;
 
 class Search
 {
-
-    public function __construct()
-    {
-        $this->addHooks();
-    }
-
     public function addHooks()
     {
         // Add a rewrite rule to handle an empty search.
-        add_action('init', fn() => add_rewrite_rule('search/?$', 'index.php?s=', 'bottom'));
+        add_action('init', fn() => add_rewrite_rule('search/?$', 'index.php?s=', 'top'));
         // Add a rewrite rule to handle the old search urls.
         add_action('template_redirect', [$this, 'redirectOldSearchUrls']);
         // Add a rewrite rule to handle the search string.
@@ -59,12 +53,53 @@ class Search
         add_action('init', [$this, 'redirectIfQueryStringHasArrays'], 1);
     }
 
+
+    public static function getSearchPageTitle(): string
+    {
+        $query = get_search_query();
+
+        $parent_id = get_post((int) get_query_var('parent')) ? (int) get_query_var('parent') : null;
+        $parent_title = $parent_id ? get_the_title($parent_id) : null;
+
+        // Set the title based on whether there is a search query.
+        $title = $query ? 'Search Results' : 'Search';
+
+        // If there is a parent title, append it to the title.
+        if ($parent_title) {
+            // e.g. "Search in Civil Procedure Rules"
+            // or,  "Search Results for Civil Procedure Rules"
+            $title .= $query ? " for " : " in ";
+            $title .= $parent_title;
+        }
+
+        return $title;
+    }
+
+
+    public static function getSearchFormLabel(): string
+    {
+        // Are we on the search page?
+        if (is_search()) {
+            $parent_id = get_post((int) get_query_var('parent')) ? (int) get_query_var('parent') : null;
+            $parent_title = $parent_id ? get_the_title($parent_id) : null;
+            return $parent_title ? "Enter your $parent_title search" : 'Search';
+        }
+
+        // Are we on a page that has a search block?
+        if (is_page() || is_single()) {
+            return sprintf("Enter your %s search", get_the_title());
+        }
+
+        return 'Search';
+    }
+
+
     /**
      * Check if the search query is empty.
      *
      * @return bool True if the search query is empty, false otherwise.
      */
-    public function hasEmptyQuery(): bool
+    public static function hasEmptyQuery(): bool
     {
         return empty(get_search_query());
     }
@@ -74,7 +109,7 @@ class Search
      *
      * @return int|null The number of search results.
      */
-    public function getResultCount(): ?int
+    public static function getResultCount(): ?int
     {
         if (empty(get_search_query())) {
             return null;
@@ -91,7 +126,7 @@ class Search
      * @param array $args An array of query parameters to add or modify.
      * @return string The URL for the search results.
      */
-    public function getSearchUrl($search, $args = [])
+    public static function getSearchUrl($search, $args = [])
     {
         $url_append = '';
         $pass_through_params = ['parent', 'post_types', 'orderby', 'section', 'organisation', 'type', 'audience'];
@@ -128,19 +163,19 @@ class Search
      *
      * @return array An array of sort options.
      */
-    public function getSortOptions(): array
+    public static function getSortOptions(): array
     {
         $orderby = get_query_var('orderby');
 
         return [
             'relevance' => [
                 'label' => 'Relevance',
-                'url' =>  $this->getSearchUrl(get_query_var('s'), ['orderby' => null]),
+                'url' =>  self::getSearchUrl(get_query_var('s'), ['orderby' => null]),
                 'selected' => empty($orderby) || $orderby === 'relevance',
             ],
             'date' => [
                 'label' => 'Most recent',
-                'url' => $this->getSearchUrl(get_query_var('s'), ['orderby' => 'date']),
+                'url' => self::getSearchUrl(get_query_var('s'), ['orderby' => 'date']),
                 'selected' => $orderby === 'date',
             ],
         ];
@@ -168,7 +203,7 @@ class Search
             $search = $_GET['query'];
         }
 
-        if (!$search) {
+        if (is_null($search)) {
             return;
         }
 
@@ -247,6 +282,165 @@ class Search
     {
         return empty($suggestion) ? $url : $this->getSearchUrl($suggestion);
     }
+
+    /**
+     * Get did you mean
+     *
+     * This function uses Relevanssi's premium feature to generate a suggestion for the search term.
+     * If no suggestion is found, it returns true.
+     *
+     * @return array|true An array containing the suggestion URL and term,
+     *   or true if the search term is correct, or false if no suggestion is found.
+     */
+    public static function getDidYouMean(): array|bool
+    {
+        $suggestion = relevanssi_premium_generate_suggestion(get_query_var('s'));
+
+        if (true === $suggestion) {
+            // Search term is correct, no suggestion needed.
+            return true;
+        }
+
+        if ('' === $suggestion) {
+            // No suggestion found.
+            return false;
+        }
+
+        return [
+            'url' => self::getSearchUrl($suggestion),
+            'term' => $suggestion,
+        ];
+    }
+
+
+    /**
+     * Get form values for the search form.
+     *
+     * This function returns an array of form values to be used in the search form or filter.
+     * It is useful for getting values for hidden inputs.
+     *
+     * @param array $exclude An array of form fields to exclude from the returned values.
+     * @return array An array of form values, each with a name and value.
+     */
+    public static function getFormValues(array $exclude = []): array
+    {
+        $fields = [
+            // Search term.
+            's' => true,
+            // Miscellaneous fields.
+            'orderby' => true,
+            'parent' => true,
+            'post_types' => true,
+            // Taxonomies.
+            'audience' => true,
+            'organisation' => true,
+            'section' => true,
+            'type' => true,
+        ];
+
+        foreach ($exclude as $field) {
+            if (in_array($field, $fields)) {
+                $fields[$field] = false;
+            }
+        }
+
+        $return_array = [];
+
+        if ($fields['s']) {
+            $return_array[] = ['name' => 's', 'value' => get_search_query()];
+        }
+
+        if ($fields['orderby'] && in_array(get_query_var('orderby'), ['date', 'relevance'])) {
+            $return_array[] = ['name' => 'orderby', 'value' => get_query_var('orderby')];
+        }
+
+        if ($fields['parent']) {
+            $parent_id = get_post((int) get_query_var('parent')) ? (int) get_query_var('parent') : null;
+            if ($parent_id) {
+                $return_array[] = [
+                    'name' => 'parent',
+                    'value' => $parent_id,
+                ];
+            }
+        }
+
+        if ($fields['post_types'] && get_query_var('post_types') === 'page') {
+            $return_array[] = [
+                'name' => 'post_types',
+                'value' => 'page',
+            ];
+        }
+
+        if ($fields['audience'] && term_exists(get_query_var('audience'), 'audience')) {
+            $return_array[] = [
+                'name' => 'audience',
+                'value' => get_query_var('audience'),
+            ];
+        }
+
+        if ($fields['organisation'] && term_exists(get_query_var('organisation'), 'organisation')) {
+            $return_array[] = [
+                'name' => 'organisation',
+                'value' => get_query_var('organisation'),
+            ];
+        }
+
+        if ($fields['section'] && term_exists(get_query_var('section'), 'section')) {
+            $return_array[] = [
+                'name' => 'section',
+                'value' => get_query_var('section'),
+            ];
+        }
+
+        if ($fields['type'] && term_exists(get_query_var('type'), 'type')) {
+            $return_array[] = [
+                'name' => 'type',
+                'value' => get_query_var('type'),
+            ];
+        }
+
+        return $return_array;
+    }
+
+
+    /**
+     * Get the pagination arguments for the search results.
+     *
+     * @return array An array containing the previous URL, next URL, and pages.
+     */
+    public static function getPaginationArgs(): array
+    {
+
+        if (is_single()) {
+            return [];
+        }
+
+        global $paged;
+        global $wp_query;
+
+        // Is there a search query?
+        if (empty(get_search_query())) {
+            // No search query, no pagination.
+            return [];
+        }
+
+        // Make the pages array
+        $pages = [];
+        for ($i = 1; $i <= $wp_query->max_num_pages; $i++) {
+            $pages[] = [
+                'url' => get_pagenum_link($i),
+                'title' => $i,
+                'current' => $i === (int) $paged,
+            ];
+        }
+
+        return [
+            'previous_url' => (int) $paged > 1 ? get_previous_posts_page_link() : null,
+            'next_url' => get_next_posts_page_link($wp_query->max_num_pages),
+            'pages' => $pages
+        ];
+    }
+
 
     /**
      * Filters the search results to only include the descendants of the parent page.
@@ -378,7 +572,6 @@ class Search
         $query_string = explode('&', $_SERVER['QUERY_STRING'] ?? '');
 
         foreach ($query_string as $query) {
-            error_log($query);
             // Get key and value
             [$key] = explode('=', $query);
 

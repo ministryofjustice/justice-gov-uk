@@ -1,0 +1,14 @@
+@use "../../components/v2-mixins" as mixins;
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.footer-wrapper {
+    @include mixins.spacing('margin', 8, 'top');
+
+    flex: 1;
+    background-color: var(--justice-primary-black);
+}

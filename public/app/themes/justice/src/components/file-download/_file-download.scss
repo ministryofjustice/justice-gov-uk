@@ -1,0 +1,21 @@
+@use "../v2-mixins.scss" as mixins;
+
+.file-download {
+    @include mixins.link;
+
+    // Keep the icon next to the text
+    white-space: nowrap;
+
+    &__icon {
+        @include mixins.spacing('margin', 1, 'right');
+        // Override the default icon styles
+        display: inline-flex!important;
+        position: relative;
+        top: 0.125em;
+    }
+
+    &__text {
+        // Override the previously set `white-space` to allow wrapping
+        white-space: normal;
+    }
+}

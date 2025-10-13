@@ -1,0 +1,75 @@
+@use "../../components/v2-mixins" as mixins;
+
+.two-sidebars {
+    $this: &;
+    @include mixins.container;
+
+    &__grid {
+        @include mixins.grid;
+    }
+
+    &__article {
+        @include mixins.grid-row(1, 4);
+
+        @media screen and (min-width: mixins.$justice-lg) {
+            @include mixins.grid-row(4, 6);
+        }
+    }
+
+    &__article-header {
+        width: 100%;
+
+        > * {
+            @include mixins.spacing('margin', 4, 'top');
+        }
+
+        > :first-child {
+            @include mixins.spacing('margin', 8, 'top');
+        }
+    }
+
+    &__article-content {
+        width: 100%;
+
+        > * {
+            @include mixins.spacing('margin', 8, 'top');
+        }
+
+        > .file-download {
+            @include mixins.spacing('margin', 4, 'top');
+        }
+    }
+
+    &__sidebar {
+        @include mixins.grid-row(1, 4);
+
+        &--left {
+            @media screen and (min-width: mixins.$justice-lg) {
+                @include mixins.grid-row(1, 3);
+            }
+        }
+
+        &--right {
+            display: none;
+            @media screen and (min-width: mixins.$justice-lg) {
+                @include mixins.grid-row(10, 3);
+            }
+        }
+
+        &--mobile {
+            display: flex;
+            @media screen and (min-width: mixins.$justice-lg) {
+                display: none;
+            }
+        }
+
+        > *:not(.navigation-secondary) {
+            @include mixins.spacing('margin', 6, 'top');
+            @media screen and (min-width: mixins.$justice-lg) {
+                &:first-child {
+                    @include mixins.spacing('margin', 8, 'top');
+                }
+            }
+        }
+    }
+}

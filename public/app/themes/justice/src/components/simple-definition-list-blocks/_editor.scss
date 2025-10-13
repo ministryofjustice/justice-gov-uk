@@ -1,0 +1,9 @@
+@use "./simple-definition-list-blocks";
+
+dl.wp-block-simple-definition-list-blocks-list {
+    // Override the default vertical margin for blocks.
+    :where(.wp-block) {
+        margin-bottom: 0.25em;
+        margin-top: 0.25em;
+    }
+} 

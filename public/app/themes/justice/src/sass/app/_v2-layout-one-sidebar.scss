@@ -1,0 +1,84 @@
+@use "../../components/v2-mixins" as mixins;
+
+.one-sidebar {
+    $this: &;
+    @include mixins.container;
+
+    &__grid {
+        @include mixins.grid;
+    }
+
+    &__article,
+    &__sidebar {
+        @include mixins.grid-row(1, 4);
+    }
+
+    &__article-header {
+        width: 100%;
+
+        > * {
+            @include mixins.spacing('margin', 4, 'top');
+        }
+
+        > :first-child {
+            @include mixins.spacing('margin', 8, 'top');
+        }
+    }
+
+    &__article-content {
+        width: 100%;
+
+        > * {
+            @include mixins.spacing('margin', 8, 'top');
+        }
+
+        > .file-download {
+            @include mixins.spacing('margin', 4, 'top');
+        }
+    }
+
+    &__sidebar {
+        display: none;
+        @media screen and (min-width: mixins.$justice-lg) {
+            > * {
+                @include mixins.spacing('margin', 6, 'top');
+            }
+
+            > :first-child {
+                @include mixins.spacing('margin', 8, 'top');
+            }
+        }
+
+        &--mobile {
+            display: flex;
+            @media screen and (min-width: mixins.$justice-lg) {
+                display: none;
+            }
+        }
+    }
+
+    &--right {
+        @media screen and (min-width: mixins.$justice-lg) {
+            #{$this}__sidebar:not(#{$this}__sidebar--mobile) {
+                @include mixins.grid-row(10, 3);
+            }
+            #{$this}__article {
+                @include mixins.grid-row(1, 7);
+                &--homepage {
+                    @include mixins.grid-row(1, 9);
+                }
+            }
+        }
+    }
+
+    &--left {
+        @media screen and (min-width: mixins.$justice-lg) {
+            #{$this}__sidebar:not(#{$this}__sidebar--mobile) {
+                @include mixins.grid-row(1, 3);
+            }
+            #{$this}__article {
+                @include mixins.grid-row(4, 9);
+            }
+        }
+    }
+}

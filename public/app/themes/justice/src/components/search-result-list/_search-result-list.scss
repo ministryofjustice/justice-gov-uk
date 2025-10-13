@@ -1,0 +1,23 @@
+@use '../v2-mixins.scss' as mixins;
+
+.search-result-list {
+    &__element {
+        @include mixins.spacing('padding', 6, 'top');
+        @include mixins.spacing('padding', 6, 'bottom');
+
+        border-bottom: 1px solid var(--justice-border);
+
+        &:first-child {
+            padding-top: 0;
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+            border: none;
+        }
+    }
+
+    &__no-results-query {
+        font-weight: var(--body-font-bold);
+    }
+}

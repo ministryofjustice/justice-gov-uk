@@ -1,0 +1,6 @@
+@use "./button";
+
+.button {
+    // I n the editorm override rounded corners to match the frontend styles.
+    border-radius: 0;
+}
