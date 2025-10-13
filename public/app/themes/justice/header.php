@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <!--[if IE 7]>
-<html class="ie ie7" <?php language_attributes(); ?>>
+<html class="ie ie7" <?php language_attributes();
+MOJ\Justice\Security::safeLocalizeScript(); ?>>
 <![endif]-->
 <!--[if IE 8]>
-<html class="ie ie8" <?php language_attributes(); ?>>
+<html class="ie ie8" <?php language_attributes();
+MOJ\Justice\Security::safeLocalizeScript(); ?>>
 <![endif]-->
 <!--[if !(IE 7) & !(IE 8)]><!-->
-<html <?php language_attributes(); ?>>
+<html <?php language_attributes();
+MOJ\Justice\Security::safeLocalizeScript(); ?>>
 <!--<![endif]-->
 <head>
     <meta charset="<?php bloginfo('charset'); ?>"/>
@@ -33,7 +36,7 @@
                 <li class="device-only">.</li>
             </ul>
             <div id="logo">
-                <a href="/" accesskey="1">Home</a><a href="#skip_nav" style="display:none;" accesskey="s">&nbsp;</a>
+                <a href="/" accesskey="1">Home</a><a href="#skip_nav" accesskey="s">&nbsp;</a>
             </div>
             <?php
             // TODO: replace hardcoded menu with dynamic menu.
@@ -47,19 +50,16 @@
             $menu_items = [
                 [
                     'title' => 'Courts',
-                    'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
-                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Courts', page_location: '" . home_url('/courts') . "' });"
+                    'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service'
                 ],
                 [
                     'title' => 'Procedure rules',
                     'url' => home_url('/courts/procedure-rules'),
-                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules')),
-                    'onclick' => null
+                    'active' => str_starts_with(get_permalink(), home_url('/courts/procedure-rules'))
                 ],
                 [
                     'title' => 'Offenders',
-                    'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
-                    'onclick' => "gtag && gtag('event', 'page_view', { page_title: 'Offenders', page_location: '" . home_url('/offenders') . "' });"
+                    'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service'
                 ]
             ];
             ?>
@@ -67,7 +67,7 @@
                 <ul class="menu-top">
                     <?php foreach ($menu_items as $item) : ?>
                         <li <?php echo !empty($item['active']) ? 'class="active"' : '' ?>>
-                            <a href="<?php echo $item['url']; ?>" onclick="<?= $item['onclick'] ?? '' ?>">
+                            <a href="<?= esc_url($item['url']); ?>" >
                                 <?= $item['title'] ?>
                             </a>
                             <div class="finish"></div>
