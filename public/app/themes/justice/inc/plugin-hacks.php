@@ -37,3 +37,7 @@ if (class_exists('PPVersionNotices\Module\TopNotice\Module')) {
         return $settings;
     }, 99);
 }
+
+// Only allow pages for PublishPress Revisions (formerly Revisionary) plugin
+add_filter('revisionary_enabled_post_types', fn () => ['page' => 1]);
+add_filter('revisionary_archive_post_types', fn () => ['page' => 1]);
