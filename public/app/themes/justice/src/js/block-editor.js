@@ -3,6 +3,7 @@
 
 import "./block-editor/filter-menu-more";
 import "./block-editor/remove-custom-class";
+import "../components/core-image/block-editor";
 import "../components/core-list/block-editor";
 import "../components/core-rich-text/block-editor";
 import "../components/inline-list/block-editor";

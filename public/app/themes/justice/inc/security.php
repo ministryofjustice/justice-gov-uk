@@ -61,7 +61,7 @@ class Security
 
         // Push the Nginx hosts to known_hosts.
         $nginx_urls = ClusterHelper::getNginxHosts('hosts');
-        $nginx_hosts = array_map(fn ($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
+        $nginx_hosts = array_map(fn($host) => parse_url($host, PHP_URL_HOST), $nginx_urls);
         array_push($this->known_hosts, ...$nginx_hosts);
     }
 
@@ -79,6 +79,15 @@ class Security
         add_filter('xmlrpc_enabled', '__return_false');
         add_filter('wp_headers', [$this, 'headerMods']);
         add_filter('auth_cookie_expiration', [$this, 'setLoginPeriod'], 10, 0);
+
+        // Prevent username enumeration via the login error message.
+        add_filter('login_errors', [__class__, 'secureLoginErrors']);
+
+        // Prevent username enumeration via the lost password error message.
+        add_filter('lostpassword_errors', [__class__, 'secureLostpasswordErrors'], 20, 0);
+
+        // Filter the password reset confirm text.
+        add_filter('gettext', [$this, 'filterPasswordResetConfirmText'], 10, 3);
 
         // Remove emoji support.
         remove_action('wp_head', 'print_emoji_detection_script', 7);
@@ -102,6 +111,29 @@ class Security
 
         // Log requests to unknown hosts.
         add_filter('pre_http_request', [$this, 'logUnknownHostRequests'], 20, 3);
+
+        // Remove the inline script that WordPress adds to the head for post previews.
+        // This is because we use a CSP to block inline scripts.
+        // The functionality has been replicated in the app.js file.
+        remove_action('wp_head', 'wp_post_preview_js', 1);
+
+        // Since we removed the inline script for post previews,
+        // we need to add the post ID to the HTML tag for the app.js to use.
+        add_filter('moj_safe_localization_data', function ($data) {
+            global $post;
+
+            if (! is_preview() || empty($post)) {
+                return $data;
+            }
+
+            $data['preview-post-id'] = get_the_ID() ?: 0;
+            return $data;
+        });
+
+        // PublishPress Revisions (formerly called Revisionary) uses inline scripts
+        // to fix the revision preview in the admin bar. Remove the inline script
+        // because it violates the CSP.
+        add_filter('revisionary_admin_bar_absolute', '__return_false');
     }
 
     /**
@@ -129,7 +161,6 @@ class Security
     {
         unset($headers['X-Pingback']);
 
-        $headers['X-Powered-By'] = 'Justice Digital';
         return $headers;
     }
 
@@ -144,6 +175,65 @@ class Security
     public function setLoginPeriod(): float|int
     {
         return 7 * DAY_IN_SECONDS; // Cookies set to expire in 7 days.
+    }
+
+    /**
+     * Prevent username enumeration via the login error message.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/login_errors/
+     *
+     * @param string $error
+     * @return string
+     */
+    public static function secureLoginErrors(string $errors): string
+    {
+        // Add a random delay between 20ms to 200ms to hinder timing attacks.
+        usleep(random_int(20000, 200000));
+
+        // Send error to Sentry, so that we can assist in debugging genuine login issues.
+        $sanitized_errors = wp_strip_all_tags($errors);
+        $severity = class_exists('Sentry\Severity') ? \Sentry\Severity::info() : null;
+        do_action('sentry/captureMessage', 'Login error: ' . $sanitized_errors, $severity);
+
+        // Generic error message regardless of the actual error.
+        return 'The login information you entered is incorrect. Please check your username and password.';
+    }
+
+    /**
+     * Prevent username enumeration via the lost password error message.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/lostpassword_errors/
+     *
+     * @return void
+     */
+    public static function secureLostpasswordErrors(): void
+    {
+        // Add a random delay between 20ms to 200ms to hinder timing attacks.
+        usleep(random_int(20000, 200000));
+
+        // Always do the same redirect, regardless of the actual error.
+        wp_safe_redirect('wp-login.php?checkemail=confirm');
+        exit;
+    }
+
+    /**
+     * Filter the password reset confirm text.
+     *
+     * Since all password resets will see the same message, then update it to avoid confusion.
+     *
+     * @see https://developer.wordpress.org/reference/hooks/gettext/
+     *
+     * @param string $translated_text
+     * @param string $text
+     * @param string $domain
+     * @return string
+     */
+    public function filterPasswordResetConfirmText(string $translated_text, string $text, string $domain): string
+    {
+        if ($text === 'Check your email for the confirmation link, then visit the <a href="%s">login page</a>.' && $domain === 'default') {
+            $translated_text = 'If you entered a valid email address or username, you will receive an email with a link to reset your password.';
+        }
+        return $translated_text;
     }
 
     /**
@@ -181,7 +271,8 @@ class Security
             return new WP_Error(
                 'rest_not_logged_in',
                 __('You are not currently logged in.'),
-                array('status' => 401)
+                // Return 403, since 401 can result in a redirect loop to Entra.
+                array('status' => 403)
             );
         }
 
@@ -241,5 +332,23 @@ class Security
         }
 
         return $response;
+    }
+
+
+    /**
+     * Safely localize a script by adding data attributes to the html tag.
+     *
+     * Similar to `wp_localize_script`, but it does not use a <script> tag, it adds data attributes to the html tag.
+     * This is useful for passing data to the app.js script without violating the Content Security Policy (CSP).
+     *
+     * @return void
+     */
+    public static function safeLocalizeScript(): void
+    {
+        $data = apply_filters('moj_safe_localization_data', []);
+
+        foreach ($data as $key => $value) {
+            echo sprintf(' data-%s="%s"', esc_attr($key), esc_attr($value));
+        }
     }
 }

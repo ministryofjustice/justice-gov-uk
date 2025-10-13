@@ -10,6 +10,7 @@
   }
 
   @include meta.load-css("../components/button/editor");
+  @include meta.load-css("../components/core-image/editor");
   @include meta.load-css("../components/core-list/editor");
   @include meta.load-css("../components/inline-list/editor");
   @include meta.load-css("../components/search-bar-block/editor");

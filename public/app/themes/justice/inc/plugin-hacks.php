@@ -19,10 +19,12 @@ add_action('wp_enqueue_scripts', function () {
         1.2,
         true
     );
+});
 
-    // This localised variable can be accessed by both `ccfw-script-frontend` and `ccfw-script`,
-    // because it is declared before the scripts in the html.
-    wp_localize_script('ccfw-script-frontend', 'mojCcfwConfig', ['https' => wp_is_using_https()]);
+add_filter('moj_safe_localization_data', function ($data) {
+    // Add the is-https data attribute to the html tag - for ccfw-storage.js.
+    $data['is-https'] = (int) wp_is_using_https();
+    return $data;
 });
 
 if (class_exists('PPVersionNotices\Module\TopNotice\Module')) {
@@ -35,3 +37,7 @@ if (class_exists('PPVersionNotices\Module\TopNotice\Module')) {
         return $settings;
     }, 99);
 }
+
+// Only allow pages for PublishPress Revisions (formerly Revisionary) plugin
+add_filter('revisionary_enabled_post_types', fn () => ['page' => 1]);
+add_filter('revisionary_archive_post_types', fn () => ['page' => 1]);
