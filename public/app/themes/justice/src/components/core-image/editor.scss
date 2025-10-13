@@ -1,0 +1,16 @@
+.editor-styles-wrapper {
+    .external-image-warning {
+        border: 3px solid tomato;
+        position: relative;
+    }
+
+    .external-image-warning::before {
+        content: 'This image from an external website may not be displayed correctly. See HowTo Admin - Block Editor Q & A.';
+        display: block;
+        background: #fff3cd;
+        color: #856404;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ffeeba;
+    }
+}
