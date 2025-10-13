@@ -6,7 +6,8 @@ use Roots\WPConfig\Config;
 use MOJ\Justice\Header;
 
 ?><!DOCTYPE html>
-<html <?php language_attributes(); MOJ\Justice\Security::safeLocalizeScript(); ?>>
+<html <?php language_attributes();
+MOJ\Justice\Security::safeLocalizeScript(); ?>>
 <head>
     <meta charset="<?php bloginfo('charset'); ?>"/>
     <meta name="viewport" content="width=device-width"/>
