@@ -11,3 +11,5 @@ div#wpadminbar #wp-admin-bar-wp-logo {
     }
   }
 }
+
+@media print { #wpadminbar { display:none; } }
