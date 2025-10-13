@@ -1765,12 +1765,16 @@ span.view-all {
     margin-top: 26px;
 }
 
-#logo a {
+#logo a:first-of-type {
     display: block;
     width: 242px;
     height: 62px;
     text-indent: -9999px;
     background: url(../img/logo-tudor-crest.png) no-repeat;
+}
+
+#logo a:nth-of-type(2) {
+    display: none;
 }
 
 .date-bar {

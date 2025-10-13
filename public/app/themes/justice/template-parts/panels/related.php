@@ -14,7 +14,7 @@ if (empty($entries)) {
 ?>
 
 <div id="panel-relatedContent-wrapper">
-    <div id="panel-relatedContent" class="grey-box phone" style="display: block;">
+    <div id="panel-relatedContent" class="grey-box phone">
 
         <div class="header">
             <span>Related pages</span>
