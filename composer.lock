@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "859cb814d4727c50be574d0d7b17de9a",
+    "content-hash": "1634c9f3a0bc3d4e9f33bae3982a3126",
     "packages": [
         {
             "name": "alphagov/notifications-php-client",
@@ -1950,16 +1950,16 @@
         },
         {
             "name": "ministryofjustice/cookie-compliance-for-wordpress",
-            "version": "3.5.0",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ministryofjustice/cookie-compliance-for-wordpress.git",
-                "reference": "468c6d8124a5aa4d39a200483424afc0b4703313"
+                "reference": "8369266477bedcdb26fbf520828cd839c883d410"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ministryofjustice/cookie-compliance-for-wordpress/zipball/468c6d8124a5aa4d39a200483424afc0b4703313",
-                "reference": "468c6d8124a5aa4d39a200483424afc0b4703313",
+                "url": "https://api.github.com/repos/ministryofjustice/cookie-compliance-for-wordpress/zipball/8369266477bedcdb26fbf520828cd839c883d410",
+                "reference": "8369266477bedcdb26fbf520828cd839c883d410",
                 "shasum": ""
             },
             "require-dev": {
@@ -1983,10 +1983,10 @@
             ],
             "description": "WP plugin that presents visitor with a cookie consent banner and opt-in setting page.",
             "support": {
-                "source": "https://github.com/ministryofjustice/cookie-compliance-for-wordpress/tree/3.5.0",
+                "source": "https://github.com/ministryofjustice/cookie-compliance-for-wordpress/tree/3.5.1",
                 "issues": "https://github.com/ministryofjustice/cookie-compliance-for-wordpress/issues"
             },
-            "time": "2025-02-20T10:50:07+00:00"
+            "time": "2025-10-15T13:29:21+00:00"
         },
         {
             "name": "mustache/mustache",
