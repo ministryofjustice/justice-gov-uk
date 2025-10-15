@@ -354,7 +354,44 @@ In our workflow file located in `.github/workflows/deploy.yml` we inject environ
 
 We find this approach is simple, highly readable and portable, and considering our CI/CD image build and deploy takes 
 just 1 minute 20 seconds to reach development, and then just 10 seconds to deploy across other stacks is testament to 
-the impact our goal has on performance. 
+the impact our goal has on performance.
+
+## Security
+
+### CSP
+
+The Content Security Policy header is an important security layer that can mitigate against certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks.
+
+The methodology for the creation of the CSP is as follows:
+
+For images: 
+- only allow images that are hosted on the same domain as the application.
+- on admin screens, allow images from `data:` URIs since WordPress uses these for icons.
+
+For styles:
+- only allow styles (.css files) that are hosted on the same domain as the application.
+- if the user is logged in, then allow inline styles on the frontend pages.
+- allow inline styles on login screens and admin screens since WordPress relies on them.
+
+For scripts:
+- only allow scripts (.js files) that are hosted on the same domain as the application, and https://www.googletagmanager.com/ .
+- if the user is logged in, then allow inline scripts on the frontend pages.
+- allow inline scripts on login screens and admin screens since WordPress relies on them.
+- for the development environment, we allow `unsafe-eval`, this is because of the way WebPack compiles JS in development mode.
+
+For Web Workers:
+- For the Sentry Browser Javascript to work, we need to allow workers with the type blob.
+
+Due to the nature of WordPress, and the use of functions like wp_localize_script() and wp_add_inline_script() it has proven
+impossible to avoid the use of 'unsafe-inline' in the CSP for scripts and styles entirely.
+
+As a compromise, 'unsafe-inline' is only allowed on admin screens and login screens, and for logged in users on the frontend pages.
+On the frontend pages for logged out users, 'unsafe-inline' is not allowed. For this to happen, we had to implement a new way 
+of loading localized data for scripts. See the following theme files for more information:
+
+- justice/inc/wp-script-localization.php
+- justice/inc/wp-scripts.php
+- justice/src/js/script-localization.js
 
 ---
 

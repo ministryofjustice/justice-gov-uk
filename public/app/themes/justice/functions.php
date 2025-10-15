@@ -48,6 +48,8 @@ require_once 'inc/theme-assets.php';
 require_once 'inc/theme.php';
 require_once 'inc/updates.php';
 require_once 'inc/utils.php';
+require_once 'inc/wp-script-localization.php';
+require_once 'inc/wp-scripts.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();
@@ -72,6 +74,7 @@ new Justice\SimpleDefinitionsListBlocks();
 new Justice\Sitemap();
 new Justice\ThemeAssets();
 new Justice\Theme();
+new Justice\WpScriptLocalization();
 
 $block_editor = new Justice\BlockEditor();
 $block_editor->addHooks();

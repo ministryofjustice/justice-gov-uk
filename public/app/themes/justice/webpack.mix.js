@@ -9,6 +9,7 @@ mix
     .js('src/js/v2-app.js', 'dist/v2-app.min.js')
     .js('src/js/admin/index.js', 'dist/admin.min.js')
     .js('src/js/login.js', 'dist/js/login.min.js')
+    .js('src/js/script-localization.js', 'dist/script-localization.min.js')
     /** patch code for CCFW **/
     .js('src/js/patch/ccfw-cookie-manage.js', 'dist/patch/js/ccfw-cookie-manage.js')
     .js('src/js/patch/ccfw-frontend.js', 'dist/patch/js/ccfw-frontend.js')
