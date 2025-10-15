@@ -14,7 +14,7 @@ use WP_Scripts;
  * @see justice/inc/wp-script-localization.php
  * @see justice/src/js/script-localization.js
  */
-class WP_Filterable_Scripts extends WP_Scripts
+class WpFilterableScripts extends WP_Scripts
 {
 
     public $l10n_store = [];
@@ -57,6 +57,7 @@ class WP_Filterable_Scripts extends WP_Scripts
      *
      * @return bool|mixed|string|void
      */
+    // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
     public function print_extra_script($handle, $display = true)
     {
         $output = parent::print_extra_script($handle, false);

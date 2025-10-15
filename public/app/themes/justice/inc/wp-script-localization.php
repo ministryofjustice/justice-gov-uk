@@ -42,7 +42,7 @@ class WpScriptLocalization
 
     /**
      * Add the necessary hooks to replace the global $wp_scripts object
-     * with an instance of WP_Filterable_Scripts and to filter the inline scripts.
+     * with an instance of WpFilterableScripts and to filter the inline scripts.
      */
     public function addHooks(): void
     {
@@ -63,10 +63,10 @@ class WpScriptLocalization
 
 
     /**
-     * Replace the global $wp_scripts object with an instance of WP_Filterable_Scripts.
+     * Replace the global $wp_scripts object with an instance of WpFilterableScripts.
      *
      * If we are on a frontend page, replace the global $wp_scripts object with an instance
-     * of our custom WP_Filterable_Scripts class. This class extends WP_Scripts and allows
+     * of our custom WpFilterableScripts class. This class extends WP_Scripts and allows
      * us to filter the inline scripts added via wp_localize_script().
      *
      * @see justice/inc/wp-scripts.php
@@ -78,7 +78,7 @@ class WpScriptLocalization
             return;
         }
 
-        $fscripts              = new WP_Filterable_Scripts;
+        $fscripts              = new WpFilterableScripts;
         $GLOBALS['wp_scripts'] = $fscripts;
     }
 
@@ -145,7 +145,7 @@ class WpScriptLocalization
     public static function addMojLocalizeLoaderAsDependency(): void
     {
         global $wp_scripts;
-        if (!$wp_scripts instanceof WP_Filterable_Scripts) {
+        if (!$wp_scripts instanceof WpFilterableScripts) {
             return;
         }
 
