@@ -52,15 +52,3 @@
 .rvy_preview_msgspan {
   background-color: #373737 !important;
 }
-
-// Make the PublishPress preview banner sticky
-// This replicates the function of rvyPreviewJS front_rvy.php.
-// And, is a more secure approach because it does not use inline scripts.
-.rvy_view_revision, .preview_approval_rvy {
-  position: sticky;
-  top: 32px;
-  padding-right: 0!important;
-  @media screen and (max-width: 782px) {
-    top: 46px;
-  }
-}

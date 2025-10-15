@@ -31,7 +31,7 @@ const CCFWStorage = {
     },
     cookie: () => {
         const mod = 'ccfw'
-        const secureString = document.documentElement.dataset.isHttps === '1' ? '; secure' : ''
+        const secureString = ccfwData.isHttps === 1 ? '; secure' : ''
         try {
             // try and set it...
             document.cookie = `${mod}=1${secureString}`
@@ -77,7 +77,7 @@ const CCFWStorage = {
                 const date = new Date(
                     new Date().setFullYear(new Date().getFullYear() + 1),
                 ).toUTCString()
-                const secureString = document.documentElement.dataset.isHttps === '1' ? '; secure' : ''
+                const secureString = ccfwData.isHttps === 1 ? '; secure' : ''
                 document.cookie = `${key}=${value || ''}; expires=${set ? date : ''}; path=/${secureString}`
             },
             removeItem: (key) => {

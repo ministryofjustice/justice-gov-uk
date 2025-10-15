@@ -12,7 +12,7 @@ defined('ABSPATH') || exit;
                 <li class="device-only">.</li>
             </ul>
             <div id="logo">
-                <a href="/" accesskey="1">Home</a><a href="#skip_nav" style="display:none;" accesskey="s">&nbsp;</a>
+                <a href="/" accesskey="1">Home</a><a href="#skip_nav" accesskey="s">&nbsp;</a>
             </div>
             <?php
             $menu_items = [

@@ -19,12 +19,11 @@ add_action('wp_enqueue_scripts', function () {
         1.2,
         true
     );
-});
 
-add_filter('moj_safe_localization_data', function ($data) {
-    // Add the is-https data attribute to the html tag - for ccfw-storage.js.
-    $data['is-https'] = (int) wp_is_using_https();
-    return $data;
+    // Localize the script with https data
+    wp_localize_script('ccfw-script', 'ccfwData', [
+        'isHttps' => (int) is_ssl(),
+    ]);
 });
 
 if (class_exists('PPVersionNotices\Module\TopNotice\Module')) {

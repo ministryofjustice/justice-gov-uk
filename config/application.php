@@ -145,6 +145,9 @@ Config::define('WP_OFFLOAD_MEDIA_PRESET', false);
 Config::define('SENTRY_TRACES_SAMPLE_RATE', 1);
 Config::define('SENTRY_PROFILE_SAMPLE_RATE', 1);
 
+// Set the WordPress language locale
+Config::define('WPLANG', 'en_GB');
+
 /**
  * Debugging Settings
  */
