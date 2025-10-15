@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
  * Class to convert localization scripts from <script type="text/javascript">
  * to <script type="application/json"> and load them via a custom loader function.
  *
- * Unfortunately, the way the WordPress adds data to the global window object, for 
+ * Unfortunately, the way the WordPress adds data to the global window object, for
  * enqueued scripts, is not compatible with a strict Content Security Policy (CSP).
  *
  * This class uses a custom WP_Scripts class to filter the inline scripts added

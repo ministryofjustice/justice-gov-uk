@@ -36,7 +36,7 @@ class Core
         // Remove the Gravatar service, and always show the default avatar.
         add_filter('pre_get_avatar', [__CLASS__, 'replaceGravatar'], 10, 3);
         // Disable the language switcher on the login page.
-        add_filter( 'login_display_language_dropdown', '__return_false' );
+        add_filter('login_display_language_dropdown', '__return_false');
 
         // Remove inline css blocks...
 

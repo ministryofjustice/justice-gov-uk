@@ -10,7 +10,7 @@ use WP_Scripts;
  * Extends WP_Scripts class to filter inline script tags added via wp_localize_script().
  *
  * @link https://wordpress.stackexchange.com/a/378850
- * 
+ *
  * @see justice/inc/wp-script-localization.php
  * @see justice/src/js/script-localization.js
  */
@@ -20,15 +20,14 @@ class WP_Filterable_Scripts extends WP_Scripts
     public $l10n_store = [];
 
     /**
-     * Executes the parent class constructor and initialization, then copies in the 
+     * Executes the parent class constructor and initialization, then copies in the
      * pre-existing $wp_scripts contents
      */
     public function __construct()
     {
         parent::__construct();
 
-        if (
-            function_exists('is_admin') && ! is_admin()
+        if (function_exists('is_admin') && ! is_admin()
             &&
             function_exists('current_theme_supports') && ! current_theme_supports('html5', 'script')
         ) {
