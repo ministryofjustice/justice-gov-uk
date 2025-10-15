@@ -62,7 +62,7 @@
         "firebase/php-jwt": "^6.10",
         "koodimonni-language/core-en_gb": "6.7.x",
         "league/oauth2-client": "^2.7",
-        "ministryofjustice/cookie-compliance-for-wordpress": "^3.5.0",
+        "ministryofjustice/cookie-compliance-for-wordpress": "^3.5.1",
         "php-http/guzzle7-adapter": "^1.0",
         "relevanssi/relevanssi-premium": "^2.27.6",
         "roots/bedrock-autoloader": "^1.0",
