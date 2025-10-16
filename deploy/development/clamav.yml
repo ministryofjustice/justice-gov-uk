@@ -1,0 +1,241 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamav
+  namespace: justice-gov-uk-dev 
+  labels:
+    app: clamav
+spec:
+  type: ClusterIP               # Clients connect to: clamav:3310
+  selector:
+    app: clamav
+  ports:
+    - name: clamd
+      port: 3310
+      targetPort: 3310
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamav-hl
+  namespace: justice-gov-uk-dev
+  labels:
+    app: clamav
+spec:
+  clusterIP: None  # Headless service for StatefulSet
+  selector:
+    app: clamav
+  ports:
+    - name: clamd
+      port: 3310
+      targetPort: 3310
+      protocol: TCP
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: clamav
+  namespace: justice-gov-uk-dev
+  labels:
+    app: clamav
+spec:
+  serviceName: clamav-hl
+  replicas: 2                   # HA: at least 2; each gets its own PVC
+  podManagementPolicy: Parallel # faster rollouts
+  updateStrategy:
+    type: RollingUpdate
+
+  selector:
+    matchLabels:
+      app: clamav
+
+  template:
+    metadata:
+      labels:
+        app: clamav
+        # If you used the earlier NetworkPolicy, you can also label approved clients with:
+        # clamav-client: "true"
+    spec:
+      # Spread across nodes for HA
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: clamav
+                topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: clamav
+
+      containers:
+        - name: clamav
+          image: clamav/clamav:stable # Official image (clamd + freshclam)
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: clamd
+              containerPort: 3310
+              protocol: TCP
+
+          env:
+            # freshclam: times per day to check for updates (default 1).
+            # - name: FRESHCLAM_CHECKS
+            #   value: "12"  # ~every 2 hours
+
+            - name: POD_INDEX
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['apps.kubernetes.io/pod-index']
+
+          # Stagger the FRESHCLAM_CHECKS per pod to avoid all replicas updating simultaneously.
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              idx="${POD_INDEX:-0}"
+              case "$idx" in
+                0) export FRESHCLAM_CHECKS=11 ;;   # pod-0
+                1) export FRESHCLAM_CHECKS=13 ;;   # pod-1
+                *) export FRESHCLAM_CHECKS=17 ;;   # fallback for extra pods
+              esac
+              echo "Using FRESHCLAM_CHECKS=$FRESHCLAM_CHECKS (pod index $idx)"
+              exec /init-unprivileged
+
+            # Optional toggles in the official image:
+            # - name: CLAMAV_NO_CLAMD
+            #   value: "true"
+            # - name: CLAMAV_NO_FRESHCLAMD
+            #   value: "true"
+
+          # ClamAV loads a large signature set; give it headroom.
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "3Gi"
+            limits:
+              cpu: "2"
+              memory: "5Gi"
+
+          volumeMounts:
+            - name: clamdb
+              mountPath: /var/lib/clamav  # official DB path
+              # Each pod has its own PVC via volumeClaimTemplates
+
+          # Allow time for DB download/load on first start
+          startupProbe:
+            tcpSocket:
+              port: 3310
+            failureThreshold: 60
+            periodSeconds: 10
+
+          readinessProbe:
+            tcpSocket:
+              port: 3310
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+
+          livenessProbe:
+            tcpSocket:
+              port: 3310
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: 
+              drop: ["ALL"]
+
+      # Optional: run as non-root using the unprivileged entrypoint.
+      securityContext:
+        runAsUser: 100
+        runAsGroup: 101
+        fsGroup: 101
+        runAsNonRoot: true
+        seccompProfile:
+          type: "RuntimeDefault"
+
+  volumeClaimTemplates:
+    - metadata:
+        name: clamdb
+      spec:
+        accessModes: ["ReadWriteOnce"]  # per-pod, single-node RW
+        resources:
+          requests:
+            storage: 10Gi               # safe default; raise to 10Gi if adding 3rd‑party signatures
+        # storageClassName: <your-storage-class>
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: clamav-pdb
+  namespace: justice-gov-uk-dev
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: clamav
+--- 
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: clamav-restrict
+  namespace: justice-gov-uk-dev
+spec:
+  podSelector:
+    matchLabels:
+      app: clamav       # <-- must match your Deployment's pod labels
+  policyTypes:
+    - Ingress
+    - Egress
+
+  # Allow only approved in-namespace clients to talk to clamd:3310
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              clamav-client: "true"  # label client pods with this
+      ports:
+        - protocol: TCP
+          port: 3310                 # clamd TCP port
+  # Permit DNS + freshclam updates; deny everything else
+  egress:
+    # DNS to kube-dns (kube-system)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+    # HTTPS to the public Internet for freshclam
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            # Optional: keep internal RFC1918 ranges blocked
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443

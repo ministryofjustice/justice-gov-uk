@@ -5,6 +5,7 @@ metadata:
   namespace: ${KUBE_NAMESPACE}
   labels:
     app: ${KUBE_NAMESPACE}
+    clamav-client: "true"
 spec:
   replicas: 1
   strategy:
