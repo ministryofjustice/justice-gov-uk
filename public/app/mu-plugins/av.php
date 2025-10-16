@@ -2,10 +2,10 @@
 
 /**
  * Antivirus Scanner Integration for WordPress
- * 
+ *
  * This must-use plugin integrates ClamAV antivirus scanning into WordPress file uploads.
  * It scans all uploaded files before they are processed and blocks malicious content.
- * 
+ *
  * @package MOJ\Justice
  * @since 1.0.0
  */
@@ -18,7 +18,7 @@ defined('ABSPATH') || exit;
 
 /**
  * Antivirus Scanner Class
- * 
+ *
  * Provides integration with ClamAV daemon for real-time file scanning.
  * Hooks into WordPress upload process to scan files before they are processed.
  */
@@ -26,10 +26,10 @@ class AV
 {
     /**
      * Initialize the antivirus scanner
-     * 
+     *
      * Sets up WordPress hooks for file scanning if AV is not disabled.
      * Can be disabled by setting CLAM_DISABLED=true in environment.
-     * 
+     *
      * @return void
      */
     public static function init(): void
@@ -62,11 +62,11 @@ class AV
 
     /**
      * Scan a file with ClamAV daemon
-     * 
+     *
      * Connects to ClamAV daemon via TCP socket and streams the file content
      * for real-time scanning. Uses the INSTREAM command for efficient scanning
      * without requiring file system access from the ClamAV container.
-     * 
+     *
      * @param string $path Full path to the file to be scanned
      * @return array Scan result with keys:
      *               - 'ok' (bool): true if file is clean, false if infected/error
