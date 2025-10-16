@@ -64,6 +64,9 @@ Config::define('WP_HOME', env('WP_HOME'));
 Config::define('WP_SITEURL', env('WP_SITEURL'));
 Config::define('WP_LOOPBACK', env('WP_LOOPBACK') ?: 'http://localhost:8080');
 Config::define('NGINX_HOST', 'http://' . (env('NGINX_IP') ?? 'nginx') . ':8080');
+Config::define('CLAM_HOSTNAME', env('CLAM_HOSTNAME') ?: 'clamav');
+Config::define('CLAM_DISABLED', env('CLAM_DISABLED') ?: 'false');
+
 
 /**
  * Custom Content Directory
