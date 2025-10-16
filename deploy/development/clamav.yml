@@ -1,12 +1,13 @@
+# ClamAV Service - Client access point
 apiVersion: v1
 kind: Service
 metadata:
   name: clamav
-  namespace: justice-gov-uk-dev 
+  namespace: justice-gov-uk-dev
   labels:
     app: clamav
 spec:
-  type: ClusterIP               # Clients connect to: clamav:3310
+  type: ClusterIP
   selector:
     app: clamav
   ports:
@@ -15,6 +16,7 @@ spec:
       targetPort: 3310
       protocol: TCP
 ---
+# Headless Service - Required for StatefulSet
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,7 +25,7 @@ metadata:
   labels:
     app: clamav
 spec:
-  clusterIP: None  # Headless service for StatefulSet
+  clusterIP: None
   selector:
     app: clamav
   ports:
@@ -32,6 +34,7 @@ spec:
       targetPort: 3310
       protocol: TCP
 ---
+# ClamAV StatefulSet - Provides antivirus scanning with HA
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -41,11 +44,10 @@ metadata:
     app: clamav
 spec:
   serviceName: clamav-hl
-  replicas: 2                   # HA: at least 2; each gets its own PVC
-  podManagementPolicy: Parallel # faster rollouts
+  replicas: 2
+  podManagementPolicy: Parallel
   updateStrategy:
     type: RollingUpdate
-
   selector:
     matchLabels:
       app: clamav
@@ -54,10 +56,8 @@ spec:
     metadata:
       labels:
         app: clamav
-        # If you used the earlier NetworkPolicy, you can also label approved clients with:
-        # clamav-client: "true"
     spec:
-      # Spread across nodes for HA
+      # High Availability: Spread pods across nodes
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -67,6 +67,7 @@ spec:
                   matchLabels:
                     app: clamav
                 topologyKey: kubernetes.io/hostname
+      
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -77,25 +78,21 @@ spec:
 
       containers:
         - name: clamav
-          image: clamav/clamav:stable # Official image (clamd + freshclam)
+          image: clamav/clamav:stable
           imagePullPolicy: IfNotPresent
-
+          
           ports:
             - name: clamd
               containerPort: 3310
               protocol: TCP
-
+          
           env:
-            # freshclam: times per day to check for updates (default 1).
-            # - name: FRESHCLAM_CHECKS
-            #   value: "12"  # ~every 2 hours
-
             - name: POD_INDEX
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.annotations['apps.kubernetes.io/pod-index']
-
-          # Stagger the FRESHCLAM_CHECKS per pod to avoid all replicas updating simultaneously.
+          
+          # Stagger freshclam updates to avoid simultaneous database updates
           command:
             - /bin/sh
             - -c
@@ -103,20 +100,13 @@ spec:
               set -eu
               idx="${POD_INDEX:-0}"
               case "$idx" in
-                0) export FRESHCLAM_CHECKS=11 ;;   # pod-0
-                1) export FRESHCLAM_CHECKS=13 ;;   # pod-1
-                *) export FRESHCLAM_CHECKS=17 ;;   # fallback for extra pods
+                0) export FRESHCLAM_CHECKS=11 ;;
+                1) export FRESHCLAM_CHECKS=13 ;;
+                *) export FRESHCLAM_CHECKS=17 ;;
               esac
               echo "Using FRESHCLAM_CHECKS=$FRESHCLAM_CHECKS (pod index $idx)"
               exec /init-unprivileged
 
-            # Optional toggles in the official image:
-            # - name: CLAMAV_NO_CLAMD
-            #   value: "true"
-            # - name: CLAMAV_NO_FRESHCLAMD
-            #   value: "true"
-
-          # ClamAV loads a large signature set; give it headroom.
           resources:
             requests:
               cpu: "500m"
@@ -124,19 +114,18 @@ spec:
             limits:
               cpu: "2"
               memory: "5Gi"
-
+          
           volumeMounts:
             - name: clamdb
-              mountPath: /var/lib/clamav  # official DB path
-              # Each pod has its own PVC via volumeClaimTemplates
-
-          # Allow time for DB download/load on first start
+              mountPath: /var/lib/clamav
+          
+          # Health checks
           startupProbe:
             tcpSocket:
               port: 3310
             failureThreshold: 60
             periodSeconds: 10
-
+          
           readinessProbe:
             tcpSocket:
               port: 3310
@@ -144,7 +133,7 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 3
             failureThreshold: 6
-
+          
           livenessProbe:
             tcpSocket:
               port: 3310
@@ -152,13 +141,14 @@ spec:
             periodSeconds: 20
             timeoutSeconds: 3
             failureThreshold: 3
-
+          
+          # Container security
           securityContext:
             allowPrivilegeEscalation: false
-            capabilities: 
+            capabilities:
               drop: ["ALL"]
 
-      # Optional: run as non-root using the unprivileged entrypoint.
+      # Pod security context
       securityContext:
         runAsUser: 100
         runAsGroup: 101
@@ -166,17 +156,18 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: "RuntimeDefault"
-
+  
+  # Persistent storage for each pod
   volumeClaimTemplates:
     - metadata:
         name: clamdb
       spec:
-        accessModes: ["ReadWriteOnce"]  # per-pod, single-node RW
+        accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 10Gi               # safe default; raise to 10Gi if adding 3rd‑party signatures
-        # storageClassName: <your-storage-class>
+            storage: 10Gi
 ---
+# Pod Disruption Budget - Ensures availability during updates
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
@@ -187,8 +178,8 @@ spec:
   selector:
     matchLabels:
       app: clamav
---- 
-
+---
+# Network Policy - Restricts network access for security
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -197,23 +188,24 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: clamav       # <-- must match your Deployment's pod labels
+      app: clamav
   policyTypes:
     - Ingress
     - Egress
-
-  # Allow only approved in-namespace clients to talk to clamd:3310
+  
+  # Allow only approved clients to access ClamAV
   ingress:
     - from:
         - podSelector:
             matchLabels:
-              clamav-client: "true"  # label client pods with this
+              clamav-client: "true"
       ports:
         - protocol: TCP
-          port: 3310                 # clamd TCP port
-  # Permit DNS + freshclam updates; deny everything else
+          port: 3310
+  
+  # Allow DNS and freshclam updates only
   egress:
-    # DNS to kube-dns (kube-system)
+    # DNS resolution
     - to:
         - namespaceSelector:
             matchLabels:
@@ -226,12 +218,11 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-
-    # HTTPS to the public Internet for freshclam
+    
+    # HTTPS for freshclam signature updates
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0
-            # Optional: keep internal RFC1918 ranges blocked
             except:
               - 10.0.0.0/8
               - 172.16.0.0/12
