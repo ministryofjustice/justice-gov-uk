@@ -10,7 +10,9 @@ class AV
 {
     public static function init(): void
     {
-        // Intentionally left blank; this class is just a namespace for the file.
+        if (Config::get('CLAM_DISABLED') === 'true') {
+            return; // AV scanning disabled
+        }
 
         add_filter('wp_handle_upload_prefilter', function ($file) {
             $tmp = $file['tmp_name'] ?? null;

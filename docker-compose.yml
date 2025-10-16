@@ -189,6 +189,15 @@ services:
       - clam-db:/var/lib/clamav
     user: clamav
     entrypoint: /init-unprivileged
+    command:
+      - /bin/sh
+      - -c
+      - |
+        if [ "$CLAM_DISABLED" = "true" ]; then
+          echo "ClamAV is disabled. Exiting."
+          exit 0
+        fi
+        exec /init-unprivileged
     healthcheck:
       test: ["CMD-SHELL", "clamdscan --version >/dev/null 2>&1 || exit 1"]
       interval: 30s
