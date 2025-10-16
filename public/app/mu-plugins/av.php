@@ -53,7 +53,7 @@ class AV
             
             // Block upload if malware is detected
             if (!$result['ok']) {
-                $file['error'] = 'Upload blocked: malware detected (' . esc_html($result['sig']) . ').';
+                $file['error'] = 'Upload blocked: ' . esc_html($result['sig']) . '.';
             }
             
             return $file;
@@ -83,7 +83,7 @@ class AV
             // Fail-closed security policy: block uploads when scanner is unavailable
             // This prevents malware uploads during scanner downtime
             error_log("ClamAV connection failed: $errstr ($errno)");
-            return ['ok' => false, 'sig' => 'ScannerUnavailable'];
+            return ['ok' => false, 'sig' => 'Malware Scanner Unavailable'];
         }
 
         // Set socket timeout to prevent hanging on large files
@@ -117,11 +117,11 @@ class AV
             // Expected format: "stream: Threat.Name FOUND"
             if (preg_match('/^stream: (.+) FOUND$/', $resp, $m)) {
                 error_log("Malware detected: {$m[1]} in file: $path");
-                return ['ok' => false, 'sig' => $m[1]];
+                return ['ok' => false, 'sig' => "Malware Detected - {$m[1]}"];
             }
             // Fallback for unexpected FOUND response format
             error_log("Malware detected (unknown signature) in file: $path");
-            return ['ok' => false, 'sig' => 'Malware'];
+            return ['ok' => false, 'sig' => 'Malware Detected'];
         }
 
         // Log scan results for monitoring (expected: "stream: OK")
