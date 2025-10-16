@@ -5,6 +5,7 @@ volumes:
   mariadb_data: ~
   minio_storage: ~
   local_ssh: ~
+  clam-db: ~
 
 services:
   php-fpm:
@@ -178,3 +179,19 @@ services:
     image: 'bitnami/redis:latest'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+
+  clamav:
+    image: clamav/clamav:stable
+    platform: linux/amd64
+    environment:
+      FRESHCLAM_CHECKS: "12" # ~every 2 hours
+    volumes:
+      - clam-db:/var/lib/clamav
+    user: clamav
+    entrypoint: /init-unprivileged
+    healthcheck:
+      test: ["CMD-SHELL", "clamdscan --version >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 10
+      start_period: 120s
