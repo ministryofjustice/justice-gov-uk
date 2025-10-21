@@ -22,6 +22,7 @@ class Content
     public function addHooks(): void
     {
         add_filter('the_content', [$this, 'fixNationalArchiveLinks']);
+        add_filter('body_class', [$this, 'addBodyClassIfContentContainsH1'], 25);
     }
 
     /**
@@ -50,6 +51,28 @@ class Content
 
         return $content;
     }
+
+
+    /**
+     * Add a body class if the content contains an <h1> tag.
+     *
+     * This is used to add the 'rich-text-contains-h1' class to the body element,
+     * which can be used to style the rich text component differently if it contains an <h1> tag.
+     *
+     * @param array $classes The existing body classes.
+     * @return array The modified body classes.
+     */
+    public function addBodyClassIfContentContainsH1($classes)
+    {
+        if ((is_single() || is_page()) && is_main_query()) {
+            $content = get_the_content();
+            if (strpos($content, '<h1') !== false) {
+                return [...$classes, 'rich-text-contains-h1'];
+            }
+        }
+        return $classes;
+    }
+
 
     /**
      * Determine if a link is external or internal so that we can add (opens in new tab)
