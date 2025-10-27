@@ -39,7 +39,7 @@
     &__heading-text {
         display: none;
         @media screen and (min-width: mixins.$justice-lg) {
-            @include mixins.spacing('padding', 2);
+            @include mixins.spacing('padding', 4, 'left');
             @include mixins.spacing('padding', 3, 'top');
             @include mixins.spacing('padding', 3, 'bottom');
 

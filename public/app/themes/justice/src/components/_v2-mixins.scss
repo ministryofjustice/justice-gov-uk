@@ -177,7 +177,7 @@ $spacing-units-desktop: (
     margin-bottom: 0;
     font-size: 1.313rem;
     line-height: 1.563rem;
-    font-family: var(--heading-font);
+    font-family: var(--heading-font), serif;
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
     .caption {
