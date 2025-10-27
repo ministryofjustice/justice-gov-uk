@@ -3,7 +3,8 @@
 .footer {
     @include mixins.spacing('padding', 4, 'top');
 
-    background-color: var(--justice-primary-black);
+    background-color: var(--justice-primary-lightgrey);
+    border-top: 4px solid var(--justice-primary-grey);
 
     &__container {
         @include mixins.container;
@@ -28,7 +29,7 @@
 
     &__link {
         a {
-            @include mixins.link('light', 'menu');
+            @include mixins.link('dark', 'menu');
             @include mixins.spacing('padding', 2, 'top');
             @include mixins.spacing('padding', 2, 'bottom');
 
@@ -48,14 +49,15 @@
         @include mixins.spacing('padding', 4, 'bottom');
 
         border-top: 1px solid var(--justice-border);
-        color: var(--justice-primary-white);
+        color: var(--justice-primary-dark-grey);
     }
 
     &__heading {
         @include mixins.h3;
 
+        @include mixins.spacing('padding', 2, 'bottom');
         font-weight: var(--heading-font-normal);
-        color: var(--justice-secondary-light-blue);
+        color: var(--justice-secondary-dark-grey);
     }
 
     &__gov {
@@ -68,21 +70,18 @@
 
     &__logo {
         @include mixins.spacing('margin', 4, 'top');
-
-        background-image: url('../img/govuk-logo-2.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        height: 1.875rem;
-        width: 9.25rem;
+        &__dot {
+            fill: #00ffe0;
+        }
     }
 
     &__content {
         @include mixins.spacing('margin', 4, 'top');
 
-        color: var(--justice-primary-white);
+        color: var(--justice-primary-black);
 
         a {
-            @include mixins.link('light');
+            @include mixins.link('dark');
 
             text-decoration: underline;
 
@@ -96,7 +95,7 @@
         @include mixins.spacing('padding', 2, 'top');
         @include mixins.spacing('padding', 4, 'bottom');
 
-        color: var(--justice-primary-white);
+        color: var(--justice-primary-black);
         display: flex;
         border-top: 1px solid var(--justice-border);
         justify-content: end;

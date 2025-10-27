@@ -2,7 +2,7 @@
 @use '../v2-mixins.scss' as mixins;
 
 .navigation-main {
-    background: var(--justice-primary-black);
+    background: var(--justice-primary-blue);
 
     &__container {
         @include mixins.container;
@@ -16,7 +16,7 @@
             flex-direction: row;
 
             // Have a negative margin equal to the padding spacing so the text is visually inline with the container element but so the focus highlight still has padding
-            margin-left: calc(map.get(mixins.$spacing-units-desktop, 2) * -1);
+            //margin-left: calc(map.get(mixins.$spacing-units-desktop, 2) * -1);
         }
     }
 
@@ -50,7 +50,7 @@
 
         @media screen and (min-width: mixins.$justice-lg) {
             border-top: none;
-            border-left: 1px var(--justice-border) solid;
+            border-left: 2px var(--justice-border) solid;
 
             &:first-child {
                 border-left: none;

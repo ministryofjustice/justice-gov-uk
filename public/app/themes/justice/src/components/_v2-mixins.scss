@@ -3,8 +3,10 @@
 @mixin css-vars() {
     // Primary colours
     --justice-primary-black: #212121;
+    --justice-primary-blue: #1d70b8;
     --justice-primary-white: #fff;
     --justice-primary-grey: #d7d7d7;
+    --justice-primary-lightgrey: #f4f8fb;
 
     // Secondary colours
     --justice-secondary-grey: #7e7e74;
@@ -381,6 +383,7 @@ $iconSizes: (
 
 @mixin button($type: 'primary') {
     @include spacing('padding', 1);
+    @include spacing('padding', 1, );
     @include body;
     display: flex;
     background-color: var(--justice-secondary-dark-grey);

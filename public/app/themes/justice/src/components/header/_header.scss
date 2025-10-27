@@ -3,7 +3,9 @@
 .header {
     @include mixins.spacing('padding', 2, 'top');
 
-    background-color: var(--justice-primary-black);
+    border-bottom: 4px solid var(--justice-primary-grey);
+
+    background-color: var(--justice-primary-blue);
 
     &__container {
         @include mixins.container;
@@ -21,6 +23,7 @@
 
     &__home {
         @include mixins.focus-outline;
+        @include mixins.spacing('margin', 3, 'top');
         @include mixins.spacing('margin', 3, 'bottom');
 
         color: transparent;
@@ -45,12 +48,12 @@
     }
     
     &__logo {
-        width: 3rem;
-        height: 3rem;
+        width: 4.1rem;
+        height: 4.1rem;
 
         @media screen and (min-width: mixins.$justice-md) {
-            width: 3.75rem;
-            height: 3.75rem;
+            width: 4.75rem;
+            height: 4.75rem;
         }
 
         background-image: url('../img/moj-short-logo.svg');
@@ -58,13 +61,13 @@
     
     &__logotype {
         margin-top: 0.075rem;
-        height: 2.15625rem;
-        width: 6.65625rem;
+        height: 3rem;
+        width: 9rem;
         
         @media screen and (min-width: mixins.$justice-md) {
             margin-top: 0.1rem;
-            height: 2.875rem;
-            width: 8.875rem; // (306 / 100) * 2.875
+            height: 3.875rem;
+            width: 11.875rem; // (306 / 100) * 2.875
         }
 
         background-image: url('../img/moj-short-logotype.png');  
@@ -80,6 +83,7 @@
         @include mixins.spacing('margin', 1, 'bottom');
 
         @media screen and (min-width: mixins.$justice-lg) {
+            @include mixins.spacing('margin', 4, 'top');
             margin-bottom: 0;
         }
 
@@ -88,6 +92,11 @@
             @media screen and (min-width: mixins.$justice-lg) {
                 width: 15rem;
             }
+        }
+
+        input[type='submit'] {
+            @include mixins.spacing('padding', 3, 'left');
+            @include mixins.spacing('padding', 3, 'right');
         }
     }
 }
