@@ -35,7 +35,7 @@ class ThemeAssets
     public function loadStyles(): void
     {
         if (Config::get('FRONTEND_VERSION') === 1) {
-            wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css', [], 1.1);
+            wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css', [], 1.2);
         }
 
         if (Config::get('FRONTEND_VERSION') === 2) {
