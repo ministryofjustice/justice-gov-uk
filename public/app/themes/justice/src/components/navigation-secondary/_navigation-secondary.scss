@@ -10,7 +10,7 @@
     height: fit-content;
     margin-left: calc(mixins.$gutter-mobile * -1);
     margin-right: calc(mixins.$gutter-mobile * -1);
-    background-color: var(--justice-primary-blue);
+    background-color: var(--justice-primary-black);
 
     @media screen and (min-width: mixins.$justice-lg) {
         @include mixins.spacing('margin', 8, 'top');
@@ -36,7 +36,7 @@
 
             display: flex;
             align-items: center;
-            background-color: var(--justice-primary-darkgrey);
+            background-color: var(--justice-primary-blue);
             color: var(--justice-primary-white);
             font-family: var(--heading-font);
         }
