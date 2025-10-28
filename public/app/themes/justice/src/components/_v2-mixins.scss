@@ -200,6 +200,9 @@ $spacing-units-desktop: (
     font-family: var(--heading-font);
     font-weight: var(--heading-font-bold);
     color: var(--justice-primary-black);
+    .caption {
+        @include caption('h4');
+    }
     @media screen and (min-width: $justice-lg) {
         margin-top: map.get($spacing-units-desktop, 4);
         font-size: 1.375rem;
@@ -284,6 +287,14 @@ $spacing-units-desktop: (
         }
     }
     @if ($tag == 'h3') {
+        font-size: 1rem;
+        line-height: 1.25;
+        @media screen and (min-width: $justice-lg) {
+            font-size: 1.1875rem;
+            line-height: 1.32;
+        }
+    }
+    @if ($tag == 'h4') {
         font-size: 1rem;
         line-height: 1.25;
         @media screen and (min-width: $justice-lg) {
@@ -385,7 +396,8 @@ $iconSizes: (
 
 @mixin button($type: 'primary') {
     @include spacing('padding', 1);
-    @include spacing('padding', 1, );
+    @include spacing('padding', 3, left);
+    @include spacing('padding', 3, right);
     @include body;
     display: flex;
     background-color: var(--justice-secondary-dark-grey);
