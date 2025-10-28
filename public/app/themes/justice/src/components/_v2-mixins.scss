@@ -78,8 +78,8 @@ $spacing-units-desktop: (
     5: 1.563rem,
     6: 1.875rem,
     7: 2.5rem,
-    8: 2.8rem,
-    9: 3.25rem,
+    8: 2.6rem,
+    9: 3rem,
 );
 
 @mixin container() {
@@ -151,8 +151,8 @@ $spacing-units-desktop: (
     }
     @media screen and (min-width: $justice-lg) {
         margin-top: map.get($spacing-units-desktop, 8);
-        font-size: 2.8rem;
-        line-height: 3rem;
+        font-size: 2.5rem;
+        line-height: 2.8rem;
     }
 }
 
@@ -169,8 +169,8 @@ $spacing-units-desktop: (
     }
     @media screen and (min-width: $justice-lg) {
         margin-top: map.get($spacing-units-desktop, 6);
-        font-size: 2.25rem;
-        line-height: 2.5rem;
+        font-size: 2rem;
+        line-height: 2.3rem;
     }
 }
 
