@@ -36,7 +36,7 @@
 
             display: flex;
             align-items: center;
-            background-color: var(--justice-primary-blue);
+            background-color: var(--justice-primary-darkgrey);
             color: var(--justice-primary-white);
             font-family: var(--heading-font);
         }
@@ -238,7 +238,7 @@
 
         &--level-1,
         &--level-2 {
-            background-color: var(--justice-primary-blue);
+            background-color: var(--justice-primary-black);
             @media screen and (min-width: mixins.$justice-lg) {
                 background-color: var(--justice-secondary-grey-blue);
             }
@@ -274,7 +274,7 @@
     }
 
     &__show-all {
-        background-color: var(--justice-primary-blue);
+        background-color: var(--justice-primary-black);
         @media screen and (min-width: mixins.$justice-lg) {
             background-color: var(--justice-secondary-grey-blue);
         }
