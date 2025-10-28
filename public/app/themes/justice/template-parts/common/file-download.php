@@ -51,7 +51,7 @@ if ($args['format']) {
     ];
     $parts = array_filter($parts); // Remove any null or empty values
     $esc_parts = array_map('esc_html', $parts);
-    printf(' (%s)', implode(', ', $esc_parts));
+    printf("<br><small>(%s)</small>", implode(', ', $esc_parts));
 }
 
 print '</span>';
