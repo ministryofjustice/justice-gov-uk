@@ -7,7 +7,7 @@
 
     &__legend {
         @include mixins.h3;
-        font-size: 1.325rem;
+        font-size: 1.325rem !important;
     }
 
     &__fieldset {

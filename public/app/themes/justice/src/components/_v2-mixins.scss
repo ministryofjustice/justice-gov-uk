@@ -4,8 +4,10 @@
     // Primary colours
     --justice-primary-black: #212121;
     --justice-primary-blue: #1d70b8;
+    --justice-primary-lightblue: #d2e2f1;
     --justice-primary-white: #fff;
     --justice-primary-grey: #d7d7d7;
+    --justice-primary-darkgrey: #333333;
     --justice-primary-lightgrey: #f4f8fb;
 
     // Secondary colours
@@ -76,8 +78,8 @@ $spacing-units-desktop: (
     5: 1.563rem,
     6: 1.875rem,
     7: 2.5rem,
-    8: 3.125rem,
-    9: 3.75rem,
+    8: 2.8rem,
+    9: 3.25rem,
 );
 
 @mixin container() {
@@ -149,8 +151,8 @@ $spacing-units-desktop: (
     }
     @media screen and (min-width: $justice-lg) {
         margin-top: map.get($spacing-units-desktop, 8);
-        font-size: 3rem;
-        line-height: 3.125rem;
+        font-size: 2.8rem;
+        line-height: 3rem;
     }
 }
 
