@@ -36,7 +36,7 @@ get_header();
                 <?php
                 get_template_part('template-parts/common/image-with-text', null, [
                     'image' => [
-                        'url' => get_template_directory_uri() . '/dist/img/scales-of-justice.jpg',
+                        'url' => get_template_directory_uri() . '/dist/img/lady-justice.jpg',
                         'alt' => 'A golden statue of Lady Justice holding a sword in her right hand and scales in her left, mounted on a domed building against a blue sky with clouds.',
                     ],
                     'title' => [
