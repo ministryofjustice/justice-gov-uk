@@ -98,7 +98,7 @@ $spacing-units-desktop: (
     column-gap: $gap-mobile;
     width: 100%;
     @media screen and (min-width: $justice-lg) {
-        grid-template-columns: repeat(12, [col-start] 1fr);
+        grid-template-columns: repeat(14, [col-start] 1fr);
         column-gap: $gap;
     }
 }

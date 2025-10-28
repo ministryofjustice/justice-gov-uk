@@ -10,7 +10,7 @@
 
     &__article,
     &__sidebar {
-        @include mixins.grid-row(1, 4);
+        @include mixins.grid-row(4, 8);
     }
 
     &__article-header {
@@ -60,7 +60,7 @@
     &--right {
         @media screen and (min-width: mixins.$justice-lg) {
             #{$this}__sidebar:not(#{$this}__sidebar--mobile) {
-                @include mixins.grid-row(10, 3);
+                @include mixins.grid-row(12, 3);
             }
             #{$this}__article {
                 @include mixins.grid-row(1, 7);

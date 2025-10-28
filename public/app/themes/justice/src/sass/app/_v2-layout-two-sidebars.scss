@@ -12,7 +12,7 @@
         @include mixins.grid-row(1, 4);
 
         @media screen and (min-width: mixins.$justice-lg) {
-            @include mixins.grid-row(4, 6);
+            @include mixins.grid-row(4, 8);
         }
     }
 
@@ -52,7 +52,7 @@
         &--right {
             display: none;
             @media screen and (min-width: mixins.$justice-lg) {
-                @include mixins.grid-row(10, 3);
+                @include mixins.grid-row(12, 3);
             }
         }
 
