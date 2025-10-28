@@ -54,12 +54,11 @@
                 &::after {
                     content: '';
                     display: block;
-                    background-image: url('./assets/archived-page.png');
-                    background-image: url('../img/archived-page.png');
+                    background-image: url('../img/archive.png');
                     background-repeat: no-repeat;
                     background-size: contain;
                     height: 1.5rem;
-                    width: 2rem;
+                    width: 1.5rem;
                 }
             }
         }
