@@ -40,10 +40,23 @@
         }
     }
 
+    &__sublist {
+        #{$this}__link.disabled {
+            @include mixins.disabled;
+            opacity: 1 !important;
+            color: var(--justice-primary-black);
+            background-color: #e6e6e6;
+            padding: 2px 2px 0;
+            border: 1px solid #adadad;
+
+            &:hover {
+                color: var(--justice-primary-black);
+            }
+        }
+    }
+
     &__link.disabled {
         @include mixins.disabled;
-
-        color: var(--justice-primary-black);
 
         &:hover {
             color: var(--justice-primary-black);
