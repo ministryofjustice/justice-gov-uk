@@ -17,5 +17,12 @@
     &__text {
         // Override the previously set `white-space` to allow wrapping
         white-space: normal;
+
+        > small {
+            color: black;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 900;
+        }
     }
 }
