@@ -1,18 +1,17 @@
 @use '../v2-mixins.scss' as mixins;
 
-
 .sidebar-block {
     width: 100%;
 
     &--brand {
-        display: block;
-        background-image: url('./assets/moj-logo.gif');
-        background-image: url('../img/moj-logo.gif');
-        background-position: left;
+        background-image: url("../img/moj-logo.gif");
+        background-position: 0;
         background-repeat: no-repeat;
         background-size: contain;
-        height: 4.5rem;
+        display: block;
+        height: 6.6rem;
         width: 100%;
+        margin-left: -36px;
     }
 
     &__description {
@@ -50,15 +49,18 @@
             &--archive {
                 display: flex;
                 align-items: center;
+                position: relative;
 
                 &::after {
-                    content: '';
-                    display: block;
-                    background-image: url('../img/archive.png');
+                    content: "";
+                    background-image: url("../img/archive.png");
                     background-repeat: no-repeat;
                     background-size: contain;
-                    height: 1.5rem;
-                    width: 1.5rem;
+                    display: block;
+                    height: 2.8rem;
+                    width: 2.8rem;
+                    position: absolute;
+                    right: 10px;
                 }
             }
         }

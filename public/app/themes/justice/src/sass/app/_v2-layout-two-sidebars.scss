@@ -67,7 +67,8 @@
             @include mixins.spacing('margin', 6, 'top');
             @media screen and (min-width: mixins.$justice-lg) {
                 &:first-child {
-                    @include mixins.spacing('margin', 8, 'top');
+                    @include mixins.spacing('margin', 9, 'top');
+                    @include mixins.spacing('margin', 9, 'bottom');
                 }
             }
         }
