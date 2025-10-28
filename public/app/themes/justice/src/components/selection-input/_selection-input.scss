@@ -72,7 +72,7 @@
                     left: 0.25rem;
                     border-radius: 50%;
                     opacity: 0;
-                    background: var(--justice-primary-black);
+                    background: var(--justice-primary-blue);
                 }
             }
         }
@@ -103,7 +103,7 @@
                     top: 0.35rem;
                     left: 0.25rem;
                     transform: rotate(-45deg);
-                    border: solid var(--justice-primary-black);
+                    border: solid var(--justice-primary-blue);
                     border-width: 0 0 5px 5px;
                     border-top-color: transparent;
                     opacity: 0;
@@ -130,6 +130,9 @@
 
         &[type='radio']:checked {
             + label {
+                &::before {
+                    border-color: var(--justice-primary-grey);
+                }
                 &::after {
                     opacity: 1;
                 }
@@ -138,6 +141,9 @@
 
         &[type='checkbox']:checked {
             + label {
+                &::before {
+                    border-color: var(--justice-primary-grey);
+                }
                 &::after {
                     opacity: 1;
                 }

@@ -9,7 +9,7 @@
     }
 
     &__article {
-        @include mixins.grid-row(1, 4);
+        @include mixins.grid-row(1, 6);
 
         @media screen and (min-width: mixins.$justice-lg) {
             @include mixins.grid-row(4, 8);
