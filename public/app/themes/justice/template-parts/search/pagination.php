@@ -42,7 +42,7 @@ $args = array_merge($defaults, $args);
 if (sizeof($args['pages']) > 1) {
 ?>
 
-<nav id="pagination" class="pagination" aria-label="pagination">
+<nav class="pagination" aria-label="pagination">
     <ul class="pagination__list">
         <li class="pagination__link-wrapper pagination__link-wrapper--previous">
             <?php if ($args['previous_url']) : ?>
@@ -103,5 +103,6 @@ if (sizeof($args['pages']) > 1) {
             <?php endif; ?>
         </li>
     </ul>
+</nav>
 <?php
 }
