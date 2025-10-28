@@ -65,7 +65,7 @@
             #{$this}__article {
                 @include mixins.grid-row(1, 7);
                 &--homepage {
-                    @include mixins.grid-row(1, 9);
+                    @include mixins.grid-row(1, 11);
                 }
             }
         }
