@@ -4,7 +4,7 @@ import { PluginDocumentSettingPanel } from "@wordpress/editor";
 import { Fragment } from "@wordpress/element";
 import { registerPlugin } from "@wordpress/plugins";
 
-import controlsIndex from "./controlsIndex";
+import controlsIndex from "./controlsIndex.js";
 
 /** @type {(string: string) => string} */
 const capitalizeFirstLetter = (string) => {
@@ -12,7 +12,7 @@ const capitalizeFirstLetter = (string) => {
 };
 
 /**
- * @typedef {import('../../js/block-editor.d.ts').SimpleGutemField} SimpleGutemField
+ * @typedef {import('../../js/block-editor').SimpleGutemField} SimpleGutemField
  * @typedef {import('@wordpress/data/src/types').SelectFunction} SelectFunction
  */
 

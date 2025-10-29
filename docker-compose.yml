@@ -1,5 +1,5 @@
 volumes:
-  node_modules: ~
+  deno_node_modules: ~
   dist: ~
   php-socket:
   mariadb_data: ~
@@ -55,23 +55,17 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - node
+      - deno
       - php-fpm
 
-  node:
-    image: node:20
-    working_dir: /node
-    entrypoint: make
-    command: node-assets
+  deno:
+    build:
+      target: deno-dev
+    command: deno task watch
     volumes:
-      - node_modules:/node/node_modules
-      - dist:/node/dist
-      - ./Makefile:/node/Makefile
-      - ./public/app/themes/justice/src:/node/src
-      - ./public/app/themes/justice/jsconfig.json:/node/jsconfig.json
-      - ./public/app/themes/justice/package.json:/node/package.json
-      - ./public/app/themes/justice/package-lock.json:/node/package-lock.json
-      - ./public/app/themes/justice/webpack.mix.js:/node/webpack.mix.js
+      - deno_node_modules:/app/node_modules
+      - dist:/app/dist
+      - ./public/app/themes/justice:/app
 
   jekyll:
     build:
