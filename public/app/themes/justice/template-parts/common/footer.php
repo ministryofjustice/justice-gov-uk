@@ -48,7 +48,7 @@ defined('ABSPATH') || exit;
             <div class="footer__content-wrapper">
                 <?php // Hide logo link from screen readers as it's repeated in the text link ?>
                 <a class="footer__logo" id="logo" aria-label="Go to the GOV.UK homepage" href="https://www.gov.uk/">
-                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" viewBox="0 0 324 60" height="30" width="162" fill="#5c5c54" class="govuk-header__logotype" aria-label="GOV.UK">
+                    <svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" viewBox="0 0 324 60" height="30" width="162" fill="#fff" class="govuk-header__logotype" aria-label="GOV.UK">
                         <title>GOV.UK</title>
                         <g>
                             <circle cx="20" cy="17.6" r="3.7"></circle>

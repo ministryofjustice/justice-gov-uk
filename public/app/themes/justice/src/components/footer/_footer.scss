@@ -3,7 +3,7 @@
 .footer {
     @include mixins.spacing('padding', 4, 'top');
 
-    background-color: var(--justice-primary-lightgrey);
+    background-color: var(--justice-primary-black);
     border-top: 4px solid var(--justice-primary-grey);
 
     &__container {
@@ -29,7 +29,7 @@
 
     &__link {
         a {
-            @include mixins.link('dark', 'menu');
+            @include mixins.link('light', 'menu');
             @include mixins.spacing('padding', 2, 'top');
             @include mixins.spacing('padding', 2, 'bottom');
 
@@ -49,7 +49,7 @@
         @include mixins.spacing('padding', 4, 'bottom');
 
         border-top: 1px solid var(--justice-border);
-        color: var(--justice-primary-dark-grey);
+        color: var(--justice-primary-white);
     }
 
     &__heading {
@@ -57,7 +57,7 @@
 
         @include mixins.spacing('padding', 2, 'bottom');
         font-weight: var(--heading-font-normal);
-        color: var(--justice-secondary-dark-grey);
+        color: var(--justice-secondary-light-blue);
     }
 
     &__gov {
@@ -78,10 +78,10 @@
     &__content {
         @include mixins.spacing('margin', 4, 'top');
 
-        color: var(--justice-primary-black);
+        color: var(--justice-primary-white);
 
         a {
-            @include mixins.link('dark');
+            @include mixins.link('light');
 
             text-decoration: underline;
 
@@ -95,7 +95,7 @@
         @include mixins.spacing('padding', 2, 'top');
         @include mixins.spacing('padding', 4, 'bottom');
 
-        color: var(--justice-primary-black);
+        color: var(--justice-primary-white);
         display: flex;
         border-top: 1px solid var(--justice-border);
         justify-content: end;

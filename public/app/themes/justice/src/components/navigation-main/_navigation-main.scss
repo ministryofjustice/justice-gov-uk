@@ -2,7 +2,7 @@
 @use '../v2-mixins.scss' as mixins;
 
 .navigation-main {
-    background: var(--justice-primary-blue);
+    background: var(--justice-primary-black);
 
     &__container {
         @include mixins.container;
@@ -75,7 +75,7 @@
                     height: 0;
                     border-left: 6px solid transparent;
                     border-right: 6px solid transparent;
-                    border-top: 6px solid var(--justice-primary-blue);
+                    border-top: 6px solid var(--justice-primary-black);
                 }
 
                 &:has(:focus-visible):not(:active, :hover) {

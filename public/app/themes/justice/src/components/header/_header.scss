@@ -2,10 +2,8 @@
 
 .header {
     @include mixins.spacing('padding', 2, 'top');
-
-    border-bottom: 4px solid var(--justice-primary-grey);
-
-    background-color: var(--justice-primary-blue);
+    box-shadow: 0 2px 3px 0 var(--justice-primary-darkgrey);
+    background-color: var(--justice-primary-black);
 
     &__container {
         @include mixins.container;
