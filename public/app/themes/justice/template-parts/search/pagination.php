@@ -40,7 +40,7 @@ $defaults = [
 $args = array_merge($defaults, $args);
 
 if (sizeof($args['pages']) > 1) {
-?>
+    ?>
 
 <nav class="pagination" aria-label="pagination">
     <ul class="pagination__list">
@@ -104,5 +104,5 @@ if (sizeof($args['pages']) > 1) {
         </li>
     </ul>
 </nav>
-<?php
+    <?php
 }
