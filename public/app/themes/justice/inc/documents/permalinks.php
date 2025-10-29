@@ -31,7 +31,7 @@ trait DocumentPermalinks
 
         // Handle edits via the Quick Edit interface.
         add_action('post_updated', function ($post_id, $post_after, $post_before) {
-            $this->handleDocumentPermalinkUpdate($post_id, $post_before?->post_name ?? '', $post_after->post_name);
+            $this->handleDocumentPermalinkUpdate($post_id, $post_before?->post_name ?? '', $post_after->post_name ?? null);
         }, 10, 3);
 
         // Handle redirects when a user tries to access a previous permalink.
@@ -292,10 +292,10 @@ trait DocumentPermalinks
      * - it removes the new slug from the previous post names if it exists.
      *
      * @param int $post_id The post ID of the document.
-     * @param string $previous_slug The previous slug of the document.
-     * @param string $new_slug The new slug of the document.
+     * @param string|null $previous_slug The previous slug of the document.
+     * @param string|null $new_slug The new slug of the document.
      */
-    public function handleDocumentPermalinkUpdate(int $post_id, string $previous_slug, string $new_slug): void
+    public function handleDocumentPermalinkUpdate(int $post_id, string|null $previous_slug, string|null $new_slug): void
     {
         if (!$this->isDocument($post_id) || $previous_slug === $new_slug) {
             return;
