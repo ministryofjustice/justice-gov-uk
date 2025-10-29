@@ -11,7 +11,6 @@
  *   - new_tab: boolean Will this link open in a new tab?
  *   - new_tab_visually_hidden: boolean Will the (open in a new tab) text be shown to all users or screen readers only?
  *   - active: boolean Is this link the current page?
- *   - on_click: string JavaScript to run when the link is clicked
  * - search_form: array Parameters to be passed to the text input form component, if it's to be displayed
  *   - id: string A unique id for the form
  *   - action: string The form action
