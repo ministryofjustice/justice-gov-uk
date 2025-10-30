@@ -43,7 +43,9 @@ if ($total_pages <= 10) {
     // Build display_pages with ellipses
     $last = -1;
     foreach ($display as $i) {
-        if ($i < 0 || $i >= $total_pages) continue;
+        if ($i < 0 || $i >= $total_pages) {
+            continue;
+        }
         if ($last !== -1 && $i > $last + 1) {
             $display_pages[] = [
                 'title' => '…',
