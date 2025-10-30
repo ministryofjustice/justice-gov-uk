@@ -19,11 +19,8 @@ use MOJ\Justice\Utils;
 
 get_header();
 
-get_template_part('template-parts/common/horizontal-rule', null, [
-    'decorative' => true,
-]);
-
 ?>
+<div class="home__spacer"> </div>
 <div class="one-sidebar one-sidebar--right">
     <div class="one-sidebar__grid">
         <article id="main-page-content" class="one-sidebar__article one-sidebar__article--homepage">
@@ -39,7 +36,7 @@ get_template_part('template-parts/common/horizontal-rule', null, [
                 <?php
                 get_template_part('template-parts/common/image-with-text', null, [
                     'image' => [
-                        'url' => get_template_directory_uri() . '/dist/img/scales-of-justice.jpg',
+                        'url' => get_template_directory_uri() . '/dist/img/lady-justice.jpg',
                         'alt' => 'A golden statue of Lady Justice holding a sword in her right hand and scales in her left, mounted on a domed building against a blue sky with clouds.',
                     ],
                     'title' => [
@@ -59,10 +56,8 @@ get_template_part('template-parts/common/horizontal-rule', null, [
 
     </div>
 </div>
+<div class="home__spacer"> </div>
 <?php
 
-get_template_part('template-parts/common/horizontal-rule', null, [
-    'decorative' => true,
-]);
 
 get_footer();

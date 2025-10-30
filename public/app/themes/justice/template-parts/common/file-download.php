@@ -43,16 +43,17 @@ print '<span class="file-download__text">';
 
 print esc_html($args['label']);
 
+print '<br><small>';
 if ($args['format']) {
     $parts = [
         $args['language'],
         $args['format'],
-        $args['filesize'],
+        $args['filesize']
     ];
     $parts = array_filter($parts); // Remove any null or empty values
     $esc_parts = array_map('esc_html', $parts);
-    printf(' (%s)', implode(', ', $esc_parts));
+    printf("(%s)", implode(', ', $esc_parts));
 }
-
+print '</small>';
 print '</span>';
 print '</a>';
