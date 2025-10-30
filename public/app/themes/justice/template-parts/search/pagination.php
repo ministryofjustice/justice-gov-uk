@@ -24,37 +24,35 @@ foreach ($args['pages'] as $i => $page) {
 $display_pages = [];
 if ($total_pages <= 10) {
     $display_pages = $args['pages'];
+} elseif ($current_index === $total_pages - 1) {
+    // Last page is current: only first and last as links, rest as ellipses
+    $display_pages[] = $args['pages'][0];
+    if ($total_pages > 2) {
+        $display_pages[] = [
+            'title' => '…',
+            'url' => '',
+            'current' => false,
+        ];
+    }
+    $display_pages[] = $args['pages'][$total_pages - 1];
 } else {
-    $display = [0, $total_pages - 1]; // first and last
+    $display = [0, $total_pages - 1];
     $window = 2;
-    $min_elements = 11; // includes prev and next
+    $min_elements = 9;
 
     // Initial window
-    for ($i = $current_index - $window; $i <= $current_index + $window; $i++) {
-        if ($i > 0 && $i < $total_pages - 1) {
-            $display[] = $i;
-        }
+    for ($i = max(1, $current_index - $window); $i <= min($total_pages - 2, $current_index + $window); $i++) {
+        $display[] = $i;
     }
 
     // Expand window if not enough elements
-    while (count($display) + 2 < $min_elements) { // +2 for possible ellipses
-        if (($current_index - $window - 1) > 0) {
-            $window++;
-            $i = $current_index - $window;
-            if ($i > 0 && $i < $total_pages - 1) {
-                $display[] = $i;
-            }
+    while (count($display) < $min_elements && (min($display) > 1 || max($display) < $total_pages - 2)) {
+        if (min($display) > 1) {
+            $display[] = min($display) - 1;
         }
-        if (count($display) + 2 >= $min_elements) {
-            break;
+        if (count($display) < $min_elements && max($display) < $total_pages - 2) {
+            $display[] = max($display) + 1;
         }
-        if (($current_index + $window + 1) < $total_pages - 1) {
-            $i = $current_index + $window;
-            if ($i > 0 && $i < $total_pages - 1) {
-                $display[] = $i;
-            }
-        }
-        $window++;
     }
 
     $display = array_unique($display);
@@ -63,9 +61,6 @@ if ($total_pages <= 10) {
     // Build display_pages with ellipses
     $last = -1;
     foreach ($display as $i) {
-        if ($i < 0 || $i >= $total_pages) {
-            continue;
-        }
         if ($last !== -1 && $i > $last + 1) {
             $display_pages[] = [
                 'title' => '…',
@@ -77,6 +72,7 @@ if ($total_pages <= 10) {
         $last = $i;
     }
 }
+
 
 // Build pagination links
 $pagination_links = [];
