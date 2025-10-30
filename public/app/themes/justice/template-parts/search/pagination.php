@@ -31,7 +31,6 @@ if ($total_pages <= 10) {
         'url' => '',
         'current' => false,
     ];
-    $display_pages[] = $args['pages'][$total_pages - 4];
     $display_pages[] = $args['pages'][$total_pages - 3];
     $display_pages[] = $args['pages'][$total_pages - 2];
     $display_pages[] = $args['pages'][$total_pages - 1];
