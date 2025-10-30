@@ -39,10 +39,10 @@
             }
         }
         &:visited {
-            color: var(--justice-link);
+            color: var(--justice-link) !important;
         }
         &:active {
-            color: var(--justice-link);
+            color: var(--justice-link) !important;
         }
     }
 
