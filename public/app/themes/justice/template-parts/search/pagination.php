@@ -27,7 +27,7 @@ if ($total_pages <= 10) {
 } else {
     $display = [0, $total_pages - 1]; // first and last
     $window = 2;
-    $min_elements = 9;
+    $min_elements = 11; // includes prev and next
 
     // Initial window
     for ($i = $current_index - $window; $i <= $current_index + $window; $i++) {
@@ -41,12 +41,18 @@ if ($total_pages <= 10) {
         if (($current_index - $window - 1) > 0) {
             $window++;
             $i = $current_index - $window;
-            if ($i > 0 && $i < $total_pages - 1) $display[] = $i;
+            if ($i > 0 && $i < $total_pages - 1) {
+                $display[] = $i;
+            }
         }
-        if (count($display) + 2 >= $min_elements) break;
+        if (count($display) + 2 >= $min_elements) {
+            break;
+        }
         if (($current_index + $window + 1) < $total_pages - 1) {
             $i = $current_index + $window;
-            if ($i > 0 && $i < $total_pages - 1) $display[] = $i;
+            if ($i > 0 && $i < $total_pages - 1) {
+                $display[] = $i;
+            }
         }
         $window++;
     }
@@ -57,7 +63,9 @@ if ($total_pages <= 10) {
     // Build display_pages with ellipses
     $last = -1;
     foreach ($display as $i) {
-        if ($i < 0 || $i >= $total_pages) continue;
+        if ($i < 0 || $i >= $total_pages) {
+            continue;
+        }
         if ($last !== -1 && $i > $last + 1) {
             $display_pages[] = [
                 'title' => '…',
