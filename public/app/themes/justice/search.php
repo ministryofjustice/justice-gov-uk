@@ -86,6 +86,7 @@ get_header();
                 get_template_part('template-parts/search/search-result-list', null, [
                     'cards' => $results,
                     'query' => get_search_query(),
+                    'pagination_page_total' => (count($pag_args['pages']) ?? 1),
                 ]);
 
                 get_template_part('template-parts/search/pagination', null, $pag_args); ?>

@@ -55,7 +55,7 @@ defined('ABSPATH') || exit;
 
 ?>
 
-<div class="search-result-list">
+<div class="search-result-list <?= ( $args['pagination_page_total'] > 1 ? '' : 'no-pagination' ) ?>">
     <?php if (!empty($args['cards'])) : ?>
         <ol class="search-result-list__list">
             <?php foreach ($args['cards'] as $card) : ?>

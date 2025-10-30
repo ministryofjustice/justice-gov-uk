@@ -1,6 +1,7 @@
 @use '../v2-mixins.scss' as mixins;
 
 .search-result-list {
+    $this: &;
     &__element {
         @include mixins.spacing('padding', 6, 'top');
         @include mixins.spacing('padding', 6, 'bottom');
@@ -8,12 +9,19 @@
         border-bottom: 1px solid var(--justice-border);
 
         &:first-child {
-            padding-top: 0;
+            @include mixins.spacing('padding', 6, 'top');
+            border-top: 1px solid var(--justice-border);
+
+            #{$this}.no-pagination & {
+                border-top: none;
+            }
         }
 
         &:last-child {
-            padding-bottom: 0;
-            border: none;
+            #{$this}.no-pagination & {
+                @include mixins.spacing('padding', 9, 'bottom');
+                border-bottom: none;
+            }
         }
     }
 

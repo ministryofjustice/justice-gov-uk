@@ -31,6 +31,7 @@ if ($total_pages <= 10) {
         'url' => '',
         'current' => false,
     ];
+    $display_pages[] = $args['pages'][$total_pages - 4];
     $display_pages[] = $args['pages'][$total_pages - 3];
     $display_pages[] = $args['pages'][$total_pages - 2];
     $display_pages[] = $args['pages'][$total_pages - 1];
@@ -87,7 +88,9 @@ foreach ($display_pages as $page) {
         $pagination_links[] = '<li class="pagination__link-wrapper"><a class="pagination__link" href="' . esc_url($page['url']) . '">' . esc_html($page['title']) . '</a></li>';
     }
 }
+
 ?>
+<div class="<?= ($total_pages > 1 ? 'paginated' : ''); ?>">
 <?php if ($total_pages > 1) : ?>
     <nav class="pagination" aria-label="pagination">
         <ul class="pagination__list">
@@ -123,4 +126,5 @@ foreach ($display_pages as $page) {
             </li>
         </ul>
     </nav>
+</div>
 <?php endif; ?>
