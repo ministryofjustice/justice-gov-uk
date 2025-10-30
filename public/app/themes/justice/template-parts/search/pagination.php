@@ -1,5 +1,4 @@
 <?php
-
 defined('ABSPATH') || exit;
 
 $defaults = [
@@ -8,12 +7,13 @@ $defaults = [
     'pages' => [],
 ];
 
+if (!isset($args)) {
+    $args = [];
+}
 $args = array_merge($defaults, $args);
 
 $total_pages = count($args['pages']);
 $current_index = null;
-// a reliable method to get the key of the current page in
-// a numerically indexed array.
 foreach ($args['pages'] as $i => $page) {
     if (!empty($page['current'])) {
         $current_index = $i;
@@ -25,28 +25,39 @@ $display_pages = [];
 if ($total_pages <= 10) {
     $display_pages = $args['pages'];
 } else {
-    $display = [0]; // First page
-    // 2 before to 2 after current
-    if ($current_index !== null) {
-        for ($i = $current_index - 2; $i <= $current_index + 2; $i++) {
-            if ($i > 0 && $i < $total_pages - 1) {
-                $display[] = $i;
-            }
+    $display = [0, $total_pages - 1]; // first and last
+    $window = 2;
+    $min_elements = 9;
+
+    // Initial window
+    for ($i = $current_index - $window; $i <= $current_index + $window; $i++) {
+        if ($i > 0 && $i < $total_pages - 1) {
+            $display[] = $i;
         }
     }
 
-    $display[] = $total_pages - 1; // Last page
+    // Expand window if not enough elements
+    while (count($display) + 2 < $min_elements) { // +2 for possible ellipses
+        if (($current_index - $window - 1) > 0) {
+            $window++;
+            $i = $current_index - $window;
+            if ($i > 0 && $i < $total_pages - 1) $display[] = $i;
+        }
+        if (count($display) + 2 >= $min_elements) break;
+        if (($current_index + $window + 1) < $total_pages - 1) {
+            $i = $current_index + $window;
+            if ($i > 0 && $i < $total_pages - 1) $display[] = $i;
+        }
+        $window++;
+    }
 
-    // Remove duplicates and sort
     $display = array_unique($display);
     sort($display);
 
     // Build display_pages with ellipses
     $last = -1;
     foreach ($display as $i) {
-        if ($i < 0 || $i >= $total_pages) {
-            continue;
-        }
+        if ($i < 0 || $i >= $total_pages) continue;
         if ($last !== -1 && $i > $last + 1) {
             $display_pages[] = [
                 'title' => '…',
@@ -59,19 +70,6 @@ if ($total_pages <= 10) {
     }
 }
 
-// Build pagination links
-$pagination_links = [];
-foreach ($display_pages as $page) {
-    if ($page['title'] === '…') {
-        $pagination_links[] = '<li class="pagination__link-wrapper"><span class="pagination__link disabled" aria-hidden="true">…</span></li>';
-    } elseif ($page['current'] ?? false) {
-        $pagination_links[] = '<li class="pagination__link-wrapper"><a class="pagination__link disabled" role="link" aria-disabled="true" aria-current="page">' . esc_html($page['title']) . '</a></li>';
-    } elseif (empty($page['url'])) {
-        $pagination_links[] = '<li class="pagination__link-wrapper"><a class="pagination__link disabled" role="link" aria-disabled="true">' . esc_html($page['title']) . '</a></li>';
-    } else {
-        $pagination_links[] = '<li class="pagination__link-wrapper"><a class="pagination__link" href="' . esc_url($page['url']) . '">' . esc_html($page['title']) . '</a></li>';
-    }
-}
 ?>
 <?php if ($total_pages > 1) : ?>
     <nav class="pagination" aria-label="pagination">
