@@ -12,6 +12,8 @@ $args = array_merge($defaults, $args);
 
 $total_pages = count($args['pages']);
 $current_index = null;
+// a reliable method to get the key of the current page in
+// a numerically indexed array.
 foreach ($args['pages'] as $i => $page) {
     if (!empty($page['current'])) {
         $current_index = $i;
@@ -23,19 +25,18 @@ $display_pages = [];
 if ($total_pages <= 10) {
     $display_pages = $args['pages'];
 } else {
-    // Always show first 2
-    $display = [0, 1];
-    // Show 3 before and after current
+    $display = [0]; // First page
+    // 2 before to 2 after current
     if ($current_index !== null) {
-        for ($i = $current_index - 3; $i <= $current_index + 3; $i++) {
-            if ($i > 1 && $i < $total_pages - 2) {
+        for ($i = $current_index - 2; $i <= $current_index + 2; $i++) {
+            if ($i > 0 && $i < $total_pages - 1) {
                 $display[] = $i;
             }
         }
     }
-    // Always show last 2
-    $display[] = $total_pages - 2;
-    $display[] = $total_pages - 1;
+
+    $display[] = $total_pages - 1; // Last page
+
     // Remove duplicates and sort
     $display = array_unique($display);
     sort($display);
