@@ -41,7 +41,8 @@
     }
 
     &__sublist {
-        #{$this}__link.disabled {
+        // only for disabled state on anchors within sublist
+        a#{$this}__link.disabled {
             @include mixins.disabled;
             opacity: 1 !important;
             color: var(--justice-primary-black);
