@@ -13,6 +13,7 @@
             border-top: 1px solid var(--justice-border);
 
             #{$this}.no-pagination & {
+                padding-top: 0;
                 border-top: none;
             }
         }
