@@ -38,6 +38,12 @@
                 @include mixins.spacing('padding', 1, 'right');
             }
         }
+        &:visited {
+            color: var(--justice-link);
+        }
+        &:active {
+            color: var(--justice-link);
+        }
     }
 
     &__sublist {
