@@ -70,6 +70,19 @@ if ($total_pages <= 10) {
     }
 }
 
+// Build pagination links
+$pagination_links = [];
+foreach ($display_pages as $page) {
+    if ($page['title'] === '…') {
+        $pagination_links[] = '<li class="pagination__link-wrapper"><span class="pagination__link disabled" aria-hidden="true">…</span></li>';
+    } elseif ($page['current'] ?? false) {
+        $pagination_links[] = '<li class="pagination__link-wrapper"><a class="pagination__link disabled" role="link" aria-disabled="true" aria-current="page">' . esc_html($page['title']) . '</a></li>';
+    } elseif (empty($page['url'])) {
+        $pagination_links[] = '<li class="pagination__link-wrapper"><a class="pagination__link disabled" role="link" aria-disabled="true">' . esc_html($page['title']) . '</a></li>';
+    } else {
+        $pagination_links[] = '<li class="pagination__link-wrapper"><a class="pagination__link" href="' . esc_url($page['url']) . '">' . esc_html($page['title']) . '</a></li>';
+    }
+}
 ?>
 <?php if ($total_pages > 1) : ?>
     <nav class="pagination" aria-label="pagination">
