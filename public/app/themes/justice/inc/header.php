@@ -31,19 +31,17 @@ class Header
         return [
             [
                 'label' => 'Courts',
-                'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
-                'on_click' => 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' . get_home_url(null, '/courts') . '" });'
+                'url' => 'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service'
             ],
             [
                 'label' => 'Procedure rules',
                 'url' => get_home_url(null, '/courts/procedure-rules'),
                 // Does the current permalink path start with /courts/procedure-rules?
-                'active' => str_starts_with(get_permalink(), get_home_url(null, '/courts/procedure-rules')),
+                'active' => str_starts_with(get_permalink(), get_home_url(null, '/courts/procedure-rules'))
             ],
             [
                 'label' =>  'Offenders',
-                'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service',
-                'on_click' => 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "' . get_home_url(null, '/offenders') . '" });'
+                'url' => 'https://www.gov.uk/government/organisations/hm-prison-and-probation-service'
             ]
         ];
     }
