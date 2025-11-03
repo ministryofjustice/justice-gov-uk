@@ -4,7 +4,7 @@ metadata:
   name: justice-gov-uk-demo
   namespace: justice-gov-uk-demo
 data:
-  WP_ENV: "production"
+  WP_ENV: "staging"
   WP_HOME: 'https://demo.justice.gov.uk'
   WP_SITEURL: 'https://demo.justice.gov.uk/wp'
   WP_LOOPBACK: 'http://localhost:8080'
