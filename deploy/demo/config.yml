@@ -13,3 +13,6 @@ data:
   # The following IDs are not private, they form part of the publicly visible oauth login url.
   OAUTH_CLIENT_ID: "3313c87a-399d-4130-a505-37c996721009"
   OAUTH_TENANT_ID: "c6874728-71e6-41fe-a9e1-2e8c36776ad8"
+  # This is the version of the frontend that should be shown to users.
+  # Show everyone version 2, regardless of the cookie.
+  FRONTEND_VERSION_OVERRIDE: "2"
