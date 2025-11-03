@@ -28,6 +28,7 @@ class Content
 
     public function addHooks(): void
     {
+        add_filter('body_class', [__CLASS__, 'addBodyClassIfContentContainsH1'], 25);
         add_filter('the_content', [__CLASS__, 'fixNationalArchiveLinks']);
         add_filter('wp_kses_allowed_html', [__CLASS__, 'customWpksesPostTags'], 10, 2);
 
@@ -38,6 +39,26 @@ class Content
         add_action('render_block_core/table', [$this, 'renderTables'], 10, 2);
 
         add_action('render_block_core/list', [$this, 'renderNavigationSection'], 15, 2);
+    }
+
+    /**
+     * Add a body class if the content contains an <h1> tag.
+     *
+     * This is used to add the 'rich-text-contains-h1' class to the body element,
+     * which can be used to style the rich text component differently if it contains an <h1> tag.
+     *
+     * @param array $classes The existing body classes.
+     * @return array The modified body classes.
+     */
+    public static function addBodyClassIfContentContainsH1($classes)
+    {
+        if ((is_single() || is_page()) && is_main_query()) {
+            $content = get_the_content();
+            if (strpos($content, '<h1') !== false) {
+                return [...$classes, 'rich-text-contains-h1'];
+            }
+        }
+        return $classes;
     }
 
     /**
