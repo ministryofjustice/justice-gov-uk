@@ -46,6 +46,11 @@ VOLUME /tmp /var/www/html/public/app/uploads
 
 WORKDIR /var/www/html
 
+# Set IMAGE_TAG at build time, we don't want this container to be run with an incorrect IMAGE_TAG.
+# Set towards the end of the Dockerfile to benefit from caching.
+ARG IMAGE_TAG
+ENV IMAGE_TAG=$IMAGE_TAG
+
 
 ###
 
