@@ -8,7 +8,7 @@ use Roots\WPConfig\Config;
 
 /**
  * Amazon S3 and CloudFront - assets.
- * 
+ *
  * This class contains functions related to serving build assets via Amazon S3 and CloudFront.
  */
 
@@ -59,7 +59,7 @@ class AmazonS3AndCloudFrontAssets
 
     /**
      * Set the Amazon_S3_And_CloudFront instance.
-     * 
+     *
      * @param Amazon_S3_And_CloudFront $as3cf_instance
      * @return void
      */
@@ -71,9 +71,9 @@ class AmazonS3AndCloudFrontAssets
 
     /**
      * On init, check if the assets exist on the CDN.
-     * 
+     *
      * Get the result from `checkManifestsSummaryWithCache` and store it in a class property.
-     * 
+     *
      * @return void
      */
 
@@ -84,20 +84,21 @@ class AmazonS3AndCloudFrontAssets
 
     /**
      * Find an item in an array.
-     * 
+     *
      * When we upgrade to PHP 8.4, we can use array_any instead.
-     * 
+     *
      * @param array $array
      * @param callable $callback
-     * 
+     *
      * @return mixed
      */
 
     public function arrayAny($array, $callback)
     {
         foreach ($array as $entry) {
-            if (call_user_func($callback, $entry) === true)
+            if (call_user_func($callback, $entry) === true) {
                 return true;
+            }
         }
         return false;
     }
@@ -105,7 +106,7 @@ class AmazonS3AndCloudFrontAssets
 
     /**
      * Verify that assets exist and are accessible via the CDN.
-     * 
+     *
      * @return bool
      */
 
@@ -160,7 +161,7 @@ class AmazonS3AndCloudFrontAssets
 
     /**
      * A wrapper around checkManifestsSummary that caches the result.
-     * 
+     *
      * @return bool
      */
 
@@ -183,7 +184,7 @@ class AmazonS3AndCloudFrontAssets
 
     /**
      * Rewrite the URL of assets to be served via the CDN.
-     * 
+     *
      * @param string $src
      * @param string $handle
      *
