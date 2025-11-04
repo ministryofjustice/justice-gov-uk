@@ -77,6 +77,7 @@ jobs:
           < "$TPL_PATH"/ingress.tpl.yml    envsubst '${MODSEC_CONFIG}' > "$TPL_PATH"/ingress.yaml
           < "$TPL_PATH"/secret.tpl.yml     envsubst                    > "$TPL_PATH"/secret.yaml
           < "$TPL_PATH"/deployment.tpl.yml envsubst                    > "$TPL_PATH"/deployment.yaml
+          < "$TPL_PATH"/job.tpl.yml envsubst                           > "$TPL_PATH"/job.yaml
 
           # If the modsec-errors.tpl.yml file exists, perform find/replace on it
           if [ -f "$TPL_PATH"/modsec-errors.tpl.yml ]; then
