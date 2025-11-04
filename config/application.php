@@ -151,6 +151,9 @@ Config::define('SENTRY_PROFILE_SAMPLE_RATE', 1);
 // Set the WordPress language locale
 Config::define('WPLANG', 'en_GB');
 
+// Disable rewrite of enqueued assets to CDN.
+Config::define('DISABLE_CDN_ASSETS', env('DISABLE_CDN_ASSETS'));
+
 /**
  * Debugging Settings
  */
