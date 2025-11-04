@@ -112,7 +112,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: cloudfront-output
-                  key: cloudfront_url
+                  key: cloudfront_alias
             - name: DB_HOST
               valueFrom:
                 secretKeyRef:
