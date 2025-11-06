@@ -84,7 +84,7 @@ RUN mkdir /var/run/nginx-cache && \
 # contains gzip and module include
 COPY --chown=nginx:nginx deploy/config/nginx.conf /etc/nginx/nginx.conf
 
-COPY deploy/config/init/* /docker-entrypoint.d/
+COPY deploy/config/init/configure-real-ip.sh /docker-entrypoint.d/
 RUN chmod +x /docker-entrypoint.d/*
 RUN echo "# This file is configured at runtime." > /etc/nginx/real_ip.conf
 
