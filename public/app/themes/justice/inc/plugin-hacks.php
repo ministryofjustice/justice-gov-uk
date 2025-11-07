@@ -37,7 +37,8 @@ add_action('wp_enqueue_scripts', function () {
  * @param string $src The script source URL.
  * @return string Modified script tag without module/nomodule attributes.
  */
-function override_ccfw_script_type($tag, $handle, $src) {
+function override_ccfw_script_type($tag, $handle, $src)
+{
     // Only affect the ccfw-script handle
     if ('ccfw-script' === $handle) {
         // Return the original tag without module/nomodule attributes
