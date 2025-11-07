@@ -107,7 +107,7 @@ jobs:
           JOB_NAME=$(kubectl -n ${KUBE_NAMESPACE} get -f deploy/${{ inputs.environment }}/job.yaml -o jsonpath='{.metadata.name}')
 
           # Wait for the files to be pushed to S3
-          kubectl -n ${KUBE_NAMESPACE} wait --for=condition=complete --timeout=600s job/${JOB_NAME}
+          kubectl -n ${KUBE_NAMESPACE} wait --for=condition=complete --timeout=300s job/${JOB_NAME}
 
           # Rename job.yaml so that it is not re-applied
           mv deploy/${{ inputs.environment }}/job.yaml deploy/${{ inputs.environment }}/job.yaml.completed
