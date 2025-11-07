@@ -26,6 +26,29 @@ add_action('wp_enqueue_scripts', function () {
     ]);
 });
 
+
+/**
+ * Override the script_loader_tag for ccfw-script to remove module/nomodule attributes
+ *
+ * This is necessary because modules require a CORS header which is not provided by our CloudFront setup.
+ *
+ * @param string $tag The original script tag.
+ * @param string $handle The script handle.
+ * @param string $src The script source URL.
+ * @return string Modified script tag without module/nomodule attributes.
+ */
+function override_ccfw_script_type($tag, $handle, $src) {
+    // Only affect the ccfw-script handle
+    if ('ccfw-script' === $handle) {
+        // Return the original tag without module/nomodule attributes
+        return '<script id="ccfw-script" src="' . esc_url($src) . '"></script>';
+    }
+    return $tag;
+}
+
+add_filter('script_loader_tag', 'override_ccfw_script_type', 20, 3);
+
+
 if (class_exists('PPVersionNotices\Module\TopNotice\Module')) {
     // Remove the 'revisionary' Upgrade to Pro notice
     add_filter(\PPVersionNotices\Module\TopNotice\Module::SETTINGS_FILTER, function ($settings) {
