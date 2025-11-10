@@ -99,6 +99,19 @@ jobs:
           kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${KUBE_NAMESPACE}
           kubectl config use-context ${KUBE_CLUSTER}
 
-      - name: "Apply manifest files"
+      - name: "Apply job.yaml and wait for completion"
+        run: |
+          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ inputs.environment }}/job.yaml
+
+          # Get the job name
+          JOB_NAME=$(kubectl -n ${KUBE_NAMESPACE} get -f deploy/${{ inputs.environment }}/job.yaml -o jsonpath='{.metadata.name}')
+
+          # Wait for the files to be pushed to S3
+          kubectl -n ${KUBE_NAMESPACE} wait --for=condition=complete --timeout=300s job/${JOB_NAME}
+
+          # Rename job.yaml so that it is not re-applied
+          mv deploy/${{ inputs.environment }}/job.yaml deploy/${{ inputs.environment }}/job.yaml.completed
+
+      - name: "Apply remaining manifest files"
         run: |
           kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ inputs.environment }}

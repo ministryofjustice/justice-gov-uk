@@ -4,6 +4,7 @@ export AWS_CLI_ARGS=""
 # Truncate $IMAGE_TAG to 8 chars.
 export IMAGE_TAG=$(echo $IMAGE_TAG | cut -c1-8)
 export S3_DESTINATION="s3://$AWS_S3_BUCKET/build/$IMAGE_TAG"
+export S3_LATEST="s3://$AWS_S3_BUCKET/builds/latest"
 export S3_MANIFESTS="s3://$AWS_S3_BUCKET/build/manifests/"
 export S3_MANIFEST="s3://$AWS_S3_BUCKET/build/manifests/$IMAGE_TAG.json"
 export S3_SUMMARY="s3://$AWS_S3_BUCKET/build/manifests/summary.jsonl"
@@ -79,7 +80,19 @@ fi
 
 
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
-# 6️⃣ Copy the list of uploaded files to S3
+# 6️⃣ Create latest build copy
+# ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
+
+echo "Creating latest build copy..."
+
+# Create a copy of the current build at builds/latest for redirecting to.
+# This uses S3-to-S3 copy which is faster than uploading from local again.
+aws $AWS_CLI_ARGS s3 sync $S3_DESTINATION $S3_LATEST --delete
+catch_error $? "aws s3 sync $S3_DESTINATION $S3_LATEST --delete"
+
+
+# ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
+# 7️⃣ Copy the list of uploaded files to S3
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
 
 echo "Copying manifest to $S3_MANIFEST..."
@@ -92,7 +105,7 @@ catch_error $? "aws s3 cp ./mainfest.json $S3_MANIFEST"
 
 
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
-# 7️⃣ Append this manifest to the summary
+# 8️⃣ Append this manifest to the summary
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
 
 echo "Getting summary file..."
@@ -121,7 +134,7 @@ catch_error $? "aws s3 cp ./summary.jsonl $S3_SUMMARY"
 
 
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
-# 8️⃣ Manage the lifecycle of old builds
+# 9️⃣ Manage the lifecycle of old builds
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
 
 # Here we will:
@@ -253,10 +266,11 @@ fi
 
 
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
-# 9️⃣ Report on actions taken
+# 🔟 Report on actions taken
 # ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░  ░░
 
 echo "Assets pushed to:            $S3_DESTINATION"
+echo "Latest build copied to:      $S3_LATEST"
 echo "Manifest pushed to:          $S3_MANIFEST"
 echo "Summary pushed to:           $S3_SUMMARY"
 echo "Builds deleted:              $BUILDS_TO_DELETE_COUNT"
