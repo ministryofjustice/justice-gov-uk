@@ -74,7 +74,7 @@ $content_id = 'sidebar-block-content-' . sanitize_title($args['title']) . ($args
                         'variant' => 'light',
                         'type' => 'input',
                         'input_type' => 'reset',
-                        'button_text' => 'Clear filters',
+                        'button_text' => 'Clear',
                         'disabled' => $args['no_query'],
                     ]); ?>
                 </div>

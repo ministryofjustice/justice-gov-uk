@@ -32,7 +32,9 @@
 @use "../components/text-input-form/text-input-form";
 @use "../components/to-the-top/to-the-top";
 
+@use "../patch/cookies";
 
+@use "app/home";
 @use "app/debug";
 @use "app/plugins";
 

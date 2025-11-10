@@ -9,10 +9,10 @@
     }
 
     &__article {
-        @include mixins.grid-row(1, 4);
+        @include mixins.grid-row(1, 6);
 
         @media screen and (min-width: mixins.$justice-lg) {
-            @include mixins.grid-row(4, 6);
+            @include mixins.grid-row(4, 8);
         }
     }
 
@@ -52,7 +52,7 @@
         &--right {
             display: none;
             @media screen and (min-width: mixins.$justice-lg) {
-                @include mixins.grid-row(10, 3);
+                @include mixins.grid-row(12, 3);
             }
         }
 
@@ -67,7 +67,8 @@
             @include mixins.spacing('margin', 6, 'top');
             @media screen and (min-width: mixins.$justice-lg) {
                 &:first-child {
-                    @include mixins.spacing('margin', 8, 'top');
+                    @include mixins.spacing('margin', 9, 'top');
+                    @include mixins.spacing('margin', 9, 'bottom');
                 }
             }
         }

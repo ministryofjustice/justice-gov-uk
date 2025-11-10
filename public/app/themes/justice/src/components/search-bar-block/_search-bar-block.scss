@@ -45,6 +45,10 @@
 
     &__results-text {
         @include mixins.body;
+        background-color: #1e71b8;
+        padding: 7px 14px 7px;
+        color: white;
+        font-weight: 400;
     }
 
     &__filter.disabled {
