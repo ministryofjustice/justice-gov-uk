@@ -283,7 +283,7 @@ class AmazonS3AndCloudFrontAssets
             return $value;
         }
 
-        if(in_array($handle, ['thickbox', 'zxcvbn-async'], true)) {
+        if (in_array($handle, ['thickbox', 'zxcvbn-async'], true)) {
             $search = get_home_url(null, '/wp/wp-includes/js');
             $search_escaped = str_replace('/', '\/', $search);
 
