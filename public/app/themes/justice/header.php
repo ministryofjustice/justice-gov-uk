@@ -17,7 +17,7 @@ use MOJ\Justice\Header;
     <link rel="shortcut icon" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/img/icon/fav/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo esc_url(get_template_directory_uri()); ?>/dist/img/icon/fav/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Justice UK" />
-    <?php // Prevent webmanifest from being served by the CDN. 
+    <?php // Prevent webmanifest from being served by the CDN.
         global $moj_skip_next_cdn_rewrite;
         $moj_skip_next_cdn_rewrite = true;
     ?>
