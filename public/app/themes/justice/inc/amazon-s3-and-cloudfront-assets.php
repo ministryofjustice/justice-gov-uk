@@ -21,7 +21,7 @@ class AmazonS3AndCloudFrontAssets
     private bool $use_cloudfront_for_assets = false;
 
     private string $cloudfront_host;
-    private string $cloudfront_asset_url;
+    private array $cloudfront_asset_urls;
 
     private Amazon_S3_And_CloudFront $as3cf;
 
@@ -47,13 +47,21 @@ class AmazonS3AndCloudFrontAssets
         $this->cloudfront_host = $_ENV['CLOUDFRONT_URL'];
         // Set the scheme/protocol for CloudFront, default to https.
         $cloudfront_scheme = isset($_ENV['CLOUDFRONT_SCHEME']) && $_ENV['CLOUDFRONT_SCHEME'] === 'http' ? 'http' : 'https';
-        // Set the CloudFront asset URL.
-        $this->cloudfront_asset_url = $cloudfront_scheme . '://' . $this->cloudfront_host . '/build/' . $this->image_tag;
+        
+        // Set the CloudFront asset URLs.
+        // - tagged URL includes the image tag, and should be used for theme assets like css and js.
+        // - untagged URL points to 'latest' and is used for other assets like images.
+        $this->cloudfront_asset_urls = [
+            'tagged' => $cloudfront_scheme . '://' . $this->cloudfront_host . '/build/' . $this->image_tag,
+            'untagged' => $cloudfront_scheme . '://' . $this->cloudfront_host . '/build/latest',
+        ];
 
         add_action('as3cf_ready', [$this, 'setAs3cfInstance']);
         add_action('init', [$this, 'init']);
+        add_filter('template_directory_uri', [$this, 'filterTemplateDirectoryUri'], 10, 1);
         add_filter('style_loader_src', [$this, 'rewriteSrc'], 10, 2);
         add_filter('script_loader_src', [$this, 'rewriteSrc'], 10, 2);
+        add_filter('wp_filterable_script_extra_tag', [$this, 'modifyScriptExtra'], 10, 2);
         add_filter('wp_resource_hints', [$this, 'registerResourceHints'], 10, 2);
     }
 
@@ -182,34 +190,64 @@ class AmazonS3AndCloudFrontAssets
         return  $assets_exist;
     }
 
+
+    /**
+     * When `get_template_directory_uri` is called, filter the URL to use the CDN if applicable.
+     *
+     * Here, the home url will be replaced with the CloudFront untagged URL.
+     * e.g. https://www.justice.gov.uk/app/themes/justice -> https://cdn.www.justice.gov.uk/build/latest/app/themes/justice
+     * This URL is suitable for favicons, theme images, etc.
+     *
+     * @param string $template_directory_uri
+     * @return string
+     */
+    public function filterTemplateDirectoryUri(string $template_directory_uri): string
+    {
+        if (!$this->use_cloudfront_for_assets) {
+            return $template_directory_uri;
+        }
+
+        // If the host is not the same as WP_HOME, then return early.
+        if (parse_url($template_directory_uri, PHP_URL_HOST) !== $this->home_host) {
+            return $template_directory_uri;
+        }
+
+        return str_replace(get_home_url(), $this->cloudfront_asset_urls['untagged'], $template_directory_uri);
+    }
+
     /**
      * Rewrite the URL of assets to be served via the CDN.
+     *
+     * Similar to `filterTemplateDirectoryUri`, but for style and script URLs.
+     * We ensure that theme CSS and JS files are served via the tagged CloudFront URL.
+     * This means that a certain version of the application, will always get the correct version of the CSS and JS files.
+     * e.g. https://www.justice.gov.uk/app/themes/justice -> https://cdn.www.justice.gov.uk/build/abcd1234/app/themes/justice
+     * and  https://cdn.www.justice.gov.uk/build/latest/app/themes/justice -> https://cdn.www.justice.gov.uk/build/abcd1234/app/themes/justice
      *
      * @param string $src
      * @param string $handle
      *
      * @return string
      */
-
     public function rewriteSrc(string $src, string $handle): string
     {
         if (!$this->use_cloudfront_for_assets) {
             return $src;
         }
 
-        // If the host is not the same as WP_HOME, then return early.
-        if (parse_url($src, PHP_URL_HOST) !== $this->home_host) {
-            return $src;
+        // If the host is the same as WP_HOME, then replace with tagged CloudFront URL.
+        if (parse_url($src, PHP_URL_HOST) === $this->home_host) {
+            return str_replace(get_home_url(), $this->cloudfront_asset_urls['tagged'], $src);
         }
 
-        // Fonts cannot be served via the CDN, because browsers do not send cookies for `@font-face` requests.
-        // Exclude the core-css handle from being rewritten, because it uses `@font-face`.
-        if (in_array($handle, ['core-css'])) {
-            return $src;
+        // If the host is the CloudFront host, replace untagged with tagged URL.
+        if (parse_url($src, PHP_URL_HOST) === $this->cloudfront_host) {
+            return str_replace($this->cloudfront_asset_urls['untagged'], $this->cloudfront_asset_urls['tagged'], $src);
         }
 
-        return str_replace(get_home_url(), $this->cloudfront_asset_url, $src);
+        return $src;
     }
+
 
     /**
      * Register a DNS prefetch tag for the pull domain if rewriting is enabled.
@@ -219,7 +257,6 @@ class AmazonS3AndCloudFrontAssets
      *
      * @return array
      */
-
     public function registerResourceHints(array $hints, string $relation_type): array
     {
         if ($this->use_cloudfront_for_assets && 'dns-prefetch' === $relation_type) {
@@ -227,6 +264,36 @@ class AmazonS3AndCloudFrontAssets
         }
 
         return $hints;
+    }
+
+
+    /**
+     * Modify script localization for certain scripts to update URLs to use CloudFront.
+     *
+     * Some scripts will use WordPress localization to add inline scripts that contain URLs.
+     * Here, we replace those URLs with the tagged CloudFront URL.
+     *
+     * @param string $value  The original extra script content.
+     * @param string $handle The handle of the script the extra script is attached to.
+     * @return string The modified extra script content.
+     */
+    public function modifyScriptExtra($value, $handle)
+    {
+        if (!$this->use_cloudfront_for_assets) {
+            return $value;
+        }
+
+        if(in_array($handle, ['thickbox', 'zxcvbn-async'], true)) {
+            $search = get_home_url(null, '/wp/wp-includes/js');
+            $search_escaped = str_replace('/', '\/', $search);
+
+            $replace = $this->cloudfront_asset_urls['tagged'] . '/wp/wp-includes/js';
+            $replace_escaped = str_replace('/', '\/', $replace);
+
+            $value = str_replace($search_escaped, $replace_escaped, $value);
+        }
+
+        return $value;
     }
 }
 

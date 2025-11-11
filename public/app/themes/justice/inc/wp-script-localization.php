@@ -65,19 +65,15 @@ class WpScriptLocalization
     /**
      * Replace the global $wp_scripts object with an instance of WpFilterableScripts.
      *
-     * If we are on a frontend page, replace the global $wp_scripts object with an instance
-     * of our custom WpFilterableScripts class. This class extends WP_Scripts and allows
-     * us to filter the inline scripts added via wp_localize_script().
+     * This class extends WP_Scripts and allows us to filter the inline scripts added
+     * via `wp_localize_script()` or the localize method in `script-loader.php`.
      *
      * @see justice/inc/wp-scripts.php
+     * @see justice/inc/amazon-s3-and-cloudfront-assets.php
+     * @see wp/wp-includes/script-loader.php
      */
     public static function replaceWpScripts(): void
     {
-        // Do nothing if we on the login screen or in the admin area.
-        if (isset($GLOBALS['pagenow']) && ($GLOBALS['pagenow'] === 'wp-login.php' || is_admin())) {
-            return;
-        }
-
         $fscripts              = new WpFilterableScripts;
         $GLOBALS['wp_scripts'] = $fscripts;
     }

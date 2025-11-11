@@ -54,6 +54,10 @@ class Security
             array_push($this->known_hosts, $custom_s3_host);
         }
 
+        if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
+            array_push($this->known_hosts, 'minio');
+        }
+
         if ($loopback_url = Config::get('WP_LOOPBACK')) {
             // Push the loopback URL host to known_hosts.
             array_push($this->known_hosts, parse_url($loopback_url, PHP_URL_HOST));
