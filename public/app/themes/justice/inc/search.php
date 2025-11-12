@@ -410,7 +410,7 @@ class Search
     /**
      * Get the form action URL for the search form.
      *
-     * Including the search term as part of the URL path here, 
+     * Including the search term as part of the URL path here,
      * means that we don't need to include it as a hidden input in the form.
      *
      * A benefit to this is that we are avoiding the redirect that would happen
