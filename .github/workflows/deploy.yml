@@ -68,7 +68,7 @@ jobs:
             base64 --decode
           );
 
-          # Get the 403, 404 and error pages, and indent with 4 spaces and then trim the leading spaces.
+          # Get the 403, 404 and 429 error pages, and indent with 4 spaces and then trim the leading spaces.
           export HTML_403=$(cat "$ERROR_PAGES_PATH/403.html" | sed 's/^/    /' | sed '1s/^ *//')
           export HTML_404=$(cat "$ERROR_PAGES_PATH/404.html" | sed 's/^/    /' | sed '1s/^ *//')
           export HTML_429=$(cat "$ERROR_PAGES_PATH/429.html" | sed 's/^/    /' | sed '1s/^ *//')
