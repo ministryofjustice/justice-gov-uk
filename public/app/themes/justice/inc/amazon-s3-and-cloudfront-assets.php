@@ -198,12 +198,21 @@ class AmazonS3AndCloudFrontAssets
      * e.g. https://www.justice.gov.uk/app/themes/justice -> https://cdn.www.justice.gov.uk/build/latest/app/themes/justice
      * This URL is suitable for favicons, theme images, etc.
      *
+     * In certain cases, we may want to skip the CDN rewrite, e.g. for the webmanifest file, because of CORS issues.
+     * In those cases, set the global `$moj_skip_next_cdn_rewrite` to true before calling `get_template_directory_uri()`.
+     *
      * @param string $template_directory_uri
      * @return string
      */
     public function filterTemplateDirectoryUri(string $template_directory_uri): string
     {
         if (!$this->use_cloudfront_for_assets) {
+            return $template_directory_uri;
+        }
+
+        // Check for the global to skip CDN rewrite.
+        if (!empty($GLOBALS['moj_skip_next_cdn_rewrite'])) {
+            unset($GLOBALS['moj_skip_next_cdn_rewrite']);
             return $template_directory_uri;
         }
 
