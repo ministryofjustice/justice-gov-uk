@@ -1,4 +1,4 @@
-ARG version_nginx=1.26.3
+ARG version_nginx=1.28.0
 
 FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 
@@ -170,7 +170,7 @@ RUN mkdir -p ./vendor-assets && \
 ###
 
 
-FROM node:20 AS assets-build
+FROM node:24 AS assets-build
 
 WORKDIR /node
 COPY ./public/app/themes/justice/src               ./src
