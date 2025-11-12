@@ -6,7 +6,7 @@ metadata:
   labels:
     app: ${KUBE_NAMESPACE}
 spec:
-  replicas: 2
+  replicas: 6
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -45,11 +45,13 @@ spec:
               drop: ["ALL"]
           resources:
             limits:
-              cpu: 500m
+              # If a pod exceeds its CPU limit, Kubernetes will simply throttle the pod.
+              cpu: "2"
+              # If a pod exceeds its memory limit, Kubernetes will kill the pod.
               memory: 200Mi
             requests:
-              cpu: 500m
-              memory: 200Mi
+              cpu: 20m # Baseline CPU under usual load is ~4m, that's 20% of the 20m request.
+              memory: 100Mi
           readinessProbe:
             httpGet:
               path: /health
@@ -71,10 +73,12 @@ spec:
             readOnlyRootFilesystem: true
           resources:
             limits:
-              cpu: 1000m
+              # If a pod exceeds its CPU limit, Kubernetes will simply throttle the pod.
+              cpu: "4"
+              # If a pod exceeds its memory limit, Kubernetes will kill the pod.
               memory: 500Mi
             requests:
-              cpu: 600m
+              cpu: 400m # Baseline CPU under usual load is ~80m, that's 20% of the 400m request.
               memory: 500Mi
           # Check frequently during startup, so that scaling up can happen as fast as possible.
           startupProbe:
