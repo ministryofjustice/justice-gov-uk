@@ -19,6 +19,7 @@ mix
     .sass('src/sass/admin.scss', 'dist/css/admin.min.css')
     .sass('src/sass/editor.scss', 'dist/css/editor.min.css')
     .sass('src/sass/login.scss', 'dist/css/login.min.css')
+    .sass('src/sass/stories.scss', 'dist/css/stories.min.css')
     .copy('src/archived/', 'dist/archived/')
     .copy('src/img/', 'dist/img/')
     .copy('dist/*.asset.php', 'dist/php')

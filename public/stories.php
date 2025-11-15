@@ -203,6 +203,16 @@ class Stories
 
         return $return_array;
     }
+
+    /**
+     * Return the date in epoch format, to prevent static assets being cached.
+     *
+     * @return int
+     */
+    public static function getEpochDate()
+    {
+        return (new DateTime())->getTimestamp();
+    }
 };
 
 new Stories();
@@ -219,37 +229,8 @@ if (!defined('IN_STORIES')) {
 
 <head>
     <title>Justice UK Components</title>
-    <link rel="stylesheet" href="/app/themes/justice/dist/css/v2-app.min.css?ver=2">
-    <style>
-        body {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: unset;
-            padding: 20px;
-            background: #f9f9f9;
-        }
-
-        .component-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .story-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        @media screen and (min-width: 1024px) {
-            .story-wrapper--sidebar {
-                /* On large screen */
-                max-width: 400px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/app/themes/justice/dist/css/v2-app.min.css?ver=<?= Stories::getEpochDate() ?>">
+    <link rel="stylesheet" href="/app/themes/justice/dist/css/stories.min.css?ver=<?= Stories::getEpochDate() ?>">
 </head>
 
 <body>
@@ -292,7 +273,7 @@ if (!defined('IN_STORIES')) {
 
     <?php endforeach; ?>
 
-    <script src="/app/themes/justice/dist/v2-app.min.js"></script>
+    <script src="/app/themes/justice/dist/v2-app.min.js?ver=<?= Stories::getEpochDate() ?>"></script>
 </body>
 
 </html>
