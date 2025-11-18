@@ -31,8 +31,8 @@ RUN rm zz-docker.conf && \
 ## Set our pool configuration
 COPY deploy/config/php-pool.conf pool.conf
 
-# Don't log every request.
-RUN perl -pi -e 's#^(?=access\.log\b)#;#' /usr/local/etc/php-fpm.d/docker.conf
+# Disable access logging in PHP-FPM to reduce log noise.
+RUN sed -i 's/^[[:space:]]*access\.log/;access.log/' /usr/local/etc/php-fpm.d/docker.conf
 
 # Create volumes for so that the directories are writeable when the container is in read-only mode.
 VOLUME /tmp /var/www/html/public/app/uploads
