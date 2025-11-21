@@ -1,0 +1,290 @@
+# ClamAV Service - Client access point
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamav
+  namespace: justice-gov-uk-demo
+  labels:
+    app: clamav
+spec:
+  type: ClusterIP
+  selector:
+    app: clamav
+  ports:
+    - name: clamd
+      port: 3310
+      targetPort: 3310
+      protocol: TCP
+---
+# Headless Service - Required for StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamav-hl
+  namespace: justice-gov-uk-demo
+  labels:
+    app: clamav
+spec:
+  clusterIP: None
+  selector:
+    app: clamav
+  ports:
+    - name: clamd
+      port: 3310
+      targetPort: 3310
+      protocol: TCP
+---
+# ClamAV StatefulSet - Provides antivirus scanning with HA
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: clamav
+  namespace: justice-gov-uk-demo
+  labels:
+    app: clamav
+spec:
+  serviceName: clamav-hl
+  replicas: 2
+  podManagementPolicy: Parallel
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: clamav
+
+  template:
+    metadata:
+      labels:
+        app: clamav
+    spec:
+      # High Availability: Spread pods across nodes
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: clamav
+                topologyKey: kubernetes.io/hostname
+      
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: clamav
+
+      containers:
+        - name: clamav
+          image: clamav/clamav:stable
+          imagePullPolicy: IfNotPresent
+          
+          ports:
+            - name: clamd
+              containerPort: 3310
+              protocol: TCP
+          
+          env:
+            - name: POD_INDEX
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['apps.kubernetes.io/pod-index']
+          
+          # Stagger freshclam updates to avoid simultaneous database updates
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              idx="${POD_INDEX:-0}"
+              case "$idx" in
+                0) export FRESHCLAM_CHECKS=11 ;;
+                1) export FRESHCLAM_CHECKS=13 ;;
+                *) export FRESHCLAM_CHECKS=17 ;;
+              esac
+              echo "Using FRESHCLAM_CHECKS=$FRESHCLAM_CHECKS (pod index $idx)"
+              exec /init-unprivileged
+
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "3Gi"
+            limits:
+              cpu: "2"
+              memory: "5Gi"
+          
+          volumeMounts:
+            - name: clamdb
+              mountPath: /var/lib/clamav
+          
+          # Health checks
+          startupProbe:
+            tcpSocket:
+              port: 3310
+            failureThreshold: 60
+            periodSeconds: 10
+          
+          readinessProbe:
+            tcpSocket:
+              port: 3310
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          
+          livenessProbe:
+            tcpSocket:
+              port: 3310
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+          
+          # Container security
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+
+      # Pod security context
+      securityContext:
+        runAsUser: 100
+        runAsGroup: 101
+        fsGroup: 101
+        runAsNonRoot: true
+        seccompProfile:
+          type: "RuntimeDefault"
+  
+  # Persistent storage for each pod
+  volumeClaimTemplates:
+    - metadata:
+        name: clamdb
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+---
+# Pod Disruption Budget - Ensures availability during updates
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: clamav-pdb
+  namespace: justice-gov-uk-demo
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: clamav
+---
+# Network Policy - Restricts network access for security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: clamav-restrict
+  namespace: justice-gov-uk-demo
+spec:
+  podSelector:
+    matchLabels:
+      app: clamav
+  policyTypes:
+    - Ingress
+    - Egress
+  
+  # Allow only approved clients to access ClamAV
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              clamav-client: "true"
+      ports:
+        - protocol: TCP
+          port: 3310
+  
+  # Allow DNS and freshclam updates only
+  egress:
+    # DNS resolution
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    
+    # HTTPS for freshclam signature updates
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+      ports:
+        - protocol: TCP
+          port: 443
+---
+# CronJob - Weekly S3 Antivirus Scan
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: s3-antivirus-scan-weekly
+  namespace: justice-gov-uk-demo
+spec:
+  schedule: "0 2 * * 4" # At 02:00 on Thursday
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          serviceAccountName: s3-av-serviceaccount
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            seccompProfile:
+              type: "RuntimeDefault"
+          containers:
+          - name: s3-antivirus-scan
+            image: ghcr.io/ministryofjustice/s3-antivirus-scan:1.0
+            imagePullPolicy: Always
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "100m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+            env:
+              - name: CLAMAV_PORT
+                value: "3310"
+              - name: CLAMAV_MAX_FILE_SIZE
+                value: "250000000"  # 250MB in bytes
+              - name: S3_BUCKET
+                valueFrom:
+                  secretKeyRef:
+                    name: s3-bucket-output
+                    key: bucket_name
+              - name: S3_HOSTNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: s3-bucket-output
+                    key: bucket_domain_name
+              - name: S3_ENDPOINT
+                value: https://s3.eu-west-2.amazonaws.com
+              - name: S3_REGION
+                value: eu-west-2
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: 
+                drop: ["ALL"]
+          restartPolicy: Never
