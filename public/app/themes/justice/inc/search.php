@@ -157,7 +157,7 @@ class Search
         }
 
         // Unslash because wp adds \ before quotes. Then immediately urlencode.
-        $encoded_search = urlencode(wp_unslash($search));
+        $encoded_search = is_string($search) ? urlencode(wp_unslash($search)) : '';
 
         return home_url('/search/' . $encoded_search .  $url_append);
     }
