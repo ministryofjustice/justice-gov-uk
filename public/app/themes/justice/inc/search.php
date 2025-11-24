@@ -18,6 +18,10 @@ class Search
         add_filter('query_vars', fn($qv) =>  array_merge($qv, array('parent')));
         // Update the search query.
         add_action('pre_get_posts', [$this, 'searchFilter']);
+        // Modify the html meta tag to prevent search results pages from being indexed, and crawlers following links.
+        add_action('wp_robots', fn() => is_search() ? ['noindex' => true, 'nofollow' => true] : []);
+        // Disallow /search/ in robots.txt
+        add_filter('robots_txt', fn($output) => $output . 'Disallow: /search/' . PHP_EOL);
 
         // Relevanssi - prevent sending documents to the Relevanssi API.
         add_filter('option_relevanssi_do_not_call_home', fn() => 'on');
@@ -153,7 +157,7 @@ class Search
         }
 
         // Unslash because wp adds \ before quotes. Then immediately urlencode.
-        $encoded_search = urlencode(wp_unslash($search));
+        $encoded_search = is_string($search) ? urlencode(wp_unslash($search)) : '';
 
         return home_url('/search/' . $encoded_search .  $url_append);
     }
@@ -400,6 +404,23 @@ class Search
         }
 
         return $return_array;
+    }
+
+
+    /**
+     * Get the form action URL for the search form.
+     *
+     * Including the search term as part of the URL path here,
+     * means that we don't need to include it as a hidden input in the form.
+     *
+     * A benefit to this is that we are avoiding the redirect that would happen
+     * e.g. ?s=example to /search/example
+     *
+     * @return string The URL to be used as the form action.
+     */
+    public static function getFormAction(): string
+    {
+        return esc_url('/search/' . urlencode(wp_unslash(get_search_query())));
     }
 
 

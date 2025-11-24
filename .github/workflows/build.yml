@@ -33,13 +33,18 @@ jobs:
       - name: "Build & Push to ECR"
         run: |
           docker image build -t $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG --target build-fpm \
-            --build-arg RELEVANSSI_API_KEY="$RELEVANSSI_API_KEY" .
+            --build-arg RELEVANSSI_API_KEY --build-arg IMAGE_TAG .
           
           docker image build -t $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG --target build-nginx \
-             --build-arg RELEVANSSI_API_KEY="$RELEVANSSI_API_KEY" .
+             --build-arg RELEVANSSI_API_KEY .
+
+          docker image build -t $REGISTRY/$REPOSITORY:s3-push-$IMAGE_TAG --target build-s3-push \
+            --build-arg RELEVANSSI_API_KEY --build-arg IMAGE_TAG .
           
           docker image push $REGISTRY/$REPOSITORY:fpm-$IMAGE_TAG
           docker image push $REGISTRY/$REPOSITORY:nginx-$IMAGE_TAG
+          docker image push $REGISTRY/$REPOSITORY:s3-push-$IMAGE_TAG
+
         env:
           REGISTRY: ${{ steps.ecr-login.outputs.registry }}
           REPOSITORY: ${{ vars.ECR_REPOSITORY }}

@@ -157,6 +157,6 @@ class Core
         $width = isset($args['width']) && is_int($args['width']) ? $args['width'] : 26;
         $height = isset($args['height']) && is_int($args['height']) ? $args['height'] : 26;
 
-        return sprintf('<img class="avatar avatar-26 photo" width="%d" height="%d" src="/app/themes/justice/dist/img/avatar.jpg" />', $width, $height);
+        return sprintf('<img class="avatar avatar-26 photo" width="%d" height="%d" src="%s/dist/img/avatar.jpg" />', $width, $height, esc_url(get_template_directory_uri()));
     }
 }
