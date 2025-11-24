@@ -16,7 +16,10 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 60
+          # Rely on CPU usage for scaling more than memory usage.
+          # Baseline CPU is usually around 20% of the request under normal load.
+          # Scale up when average CPU across pods goes above 40% of the requested CPU.
+          averageUtilization: 40
     - type: Resource
       resource:
         name: memory
