@@ -44,6 +44,12 @@ In a terminal, move to the directory where you want to install the application. 
 git clone https://github.com/ministryofjustice/justice-gov-uk.git
 ```
 
+or, using SSH:
+
+```bash
+git clone git@github.com:ministryofjustice/justice-gov-uk.git
+```
+
 Change directories:
 
 ```bash
@@ -72,6 +78,8 @@ make
 
 During the `make` process, the Dory proxy will attempt to install. You will be guided though an installation, if needed.
 
+You will be prompted for the Relevanssi Premium API key, this is necessary for the composer install step.
+
 ### Services
 
 You will have five services running with different access points. They are:
@@ -89,6 +97,14 @@ On first use, the application will need initializing with the following command.
 
 ```bash
 composer install
+```
+
+Next, you can import the local database with a WP_CLI import command.
+
+Place a copy of the local database at the root of the project, named `local.sql`, then run:
+
+```bash
+wp db import --defaults local.sql
 ```
 
 **Node**<br>
