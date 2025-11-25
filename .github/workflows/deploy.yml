@@ -32,6 +32,7 @@ jobs:
           ECR_URL: "${{ inputs.registry }}/${{ vars.ECR_REPOSITORY }}"
           IMAGE_TAG_NGINX: "nginx-${{ github.sha }}"
           IMAGE_TAG_FPM: "fpm-${{ github.sha }}"
+          IMAGE_TAG_S3_PUSH: "s3-push-${{ github.sha }}"
           GOV_NOTIFY_API_KEY: ${{ secrets.GOV_NOTIFY_API_KEY }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           AUTH_KEY: ${{ secrets.AUTH_KEY }}
@@ -67,15 +68,17 @@ jobs:
             base64 --decode
           );
 
-          # Get the 403 and 404 error pages, and indent with 4 spaces and then trim the leading spaces.
+          # Get the 403, 404 and 429 error pages, and indent with 4 spaces and then trim the leading spaces.
           export HTML_403=$(cat "$ERROR_PAGES_PATH/403.html" | sed 's/^/    /' | sed '1s/^ *//')
           export HTML_404=$(cat "$ERROR_PAGES_PATH/404.html" | sed 's/^/    /' | sed '1s/^ *//')
+          export HTML_429=$(cat "$ERROR_PAGES_PATH/429.html" | sed 's/^/    /' | sed '1s/^ *//')
 
           ## Perform find/replace 
           ## Only replace $MODSEC_CONFIG from ingress.tpl.yml
           < "$TPL_PATH"/ingress.tpl.yml    envsubst '${MODSEC_CONFIG}' > "$TPL_PATH"/ingress.yaml
           < "$TPL_PATH"/secret.tpl.yml     envsubst                    > "$TPL_PATH"/secret.yaml
           < "$TPL_PATH"/deployment.tpl.yml envsubst                    > "$TPL_PATH"/deployment.yaml
+          < "$TPL_PATH"/job.tpl.yml        envsubst                    > "$TPL_PATH"/job.yaml
 
           # If the modsec-errors.tpl.yml file exists, perform find/replace on it
           if [ -f "$TPL_PATH"/modsec-errors.tpl.yml ]; then
@@ -97,6 +100,19 @@ jobs:
           kubectl config set-context ${KUBE_CLUSTER} --cluster=${KUBE_CLUSTER} --user=deploy-user --namespace=${KUBE_NAMESPACE}
           kubectl config use-context ${KUBE_CLUSTER}
 
-      - name: "Apply manifest files"
+      - name: "Apply job.yaml and wait for completion"
+        run: |
+          kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ inputs.environment }}/job.yaml
+
+          # Get the job name
+          JOB_NAME=$(kubectl -n ${KUBE_NAMESPACE} get -f deploy/${{ inputs.environment }}/job.yaml -o jsonpath='{.metadata.name}')
+
+          # Wait for the files to be pushed to S3
+          kubectl -n ${KUBE_NAMESPACE} wait --for=condition=complete --timeout=300s job/${JOB_NAME}
+
+          # Rename job.yaml so that it is not re-applied
+          mv deploy/${{ inputs.environment }}/job.yaml deploy/${{ inputs.environment }}/job.yaml.completed
+
+      - name: "Apply remaining manifest files"
         run: |
           kubectl -n ${KUBE_NAMESPACE} apply -f deploy/${{ inputs.environment }}

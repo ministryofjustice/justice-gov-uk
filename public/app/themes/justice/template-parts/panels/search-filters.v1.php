@@ -2,6 +2,7 @@
 
 defined('ABSPATH') || exit;
 
+use MOJ\Justice\Search;
 use MOJ\Justice\Taxonomies;
 
 $taxonomies = (new Taxonomies())->getTaxonomiesForFilterV1();
@@ -13,7 +14,7 @@ if (empty($taxonomies)) {
 ?>
 
 <div class="filter">
-    <form>
+    <form action="<?= Search::getFormAction(); ?>">
         <span class="title">Filter results by:</span>
 
         <?php foreach ($taxonomies as $taxonomy) : ?>
