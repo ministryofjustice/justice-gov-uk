@@ -18,13 +18,16 @@ k8s_pod := kubectl -n $(k8s_nsp) get pod -l app=justice-gov-uk-local -o jsonpath
 init: setup key-gen run
 
 d-compose: local-stop
-	docker compose up -d nginx phpmyadmin php-fpm
+	docker compose up -d
 
 d-shell: setup key-gen dory d-compose composer
 
 setup:
 	@chmod +x ./bin/*
 	@[ -f "./.env" ] || cp .env.example .env
+	@if grep -q 'RELEVANSSI_API_KEY=api_key_placeholder' .env; then \
+		read -p "Please set a valid RELEVANSSI_API_KEY in the .env file. Then press Enter to continue..."; \
+	fi
 
 restart:
 	@docker compose down php-fpm

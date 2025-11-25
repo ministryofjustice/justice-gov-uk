@@ -93,6 +93,11 @@ RUN apk add --update nano nodejs npm inotify-tools
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Add MariaDB client config to disable SSL by default
+# Without this, `wp db` commands fail because the local connection is not SSL-enabled
+RUN echo -e "[client]\nssl=0" > /home/nginx/.my.cnf \
+    && chown nginx:nginx /home/nginx/.my.cnf
+
 VOLUME ["/sock"]
 # nginx
 USER 101
