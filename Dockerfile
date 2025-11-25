@@ -1,4 +1,4 @@
-ARG version_nginx=1.26.3
+ARG version_nginx=1.28.0
 
 FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 
@@ -15,20 +15,10 @@ RUN addgroup -g 101 -S nginx; adduser -u 101 -S -D -G nginx nginx
 RUN mkdir /sock && \
     chown nginx:nginx /sock
 
-# Copy our init. script(s) and set them to executable
-COPY deploy/config/init/fpm-*.sh /usr/local/bin/docker-entrypoint.d/
-
-RUN chmod +x /usr/local/bin/docker-entrypoint.d/*
-
 # Copy our healthcheck scripts and set them to executable
 COPY bin/fpm-liveness.sh bin/fpm-readiness.sh bin/fpm-status.sh /usr/local/bin/fpm-health/
 
 RUN chmod +x /usr/local/bin/fpm-health/*
-
-# Copy our stop script and set it to executable
-COPY bin/fpm-stop.sh /usr/local/bin/fpm-stop.sh
-
-RUN chmod +x /usr/local/bin/fpm-stop.sh
 
 ## Change directory
 WORKDIR /usr/local/etc/php-fpm.d
@@ -45,6 +35,11 @@ COPY deploy/config/php-pool.conf pool.conf
 VOLUME /tmp /var/www/html/public/app/uploads
 
 WORKDIR /var/www/html
+
+# Set IMAGE_TAG at build time, we don't want this container to be run with an incorrect IMAGE_TAG.
+# Set towards the end of the Dockerfile to benefit from caching.
+ARG IMAGE_TAG
+ENV IMAGE_TAG=$IMAGE_TAG
 
 
 ###
@@ -84,7 +79,7 @@ RUN mkdir /var/run/nginx-cache && \
 # contains gzip and module include
 COPY --chown=nginx:nginx deploy/config/nginx.conf /etc/nginx/nginx.conf
 
-COPY deploy/config/init/* /docker-entrypoint.d/
+COPY deploy/config/init/configure-real-ip.sh /docker-entrypoint.d/
 RUN chmod +x /docker-entrypoint.d/*
 RUN echo "# This file is configured at runtime." > /etc/nginx/real_ip.conf
 
@@ -165,7 +160,7 @@ RUN mkdir -p ./vendor-assets && \
 ###
 
 
-FROM node:20 AS assets-build
+FROM node:24 AS assets-build
 
 WORKDIR /node
 COPY ./public/app/themes/justice/src               ./src
@@ -250,3 +245,35 @@ COPY --from=build-fpm-composer --chown=nginx:nginx /var/www/html/vendor-assets  
 # Grab assets for Nginx
 COPY --from=assets-build /node/dist        public/app/themes/justice/dist/
 COPY --from=assets-build /node/style.css   public/app/themes/justice/
+
+
+###
+
+
+FROM alpine:3.22 AS build-s3-push
+
+ARG user=s3pusher
+RUN addgroup --gid 3001 ${user} && adduser -D -G ${user} -g "${user} user" -u 3001 ${user}
+
+RUN apk add --no-cache aws-cli jq
+
+WORKDIR /usr/bin
+
+COPY deploy/config/init/s3-push-start.sh ./s3-push-start
+RUN chmod +x s3-push-start
+
+USER 3001
+
+# Go home...
+WORKDIR /home/s3pusher
+
+# Grab assets for pushing to s3
+COPY --from=build-fpm-composer /var/www/html/vendor-assets ./
+COPY --from=assets-build /node/dist public/app/themes/justice/dist/
+
+# Set IMAGE_TAG at build time, we don't want this container to be run with an incorrect IMAGE_TAG.
+# Set towards the end of the Dockerfile to benefit from caching.
+ARG IMAGE_TAG
+ENV IMAGE_TAG=$IMAGE_TAG
+
+ENTRYPOINT ["/bin/sh", "-c", "s3-push-start"]

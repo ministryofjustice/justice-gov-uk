@@ -45,7 +45,8 @@ if ($post_meta->hasPanel('search-filters')) {
 
     get_template_part('template-parts/panels/search-filters', null, [
         'fields' => $fields,
-        'hidden_inputs' => Search::getFormValues($field_names),
+        'hidden_inputs' => Search::getFormValues([...$field_names, 's']),
+        'form_action' => Search::getFormAction(),
         'is_mobile' => $is_mobile,
     ]);
 }

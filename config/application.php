@@ -63,7 +63,7 @@ if (!env('WP_ENVIRONMENT_TYPE') && in_array(WP_ENV, ['production', 'staging', 'd
 Config::define('WP_HOME', env('WP_HOME'));
 Config::define('WP_SITEURL', env('WP_SITEURL'));
 Config::define('WP_LOOPBACK', env('WP_LOOPBACK') ?: 'http://localhost:8080');
-Config::define('NGINX_HOST', 'http://' . (env('NGINX_IP') ?? 'nginx') . ':8080');
+Config::define('NGINX_PURGE_CACHE_URL', env('NGINX_PURGE_CACHE_URL') ?? 'http://nginx:8080/purge-cache');
 Config::define('CLAM_HOSTNAME', env('CLAM_HOSTNAME') ?: 'clamav');
 Config::define('CLAM_DISABLED', env('CLAM_DISABLED') ?: 'false');
 
@@ -150,6 +150,9 @@ Config::define('SENTRY_PROFILE_SAMPLE_RATE', 1);
 
 // Set the WordPress language locale
 Config::define('WPLANG', 'en_GB');
+
+// Disable rewrite of enqueued assets to CDN.
+Config::define('DISABLE_CDN_ASSETS', env('DISABLE_CDN_ASSETS'));
 
 /**
  * Debugging Settings
