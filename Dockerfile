@@ -172,6 +172,7 @@ FROM node:24 AS assets-build
 
 WORKDIR /node
 COPY ./public/app/themes/justice/src               ./src
+COPY ./public/app/themes/justice/.npmrc            ./.npmrc
 COPY ./public/app/themes/justice/style.css         ./style.css
 COPY ./public/app/themes/justice/jsconfig.json     ./jsconfig.json
 COPY ./public/app/themes/justice/package.json      ./package.json
