@@ -15,7 +15,7 @@ $component['stories']['Left'] = [
         'url' => '#',
     ],
     'image' => [
-        'url' => 'https://images.unsplash.com/photo-1589994965851-a8f479c573a9',
+        'url' => '/app/themes/justice/dist/img/scales-of-justice.jpg',
         'alt' => 'A statue of the scales of justice',
     ],
     'content' => "
