@@ -1,34 +1,9 @@
-# ClamAV Configuration
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: clamav-config
-  namespace: justice-gov-uk-dev
-  labels:
-    app: clamav
-data:
-  clamd.conf: |
-    # Default values
-    LogTime yes
-    LocalSocket /tmp/clamd.sock
-    TCPSocket 3310
-    # LogFile has been removed, use syslog instead
-    LogSyslog yes
-    # Unprivileged user
-    User clamav
-    # Increased limits
-    MaxFileSize 250M
-    MaxScanSize 250M
-    StreamMaxLength 250M
-    # Enable FIPS compliant hashing algorithms
-    FIPSCryptoHashLimits yes
----
 # ClamAV Service - Client access point
 apiVersion: v1
 kind: Service
 metadata:
   name: clamav
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-demo
   labels:
     app: clamav
 spec:
@@ -46,7 +21,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: clamav-hl
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-demo
   labels:
     app: clamav
 spec:
@@ -64,7 +39,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: clamav
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-demo
   labels:
     app: clamav
 spec:
@@ -92,7 +67,7 @@ spec:
                   matchLabels:
                     app: clamav
                 topologyKey: kubernetes.io/hostname
-
+      
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -116,7 +91,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.annotations['apps.kubernetes.io/pod-index']
-
+          
           # Stagger freshclam updates to avoid simultaneous database updates
           command:
             - /bin/sh
@@ -143,10 +118,6 @@ spec:
           volumeMounts:
             - name: clamdb
               mountPath: /var/lib/clamav
-            - name: clamav-config
-              mountPath: /etc/clamav/clamd.conf
-              subPath: clamd.conf
-              readOnly: true
           
           # Health checks
           startupProbe:
@@ -185,12 +156,6 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: "RuntimeDefault"
-      
-      volumes:
-        - name: clamav-config
-          configMap:
-            name: clamav-config
-            defaultMode: 0644
   
   # Persistent storage for each pod
   volumeClaimTemplates:
@@ -207,7 +172,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: clamav-pdb
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-demo
 spec:
   minAvailable: 1
   selector:
@@ -219,7 +184,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: clamav-restrict
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-demo
 spec:
   podSelector:
     matchLabels:
@@ -271,9 +236,9 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: s3-antivirus-scan-weekly
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-demo
 spec:
-  schedule: "0 2 * * 1" # At 02:00 on Monday
+  schedule: "0 2 * * 4" # At 02:00 on Thursday
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   jobTemplate:
