@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: clamav-config
-  namespace: justice-gov-uk-dev
+  namespace: justice-gov-uk-production
   labels:
     app: clamav
 data:
