@@ -26,7 +26,9 @@ setup:
 	@chmod +x ./bin/*
 	@[ -f "./.env" ] || cp .env.example .env
 	@if grep -q 'RELEVANSSI_API_KEY=api_key_placeholder' .env; then \
-		read -p "Please set a valid RELEVANSSI_API_KEY in the .env file. Then press Enter to continue..."; \
+		printf "Please set a valid RELEVANSSI_API_KEY in the .env file. Then press Enter to continue..."; \
+		read _; \
+		printf "\n"; \
 	fi
 
 restart:
