@@ -9,7 +9,6 @@ if (empty($args['url'])) {
 $defaults = [
     'new_tab' => false,
     'new_tab_visually_hidden' => true,
-    'on_click' => null,
     'aria_current' => null,
     'external' => false,
 ];
@@ -20,7 +19,6 @@ $args = array_merge($defaults, $args);
     href="<?= esc_attr($args['url']) ?>"
     class="link<?= $args['new_tab'] ? ' link--new-tab' : '' ?><?= $args['external'] ? ' link--external' : '' ?>"
     <?= $args['new_tab'] ? ' target="_blank" rel="noreferrer noopener"' : '' ?>
-    <?= $args['on_click'] ? " onclick='" . esc_attr($args['on_click']) . "'" : '' ?>
     <?= $args['aria_current'] ? ' aria-current="' . esc_attr($args['aria_current']) . '"' : '' ?>
 ><?php
     // Use php tags immediately inside the a tag, to avoid formatting issues.
