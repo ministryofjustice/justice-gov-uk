@@ -1,3 +1,28 @@
+# ClamAV Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clamav-config
+  namespace: justice-gov-uk-dev
+  labels:
+    app: clamav
+data:
+  clamd.conf: |
+    # Default values
+    LogTime yes
+    LocalSocket /tmp/clamd.sock
+    TCPSocket 3310
+    # LogFile has been removed, use syslog instead
+    LogSyslog yes
+    # Unprivileged user
+    User clamav
+    # Increased limits
+    MaxFileSize 250M
+    MaxScanSize 250M
+    StreamMaxLength 250M
+    # Enable FIPS compliant hashing algorithms
+    FIPSCryptoHashLimits yes
+---
 # ClamAV Service - Client access point
 apiVersion: v1
 kind: Service
@@ -118,6 +143,10 @@ spec:
           volumeMounts:
             - name: clamdb
               mountPath: /var/lib/clamav
+            - name: clamav-config
+              mountPath: /etc/clamav/clamd.conf
+              subPath: clamd.conf
+              readOnly: true
           
           # Health checks
           startupProbe:
@@ -156,6 +185,12 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: "RuntimeDefault"
+
+      volumes:
+        - name: clamav-config
+          configMap:
+            name: clamav-config
+            defaultMode: 0644
   
   # Persistent storage for each pod
   volumeClaimTemplates:
@@ -230,3 +265,61 @@ spec:
       ports:
         - protocol: TCP
           port: 443
+---
+# CronJob - Weekly S3 Antivirus Scan
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: s3-antivirus-scan-weekly
+  namespace: justice-gov-uk-production
+spec:
+  schedule: "0 2 * * 3" # At 02:00 on Wednesday
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          serviceAccountName: s3-av-serviceaccount
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            seccompProfile:
+              type: "RuntimeDefault"
+          containers:
+          - name: s3-antivirus-scan
+            image: ghcr.io/ministryofjustice/s3-antivirus-scan:1.0
+            imagePullPolicy: Always
+            resources:
+              requests:
+                memory: "256Mi"
+                cpu: "100m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+            env:
+              - name: CLAMAV_PORT
+                value: "3310"
+              - name: CLAMAV_MAX_FILE_SIZE
+                value: "250000000"  # 250MB in bytes
+              - name: S3_BUCKET
+                valueFrom:
+                  secretKeyRef:
+                    name: s3-bucket-output
+                    key: bucket_name
+              - name: S3_HOSTNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: s3-bucket-output
+                    key: bucket_domain_name
+              - name: S3_ENDPOINT
+                value: https://s3.eu-west-2.amazonaws.com
+              - name: S3_REGION
+                value: eu-west-2
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: 
+                drop: ["ALL"]
+          restartPolicy: Never
