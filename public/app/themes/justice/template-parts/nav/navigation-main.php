@@ -6,7 +6,6 @@
  * Available variables:
  *  - links: array An array of links to be displayed
  *    - new_tab: boolean Whether the link will open in a new tab
- *    - on_click: string A js function to run on click
  *    - active: boolean Whether the user is currently on the linked page
  *    - url: string The url for the link
  *    - label: string The label for the link
@@ -16,7 +15,6 @@
  *     'links' => [
  *       [
  *         'new_tab' => true,
- *         'on_click' => 'gtag && gtag("event", "page_view", { page_title: "Courts", page_location: "/offenders" });',
  *         'active' => true,
  *         'url' => 'https://google.com',
  *         'label' => 'Click here'
@@ -49,7 +47,6 @@ if (empty($args['links'])) {
                         [
                             'new_tab' => $link['new_tab'] ?? false,
                             'new_tab_visually_hidden' => $link['new_tab_visually_hidden'] ?? true,
-                            'on_click' => $link['on_click'] ?? null,
                             'url' => $link['url'],
                             'label' => $link['label'],
                             'aria_current' => ($link['active'] ?? false) ? 'page' : null,
