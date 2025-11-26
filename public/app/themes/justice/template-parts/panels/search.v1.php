@@ -13,8 +13,7 @@ defined('ABSPATH') || exit;
             action="<?php get_site_url(null, '/courts/procedure-rules/civil/standard-directions/standard-directions-search'); ?>"
             class="styled">
             <label for="query">Search standard directions content</label>
-            <input name="query" id="query" type="text" value="E.g. Witness Statements" accesskey="q"
-                onfocus="this.value=''">
+            <input name="query" id="query" type="text" placeholder="E.g. Witness Statements" accesskey="q">
             <input class="go-btn" value="Search" type="submit">
             <input name="collection" value="MoJ-Standard-Directions" type="hidden">
             <input name="form" value="simple" type="hidden">

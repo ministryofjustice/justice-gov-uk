@@ -1,3 +1,28 @@
+# ClamAV Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clamav-config
+  namespace: justice-gov-uk-dev
+  labels:
+    app: clamav
+data:
+  clamd.conf: |
+    # Default values
+    LogTime yes
+    LocalSocket /tmp/clamd.sock
+    TCPSocket 3310
+    # LogFile has been removed, use syslog instead
+    LogSyslog yes
+    # Unprivileged user
+    User clamav
+    # Increased limits
+    MaxFileSize 250M
+    MaxScanSize 250M
+    StreamMaxLength 250M
+    # Enable FIPS compliant hashing algorithms
+    FIPSCryptoHashLimits yes
+---
 # ClamAV Service - Client access point
 apiVersion: v1
 kind: Service
@@ -67,7 +92,7 @@ spec:
                   matchLabels:
                     app: clamav
                 topologyKey: kubernetes.io/hostname
-      
+
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -91,7 +116,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.annotations['apps.kubernetes.io/pod-index']
-          
+
           # Stagger freshclam updates to avoid simultaneous database updates
           command:
             - /bin/sh
@@ -118,6 +143,10 @@ spec:
           volumeMounts:
             - name: clamdb
               mountPath: /var/lib/clamav
+            - name: clamav-config
+              mountPath: /etc/clamav/clamd.conf
+              subPath: clamd.conf
+              readOnly: true
           
           # Health checks
           startupProbe:
@@ -156,6 +185,12 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: "RuntimeDefault"
+      
+      volumes:
+        - name: clamav-config
+          configMap:
+            name: clamav-config
+            defaultMode: 0644
   
   # Persistent storage for each pod
   volumeClaimTemplates:

@@ -50,7 +50,7 @@ spec:
               # If a pod exceeds its memory limit, Kubernetes will kill the pod.
               memory: 200Mi
             requests:
-              cpu: 20m # Baseline CPU under usual load is ~4m, that's 20% of the 20m request.
+              cpu: 15m # Baseline CPU under usual load is ~3m, that's 20% of the 15m request.
               memory: 100Mi
           readinessProbe:
             httpGet:
@@ -76,10 +76,10 @@ spec:
               # If a pod exceeds its CPU limit, Kubernetes will simply throttle the pod.
               cpu: "4"
               # If a pod exceeds its memory limit, Kubernetes will kill the pod.
-              memory: 500Mi
+              memory: 625Mi
             requests:
-              cpu: 400m # Baseline CPU under usual load is ~80m, that's 20% of the 400m request.
-              memory: 500Mi
+              cpu: 250m # Baseline CPU under usual load is ~50m, that's 20% of the 250m request.
+              memory: 625Mi
           # Check frequently during startup, so that scaling up can happen as fast as possible.
           startupProbe:
             exec:
