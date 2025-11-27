@@ -27,4 +27,18 @@ $component['stories']['Default'] = [
     ]
 ];
 
+$component['stories']['ManyPages'] = [
+    'previous_url' => '#',
+    'next_url' => '#',
+];
+
+// Use a php loop to add 40 pages.
+for ($i = 1; $i <= 40; $i++) {
+    $component['stories']['ManyPages']['pages'][] = [
+        'title' => (string) $i,
+        'url' => '#',
+        'current' => $i === 1,
+    ];
+}
+
 return $component;
