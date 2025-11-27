@@ -1,0 +1,35 @@
+// Styles for the public/stories.php page
+// That pages is for previewing components on non-production environments
+// so this file is not included in the production build.
+
+body {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: unset;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.component-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.story-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+@media screen and (min-width: 1024px) {
+    /* On large screen */
+    .story-wrapper--medium {
+        max-width: 600px;
+    }
+    .story-wrapper--sidebar {
+        max-width: 400px;
+    }
+}
