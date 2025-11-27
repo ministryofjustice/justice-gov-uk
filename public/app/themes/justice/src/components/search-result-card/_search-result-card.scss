@@ -4,8 +4,7 @@
     margin-top: 0;
 
     &__title {
-        @include mixins.h3;
-
+        @include mixins.h4;
         margin-top: 0;
 
         .caption {
