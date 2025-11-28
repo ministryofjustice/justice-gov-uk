@@ -51,10 +51,6 @@ composer-assets:
 	@chmod +x ./bin/local-composer-assets.sh
 	@docker compose exec php-fpm ./bin/local-composer-assets.sh ash
 
-composer-copy:
-	@chmod +x ./bin/local-composer-assets-copy.sh
-	@./bin/local-composer-assets-copy.sh
-
 composer: composer-assets
 
 # Open a bash shell on the running php container
