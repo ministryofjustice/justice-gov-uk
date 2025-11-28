@@ -1,6 +1,7 @@
 volumes:
   node_modules: ~
   dist: ~
+  uploads: ~
   php-socket:
   mariadb_data: ~
   minio_storage: ~
@@ -14,6 +15,7 @@ services:
       target: dev
     volumes:
       - dist:/var/www/html/public/app/themes/justice/dist
+      - uploads:/var/www/html/public/app/uploads
       - .:/var/www/html
       - php-socket:/sock
     env_file:
