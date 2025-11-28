@@ -96,6 +96,11 @@ RUN apk add --update nano nodejs npm inotify-tools
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Add MariaDB client config to disable SSL by default
+# Without this, `wp db` commands fail because the local connection is not SSL-enabled
+RUN echo -e "[client]\nssl=0" > /home/nginx/.my.cnf \
+    && chown nginx:nginx /home/nginx/.my.cnf
+
 VOLUME ["/sock"]
 # nginx
 USER 101
@@ -167,6 +172,7 @@ FROM node:24 AS assets-build
 
 WORKDIR /node
 COPY ./public/app/themes/justice/src               ./src
+COPY ./public/app/themes/justice/.npmrc            ./.npmrc
 COPY ./public/app/themes/justice/style.css         ./style.css
 COPY ./public/app/themes/justice/jsconfig.json     ./jsconfig.json
 COPY ./public/app/themes/justice/package.json      ./package.json
