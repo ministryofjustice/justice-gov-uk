@@ -35,9 +35,14 @@ class AV
     public static function init(): void
     {
         // Exit early if antivirus scanning is disabled
-        if (Config::get('CLAM_DISABLED') === 'true') {
+        if (Config::get('CLAM_DISABLED') === true) {
             return;
         }
+
+        // Let's ad an admin body-class to indicate AV is enabled
+        add_filter('admin_body_class', function ($classes) {
+            return trim($classes . ' av-enabled');
+        });
 
         // Hook into WordPress file upload process
         add_filter('wp_handle_upload_prefilter', function ($file) {
@@ -47,6 +52,8 @@ class AV
             if (!$tmp || !is_file($tmp)) {
                 return $file;
             }
+
+            sleep(10);
 
             // Scan the uploaded file with ClamAV
             $result = self::scanWithClam($tmp);
