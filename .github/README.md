@@ -78,7 +78,10 @@ make
 
 During the `make` process, the Dory proxy will attempt to install. You will be guided though an installation, if needed.
 
-You will be prompted for the Relevanssi Premium API key, this is necessary for the composer install step.
+> [!IMPORTANT] 
+> You will be prompted for the Relevanssi Premium API key, this is necessary for the composer install step.
+> Before continuing, edit the .env file at the root of the project. 
+> Update the line `RELEVANSSI_API_KEY=api_key_placeholder` with the actual API key.
 
 ### Services
 
