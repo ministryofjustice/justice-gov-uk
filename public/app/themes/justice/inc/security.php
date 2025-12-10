@@ -190,6 +190,14 @@ class Security
      */
     public static function secureLostpasswordErrors($errors, $user_data): WP_Error
     {
+        // Are we a logged in user e.g. resetting another user's password,
+        // do nothing and return the actual errors.
+        if (is_user_logged_in()) {
+            return $errors;
+        }
+
+        // Here, we are on the lost password form for logged out users.
+
         // Add a random delay between 20ms to 200ms to hinder timing attacks.
         usleep(random_int(20000, 200000));
 
