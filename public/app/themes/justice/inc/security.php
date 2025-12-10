@@ -89,7 +89,7 @@ class Security
         add_filter('login_errors', [__class__, 'secureLoginErrors']);
 
         // Prevent username enumeration via the lost password error message.
-        add_filter('lostpassword_errors', [__class__, 'secureLostpasswordErrors'], 20, 0);
+        add_filter('lostpassword_errors', [__class__, 'secureLostpasswordErrors'], 20, 2);
 
         // Filter the password reset confirm text.
         add_filter('gettext', [$this, 'filterPasswordResetConfirmText'], 10, 3);
@@ -186,16 +186,24 @@ class Security
      *
      * @see https://developer.wordpress.org/reference/hooks/lostpassword_errors/
      *
-     * @return void
+     * @return WP_Error
      */
-    public static function secureLostpasswordErrors(): void
+    public static function secureLostpasswordErrors($errors, $user_data): WP_Error
     {
         // Add a random delay between 20ms to 200ms to hinder timing attacks.
         usleep(random_int(20000, 200000));
 
-        // Always do the same redirect, regardless of the actual error.
-        wp_safe_redirect('wp-login.php?checkemail=confirm');
-        exit;
+        // Copy conditionals from wp-includes/user.php retrieve_password()
+        if ($errors?->has_errors() || ! $user_data) {
+            // Instead of returning the actual errors, redirect to the confirm page
+            // as if the reset email had been sent.
+            wp_safe_redirect('wp-login.php?checkemail=confirm');
+            exit;
+        }
+
+        // Return the original errors if no issues. 
+        // Execution in retrieve_password() will continue, and the reset email will be sent.
+        return $errors;
     }
 
     /**
