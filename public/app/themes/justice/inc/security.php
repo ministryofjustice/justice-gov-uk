@@ -201,7 +201,7 @@ class Security
             exit;
         }
 
-        // Return the original errors if no issues. 
+        // Return the original errors if no issues.
         // Execution in retrieve_password() will continue, and the reset email will be sent,
         // ultimately redirecting the user to the confirm page.
         return $errors;
