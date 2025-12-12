@@ -128,11 +128,11 @@ class DynamicMenu
         $the_query = new \WP_Query($query_args);
         $posts = $the_query->get_posts();
 
-        foreach ($posts as $post) {
+        foreach ($posts as $child_post) {
             $entries[] = [
                 'level' => 2,
-                'title' => $post_meta->getShortTitle($post->ID),
-                'url' => get_permalink($post->ID)
+                'title' => $post_meta->getShortTitle($child_post->ID),
+                'url' => get_permalink($child_post->ID)
             ];
         }
 
@@ -141,7 +141,7 @@ class DynamicMenu
         // Additional entries
         $additional_entries = get_post_meta($post->ID, '_dynamic_menu_additional_entries', true);
 
-        if (!empty($additional_entries)) {
+        if (is_array($additional_entries) && !empty($additional_entries)) {
             foreach ($additional_entries as $entry) {
                 $entries[] = [
                     'level' => 2,
