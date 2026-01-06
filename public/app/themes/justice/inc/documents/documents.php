@@ -703,7 +703,7 @@ class Documents
      * @param callable $handler The original wp_die handler.
      * @return callable The filtered wp_die handler.
      */
-    static function filterWpDieHandler(callable $handler): callable
+    public static function filterWpDieHandler(callable $handler): callable
     {
         global $post;
 
@@ -734,7 +734,7 @@ class Documents
      * @param string|array $args Additional arguments.
      * @return void
      */
-    static function wpDieWrapper($message, $title, string|array $args = []): void
+    public static function wpDieWrapper($message, $title, string|array $args = []): void
     {
         global $post;
 
