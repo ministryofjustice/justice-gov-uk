@@ -747,8 +747,7 @@ class Documents
         // This is when the message is 'No document file is attached.' and the response code is 403.
         // See: `wp-document-revisions/includes/class-wp-document-revisions.php`
         $target_message = esc_html__('No document file is attached.', 'wp-document-revisions');
-        if (
-            $message === $target_message &&
+        if ($message === $target_message &&
             is_array($args) &&
             isset($args['response']) &&
             (int) $args['response'] === 403
