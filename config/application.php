@@ -65,7 +65,7 @@ Config::define('WP_SITEURL', env('WP_SITEURL'));
 Config::define('WP_LOOPBACK', env('WP_LOOPBACK') ?: 'http://localhost:8080');
 Config::define('NGINX_PURGE_CACHE_URL', env('NGINX_PURGE_CACHE_URL') ?? 'http://nginx:8080/purge-cache');
 Config::define('CLAM_HOSTNAME', env('CLAM_HOSTNAME') ?: 'clamav');
-Config::define('CLAM_DISABLED', env('CLAM_DISABLED') ?: 'false');
+Config::define('CLAM_DISABLED', env('CLAM_DISABLED') ?: false);
 
 
 /**

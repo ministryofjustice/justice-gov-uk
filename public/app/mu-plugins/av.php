@@ -35,7 +35,7 @@ class AV
     public static function init(): void
     {
         // Exit early if antivirus scanning is disabled
-        if (Config::get('CLAM_DISABLED') === 'true') {
+        if (Config::get('CLAM_DISABLED') === true) {
             return;
         }
 
