@@ -5,7 +5,7 @@ namespace MOJ\Justice;
 defined('ABSPATH') || exit;
 
 /**
- * Hide the field `_dynamic_menu_exclude_this` on the edit screen, 
+ * Hide the field `_dynamic_menu_exclude_this` on the edit screen,
  * for pages with specific tags.
  *
  * This functionality can be demonstrated by tagging a page with
