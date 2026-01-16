@@ -60,7 +60,7 @@
                 "class": "",
                 "id": ""
             },
-            "relevanssi_exclude": 0,
+            "relevanssi_exclude": 1,
             "message": "Do you need custom entries on the left hand side menu?",
             "default_value": 0,
             "allow_in_bindings": 0,
@@ -96,7 +96,7 @@
             "min": 0,
             "max": 0,
             "collapsed": "",
-            "button_label": "Add entry",
+            "button_label": "Add Entry",
             "rows_per_page": 20,
             "sub_fields": [
                 {
@@ -161,7 +161,7 @@
                 "class": "",
                 "id": ""
             },
-            "relevanssi_exclude": 0,
+            "relevanssi_exclude": 1,
             "message": "Do you want this page to be hidden from it's parent's left hand side menu?",
             "default_value": 0,
             "allow_in_bindings": 0,
@@ -184,7 +184,7 @@
             }
         ]
     ],
-    "menu_order": 0,
+    "menu_order": 15,
     "position": "side",
     "style": "default",
     "label_placement": "top",
@@ -194,5 +194,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "Navigation",
-    "modified": 1768576129
+    "modified": 1768583878
 }
