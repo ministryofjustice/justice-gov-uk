@@ -25,6 +25,11 @@ d-shell: setup key-gen dory d-compose composer
 setup:
 	@chmod +x ./bin/*
 	@[ -f "./.env" ] || cp .env.example .env
+	@if grep -q 'ACF_PRO_LICENSE=acf_pro_license_placeholder' .env; then \
+		printf "Please set a valid ACF_PRO_LICENSE in the .env file. Then press Enter to continue..."; \
+		read _; \
+		printf "\n"; \
+	fi
 	@if grep -q 'RELEVANSSI_API_KEY=api_key_placeholder' .env; then \
 		printf "Please set a valid RELEVANSSI_API_KEY in the .env file. Then press Enter to continue..."; \
 		read _; \

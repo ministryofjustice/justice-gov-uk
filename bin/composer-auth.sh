@@ -6,15 +6,15 @@
 # This script will create an `auth.json` file, which is used by composer for
 # HTTP basic auth access to the private composer repository www.relevanssi.com.
 #
-# It requires the environment variables `RELEVANSSI_API_KEY` to be set with 
-# authentication credentials.
+# It requires the environment variables `AS3CF_PRO_USER`, and
+# `RELEVANSSI_API_KEY` to be set with authentication credentials.
 ##
 
 if [ -n "$COMPOSER_TOKEN" ]; then
   composer config --global github-oauth.github.com "$COMPOSER_TOKEN"
 fi
 
-if [ -n "$RELEVANSSI_API_KEY" ]
+if [ -n "$ACF_PRO_LICENSE" ] && [ -n "$RELEVANSSI_API_KEY" ]
 then
   rm -f auth.json
 	cat <<- EOF >> auth.json
@@ -23,12 +23,16 @@ then
 				"www.relevanssi.com": {
 					"username": "",
 					"password": "$RELEVANSSI_API_KEY"
+				},
+				"connect.advancedcustomfields.com": {
+					"username": "$ACF_PRO_LICENSE",
+					"password": "https://www.justice.gov.uk"
 				}
 			}
 		}
 	EOF
 else
-	echo "FATAL: RELEVANSSI_API_KEY was not available."
+	echo "FATAL: ACF_PRO_LICENSE or RELEVANSSI_API_KEY was not available."
 fi
 
 ## check for auth.json

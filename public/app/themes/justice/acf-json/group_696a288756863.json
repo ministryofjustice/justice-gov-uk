@@ -1,0 +1,75 @@
+{
+    "key": "group_696a288756863",
+    "title": "Page Navigation - Home Template",
+    "fields": [
+        {
+            "key": "field_696a288757cb2",
+            "label": "Short title",
+            "name": "_short_title",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Optional. This is used in breadcrumb & menu navigation. <br\/>\r\nDefault: Page title.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "relevanssi_exclude": 0,
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_696a2887580e6",
+            "label": "Title Tag",
+            "name": "_title_tag",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Optional. Used for search result titles (internal & external) and browser tabs.<\/br>\r\n<a href=\"https:\/\/howto-admin.www.justice.gov.uk\/editing\/pages.html#title-tag-setting\" target=\"_blank\">\r\n  Creating an accessible title tag\r\n<\/a><\/br>\r\nDefault: Page title",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "relevanssi_exclude": 0,
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            },
+            {
+                "param": "post_template",
+                "operator": "==",
+                "value": "page_home.php"
+            }
+        ]
+    ],
+    "menu_order": 10,
+    "position": "side",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "Navigation",
+    "modified": 1768583172
+}

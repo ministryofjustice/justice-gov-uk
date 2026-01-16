@@ -1,0 +1,130 @@
+{
+    "key": "group_696a6ab9dfc94",
+    "title": "Page Meta",
+    "fields": [
+        {
+            "key": "field_696a6abad1043",
+            "label": "Show updated at",
+            "name": "_show_updated_at",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "relevanssi_exclude": 1,
+            "message": "Show updated at date following the content.",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui": 0,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_696a6ae63b6d6",
+            "label": "Modified at (override)",
+            "name": "_modified_at_override",
+            "aria-label": "",
+            "type": "date_time_picker",
+            "instructions": "Optional. \"Updated at\" date can be set here. <br\/>\r\nDefault: Most recent update.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "relevanssi_exclude": 1,
+            "display_format": "F j, Y",
+            "return_format": "d\/m\/Y g:i a",
+            "first_day": 1,
+            "default_to_current_date": 0,
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_696a6d8c93a16",
+            "label": "Regions",
+            "name": "_regions",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Optional. Regions for this content.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "relevanssi_exclude": 1,
+            "choices": [
+                "England",
+                "Wales"
+            ],
+            "default_value": [],
+            "return_format": "value",
+            "multiple": 1,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "ui": 1,
+            "ajax": 0,
+            "create_options": 0,
+            "placeholder": "",
+            "save_options": 0
+        },
+        {
+            "key": "field_696a6ebc84f14",
+            "label": "Language",
+            "name": "_language",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Optional. Regions for this content.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "relevanssi_exclude": 1,
+            "choices": {
+                "en_GB": "English",
+                "cy_GB": "Welsh",
+                "en_GB,cy_GB": "English and Welsh"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 20,
+    "position": "side",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "Meta data",
+    "modified": 1768583237
+}

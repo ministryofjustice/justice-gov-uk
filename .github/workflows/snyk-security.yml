@@ -47,11 +47,12 @@ jobs:
       - name: Container monitor ~ build FPM & Nginx Docker images
         run: |
           docker image build  -t justice-fpm:snyk --target build-fpm \
-            --build-arg RELEVANSSI_API_KEY="$RELEVANSSI_API_KEY" .
+            --build-arg ACF_PRO_LICENSE --build-arg RELEVANSSI_API_KEY .
 
           docker image build  -t justice-nginx:snyk --target build-nginx \
-            --build-arg RELEVANSSI_API_KEY="$RELEVANSSI_API_KEY" .
+            --build-arg ACF_PRO_LICENSE --build-arg RELEVANSSI_API_KEY .
         env:
+          ACF_PRO_LICENSE: ${{ secrets.ACF_PRO_LICENSE }}
           RELEVANSSI_API_KEY: ${{ secrets.RELEVANSSI_API_KEY }}
         # Runs Snyk Container (Container and SCA) analysis.
       - name: Container monitor ~ analyse
