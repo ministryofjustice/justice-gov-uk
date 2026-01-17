@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'design-check-and-balance'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,13 +14,11 @@ concurrency:
 jobs:
   image:
     name: "Image"
-    if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/build.yml
     secrets: inherit
 
   modsec_config:
     name: "Modsec"
-    if: github.event.ref == 'refs/heads/main'
     uses: ./.github/workflows/modsec-config.yml
     secrets: inherit
 
@@ -36,8 +35,8 @@ jobs:
 
   deploy_demo:
     name: "Demo"
-    needs: [image, modsec_config, deploy_dev]
-    if: github.event.ref == 'refs/heads/main'
+    needs: [image, modsec_config]
+    if: github.event.ref == 'refs/heads/design-check-and-balance'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: demo
