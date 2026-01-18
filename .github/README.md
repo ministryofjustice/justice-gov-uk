@@ -110,6 +110,10 @@ Place a copy of the local database at the root of the project, named `local.sql`
 wp db import --defaults local.sql
 ```
 
+> [!TIP]
+> The above process of running `make bash` then `composer` can be used when you need to add/update/remove new composer packages.
+> It allows for developers to use composer that is running inside the container, avoiding any local environment conflicts.
+
 **Node**<br>
 This service watches and compiles our assets, no need to access. The output of this service is available on STDOUT.
 
@@ -120,6 +124,10 @@ Be sure to keep an eye on the node container's terminal output for any laravel m
 
 The folder `src/components` is used for when it makes sense to keep a group of scss/js/php files together.
 The folder `src/components/post-meta` is an example where php is required to register fields in the backend, and js is used to register fields in the frontend.
+
+> [!TIP]
+> Similar to php/composer, running `make node` and `npm` can be used when you need to add/update/remove new npm packages.
+> It allows for developers to use npm that is running inside the container, avoiding any local environment conflicts.
 
 **MariaDB**<br>
 Internally accessed by PHP-FPM on port 3306
