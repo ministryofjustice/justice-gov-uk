@@ -100,7 +100,7 @@ class Theme
         }
 
         // Set the cookie...
-        setcookie('frontend_version', (string) $version, 0, COOKIEPATH, COOKIE_DOMAIN, $https, true);
+        setcookie('frontend_version', (string) $version, time() + (365 * 24 * 60 * 60), COOKIEPATH, COOKIE_DOMAIN, $https, true);
 
         // Redirect to the page with a query so that the response is not cached by nginx.
         wp_redirect($permalink . '?redirected');
