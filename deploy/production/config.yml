@@ -17,7 +17,7 @@ data:
   # Default version of the frontend during rollout.
   FRONTEND_VERSION_DEFAULT: "1"
   # Percentage of users that will see the new version of the frontend.
-  FRONTEND_ROLLOUT_PERCENTAGE: "40"
+  FRONTEND_ROLLOUT_PERCENTAGE: "50"
   # This is the version of the frontend that should be shown to users.
   # Show everyone version 1, even if they have a cookie set to version 2.
   # FRONTEND_VERSION_OVERRIDE: "1"
