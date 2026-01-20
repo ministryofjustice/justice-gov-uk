@@ -109,12 +109,17 @@ class DynamicMenu
                     'terms' => $this->excluded_child_pages_tags,
                 ),
             ),
-            // Exclude pages with the _dynamic_menu_exclude_this meta set to true.
+            // Include pages with the _dynamic_menu_exclude_this meta set to false, 0, or not set.
             'meta_query' => array(
                 'relation' => 'OR',
                 array(
                     'key' => '_dynamic_menu_exclude_this',
-                    'value' => false,
+                    'value' => false, // Value set by deprecated 'in-house' custom fields.
+                    'compare' => '=',
+                ),
+                array(
+                    'key' => '_dynamic_menu_exclude_this',
+                    'value' => 0, // Value set by ACF false boolean field.
                     'compare' => '=',
                 ),
                 array(
