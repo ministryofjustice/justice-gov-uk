@@ -135,7 +135,7 @@ class NavigationSecondary
         $child_posts = $child_query->get_posts();
         wp_reset_postdata();
 
-        return array_map(function ($post) {
+        $entries = array_map(function ($post) {
             // Get the `_dynamic_menu_exclude_this` metadata value for the page.
             $exclude_this = get_post_meta($post->ID, '_dynamic_menu_exclude_this', true);
             return [
@@ -151,6 +151,21 @@ class NavigationSecondary
                 'children' => $this->getChildPagesForNavigation($post->ID) ?: [],
             ];
         }, $child_posts);
+
+        // Additional entries
+        $additional_entries = get_post_meta($post_id, '_dynamic_menu_additional_entries', true);
+
+        if (is_array($additional_entries) && !empty($additional_entries)) {
+            foreach ($additional_entries as $entry) {
+                $entries[] = [
+                    'id' => sanitize_title($entry['label']) . "-{$post_id}-additional-entry",
+                    'url' => $entry['url'],
+                    'label' => $entry['label'],
+                ];
+            }
+        }
+
+        return $entries;
     }
 
 
