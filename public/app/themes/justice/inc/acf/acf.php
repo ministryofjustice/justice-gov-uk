@@ -15,6 +15,12 @@ defined('ABSPATH') || exit;
  * @return array|false The unmodified field array or false to hide the field.
  */
 add_filter('acf/prepare_field/name=_dynamic_menu_exclude_this', function ($field) {
+
+    // If MOJ\Justice\DynamicMenu class does not exist, return the field unmodified.
+    if (!class_exists(DynamicMenu::class)) {
+        return $field;
+    }
+
     // Get an array of the page's tags.
     $page_tag_ids = wp_get_post_tags(get_the_ID(), ['fields' => 'ids']);
 
