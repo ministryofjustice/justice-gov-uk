@@ -1,11 +1,5 @@
 <?php
 
-/**
- *
- * Template name: Home
- * Template Post Type: page
- */
-
 defined('ABSPATH') || exit;
 
 get_header();

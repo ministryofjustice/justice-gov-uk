@@ -100,11 +100,6 @@ class BlockEditor
     public function search(): string
     {
         $args = [
-            'parent' => get_the_ID(),
-            'submit' => 'Search'
-        ];
-
-        $args = [
             'search_form' => [
                 'id' => 'search-bar-main',
                 'action' => '/search',
@@ -115,7 +110,10 @@ class BlockEditor
                     'value' => get_search_query(),
                     'label_hidden' => true,
                 ],
-                'button' => ['text' => 'Search']
+                'button' => ['text' => 'Search'],
+                'hidden_inputs' => [
+                    ['name' => 'parent', 'value' => get_the_ID()],
+                ],
             ]
         ];
 
