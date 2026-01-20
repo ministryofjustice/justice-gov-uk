@@ -15,6 +15,7 @@
 set -a && source .env && set +a
 
 docker image build -t justice-s3-push:latest \
+  --build-arg ACF_PRO_LICENSE \
   --build-arg RELEVANSSI_API_KEY \
   --build-arg IMAGE_TAG \
   --target build-s3-push .

@@ -41,6 +41,7 @@ jobs:
         composer install --no-progress --prefer-dist --optimize-autoloader
         rm -f auth.json
       env:
+        ACF_PRO_LICENSE: ${{ secrets.ACF_PRO_LICENSE }}
         RELEVANSSI_API_KEY: ${{ secrets.RELEVANSSI_API_KEY }}
 
     - name: "Run tests"

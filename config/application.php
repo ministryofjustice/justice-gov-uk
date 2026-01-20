@@ -141,6 +141,9 @@ Config::define('GOV_NOTIFY_API_KEY', env('GOV_NOTIFY_API_KEY') ?? null);
 // Support email address
 Config::define('SUPPORT_EMAIL', env('SUPPORT_EMAIL'));
 
+// ACF License Key
+Config::define('ACF_PRO_LICENSE', env('ACF_PRO_LICENSE'));
+
 // Define initial preset value for the wp-offload-media plugin.
 Config::define('WP_OFFLOAD_MEDIA_PRESET', false);
 
