@@ -33,9 +33,10 @@ class AcfCommands
         [
             'legacy_key' => '_dynamic_menu_additional_entries',
             'field_name' => '_dynamic_menu_additional_entries_acf',
-            'field_key' => 'field_696a39ddb33b7',
-            'label_field_key' => 'field_696a3a12b33b8',
-            'url_field_key' => 'field_696a3a30b33b9',
+            // These values are found in `public/app/themes/justice/acf-json`
+            'field_key' => 'field_696a39ddb33b7', // Main repeater field key
+            'label_field_key' => 'field_696a3a12b33b8', // Sub-field key for 'label'
+            'url_field_key' => 'field_696a3a30b33b9', // Sub-field key for 'url'
         ],
         [
             'legacy_key' => '_panel_related_entries',
