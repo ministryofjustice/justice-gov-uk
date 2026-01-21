@@ -670,7 +670,6 @@ class Documents
             if ($attachment?->ID ?? false) {
                 // Update the $postId variable to the document's attachment ID
                 $post_id = $attachment->ID;
-                error_log('attachment ID: ' . $post_id);
             }
         }
 
