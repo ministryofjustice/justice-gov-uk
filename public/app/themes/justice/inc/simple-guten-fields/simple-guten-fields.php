@@ -17,7 +17,13 @@ class SimpleGutenFields
      */
     public function __construct()
     {
+        if (function_exists('get_field')) {
+            // ACF is active, do not load Simple Guten Fields.
+            return;
+        }
+
         add_action('admin_enqueue_scripts', [$this, 'loadScripts']);
+
         // Use init hook to ensure default values are available via get_metadata.
         add_filter('init', [$this, 'metaFields']);
     }
