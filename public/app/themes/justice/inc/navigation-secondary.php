@@ -52,7 +52,17 @@ class NavigationSecondary
         $items = $this->getAllPagesForNavigation();
 
         // Add the active and expanded properties based on the current page.
-        $this->markActiveAndExpanded($items, get_permalink(get_the_ID()));
+        $found_active = $this->markActiveAndExpanded($items, get_permalink(get_the_ID()));
+
+        // If no active item was found, then the current page is not a child of Procedure Rules.
+        if (!$found_active) {
+            // We are on an auxiliary page, like Accessibility or Privacy.
+            $items = $this->getAuxiliaryPagesForNavigation();
+
+            // Since the items have been updated, we need to mark active and expanded again.
+            $this->markActiveAndExpanded($items, get_permalink(get_the_ID()));
+        }
+
         // Remove any items that are hidden and not expanded.
         $this->removeHiddenItems($items);
 
@@ -225,5 +235,48 @@ class NavigationSecondary
 
         // Re-index the array to have sequential keys.
         $items = array_values($items);
+    }
+
+
+    /**
+     * The navigation for auxiliary pages like Accessibility and Privacy
+     *
+     * The usual navigation has a base of Courts, Procedure rules & Offenders.
+     * This works when the current page is under Procedure rules, but for other pages
+     * like Accessibility and Privacy we need a different menu structure.
+     *
+     * @return array An array of pages formatted for the secondary navigation.
+     */
+    public function getAuxiliaryPagesForNavigation(): array
+    {
+        if ($this->post_meta === null) {
+            $this->post_meta = new PostMeta();
+        }
+
+        $parent_id = get_the_ID();
+        // Attempt to get the top-level parent ID.
+        $maybe_parent_id = wp_get_post_parent_id($parent_id);
+        while ($maybe_parent_id !== 0) {
+            $parent_id = $maybe_parent_id;
+            $maybe_parent_id = wp_get_post_parent_id($parent_id);
+        }
+
+        // Build the navigation item for the top-level parent.
+        $items = [
+            [
+                // Unique ID for use in the `aria-controls` attribute.
+                'id' => sanitize_title($this->post_meta->getShortTitle($parent_id)) . "-{$parent_id}",
+                // The URL for the page.
+                'url' => get_permalink($parent_id),
+                // The label for the page, using the short title.
+                'label' => $this->post_meta->getShortTitle($parent_id),
+                // Recursively call the function to get children for this post.
+                'children' => $this->getChildPagesForNavigation($parent_id) ?: [],
+                // Expanded, since auxiliary pages have few children.
+                'expanded' => true,
+            ],
+        ];
+
+        return $items;
     }
 }
