@@ -15,7 +15,8 @@ import domReady from "@wordpress/dom-ready";
 domReady(async () => {
   let i = 0;
 
-  // Wait for block variations to be defined, with a timeout of 30 seconds
+  // Wait for block variations to be defined, with a timeout of 30 seconds.
+  // This should be fine to do at domReady, but instead it usually takes < 100ms.
   while (getBlockVariations?.("core/heading") === undefined && i++ < 3_000) {
     // Wait 100ms between checks
     await new Promise((resolve) => setTimeout(resolve, 100));
