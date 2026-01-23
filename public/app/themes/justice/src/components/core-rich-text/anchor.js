@@ -7,7 +7,6 @@ import { dispatch, select, subscribe, useSelect } from "@wordpress/data";
 import { Fragment, useState } from "@wordpress/element";
 import { store as preferencesStore } from "@wordpress/preferences";
 import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
-import { cleanForSlug } from "@wordpress/url";
 import { TfiAnchor } from "react-icons/tfi";
 
 /**
