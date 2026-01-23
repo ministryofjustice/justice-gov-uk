@@ -348,7 +348,7 @@ class Content
     {
 
         // Conditions for skipping the cache:
-        // non-singular, non-main-query, logged-in users, or non-page post types
+        // not a single page, non-main-query, or user is logged in.
         if (!is_singular('page') || !is_main_query() || is_user_logged_in()) {
             self::$skip_cache = true;
             return $content;
