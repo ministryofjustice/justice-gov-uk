@@ -359,7 +359,8 @@ class Content
         if ($cached !== false) {
             // We have cached content - skip all further processing.
 
-            // Skip saving the cached result, back to the cache.
+            // Skip saving the cached result, back into the cache.
+            // This value is checked in saveContentCache().
             self::$skip_cache = true;
 
             // Remove all the hooks ( except body_class filter ) - they don't need to run.
