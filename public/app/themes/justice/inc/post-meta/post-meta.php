@@ -53,6 +53,14 @@ class PostMeta
         if (isset($this->panels_in)) {
             return in_array($panel, $this->panels_in);
         }
+
+        if (function_exists('get_field')) {
+            // Use ACF to get the field if it's available.
+            // This is important, since when migrated to ACF, get_metadata will not return the correct default value.
+            return (bool) get_field("_panel_$panel", $post_id ?: $this->post_id);
+        }
+
+        // Fallback to get_post_meta if ACF is not available.
         return get_post_meta($post_id ?: $this->post_id, "_panel_$panel", true);
     }
 
@@ -111,6 +119,13 @@ class PostMeta
 
     public function getMeta(string $meta_key, string | int $post_id = 0, bool $single = true)
     {
+        if (function_exists('get_field')) {
+            // Use ACF to get the field if it's available.
+            // This is important, since when migrated to ACF, get_metadata will not return the correct default value.
+            return get_field($meta_key, $post_id ?: $this->post_id);
+        }
+
+        // Fallback to get_metadata if ACF is not available.
         return get_metadata('post', $post_id ?: $this->post_id, $meta_key, $single);
     }
 
