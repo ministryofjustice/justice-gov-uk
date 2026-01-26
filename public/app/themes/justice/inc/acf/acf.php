@@ -54,9 +54,8 @@ add_filter('acf/settings/show_admin', fn() => defined('WP_ENV') && WP_ENV !== 'p
  * This filter ensures that certain fields return their default values
  * when their value is null.
  *
- * This is essential on the Justice site, since the majority of pages
- * have never been edited since migration to ACF, and so their fields
- * are all null.
+ * This is essential on the Justice site, since it's impractical to
+ * edit and save every post to set fields to their default values.
  *
  * @param mixed $value The current value of the field.
  * @param int|string $post_id The post ID.
