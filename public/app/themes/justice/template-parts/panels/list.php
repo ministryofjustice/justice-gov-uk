@@ -8,6 +8,10 @@ $is_archive = $args['is_archive'] ?? false;
 $title_id = 'sidebar-block-title-' . sanitize_title($args['title']) . ($is_mobile ? '-mobile' : '');
 $content_id = 'sidebar-block-content-' . sanitize_title($args['title']) . ($is_mobile ? '-mobile' : '');
 
+if (empty($args['links']) || !is_array($args['links'])) {
+    return;
+}
+
 ?>
 
 <section class="sidebar-block sidebar-block--list" aria-labelledby="<?= $title_id ?>" role="complementary">
