@@ -32,3 +32,16 @@ add_filter('acf/prepare_field/name=_dynamic_menu_exclude_this', function ($field
 
     return empty($intersect_array) ? $field : false;
 });
+
+// Disable the custom post type and taxonomies feature of ACF,
+// since we are not using ACF for custom post types and taxonomies.
+add_filter('acf/settings/enable_post_types', '__return_false');
+
+// Disable the options pages UI feature of ACF,
+// since we are not using ACF options pages.
+add_filter('acf/settings/enable_options_pages_ui', '__return_false');
+
+// Hide the Admin menu entirely on production.
+// It's not necessary, since we are defining field groups programmatically,
+// and it prevents accidental changes to fields in production.
+add_filter('acf/settings/show_admin', fn() => defined('WP_ENV') && WP_ENV !== 'production');

@@ -33,9 +33,13 @@ class PostMeta
     public function addHooks()
     {
         $post_meta_constants = new PostMetaConstants();
-        add_filter('sgf_register_fields', [$post_meta_constants, 'navigationFields'], 5);
-        add_filter('sgf_register_fields', [$post_meta_constants, 'metaFields'], 5);
-        add_filter('sgf_register_fields', [$post_meta_constants, 'panelFields'], 5);
+        // Register fields with the 'in-house' custom fields system if ACF is not active.
+        // TODO - tidy this up when ACF migration is complete.
+        if (!function_exists('get_field')) {
+            add_filter('sgf_register_fields', [$post_meta_constants, 'navigationFields'], 5);
+            add_filter('sgf_register_fields', [$post_meta_constants, 'metaFields'], 5);
+            add_filter('sgf_register_fields', [$post_meta_constants, 'panelFields'], 5);
+        }
         add_filter('document_title_parts', [$this, 'titleTagFilter']);
         add_action('wp_head', [$this, 'headMetaTags']);
     }
