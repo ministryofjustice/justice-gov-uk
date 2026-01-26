@@ -55,7 +55,7 @@ $post_meta = new PostMeta();
         </article>
 
         <?php if ($post_meta->sideHasPanels('right')) : ?>
-            <div class="one-sidebar__sidebar">
+            <div class="one-sidebar__sidebar one-sidebar__sidebar--right">
                 <?php Utils::getSidebarMulti('right'); ?>
             </div>
         <?php endif; ?>

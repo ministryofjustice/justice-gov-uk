@@ -38,7 +38,9 @@
     }
 
     &__sidebar {
-        display: none;
+        &--right {
+            display: none;
+        }
         @media screen and (min-width: mixins.$justice-lg) {
             > * {
                 @include mixins.spacing('margin', 6, 'top');

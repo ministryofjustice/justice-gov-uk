@@ -20,6 +20,12 @@ class Content
 
     public ContentLinks $links;
 
+    /** @var string Prefix for content cache transients */
+    const CACHE_PREFIX = 'justice_content_cache_';
+
+    /** @var bool Whether to skip content caching */
+    private static bool $skip_cache = false;
+
     public function __construct()
     {
         libxml_use_internal_errors(true);
@@ -28,7 +34,10 @@ class Content
 
     public function addHooks(): void
     {
+        // Filter the body class depending on content
         add_filter('body_class', [__CLASS__, 'addBodyClassIfContentContainsH1'], 25);
+
+        // Filter the content to correctly render various elements
         add_filter('the_content', [__CLASS__, 'fixNationalArchiveLinks']);
         add_filter('wp_kses_allowed_html', [__CLASS__, 'customWpksesPostTags'], 10, 2);
 
@@ -39,6 +48,19 @@ class Content
         add_action('render_block_core/table', [$this, 'renderTables'], 10, 2);
 
         add_action('render_block_core/list', [$this, 'renderNavigationSection'], 15, 2);
+
+        // Check transient / cache EARLY in the_content filter.
+        // If it's present, we can skip all other processing.
+        add_filter('the_content', [$this, 'checkContentCache'], 1);
+
+        // Save transient / cache LATE in the_content filter,
+        // after all other processing is done, and we have the final content to cache.
+        add_filter('the_content', [__CLASS__, 'saveContentCache'], 999);
+
+        // Clear the cache whenever an existing post is updated.
+        add_action('wp_after_insert_post', [__CLASS__, 'invalidateCache']);
+        // Clear the cache when a revision is published.
+        add_action('revisionary_revision_published', [__CLASS__, 'invalidateCache']);
     }
 
     /**
@@ -89,6 +111,10 @@ class Content
         }
 
         if (empty($block['innerHTML'])) {
+            return $block_content;
+        }
+
+        if (strpos($block['innerHTML'], '<a ') === false) {
             return $block_content;
         }
 
@@ -174,6 +200,10 @@ class Content
             return $block_content;
         }
 
+        if (strpos($block['innerHTML'], '<th ') === false) {
+            return $block_content;
+        }
+
         $html = $block['innerHTML'];
 
         $doc = new \DOMDocument();
@@ -208,7 +238,7 @@ class Content
         if (!in_the_loop() || !is_main_query() || (!is_single() && !is_page())) {
             return $block_content;
         }
-        
+
         if (($block['attrs']['className'] ?? '') !== 'is-style-pag-nav') {
             return $block_content;
         }
@@ -304,5 +334,95 @@ class Content
         }
 
         return $tags;
+    }
+
+    /**
+     * Check if we have cached processed content for this post.
+     *
+     * If cached content is found, it is returned immediately, skipping all further processing.
+     *
+     * @param string $content The original content.
+     * @return string The processed content from the cache if available, otherwise the original content.
+     */
+    public function checkContentCache($content)
+    {
+
+        // Conditions for skipping the cache:
+        // not a single page, non-main-query, or user is logged in.
+        if (!is_singular('page') || !is_main_query() || is_user_logged_in()) {
+            self::$skip_cache = true;
+            return $content;
+        }
+
+        $cached = get_transient(self::CACHE_PREFIX . get_the_id());
+
+        if ($cached !== false) {
+            // We have cached content - skip all further processing.
+
+            // Skip saving the cached result, back into the cache.
+            // This value is checked in saveContentCache().
+            self::$skip_cache = true;
+
+            // Remove all the hooks ( except body_class filter ) - they don't need to run.
+            remove_filter('the_content', [__CLASS__, 'fixNationalArchiveLinks']);
+            remove_filter('wp_kses_allowed_html', [__CLASS__, 'customWpksesPostTags'], 10, 2);
+
+            remove_action('render_block_core/list-item', [$this, 'renderLinks'], 10, 2);
+            remove_action('render_block_core/paragraph', [$this, 'renderLinks'], 10, 2);
+            remove_action('render_block_core/table', [$this, 'renderLinks'], 10, 2);
+
+            remove_action('render_block_core/table', [$this, 'renderTables'], 10, 2);
+
+            remove_action('render_block_core/list', [$this, 'renderNavigationSection'], 15, 2);
+
+            return $cached;
+        }
+
+
+        return $content;
+    }
+
+    /**
+     * Save processed content to cache.
+     *
+     * @param string $content The content to be cached.
+     * @return string The unmodified content.
+     */
+    public static function saveContentCache($content)
+    {
+
+        // Check if we should skip caching
+        if (self::$skip_cache) {
+            return $content;
+        }
+
+        // Cache for 1 hour (3600 seconds)
+        set_transient(self::CACHE_PREFIX . get_the_id(), $content, HOUR_IN_SECONDS);
+
+        return $content;
+    }
+
+    /**
+     * Invalidate cache when post is saved.
+     * Hook this to 'save_post' action.
+     *
+     * @param int|WP_Post $post The post ID or post object.
+     * @return void
+     */
+    public static function invalidateCache($post) :void
+    {
+        $post_id = is_object($post) ? $post->ID : $post;
+        
+        // Ensure we have a valid post ID
+        if (empty($post_id)) {
+            return;
+        }
+
+        // Only invalidate cache for 'page' post types
+        if (get_post_type($post_id) !== 'page') {
+            return;
+        }
+
+        delete_transient(self::CACHE_PREFIX . $post_id);
     }
 }
