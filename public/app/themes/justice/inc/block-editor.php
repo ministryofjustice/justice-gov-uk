@@ -19,6 +19,7 @@ class BlockEditor
     public function addHooks()
     {
         add_action('init', [$this, 'registerBlocks']);
+        add_action('admin_enqueue_scripts', [$this, 'loadScripts']);
         add_filter('the_content', [$this, 'formatBlocks']);
         add_filter('allowed_block_types_all', [$this, 'filterAllowedBlockTypes'], 10, 0);
         add_filter('block_editor_settings_all', [$this, 'customiseSettings']);
@@ -33,6 +34,30 @@ class BlockEditor
         if (Config::get('FRONTEND_VERSION') === 2) {
             register_block_type('moj/search', ['render_callback' => [$this, 'search']]);
         }
+    }
+
+    /**
+     * Load scripts.
+     */
+    public function loadScripts()
+    {
+
+        $script_asset_path = get_template_directory() . "/dist/php/block-editor.asset.php";
+        if (!file_exists($script_asset_path)) {
+            throw new \Error(
+                'You need to run `npm start` or `npm run build` for "app" first.'
+            );
+        }
+
+        $script_asset = require($script_asset_path);
+        wp_register_script(
+            'block-editor-script',
+            get_template_directory_uri() . '/dist/block-editor.js',
+            $script_asset['dependencies'],
+            $script_asset['version']
+        );
+
+        wp_enqueue_script('block-editor-script');
     }
 
     /**
