@@ -45,3 +45,47 @@ add_filter('acf/settings/enable_options_pages_ui', '__return_false');
 // It's not necessary, since we are defining field groups programmatically,
 // and it prevents accidental changes to fields in production.
 add_filter('acf/settings/show_admin', fn() => defined('WP_ENV') && WP_ENV !== 'production');
+
+
+/**
+ * Ensure that certain fields return their default values
+ *
+ * ACF does not return default values for fields if they have not been set.
+ * This filter ensures that certain fields return their default values
+ * when their value is null.
+ *
+ * This is essential on the Justice site, since it's impractical to
+ * edit and save every post to set fields to their default values.
+ *
+ * @param mixed $value The current value of the field.
+ * @param int|string $post_id The post ID.
+ * @param array $field The ACF field array.
+ * @return mixed The field value or its default value.
+ */
+add_filter('acf/load_value', function ($value, $_post_id, $field) {
+
+    if (!is_null($value)) {
+        // Return the value, unmodified. We only care about null values.
+        return $value;
+    }
+
+    // We only care about specific fields - those that have 'truthy' defaults.
+    // For reference, default can be found in the acf-json files.
+    $fields = [
+        '_language',
+        '_panel_brand',
+        '_panel_menu',
+        '_show_updated_at',
+    ];
+
+    if (!in_array($field['name'], $fields, true)) {
+        // If the field does not have a default we care about, return the value as is.
+        return $value;
+    }
+
+    // Get the full field definition - this includes the default value.
+    $full_field = acf_get_field($field['name']);
+
+    // Return the default value from the field settings.
+    return $full_field['default_value'] ?? null;
+}, 10, 3);
