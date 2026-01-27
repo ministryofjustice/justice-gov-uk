@@ -14,7 +14,6 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
 }
 
 require_once 'inc/acf/acf.php';
-require_once 'inc/acf/commands.php';
 require_once 'inc/admin.php';
 require_once 'inc/admin-branding.php';
 require_once 'inc/amazon-s3-and-cloudfront-assets.php';
