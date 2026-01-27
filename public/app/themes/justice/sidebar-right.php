@@ -29,9 +29,8 @@ if ($post_meta->hasPanel('email_alerts')) {
 }
 
 if ($post_meta->hasPanel('related')) {
-    // Use ACF version if ACF is active.
-    // TODO - tidy this up when ACF migration is complete.
-    $entries = function_exists('get_field') ? get_field('_panel_related_entries_acf') : $post_meta->getMeta('_panel_related_entries');
+    // Use ACF function if available, otherwise fall back to an empty array.
+    $entries = function_exists('get_field') ? get_field('_panel_related_entries_acf') : [];
 
     get_template_part('template-parts/panels/list', null, [
         'title' => 'Related pages',
@@ -70,9 +69,8 @@ if ($post_meta->hasPanel('popular')) {
 }
 
 if ($post_meta->hasPanel('other_websites')) {
-    // Use ACF version if ACF is active.
-    // TODO - tidy this up when ACF migration is complete.
-    $entries = function_exists('get_field') ? get_field('_panel_other_websites_entries_acf') : $post_meta->getMeta('_panel_other_websites_entries');
+    // Use ACF function if available, otherwise fall back to an empty array.
+    $entries = function_exists('get_field') ? get_field('_panel_other_websites_entries_acf') : [];
 
     get_template_part('template-parts/panels/list', null, [
         'title' => 'Other websites',
