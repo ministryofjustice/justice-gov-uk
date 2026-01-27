@@ -18,7 +18,7 @@
             },
             "relevanssi_exclude": 1,
             "message": "Show updated at date following the content.",
-            "default_value": 0,
+            "default_value": 1,
             "allow_in_bindings": 0,
             "ui": 0,
             "ui_on_text": "",
@@ -126,5 +126,5 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "Meta data",
-    "modified": 1768583237
+    "modified": 1769433237
 }
