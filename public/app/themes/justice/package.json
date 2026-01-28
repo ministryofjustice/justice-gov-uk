@@ -34,7 +34,6 @@
         "dompurify": "^3.2.6",
         "laravel-mix": "^6.0.49",
         "react-icons": "^5.4.0",
-        "react-select": "^5.9.0",
         "sass": "^1.96.0",
         "sass-loader": "^12.6.0"
     },
@@ -56,9 +55,6 @@
         ],
         "@wordpress/rich-text": [
             "This package was installed for types."
-        ],
-        "react-select": [
-            "This package is used in simple-guten-fields for a user friendly multi-select."
         ],
         "sass-loader": [
             "sass-loader@^12.3.0 is required by laravel-mix@6.0.49 to compile SASS files."
