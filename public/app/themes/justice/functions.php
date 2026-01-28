@@ -14,7 +14,6 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
 }
 
 require_once 'inc/acf/acf.php';
-require_once 'inc/acf/commands.php';
 require_once 'inc/admin.php';
 require_once 'inc/admin-branding.php';
 require_once 'inc/amazon-s3-and-cloudfront-assets.php';
@@ -44,7 +43,6 @@ require_once 'inc/redirects.php';
 require_once 'inc/search.php';
 require_once 'inc/security.php';
 require_once 'inc/simple-definition-list-blocks.php';
-require_once 'inc/simple-guten-fields/simple-guten-fields.php';
 require_once 'inc/sitemap.php';
 require_once 'inc/taxonomies.php';
 require_once 'inc/theme-assets.php';
@@ -72,7 +70,6 @@ new Justice\NginxCache();
 new Justice\Posts();
 new Justice\Redirects();
 new Justice\Security();
-new Justice\SimpleGutenFields();
 new Justice\SimpleDefinitionsListBlocks();
 new Justice\Sitemap();
 new Justice\ThemeAssets();

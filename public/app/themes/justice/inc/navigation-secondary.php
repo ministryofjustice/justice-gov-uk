@@ -162,15 +162,9 @@ class NavigationSecondary
             ];
         }, $child_posts);
 
-        // Additional entries
-        $additional_entries = [];
-        // Use ACF version if ACF is active.
-        // TODO - tidy this up when ACF migration is complete.
-        if (function_exists('get_field')) {
-            $additional_entries = get_field('_dynamic_menu_additional_entries_acf', $post_id);
-        } else {
-            $additional_entries = get_post_meta($post_id, '_dynamic_menu_additional_entries', true);
-        }
+        // Additional entries from ACF field.
+        // Use ACF function if available, otherwise fall back to an empty array.
+        $additional_entries = function_exists('get_field') ? get_field('_dynamic_menu_additional_entries_acf', $post_id) : [];
 
         if (is_array($additional_entries) && !empty($additional_entries)) {
             foreach ($additional_entries as $entry) {
