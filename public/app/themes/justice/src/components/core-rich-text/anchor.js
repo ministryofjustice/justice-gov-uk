@@ -7,7 +7,6 @@ import { dispatch, select, subscribe, useSelect } from "@wordpress/data";
 import { Fragment, useState } from "@wordpress/element";
 import { store as preferencesStore } from "@wordpress/preferences";
 import { applyFormat, toggleFormat, useAnchor } from "@wordpress/rich-text";
-import { cleanForSlug } from "@wordpress/url";
 import { TfiAnchor } from "react-icons/tfi";
 
 /**
@@ -152,9 +151,21 @@ subscribe(async () => {
     .forEach((a) => {
       // Add a class to the anchor.
       a.classList.add(settings.className);
-      // If anchor text is empty, add a space - for compatibility and so the editor can see it.
-      if (a.textContent === "") {
-        a.textContent = " ";
+      // If anchor text is empty, add a non-breaking space - for compatibility and so the editor can see it.
+      // Using \u00A0 (non-breaking space) instead of regular space as WP 6.9+ normalizes empty elements.
+      if (a.textContent === "" || a.textContent.trim() === "") {
+        a.innerHTML = "\u00A0";
+      }
+    });
+  
+  // Ensure all existing anchors have a non-breaking space if their text is empty.
+  document
+    .querySelectorAll("a[name][id]:not([href]).moj-anchor")
+    .forEach((a) => {
+      // If anchor text is empty, add a non-breaking space - for compatibility and so the editor can see it.
+      // Using \u00A0 (non-breaking space) instead of regular space as WP 6.9+ normalizes empty elements.
+      if (a.textContent === "" || a.textContent.trim() === "") {
+        a.innerHTML = "\u00A0";
       }
     });
 });

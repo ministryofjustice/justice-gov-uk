@@ -60,6 +60,12 @@ class Core
         add_action('admin_print_scripts', function () {
             remove_action('admin_print_scripts', 'print_emoji_detection_script');
         }, 1);
+
+        // Remove editor notes support added in WP 6.9
+        add_action('init', [__CLASS__, 'removeEditorNotesSupport']);
+
+        // Disable block visibility support added in WP 6.9
+        add_filter('block_type_metadata', [__CLASS__, 'disableBlockVisibilitySupport']);
     }
 
     /**
@@ -139,6 +145,9 @@ class Core
     public function removeSubmenus(): void
     {
         remove_submenu_page('tools.php', 'tools.php');
+        // Remove Appearance > Patterns menu,
+        // the URL is still accessible to admins but that's fine.
+        remove_submenu_page('themes.php', 'site-editor.php?p=/pattern');
     }
 
 
@@ -158,5 +167,40 @@ class Core
         $height = isset($args['height']) && is_int($args['height']) ? $args['height'] : 26;
 
         return sprintf('<img class="avatar avatar-26 photo" width="%d" height="%d" src="%s/dist/img/avatar.jpg" />', $width, $height, esc_url(get_template_directory_uri()));
+    }
+
+
+    /**
+     * WP 6.9 adds 'notes' support to the block editor by default.
+     *
+     * This feature is not necessary for our use case,
+     * so it is removed here.
+     *
+     * @return void
+     */
+    public static function removeEditorNotesSupport(): void
+    {
+        $all_supports = get_all_post_type_supports('page');
+        $editor_supports = $all_supports['editor'];
+
+        if (isset($editor_supports[0]['notes'])) {
+            unset($editor_supports[0]['notes']);
+            add_post_type_support('page', 'editor', $editor_supports);
+        }
+    }
+
+    /**
+     * Disable block visibility support.
+     *
+     * This feature was added in WP 6.9, but is not necessary for our use case.
+     * It has been disabled to prevent accidental usage.
+     *
+     * @param array $metadata
+     * @return array
+     */
+    public static function disableBlockVisibilitySupport($metadata)
+    {
+        $metadata['supports']['visibility'] = false;
+        return $metadata;
     }
 }
