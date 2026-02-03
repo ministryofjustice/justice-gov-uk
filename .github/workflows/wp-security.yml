@@ -34,4 +34,4 @@ jobs:
           wp_core_version: '6.7.3'
           composer_build: 'true'
         env:
-          COMPOSER_AUTH: '{ "http-basic": { "www.relevanssi.com": { "username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}" }, "connect.advancedcustomfields.com": { "username": "${{ secrets.ACF_PRO_LICENSE }}", "password": "https://www.justice.gov.uk" } } }'
+          COMPOSER_AUTH: '{ "http-basic": { "www.relevanssi.com": { "username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}" } } }'
