@@ -31,7 +31,7 @@ jobs:
         uses: 10up/wp-scanner-action@75371fe927396bd16da76de26884d9b777e92b0d # 1.0.1
         with:
           content_dir: './public/app'
-          wp_core_version: '6.9.0'
+          wp_core_version: '6.7.3'
           composer_build: 'true'
         env:
           COMPOSER_AUTH: '{ "http-basic": { "www.relevanssi.com": { "username": "", "password": "${{ secrets.RELEVANSSI_API_KEY }}" }, "connect.advancedcustomfields.com": { "username": "${{ secrets.ACF_PRO_LICENSE }}", "password": "https://www.justice.gov.uk" } } }'
