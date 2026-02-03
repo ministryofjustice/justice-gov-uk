@@ -38,8 +38,6 @@ final class BlockEditorTest extends \Codeception\Test\Unit
         $block_editor->addHooks();
     }
 
-    public function testRegisterBlocksV1(): void
-
     public function testRegisterBlocks(): void
     {
         $block_editor = new BlockEditor();
