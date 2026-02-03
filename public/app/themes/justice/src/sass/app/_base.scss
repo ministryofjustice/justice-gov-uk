@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@use "../../components/v2-mixins" as mixins;
+@use "../../components/mixins" as mixins;
 
 :root {
     @include mixins.css-vars();
