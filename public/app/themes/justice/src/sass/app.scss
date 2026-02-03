@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
-@use "app/v2-base";
+@use "app/base";
 
-@use "app/v2-layout-base";
-@use "app/v2-layout-one-sidebar";
-@use "app/v2-layout-two-sidebars";
+@use "app/layout-base";
+@use "app/layout-one-sidebar";
+@use "app/layout-two-sidebars";
 
 @use "../components/button/button";
 @use "../components/breadcrumbs/breadcrumbs";

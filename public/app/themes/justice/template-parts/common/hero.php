@@ -47,7 +47,7 @@ $args = array_merge($defaults, $args);
     <?php if (!empty($args['breadcrumbs'])) : ?>
         <div class="hero__breadcrumbs">
             <?php
-            get_template_part('template-parts/nav/breadcrumbs.v2', null, [
+            get_template_part('template-parts/nav/breadcrumbs', null, [
                 'links' => $args['breadcrumbs'],
             ]);
             ?>

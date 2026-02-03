@@ -2,13 +2,6 @@
 
 defined('ABSPATH') || exit;
 
-use Roots\WPConfig\Config;
-
-if (Config::get('FRONTEND_VERSION') === 1) {
-    require get_template_directory() . '/footer.v1.php';
-    return;
-}
-
 ?>
         </main>
         <div class="footer-wrapper">

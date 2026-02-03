@@ -34,13 +34,7 @@ class ThemeAssets
 
     public function loadStyles(): void
     {
-        if (Config::get('FRONTEND_VERSION') === 1) {
-            wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css', [], 1.2);
-        }
-
-        if (Config::get('FRONTEND_VERSION') === 2) {
-            wp_enqueue_style('v2-justice-styles', get_template_directory_uri() . '/dist/css/v2-app.min.css', [], 2.0);
-        }
+        wp_enqueue_style('justice-styles', get_template_directory_uri() . '/dist/css/app.min.css', [], 2.0);
     }
 
     /**
@@ -57,12 +51,6 @@ class ThemeAssets
         $handle = 'moj-justice-app';
         $script_asset_path = get_template_directory() . "/dist/php/app.min.asset.php";
         $script_uri = get_template_directory_uri() . '/dist/app.min.js';
-        
-        if (Config::get('FRONTEND_VERSION') === 2) {
-            $handle = 'v2-moj-justice-app';
-            $script_asset_path = get_template_directory() . "/dist/php/v2-app.min.asset.php";
-            $script_uri = get_template_directory_uri() . '/dist/v2-app.min.js';
-        }
 
         if (!file_exists($script_asset_path)) {
             throw new \Error(
