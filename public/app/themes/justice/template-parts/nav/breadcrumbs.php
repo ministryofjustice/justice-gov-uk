@@ -1,29 +1,51 @@
 <?php
 
+/*
+ * A component to display breadcrumbs
+ *
+ * Available variables:
+ *   - links: array An array of links to be displayed
+ *      - url: string The url for the link
+ *      - label: string The label for the link
+ *
+ * Example usage:
+ *   get_template_part('nav/breadcrumbs', null, [
+ *     'links' => [
+ *       [
+ *         'url' => '#',
+ *         'label' => 'Home'
+ *       ],
+ *       [
+ *         'url' => '#',
+ *         'label' => 'Procedure rules'
+ *       ],
+ *       [
+ *         'url' => '#',
+ *         'label' => 'Family'
+ *        ],
+ *     ]
+ *   ]);
+ */
+
 defined('ABSPATH') || exit;
 
-use MOJ\Justice\Breadcrumbs;
-
-$moj_breadcrumbs = Breadcrumbs::getTheBreadcrumbs();
-
-if (!$moj_breadcrumbs) {
+if (empty($args['links'])) {
     return;
 }
 
 ?>
 
-<ul id="breadcrumb">
-    <?php foreach ($moj_breadcrumbs as $breadcrumb) { ?>
-        <li>
-            <?php if ($breadcrumb['url']) { ?>
-                <a href="<?php echo $breadcrumb['url']; ?>"><?php echo $breadcrumb['label']; ?></a>
-            <?php } else { ?>
-                <?php echo $breadcrumb['label']; ?>
-            <?php } ?>
-        </li>
-
-        <?php if (empty($breadcrumb['last'])) { ?>
-            <li class="separator">»</li>
-        <?php } ?>
-    <?php } ?>
-</ul>
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ul class="breadcrumbs__list">
+        <?php foreach ($args['links'] as $i => $link) : ?>
+            <li class="breadcrumbs__item">
+                <?php if ($i + 1 < sizeof($args['links'])) : ?>
+                    <a class="breadcrumbs__link" href="<?= esc_url($link['url']) ?>"><?= esc_html($link['label']) ?></a>
+                <?php else : ?>
+                    <a class="breadcrumbs__link disabled" role="link" aria-disabled="true"
+                    aria-current="page"><?= esc_html($link['label']) ?></a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</nav>
