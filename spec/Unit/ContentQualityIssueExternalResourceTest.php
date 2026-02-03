@@ -13,7 +13,7 @@ final class ContentQualityIssueExternalResourceTest extends \Codeception\Test\Un
         $this->assertEquals([], ExternalResource::getExternalResourcesFromContent(''));
         // Allowed
         $this->assertEquals([], ExternalResource::getExternalResourcesFromContent('<img src="//justice.docker/logo.png" />'));
-        $this->assertEquals([], ExternalResource::getExternalResourcesFromContent('<img src="//justice.gov.uk/logo.png" />'));
+        $this->assertEquals([], ExternalResource::getExternalResourcesFromContent('<img src="//www.justice.gov.uk/logo.png" />'));
         // Google
         $this->assertEquals(['//google.com/logo.png'], ExternalResource::getExternalResourcesFromContent('<img src="//google.com/logo.png" />'));
         $this->assertEquals(['http://google.com/logo.png'], ExternalResource::getExternalResourcesFromContent('<img src="http://google.com/logo.png" />'));
