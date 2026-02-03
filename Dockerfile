@@ -101,8 +101,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN echo -e "[client]\nssl=0" > /home/nginx/.my.cnf \
     && chown nginx:nginx /home/nginx/.my.cnf
 
-RUN mkdir -p /var/www/html/public/app/uploads
-RUN chown -R nginx:nginx /var/www/html/public/app/uploads
+RUN mkdir -p /var/www/html/public/app/uploads \
+    && chown -R nginx:nginx /var/www/html/public/app/uploads
 
 VOLUME ["/sock"]
 # nginx
