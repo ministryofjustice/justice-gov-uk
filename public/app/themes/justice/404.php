@@ -2,13 +2,6 @@
 
 defined('ABSPATH') || exit;
 
-use Roots\WPConfig\Config;
-
-if (Config::get('FRONTEND_VERSION') === 1) {
-    include(get_template_directory() . '/error-pages/404.html');
-    return;
-}
-
 use MOJ\Justice\Utils;
 
 get_header();

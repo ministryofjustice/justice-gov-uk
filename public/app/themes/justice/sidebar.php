@@ -2,13 +2,6 @@
 
 defined('ABSPATH') || exit;
 
-use Roots\WPConfig\Config;
-
-if (Config::get('FRONTEND_VERSION') === 1) {
-    require get_template_directory() . '/sidebar.v1.php';
-    return;
-}
-
 use MOJ\Justice\NavigationSecondary;
 use MOJ\Justice\PostMeta;
 use MOJ\Justice\Search;

@@ -2,7 +2,6 @@
 
 defined('ABSPATH') || exit;
 
-use Roots\WPConfig\Config;
 use MOJ\Justice\Header;
 
 ?><!DOCTYPE html>
@@ -30,11 +29,6 @@ use MOJ\Justice\Header;
 <?php
 
 wp_body_open();
-
-if (Config::get('FRONTEND_VERSION') === 1) {
-    require get_template_directory() . '/header.v1.php';
-    return;
-}
 
 // skip link for main content
 get_template_part('template-parts/nav/skip-link', null, [
