@@ -38,37 +38,9 @@ final class BlockEditorTest extends \Codeception\Test\Unit
         $block_editor->addHooks();
     }
 
-    public function testRegisterBlocksV1(): void
-    {
-        $block_editor = new BlockEditor();
-
-        $mock = \Mockery::mock('alias:Roots\WPConfig\Config');
-        $mock->shouldReceive('get')
-            ->with('FRONTEND_VERSION')
-            ->andReturn(1);
-
-        WP_Mock::userFunction('register_block_type', [
-            'times' => 1,
-            'args' => ['moj/inline-menu', ['render_callback' => [$block_editor, 'inlineMenu']]],
-        ]);
-
-        WP_Mock::userFunction('register_block_type', [
-            'times' => 1,
-            'args' => ['moj/search',      ['render_callback' => [$block_editor, 'searchV1']]],
-        ]);
-
-        $block_editor = new BlockEditor();
-        $block_editor->registerBlocks();
-    }
-
     public function testRegisterBlocks(): void
     {
         $block_editor = new BlockEditor();
-
-        $mock = \Mockery::mock('alias:Roots\WPConfig\Config');
-        $mock->shouldReceive('get')
-            ->with('FRONTEND_VERSION')
-            ->andReturn(2);
 
         WP_Mock::userFunction('register_block_type', [
             'times' => 1,

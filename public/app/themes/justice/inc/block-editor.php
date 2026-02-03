@@ -19,6 +19,7 @@ class BlockEditor
     public function addHooks()
     {
         add_action('init', [$this, 'registerBlocks']);
+        add_action('admin_enqueue_scripts', [$this, 'loadScripts']);
         add_filter('the_content', [$this, 'formatBlocks']);
         add_filter('allowed_block_types_all', [$this, 'filterAllowedBlockTypes'], 10, 0);
         add_filter('block_editor_settings_all', [$this, 'customiseSettings']);
@@ -27,12 +28,31 @@ class BlockEditor
     public function registerBlocks()
     {
         register_block_type('moj/inline-menu', ['render_callback' => [$this, 'inlineMenu']]);
-        if (Config::get('FRONTEND_VERSION') === 1) {
-            register_block_type('moj/search', ['render_callback' => [$this, 'searchV1']]);
+        register_block_type('moj/search', ['render_callback' => [$this, 'search']]);
+    }
+
+    /**
+     * Load scripts.
+     */
+    public function loadScripts()
+    {
+
+        $script_asset_path = get_template_directory() . "/dist/php/block-editor.asset.php";
+        if (!file_exists($script_asset_path)) {
+            throw new \Error(
+                'You need to run `npm start` or `npm run build` for "app" first.'
+            );
         }
-        if (Config::get('FRONTEND_VERSION') === 2) {
-            register_block_type('moj/search', ['render_callback' => [$this, 'search']]);
-        }
+
+        $script_asset = require($script_asset_path);
+        wp_register_script(
+            'block-editor-script',
+            get_template_directory_uri() . '/dist/block-editor.js',
+            $script_asset['dependencies'],
+            $script_asset['version']
+        );
+
+        wp_enqueue_script('block-editor-script');
     }
 
     /**
@@ -84,26 +104,8 @@ class BlockEditor
      * @return string
      */
 
-    public function searchV1(): string
-    {
-        $args = [
-            'parent' => get_the_ID(),
-            'submit' => 'Search'
-        ];
-
-        return sprintf(
-            '<div class="search wp-block-moj-search">%s</div>',
-            $this->templatePartToVariable('template-parts/search/search-bar.v1', null, $args)
-        );
-    }
-
     public function search(): string
     {
-        $args = [
-            'parent' => get_the_ID(),
-            'submit' => 'Search'
-        ];
-
         $args = [
             'search_form' => [
                 'id' => 'search-bar-main',
@@ -115,7 +117,10 @@ class BlockEditor
                     'value' => get_search_query(),
                     'label_hidden' => true,
                 ],
-                'button' => ['text' => 'Search']
+                'button' => ['text' => 'Search'],
+                'hidden_inputs' => [
+                    ['name' => 'parent', 'value' => get_the_ID()],
+                ],
             ]
         ];
 

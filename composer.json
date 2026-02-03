@@ -52,6 +52,11 @@
         {
             "type": "vcs",
             "url": "git@github.com:ministryofjustice/cookie-compliance-for-wordpress.git"
+        },
+        {
+            "type":"composer",
+            "url":"https://connect.advancedcustomfields.com",
+            "only":[ "wpengine/advanced-custom-fields-pro" ]
         }
     ],
     "require": {
@@ -60,16 +65,15 @@
         "alphagov/notifications-php-client": "^6.0",
         "composer/installers": "^2.2.0",
         "firebase/php-jwt": "^6.10",
-        "koodimonni-language/core-en_gb": "6.7.x",
+        "koodimonni-language/core-en_gb": "6.9.x",
         "league/oauth2-client": "^2.7",
         "ministryofjustice/cookie-compliance-for-wordpress": "^3.5.1",
         "php-http/guzzle7-adapter": "^1.0",
         "relevanssi/relevanssi-premium": "^2.29.0",
         "roots/bedrock-autoloader": "^1.0",
         "roots/bedrock-disallow-indexing": "^2.0",
-        "roots/wordpress": "6.7.x",
+        "roots/wordpress": "6.9.x",
         "roots/wp-config": "^1.0",
-        "roots/wp-password-bcrypt": "^1.1.0",
         "stayallive/wp-sentry": "^8.3.1",
         "symfony/filesystem": "^7.0",
         "symfony/process": "^7.0",
@@ -83,7 +87,8 @@
         "wpackagist-plugin/revisionary": "^3.5.16",
         "wpackagist-plugin/simple-definition-list-blocks": "6.0.1",
         "wpackagist-plugin/wp-crontrol": "^1.16",
-        "wpackagist-plugin/wp-document-revisions": "^3.6.1"
+        "wpackagist-plugin/wp-document-revisions": "^3.6.1",
+        "wpengine/advanced-custom-fields-pro": "^6.7"
     },
     "require-dev": {
         "10up/wp_mock": "^1.0.1",

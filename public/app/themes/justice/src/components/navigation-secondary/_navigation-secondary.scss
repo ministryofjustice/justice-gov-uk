@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '../v2-mixins.scss' as mixins;
+@use '../mixins.scss' as mixins;
 
 .navigation-secondary {
     $this: &;

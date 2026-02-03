@@ -10,8 +10,15 @@ $post_meta = new PostMeta();
 
 ?>
 
-<div class="one-sidebar one-sidebar--right">
+<div class="one-sidebar one-sidebar--<?=  $post_meta->sideHasPanels('left') ? 'left' : 'right' ?>">
     <div class="one-sidebar__grid">
+
+        <?php if ($post_meta->sideHasPanels('left')) : ?>
+            <div class="one-sidebar__sidebar">
+                <?php Utils::getSidebarMulti('left'); ?>
+            </div>
+        <?php endif; ?>
+
         <article id="main-page-content" class="one-sidebar__article">
 
             <div class="one-sidebar__article-header">
@@ -47,9 +54,11 @@ $post_meta = new PostMeta();
             </div>
         </article>
 
-        <div class="one-sidebar__sidebar">
-            <?php Utils::getSidebarMulti('right'); ?>
-        </div>
+        <?php if ($post_meta->sideHasPanels('right')) : ?>
+            <div class="one-sidebar__sidebar one-sidebar__sidebar--right">
+                <?php Utils::getSidebarMulti('right'); ?>
+            </div>
+        <?php endif; ?>
 
     </div>
 </div>

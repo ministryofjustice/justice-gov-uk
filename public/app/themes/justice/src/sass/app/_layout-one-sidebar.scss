@@ -1,4 +1,4 @@
-@use "../../components/v2-mixins" as mixins;
+@use "../../components/mixins" as mixins;
 
 .one-sidebar {
     $this: &;
@@ -38,7 +38,9 @@
     }
 
     &__sidebar {
-        display: none;
+        &--right {
+            display: none;
+        }
         @media screen and (min-width: mixins.$justice-lg) {
             > * {
                 @include mixins.spacing('margin', 6, 'top');

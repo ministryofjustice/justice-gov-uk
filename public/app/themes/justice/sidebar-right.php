@@ -2,13 +2,6 @@
 
 defined('ABSPATH') || exit;
 
-use Roots\WPConfig\Config;
-
-if (Config::get('FRONTEND_VERSION') === 1) {
-    require get_template_directory() . '/sidebar-right.v1.php';
-    return;
-}
-
 use MOJ\Justice\ContentLinks;
 use MOJ\Justice\PostMeta;
 
@@ -29,9 +22,11 @@ if ($post_meta->hasPanel('email_alerts')) {
 }
 
 if ($post_meta->hasPanel('related')) {
+    // Use ACF function if available, otherwise fall back to an empty array.
+    $entries = function_exists('get_field') ? get_field('_panel_related_entries_acf') : [];
+
     get_template_part('template-parts/panels/list', null, [
         'title' => 'Related pages',
-        // TODO - fortify the links with file properties.
         'links' => array_map(
             function ($entry) {
                 $args =  ContentLinks::getLinkParams(
@@ -43,7 +38,7 @@ if ($post_meta->hasPanel('related')) {
 
                 return [...$args, ...$entry];
             },
-            $post_meta->getMeta('_panel_related_entries')
+            $entries ?? []
         ),
         'is_mobile' => $is_mobile,
     ]);
@@ -67,5 +62,24 @@ if ($post_meta->hasPanel('popular')) {
 }
 
 if ($post_meta->hasPanel('other_websites')) {
-    get_template_part('template-parts/panels/other-websites');
+    // Use ACF function if available, otherwise fall back to an empty array.
+    $entries = function_exists('get_field') ? get_field('_panel_other_websites_entries_acf') : [];
+
+    get_template_part('template-parts/panels/list', null, [
+        'title' => 'Other websites',
+        'links' => array_map(
+            function ($entry) {
+                $args =  ContentLinks::getLinkParams(
+                    $entry['url'],
+                    $entry['label'] ?? null,
+                    $entry['id'] ?? null,
+                    $entry['target'] ?? null
+                );
+
+                return [...$args, ...$entry];
+            },
+            $entries ?? []
+        ),
+        'is_mobile' => $is_mobile,
+    ]);
 }

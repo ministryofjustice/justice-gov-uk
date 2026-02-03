@@ -141,6 +141,9 @@ Config::define('GOV_NOTIFY_API_KEY', env('GOV_NOTIFY_API_KEY') ?? null);
 // Support email address
 Config::define('SUPPORT_EMAIL', env('SUPPORT_EMAIL'));
 
+// ACF License Key
+Config::define('ACF_PRO_LICENSE', env('ACF_PRO_LICENSE'));
+
 // Define initial preset value for the wp-offload-media plugin.
 Config::define('WP_OFFLOAD_MEDIA_PRESET', false);
 
@@ -205,33 +208,6 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
 // By not setting AS3CF_SETTINGS here, we can use the plugin GUI to configure the settings during debugging.
 if (file_exists(__DIR__ . '/wp-offload-media.php')) {
     require_once __DIR__ . '/wp-offload-media.php';
-}
-
-/**
- * Frontend upgrade settings
- *
- * When the frontend upgrade is complete, the following cleanup tasks should be performed:
- *
- * - this code block should be deleted.
- * - FRONTEND_* environment variables should be deleted from .env and config.yml files.
- * - conditional code blocks (e.g. `if (Config::get('FRONTEND_VERSION') === 1)`) should be deleted from the theme directory.
- * - files ending in .v1.php should be deleted from the theme directory.
- * - v1 theme assets should be archived, but still served.
- * - v1 theme source files should be deleted.
- */
-
-Config::define('FRONTEND_ROLLOUT_PERCENTAGE', (int) env('FRONTEND_ROLLOUT_PERCENTAGE') ?: 0);
-
-switch (true) {
-    case in_array(env('FRONTEND_VERSION_OVERRIDE'), ['1', '2'], true):
-        Config::define('FRONTEND_VERSION', (int) env('FRONTEND_VERSION_OVERRIDE'));
-        break;
-    case isset($_COOKIE['frontend_version']) && in_array($_COOKIE['frontend_version'], ['1', '2'], true):
-        Config::define('FRONTEND_VERSION', (int) $_COOKIE['frontend_version']);
-        break;
-    default:
-        Config::define('FRONTEND_VERSION', (int) env('FRONTEND_VERSION_DEFAULT') ?: 1);
-        break;
 }
 
 /**

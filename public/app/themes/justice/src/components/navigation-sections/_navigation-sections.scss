@@ -1,4 +1,4 @@
-@use '../v2-mixins' as mixins;
+@use '../mixins' as mixins;
 
 .navigation-sections {
     @include mixins.spacing('margin', 4, 'top');
