@@ -159,7 +159,7 @@ final class ContentQualityIssueExternalResource extends ContentQualityIssue
         }
 
         $allowed_hosts = [
-            'justice.gov.uk',
+            'www.justice.gov.uk',
             'dev.justice.gov.uk',
             'staging.justice.gov.uk',
             'demo.justice.gov.uk',
