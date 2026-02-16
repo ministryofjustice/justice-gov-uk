@@ -257,10 +257,14 @@ class NavigationSecondary
             $this->post_meta = new PostMeta();
         }
 
+        $loop_count = 0;
+        $loop_limit = 10;
+
         $parent_id = get_the_ID();
         // Attempt to get the top-level parent ID.
         $maybe_parent_id = wp_get_post_parent_id($parent_id);
-        while ($maybe_parent_id !== 0) {
+
+        while ($maybe_parent_id !== 0 && $loop_count++ < $loop_limit) {
             $parent_id = $maybe_parent_id;
             $maybe_parent_id = wp_get_post_parent_id($parent_id);
         }
