@@ -56,7 +56,7 @@ class NavigationSecondary
 
         // If:
         // - no active item was found, and
-        // - there is a post ID 
+        // - there is a post ID
         // ... then the current page is not a child of Procedure Rules.
         if (!$found_active && get_the_ID()) {
             // We are on an auxiliary page, like Accessibility or Privacy.
