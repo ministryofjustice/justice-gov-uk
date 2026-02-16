@@ -54,8 +54,11 @@ class NavigationSecondary
         // Add the active and expanded properties based on the current page.
         $found_active = $this->markActiveAndExpanded($items, get_permalink(get_the_ID()));
 
-        // If no active item was found, then the current page is not a child of Procedure Rules.
-        if (!$found_active) {
+        // If:
+        // - no active item was found, and
+        // - there is a post ID
+        // ... then the current page is not a child of Procedure Rules.
+        if (!$found_active && get_the_ID()) {
             // We are on an auxiliary page, like Accessibility or Privacy.
             $items = $this->getAuxiliaryPagesForNavigation();
 
@@ -254,10 +257,14 @@ class NavigationSecondary
             $this->post_meta = new PostMeta();
         }
 
+        $loop_count = 0;
+        $loop_limit = 10;
+
         $parent_id = get_the_ID();
         // Attempt to get the top-level parent ID.
         $maybe_parent_id = wp_get_post_parent_id($parent_id);
-        while ($maybe_parent_id !== 0) {
+
+        while ($maybe_parent_id !== 0 && $loop_count++ < $loop_limit) {
             $parent_id = $maybe_parent_id;
             $maybe_parent_id = wp_get_post_parent_id($parent_id);
         }
