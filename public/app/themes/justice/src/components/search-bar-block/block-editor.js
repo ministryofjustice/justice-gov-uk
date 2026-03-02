@@ -8,6 +8,7 @@ import { registerBlockType } from "@wordpress/blocks";
  */
 
 registerBlockType("moj/search", {
+  apiVersion: 3,
   title: "Search - child pages",
   icon: "search",
   category: "common",
