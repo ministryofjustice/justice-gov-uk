@@ -57,6 +57,13 @@
                 display: none;
             }
         }
+        
+        &--desktop {
+            display: none;
+            @media screen and (min-width: mixins.$justice-lg) {
+                display: flex;
+            }
+        }
     }
 
     &--right {

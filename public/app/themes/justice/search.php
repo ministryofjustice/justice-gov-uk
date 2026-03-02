@@ -14,7 +14,7 @@ get_header();
 <div class="one-sidebar one-sidebar--left">
     <div class="one-sidebar__grid">
 
-        <div class="one-sidebar__sidebar">
+        <div class="one-sidebar__sidebar one-sidebar__sidebar--desktop">
             <?php Utils::getSidebarMulti('left', ['panels_in' => ['search-filters']]); ?>
         </div>
 
