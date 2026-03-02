@@ -62,9 +62,9 @@
     "require": {
         "php": ">=8.2",
         "ext-mysqli": "*",
-        "alphagov/notifications-php-client": "^6.0",
+        "alphagov/notifications-php-client": "^7.0",
         "composer/installers": "^2.2.0",
-        "firebase/php-jwt": "^6.10",
+        "firebase/php-jwt": "^7.0.3",
         "koodimonni-language/core-en_gb": "6.9.x",
         "league/oauth2-client": "^2.7",
         "ministryofjustice/cookie-compliance-for-wordpress": "^3.5.1",
