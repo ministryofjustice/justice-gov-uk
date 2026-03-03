@@ -55,6 +55,9 @@ class Search
 
         // Redirect the user to the search page if there are arrays in the the query string.
         add_action('init', [$this, 'redirectIfQueryStringHasArrays'], 1);
+
+        // Skip block rendering on search pages to prevent memory exhaustion.
+        add_filter('pre_render_block', [$this, 'skipBlockRenderingOnSearch'], 10, 2);
     }
 
 
@@ -604,5 +607,31 @@ class Search
                 exit;
             }
         }
+    }
+
+
+    /**
+     * Skip block rendering on search pages to prevent memory exhaustion.
+     *
+     * Relevanssi generates search excerpts by applying the_content filter to each result,
+     * which triggers WordPress's do_blocks() function. For pages with many blocks (e.g.,
+     * large content pages), parsing blocks consumes significant memory (~30-40MB per page).
+     * When processing multiple search results in a single request, memory accumulates and
+     * can exceed PHP's memory limit (e.g., 128MB), causing fatal errors.
+     *
+     * This filter short-circuits block rendering by returning the raw innerHTML instead
+     * of fully processed block output. Relevanssi only needs the text content for excerpt
+     * generation, so this is safe and prevents memory exhaustion.
+     *
+     * @param string|null $pre  Pre-rendered content. Returning non-null skips normal rendering.
+     * @param array       $block The block being rendered.
+     * @return string|null Raw innerHTML on search pages, otherwise null to continue normal rendering.
+     */
+    public function skipBlockRenderingOnSearch($pre, array $block)
+    {
+        if (is_search()) {
+            return $block['innerHTML'] ?? '';
+        }
+        return $pre;
     }
 }

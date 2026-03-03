@@ -365,7 +365,6 @@ class Content
 
             // Remove all the hooks ( except body_class filter ) - they don't need to run.
             remove_filter('the_content', [__CLASS__, 'fixNationalArchiveLinks']);
-            remove_filter('wp_kses_allowed_html', [__CLASS__, 'customWpksesPostTags'], 10, 2);
 
             remove_action('render_block_core/list-item', [$this, 'renderLinks'], 10, 2);
             remove_action('render_block_core/paragraph', [$this, 'renderLinks'], 10, 2);
@@ -374,6 +373,9 @@ class Content
             remove_action('render_block_core/table', [$this, 'renderTables'], 10, 2);
 
             remove_action('render_block_core/list', [$this, 'renderNavigationSection'], 15, 2);
+            
+            // Also remove, wpautop, else it's applied twice.
+            remove_filter('the_content', 'wpautop');
 
             return $cached;
         }

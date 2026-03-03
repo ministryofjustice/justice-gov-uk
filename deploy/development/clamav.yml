@@ -273,7 +273,7 @@ metadata:
   name: s3-antivirus-scan-weekly
   namespace: justice-gov-uk-dev
 spec:
-  schedule: "0 2 * * 1" # At 02:00 on Monday
+  schedule: "7 4 * * 2" # At 04:07 on Tuesday
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
   jobTemplate:

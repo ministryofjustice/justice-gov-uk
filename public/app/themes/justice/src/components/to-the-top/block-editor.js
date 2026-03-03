@@ -1,5 +1,6 @@
 // @ts-check
 
+import { useBlockProps } from "@wordpress/block-editor";
 import { registerBlockType } from "@wordpress/blocks";
 import { createElement } from "@wordpress/element";
 
@@ -9,13 +10,19 @@ import { createElement } from "@wordpress/element";
  */
 
 registerBlockType("moj/to-the-top", {
+  apiVersion: 3,
   title: "To the top", // Block name visible to the user within the editor
   icon: "arrow-up-alt", // Toolbar icon displayed beneath the name of the block
   category: "common", // The category under which the block will appear in the Add block menu
   attributes: {}, // The data this block will be storing
-  //   edit: function () {
-  //     // Defines how the block will render in the editor
-  //   },
+  edit: function () {
+    const blockProps = useBlockProps();
+    return createElement(
+      "div",
+      blockProps,
+      createElement("a", { href: "#top", className: "to-the-top" }, "To the top")
+    );
+  },
   supports: {
     className: false, // Removes the default class name: wp-block-{name}
   },
