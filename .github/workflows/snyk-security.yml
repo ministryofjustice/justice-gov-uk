@@ -27,7 +27,7 @@ jobs:
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - name: Set up Snyk CLI to check for security issues
         uses: snyk/actions/setup@806182742461562b67788a64410098c9d9b96adb
 
@@ -40,7 +40,7 @@ jobs:
         run: snyk iac test --report || true
 
       - name: PHP test
-        uses: snyk/actions/php@master
+        uses: snyk/actions/php@9adf32b1121593767fc3c057af55b55db032dc04 # v1.0.0
         continue-on-error: true
 
         # Build the docker images for testing
@@ -62,6 +62,6 @@ jobs:
 
         # Push the Snyk Code results into GitHub Code Scanning tab
       - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@5c8a8a642e79153f5d047b10ec1cba1d1cc65699  # v3.35.1
         with:
           sarif_file: snyk-code.sarif
