@@ -1,5 +1,7 @@
 ARG version_nginx=1.28.0
 
+FROM composer:2.9.8@sha256:b09bccd91a78fe8a9ab4b33d707b862e8fe54fec17782e32683ad2a69c46867d AS composer
+
 FROM ministryofjustice/wordpress-base-fpm:latest AS base-fpm
 
 # Switch to the alpine's default user, for installing packages
@@ -94,7 +96,7 @@ USER 101
 FROM base-fpm AS dev
 RUN apk add --update nano nodejs npm inotify-tools
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Add MariaDB client config to disable SSL by default
 # Without this, `wp db` commands fail because the local connection is not SSL-enabled
@@ -143,7 +145,7 @@ WORKDIR /var/www/html
 ARG ACF_PRO_LICENSE
 ARG RELEVANSSI_API_KEY
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 COPY ./bin/composer-auth.sh ./bin/composer-post-install.sh ./bin/
 
