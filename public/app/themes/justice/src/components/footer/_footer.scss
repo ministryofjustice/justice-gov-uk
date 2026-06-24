@@ -96,9 +96,18 @@
         @include mixins.spacing('padding', 2, 'top');
         @include mixins.spacing('padding', 4, 'bottom');
 
-        color: var(--justice-primary-white);
         display: flex;
         border-top: 1px solid var(--justice-border);
         justify-content: end;
+
+        a {
+            @include mixins.link('light');
+
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+            }
+        }
     }
 }
