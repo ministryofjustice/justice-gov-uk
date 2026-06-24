@@ -23,22 +23,6 @@ $component['stories']['Default'] = [
             'label' => 'Contacts',
         ],
         [
-            'url' => '/copyright',
-            'label' => 'Copyright',
-        ],
-        [
-            'url' => '/help',
-            'label' => 'Help',
-        ],
-        [
-            'url' => '/privacy',
-            'label' => 'Privacy',
-        ],
-        [
-            'url' => '/ministry-of-justice-webchats',
-            'label' => 'Webchats',
-        ],
-        [
             'url' => '/website-queries',
             'label' => 'Website queries',
         ],
