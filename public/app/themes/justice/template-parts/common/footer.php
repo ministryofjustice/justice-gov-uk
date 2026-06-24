@@ -51,12 +51,14 @@ defined('ABSPATH') || exit;
                         <div class="footer__logo"></div>
                 </a>
                 <p class="footer__content">
-                    For citizen and business advice on justice, rights and more visit <a href="https://www.gov.uk/">GOV.UK <span class="visually-hidden">(opens in a new tab)</span></a>
+                    For citizen and business advice on justice, rights and more visit <a href="https://www.gov.uk/">GOV.UK</a>
                 </p>
             </div>
         </div>
         <p class="footer__copyright">
-            © Crown copyright
+            <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">
+                © Crown copyright
+            </a>
         </p>
     </div>
 </footer>
