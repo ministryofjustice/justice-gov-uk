@@ -162,7 +162,6 @@ final class ContentQualityIssueExternalResource extends ContentQualityIssue
             'www.justice.gov.uk',
             'dev.justice.gov.uk',
             'staging.justice.gov.uk',
-            'demo.justice.gov.uk',
             'justice.docker',
         ];
 

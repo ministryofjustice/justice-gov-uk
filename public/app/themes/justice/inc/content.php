@@ -281,7 +281,7 @@ class Content
     /**
      * Filter the content to fix broken National Archives links.
      *
-     * A fix to replace the dev/demo/stage URL with the www URL when pointing to national archive URLs.
+     * A fix to replace the dev/stage URL with the www URL when pointing to national archive URLs.
      * This only runs on non-production environments.
      *
      * e.g. It replaces the broken link:
