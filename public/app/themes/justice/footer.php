@@ -20,22 +20,6 @@ defined('ABSPATH') || exit;
                         'label' => 'Contacts',
                     ],
                     [
-                        'url' => home_url('/copyright'),
-                        'label' => 'Copyright',
-                    ],
-                    [
-                        'url' => home_url('/help'),
-                        'label' => 'Help',
-                    ],
-                    [
-                        'url' => home_url('/privacy'),
-                        'label' => 'Privacy',
-                    ],
-                    [
-                        'url' => home_url('/ministry-of-justice-webchats'),
-                        'label' => 'Webchats',
-                    ],
-                    [
                         'url' => home_url('/website-queries'),
                         'label' => 'Website queries',
                     ],
