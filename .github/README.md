@@ -356,7 +356,7 @@ You can get an Access Token, Refresh Token and an expiry of the token.
 #### `deploy/[stack]/[file].tpl.yml`
 
 At the start of this project we understood that our production image would be
-managed by environment variables. These variables would change the behaviour of our image, rendering a single image useful in development, staging and demo environments, in addition to production.
+managed by environment variables. These variables would change the behaviour of our image, rendering a single image useful in development and staging environments, in addition to production.
 
 We believe that thinking in this way, allows the team to reduce complexities in our application. Making an image reusable in this way presents us with a challenge; we must introduce variables into the image in a highly dynamic way. 
 
