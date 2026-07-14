@@ -97,13 +97,13 @@ add_action('init', fn() => register_nav_menus([
 /**
  * Temporarily set X-Canary cookie based on query string.
  *
- * This will allow our team to share a link like: 
+ * This will allow our team to share a link like:
  * www.justice.gov.uk?moj_version=preview with the team and stakeholders.
- * This will force Cloud Platform ingress to serve the site from the 
+ * This will force Cloud Platform ingress to serve the site from the
  * hale-platform-* ingress.
- * 
+ *
  * The cookie can be deleted with: www.justice.gov.uk?moj_version=reset
- * 
+ *
  * The legacy version of the site can be forced with:
  * www.justice.gov.uk?moj_version=legacy
  */
