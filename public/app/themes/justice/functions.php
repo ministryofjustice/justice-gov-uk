@@ -114,13 +114,13 @@ add_action('init', function () {
 
     switch ($_GET['moj_version']) {
         case 'preview':
-            setcookie("X-Canary", 'always', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN);
+            setcookie("X-Canary", 'always', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
             break;
         case 'legacy':
-            setcookie("X-Canary", 'never', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN);
+            setcookie("X-Canary", 'never', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
             break;
         case 'reset':
-            setcookie("X-Canary", '', time() - 1000, COOKIEPATH, COOKIE_DOMAIN);
+            setcookie("X-Canary", '', time() - 1000, COOKIEPATH, COOKIE_DOMAIN, true, true);
             break;
     }
 });
