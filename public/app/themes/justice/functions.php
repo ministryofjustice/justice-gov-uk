@@ -93,3 +93,34 @@ add_action('init', fn() => register_nav_menus([
     'header-menu' => __('Header Menu'),
     'footer-menu' => __('Footer Menu')
 ]));
+
+/**
+ * Temporarily set X-Canary cookie based on query string.
+ *
+ * This will allow our team to share a link like:
+ * www.justice.gov.uk?moj_version=preview with the team and stakeholders.
+ * This will force Cloud Platform ingress to serve the site from the
+ * hale-platform-* ingress.
+ *
+ * The cookie can be deleted with: www.justice.gov.uk?moj_version=reset
+ *
+ * The legacy version of the site can be forced with:
+ * www.justice.gov.uk?moj_version=legacy
+ */
+add_action('init', function () {
+    if (empty($_GET['moj_version'])) {
+        return;
+    }
+
+    switch ($_GET['moj_version']) {
+        case 'preview':
+            setcookie("X-Canary", 'always', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
+            break;
+        case 'legacy':
+            setcookie("X-Canary", 'never', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
+            break;
+        case 'reset':
+            setcookie("X-Canary", '', time() - 1000, COOKIEPATH, COOKIE_DOMAIN, true, true);
+            break;
+    }
+});
