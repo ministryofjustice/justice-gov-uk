@@ -32,7 +32,7 @@ class Admin
         add_action('wp_before_admin_bar_render', [$this, 'filterAdminBar']);
         add_filter('admin_body_class', [$this, 'addRoleToAdminBody']);
         add_filter('wp_sentry_public_options', [$this, 'filterSentryJsOptions']);
-        add_action( 'admin_bar_menu', [$this, 'addPlatformVersionToAdminBar'], 500 );
+        add_action('admin_bar_menu', [$this, 'addPlatformVersionToAdminBar'], 500);
     }
 
 
@@ -237,19 +237,20 @@ class Admin
         ));
     }
 
-    public function addPlatformVersionToAdminBar ( \WP_Admin_Bar $wp_admin_bar ) {
-        if(WP_ENV !== 'production') {
+    public function addPlatformVersionToAdminBar(\WP_Admin_Bar $wp_admin_bar)
+    {
+        if (WP_ENV !== 'production') {
             return;
         }
-        $wp_admin_bar->add_menu( array(
+        $wp_admin_bar->add_menu(array(
             'id'    => 'moj-platform-version-stable',
             'title' => 'Viewing stable version',
             'href'  => '#'
-        ) );
-        $wp_admin_bar->add_menu( array(
+        ));
+        $wp_admin_bar->add_menu(array(
             'id'    => 'moj-platform-version-canary',
             'title' => 'Activate preview version',
             'href'  => get_admin_url() . '?moj_version=preview'
-        ) );
+        ));
     }
 }
