@@ -114,13 +114,16 @@ add_action('init', function () {
 
     switch ($_GET['moj_version']) {
         case 'preview':
-            setcookie("X-Canary", 'always', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
-            break;
+            setcookie("X-Canary", 'always', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
+            wp_safe_redirect(home_url());
+            exit;
         case 'legacy':
-            setcookie("X-Canary", 'never', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
-            break;
+            setcookie("X-Canary", 'never', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
+            wp_safe_redirect(home_url());
+            exit;
         case 'reset':
-            setcookie("X-Canary", '', time() - 1000, COOKIEPATH, COOKIE_DOMAIN, true, true);
-            break;
+            setcookie("X-Canary", '', time() - 1000, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
+            wp_safe_redirect(home_url());
+            exit;
     }
 });
