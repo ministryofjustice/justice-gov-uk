@@ -46,7 +46,7 @@ get_template_part('template-parts/common/horizontal-rule', null, [
             </div>
         </article>
 
-        <div class="one-sidebar__sidebar">
+        <div class="one-sidebar__sidebar one-sidebar__sidebar--desktop">
             <?php Utils::getSidebarMulti('right'); ?>
         </div>
 
