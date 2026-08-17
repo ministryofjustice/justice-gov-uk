@@ -35,7 +35,6 @@ class WpScriptLocalization
     // Only allow certain script handles to be modified.
     // Warning! Keep in sync with mojLocalizedDataEntries in src/js/script-localization.js.
     const ALLOWED_SCRIPT_HANDLES = [
-        'ccfw-script',
         'cookie-consent-script',
         'wp-sentry-browser',
     ];
