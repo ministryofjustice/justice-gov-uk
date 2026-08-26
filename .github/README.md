@@ -409,7 +409,6 @@ On the frontend pages for logged out users, 'unsafe-inline' is not allowed. For 
 of loading localized data for scripts. See the following theme files for more information:
 
 - justice/inc/wp-script-localization.php
-- justice/inc/wp-scripts.php
 - justice/src/js/script-localization.js
 
 ---

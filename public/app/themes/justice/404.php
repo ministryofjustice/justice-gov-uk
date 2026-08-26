@@ -48,7 +48,7 @@ $error_html = '
             </div>
         </article>
 
-        <div class="one-sidebar__sidebar">
+        <div class="one-sidebar__sidebar one-sidebar__sidebar--desktop">
             <?php Utils::getSidebarMulti('right'); ?>
         </div>
 

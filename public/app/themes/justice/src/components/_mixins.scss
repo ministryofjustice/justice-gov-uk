@@ -1,45 +1,5 @@
 @use "sass:map";
 
-@mixin css-vars() {
-    // Primary colours
-    --justice-primary-black: #212121;
-    --justice-primary-white: #fff;
-    --justice-primary-grey: #d7d7d7;
-
-    // Secondary colours
-    --justice-secondary-grey: #7e7e74;
-    --justice-secondary-dark-grey: #5c5c54; 
-    --justice-secondary-blue: #5F789B;
-    --justice-secondary-light-blue: #6c8ab2;
-    --justice-secondary-grey-blue: #eff0f2;
-
-    // Links
-    --justice-link: #1d70b8;
-    --justice-link-hover: #003078;
-    --justice-link-visited: #4c2c92;
-    --justice-link-active: #0b0c0c;
-
-    // Borders
-    --justice-border: #b1b4b6;
-    --justice-border-input: #0b0c0c    ;
-
-    //States
-    --justice-error: #d4351c;
-    --justice-success: #00703c;
-    // Accessible colours from the GDS https://design-system.service.gov.uk/styles/colour/
-    --gds-yellow: #fd0;
-    --gds-black: #000;
-
-    // Typography
-    --body-font: 'Arial', sans-serif;
-    --body-font-normal: 400;
-    --body-font-bold: 700;
-
-    --heading-font: 'Georgia', serif;
-    --heading-font-normal: 400;
-    --heading-font-bold: 700; // Use a medium bold as 700 doesn't work well with the heading font.
-}
-
 // Minimum screen sizes
 $justice-md: 768px;
 $justice-lg: 1024px;
@@ -78,14 +38,60 @@ $spacing-units-desktop: (
     9: 3.75rem,
 );
 
+
+@mixin css-vars() {
+    // Primary colours
+    --justice-primary-black: #212121;
+    --justice-primary-white: #fff;
+    --justice-primary-grey: #d7d7d7;
+
+    // Secondary colours
+    --justice-secondary-grey: #7e7e74;
+    --justice-secondary-dark-grey: #5c5c54; 
+    --justice-secondary-blue: #5F789B;
+    --justice-secondary-light-blue: #6c8ab2;
+    --justice-secondary-grey-blue: #eff0f2;
+
+    // Links
+    --justice-link: #1d70b8;
+    --justice-link-hover: #003078;
+    --justice-link-visited: #4c2c92;
+    --justice-link-active: #0b0c0c;
+
+    // Borders
+    --justice-border: #b1b4b6;
+    --justice-border-input: #0b0c0c    ;
+
+    //States
+    --justice-error: #d4351c;
+    --justice-success: #00703c;
+    // Accessible colours from the GDS https://design-system.service.gov.uk/styles/colour/
+    --gds-yellow: #fd0;
+    --gds-black: #000;
+
+    // Typography
+    --body-font: 'Arial', sans-serif;
+    --body-font-normal: 400;
+    --body-font-bold: 700;
+
+    --heading-font: 'Georgia', serif;
+    --heading-font-normal: 400;
+    --heading-font-bold: 700; // Use a medium bold as 700 doesn't work well with the heading font.
+
+    // Container widths
+    --justice-container-max-width: calc(100% - (2 * #{$gutter-mobile}));
+    --justice-container-gutter: #{$gutter-mobile};
+    
+    @media screen and (min-width: $justice-lg) {
+        --justice-container-max-width: calc(#{$max-width} - (2 * #{$gutter}));
+        --justice-container-gutter: #{$gutter};
+    }
+}
+
 @mixin container() {
     margin: 0 auto;
-    padding: 0 $gutter-mobile;
-    max-width: calc(100% - (2 * $gutter-mobile));
-    @media screen and (min-width: $justice-lg) {
-        padding: 0 $gutter;
-        max-width: calc($max-width - (2 * $gutter));
-    }
+    padding: 0 var(--justice-container-gutter);
+    max-width: var(--justice-container-max-width);
 }
 
 @mixin grid() {

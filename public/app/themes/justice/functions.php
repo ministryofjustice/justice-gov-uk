@@ -16,7 +16,6 @@ if (Config::get('WP_OFFLOAD_MEDIA_PRESET') === 'minio') {
 require_once 'inc/acf/acf.php';
 require_once 'inc/admin.php';
 require_once 'inc/admin-branding.php';
-require_once 'inc/amazon-s3-and-cloudfront-assets.php';
 require_once 'inc/amazon-s3-and-cloudfront-tweaks.php';
 require_once 'inc/block-editor.php';
 require_once 'inc/breadcrumbs.php';
@@ -50,7 +49,6 @@ require_once 'inc/theme.php';
 require_once 'inc/updates.php';
 require_once 'inc/utils.php';
 require_once 'inc/wp-script-localization.php';
-require_once 'inc/wp-scripts.php';
 
 if (getenv('WP_ENV') === 'development') {
     $debug = new Justice\Debug();
@@ -114,13 +112,16 @@ add_action('init', function () {
 
     switch ($_GET['moj_version']) {
         case 'preview':
-            setcookie("X-Canary", 'always', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
-            break;
+            setcookie("X-Canary", 'always', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
+            wp_safe_redirect(home_url());
+            exit;
         case 'legacy':
-            setcookie("X-Canary", 'never', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, true, true);
-            break;
+            setcookie("X-Canary", 'never', 60 * 60 * 24 * 30 + time(), COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
+            wp_safe_redirect(home_url());
+            exit;
         case 'reset':
-            setcookie("X-Canary", '', time() - 1000, COOKIEPATH, COOKIE_DOMAIN, true, true);
-            break;
+            setcookie("X-Canary", '', time() - 1000, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
+            wp_safe_redirect(home_url());
+            exit;
     }
 });

@@ -1,5 +1,5 @@
 window.mojLocalizedDataEntries = [
-  { id: "ccfw-script-js-extra", loaded: false, vars: ["ccfwData"] },
+  { id: "cookie-consent-script-js-extra", loaded: false, vars: ["cookie_consent_object"] },
   { id: "wp-sentry-browser-js-extra", loaded: false, vars: ["wp_sentry"] },
 ];
 
@@ -41,10 +41,7 @@ window["mojLoadLocalizedData"] = function () {
       }
       entry.loaded = true;
     } catch (e) {
-      console.error(
-        `Error parsing localization JSON for 'wp-sentry-browser'`,
-        e,
-      );
+      console.error(`Error parsing localization JSON for '${entry.id}'`, e);
     }
   }
 };

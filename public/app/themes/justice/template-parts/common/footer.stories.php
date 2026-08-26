@@ -14,7 +14,7 @@ $component['stories']['Default'] = [
             'label' => 'Accessibility',
         ],
         [
-            'url' => '/privacy/cookies',
+            'url' => '/cookies',
             'label' => 'Cookies',
             'active' => true, // This link is active
         ],

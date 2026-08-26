@@ -1,3 +1,4 @@
+@use "../../components/mixins" as mixins;
 
 /**
  * #ccfw-page-banner
@@ -51,4 +52,40 @@
 // Recolour PublishPress preview banner to better fit the theme
 .rvy_preview_msgspan {
   background-color: #373737 !important;
+}
+
+// Sizing (layout and text) of the Cookie Compliance banner
+#cookie-compliance-banner {
+  --cc-text-lg: 1rem;
+  --cookie-banner-container-max-width: var(--justice-container-max-width);
+  --cookie-banner-container-width: 100%;
+
+  @media screen and (min-width: mixins.$justice-lg) {
+    --cookie-banner-container-width: calc(100% - 92px);
+  }
+
+
+  h2 {
+    @include mixins.h3;
+    @include mixins.spacing('margin', 2, 'bottom');
+    font-weight: var(--heading-font-normal);
+    margin-top: 0;
+  }
+  
+  p {
+    @include mixins.spacing('margin', 1, 'bottom');
+  }
+
+  button, #cookie-page-link {
+    --cc-spacing: 0.125rem;
+  }
+}
+
+// Sizing (layout) of the Cookie Compliance user facing settings page
+#cookie-settings-page {
+  @include mixins.container;
+
+  table, fieldset {
+    @include mixins.spacing('margin', 3, 'top');
+  }
 }

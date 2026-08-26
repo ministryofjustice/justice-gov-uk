@@ -12,7 +12,7 @@ defined('ABSPATH') || exit;
                         'label' => 'Accessibility',
                     ],
                     [
-                        'url' => home_url('/privacy/cookies'),
+                        'url' => home_url('/cookies'),
                         'label' => 'Cookies',
                     ],
                     [
