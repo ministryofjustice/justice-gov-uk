@@ -1,3 +1,7 @@
+> [!IMPORTANT]  
+> This repository has been archived.  
+> Justice UK has been replatformed to the Website Builder Platform and the theme repository is now maintained at https://github.com/ministryofjustice/justice
+
 <div align="center">
 
 <br>
